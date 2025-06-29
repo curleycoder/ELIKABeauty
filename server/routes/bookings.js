@@ -14,7 +14,7 @@ router.post("/", async (req, res)=>{
     }
 })
 
-route.get("/", async (req, res) =>{
+router.get("/", async (req, res) =>{
     try{
         const bookings = await Booking.find().sort({ date: -1 });
         res.json(bookings);
@@ -22,3 +22,6 @@ route.get("/", async (req, res) =>{
         res.status(500).json({error: " Could not fetch booking "})
     }
 })
+
+
+module.exports = router;
