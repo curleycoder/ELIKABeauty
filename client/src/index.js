@@ -15,3 +15,15 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+const observerErr = window.console.error;
+window.console.error = (...args) => {
+  if (
+    args[0] &&
+    typeof args[0] === "string" &&
+    args[0].includes("ResizeObserver loop")
+  ) {
+    return;
+  }
+  observerErr(...args);
+};
