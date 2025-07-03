@@ -5,16 +5,18 @@ require("dotenv").config();
 const path = require("path"); 
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3001" }));
 app.use(express.json());
 
 const bookingRoutes = require("./routes/bookings");
 const serviceRoutes = require("./routes/services")
 const galleryRoutes = require("./routes/gallery")
+const googleRoutes = require("./routes/googleReview")
 
 app.use("/api/bookings", bookingRoutes)
 app.use("/api/services", serviceRoutes)
 app.use("/api/gallery", galleryRoutes)
+app.use("/api/google", googleRoutes)
 
 app.use('/gallery', express.static(path.join(__dirname, 'public' , 'gallery')))
 
