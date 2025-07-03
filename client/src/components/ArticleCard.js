@@ -13,8 +13,8 @@ export default function ArticleCard({ title, text, image }){
 
                 <p className={`test-sm text-gray-700 ${isExpanded ? '' : 'truncate'}`}>{text}</p>
 
-                <button onClick={toggleText} className="text-blue-700 underline hover:text-blue-400 transition colors duration-200 focus:underline-none">
-                    {isExpanded ? "Show Less": "Read More"}
+                <button onClick={toggleText} className="text-blue-500 font-sans-serif hover:text-blue-400 transition colors duration-200 focus:underline-none">
+                    {isExpanded ? "Show Less": "Read more"}
                 </button>
             </div>
         </div>

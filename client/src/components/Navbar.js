@@ -20,13 +20,13 @@ export default function Navbar(){
         // </div>
         <div className="bg-white shadow-md sticky top-0 z-50">
       <nav className="text-purplecolor p-4 max-w-6xl flex justify-between items-center mx-auto">
-        {/* Logo and Title */}
+
         <div className="flex items-center space-x-4">
           <img src={logo} alt="Beauty Shohre Studio Logo" className="h-16 w-auto" />
           <h1 className="text-xl font-bodonimoda font-bold">BEAUTY SHOHRE STUDIO</h1>
         </div>
 
-        {/* Navigation Links */}
+      
         <div className="font-bodonimoda space-x-4">
           {["Home", "Booking", "Products", "About Me"].map((item, index) => {
             const route = item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "")}`;
@@ -45,4 +45,3 @@ export default function Navbar(){
     </div>
     )
 }
-

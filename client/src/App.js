@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-// import './App.css';
+import './App.css';
 
 import React from "react";
 import { BrowserRouter as Router , Routes, Route} from "react-router-dom";
@@ -10,13 +10,15 @@ import Product from "./pages/Product"
 import About from "./pages/About"
 import Navbar from "./components/Navbar"
 
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Navbar />
 
-      <div className="p-4">
+      <div >
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/booking" element={<Booking />}/>
@@ -25,6 +27,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 
