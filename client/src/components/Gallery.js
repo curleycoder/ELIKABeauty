@@ -19,7 +19,7 @@ export default function Gallery() {
       .then((data) => {
         if (Array.isArray(data.images) && data.images.length > 0) {
           setGalleryImages(data.images);
-          setSelectedImage(baseURL + data.images[0]);
+          setSelectedImage(`${baseURL}${data.images[0]}`);
         }
 
       })
@@ -81,7 +81,7 @@ export default function Gallery() {
         {/* Blurry Previous Image */}
         {galleryImages.length > 0 && (
           <img
-            src={baseURL + galleryImages[(currentIndex - 1 + galleryImages.length) % galleryImages.length]}
+            src={`${baseURL}${galleryImages[(currentIndex - 1 + galleryImages.length) % galleryImages.length]}`}
             alt="Previous Preview"
             className="absolute left-14 h-[300px] w-auto object-contain opacity-30 blur-sm"
           />

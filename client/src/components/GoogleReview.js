@@ -7,26 +7,23 @@ import "swiper/css/pagination";
 
 const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
-
 export default function GoogleReview() {
   const [reviews, setReviews] = useState([]);
   const [expanded, setExpanded] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const fetchReviews = () => {
+  useEffect(() => {
     fetch(`${baseURL}/api/google/reviews`)
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data.reviews)) {
-          setReviews(data.reviews);
-        } else {
-          setReviews([]);
-        }
+        console.log("📣 Google Reviews fetched:", data.reviews);
+        setReviews(Array.isArray(data.reviews) ? data.reviews : []);
+        setLoading(false);
       })
-      .catch((err) => console.error("Failed to fetch reviews", err));
-  };
-
-  useEffect(() => {
-    fetchReviews();
+      .catch((err) => {
+        console.error("❌ Failed to fetch reviews:", err);
+        setLoading(false);
+      });
   }, []);
 
   const toggleExpanded = (index) => {
@@ -44,11 +41,12 @@ export default function GoogleReview() {
             What Our Clients Say
           </span>
         </h2>
-        
       </div>
 
       <div className="mt-10">
-        {reviews.length > 0 ? (
+        {loading ? (
+          <p className="text-center text-gray-500 mt-6">Loading reviews...</p>
+        ) : reviews.length > 0 ? (
           <Swiper
             modules={[Navigation, Pagination]}
             navigation
