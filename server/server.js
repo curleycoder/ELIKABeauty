@@ -4,8 +4,19 @@ const cors = require('cors');
 require("dotenv").config();
 const path = require("path"); 
 
+const allowedOrigins = [
+  "http://localhost:3001",              // local dev
+  "https://beautyshohrestudio.com",     // frontend
+  "https://api.beautyshohrestudio.com"  // if frontend fetches from API directly
+];
+
+
+
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: allowedOrigins,
+    credential: true,
+}));
 app.use(express.json());
 
 const bookingRoutes = require("./routes/bookings");
@@ -28,6 +39,10 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.get("/", (req, res)=>{
     res.send("Hello from server");
+});
+app.get("/api/google/reviews", (req, res) => {
+  console.log("✅ Hardcoded test route hit");
+  res.json({ reviews: [{ author_name: "Jane Test", text: "Testing route!", rating: 5 }] });
 });
 
 const PORT = process.env.PORT || 3000;
