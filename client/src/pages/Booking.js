@@ -1,3 +1,157 @@
+// import React, { useState } from "react";
+// import BookingForm from "../components/BookingForm";
+// import BackgroundPic from "../assets/hero.jpg";
+// import QuestionsForm from "../components/QuestionForm";
+// import DateTimePicker from "../components/DatePicker";
+// import services from "../data/services";
+// import { format } from "date-fns";
+
+
+// function calculateTotalDuration(selected) {
+//   return selected.reduce((sum, name) => {
+//     const s = services.find((s) => s.name === name);
+//     return sum + (s?.duration || 60);
+//   }, 0);
+// }
+
+
+// export default function Booking() {
+//   const [selection, setSelection] = useState({ selected: [], total: 0 });
+//   const [showDateTime, setShowDateTime] = useState(false);
+//   const [showQuestions, setShowQuestions] = useState(false);
+//   const [bookingTime, setBookingTime] = useState(null);
+//   const [showFinalPopup, setShowFinalPopup] = useState(false);
+//   const [bookingData, setBookingData] = useState(null);
+
+
+//   return (
+//     <div
+//       className="w-full h-full overflow-hidden relative font-bodonimoda"
+//     >
+//       {/* Fixed background image */}
+//       <div
+//         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 "
+//         style={{ backgroundImage: `url(${BackgroundPic})` }}
+//       />
+
+//       {/* Foreground */}
+//       <div className="relative z-10 flex items-center justify-center px-4 bg-white/50 backdrop-blur-med" 
+// >
+
+//         <div className="w-full max-w-5xl grid grid-cols-[1fr_260px] gap-6" style={{ height: 'calc(-100px + 100vh)' }}
+// >
+
+          
+//           {/* LEFT SCROLLABLE CARD */}
+//           <div className="rounded-[30px] p-6 overflow-y-auto">
+//           {!showDateTime ? (
+//             <BookingForm onSelectionChange={setSelection} />
+//           ) : !showQuestions ? (
+//             <DateTimePicker
+//               duration={calculateTotalDuration(selection.selected)}
+//               onSelect={(value) => {
+//                 setBookingTime(value); // value = { date, time }
+//                 setShowQuestions(true);
+//               }}
+//             />
+//           ) : (
+//             <QuestionsForm
+//               selection={selection}
+//               bookingTime={bookingTime}
+//               onSubmit={(formData) => {
+//                 console.log("Booking Submitted", formData);
+
+//                 // Send email here if needed...
+
+//                 // Show popup
+//                 setBookingData(formData)
+//                 setShowFinalPopup(true);
+//               }}
+//             />
+
+//           )}
+//         </div>
+
+
+//           <div className="bg-white/90 rounded-[25px] shadow-xl p-8 h-fit self-start sticky top-36">
+//             <h4 className="font-bold text-lg mb-1">Beauty Shohre Studio</h4>
+//             <p className="text-sm text-gray-500 mb-4">275 Gilmore Ave, Burnaby</p>
+
+//             <p className="text-sm font-medium mb-2">Selected Services:</p>
+//             {selection.selected.length === 0 ? (
+//               <p className="text-sm text-gray-400">No services selected</p>
+//             ) : (
+//               <ul className="text-sm space-y-1 mb-4">
+//                 {selection.selected.map((name) => (
+//                   <li key={name}>• {name}</li>
+//                 ))}
+//               </ul>
+//             )}
+
+//             <hr className="my-4" />
+//             <div className="text-lg font-semibold">
+//               <div className="flex justify-between mb-2">
+//                 <span>Estimated Total</span>
+//                 <span>${selection.total}</span>
+//               </div>
+//               <p className="text-sm italic text-gray-400 leading-tight">
+//                 * Final pricing will be confirmed by Sherry, as it depends on the hair’s length, volume, and thickness.
+//               </p>
+//             </div>
+//             {showFinalPopup && bookingData && (
+//               <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
+//                 <div className="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-md space-y-4">
+//                   <h3 className="text-lg font-semibold text-purplecolor">Booking Confirmed ✅</h3>
+
+//                   <p className="text-sm text-gray-700">
+//                     Dear <span className="font-semibold">{bookingData.name}</span>,<br />
+//                     your booking has been confirmed.
+//                   </p>
+
+//                   <p className="text-sm text-gray-700">
+//                     <strong>Services:</strong> {bookingData.services.join(", ")}<br />
+//                     <strong>Date:</strong> {format(bookingData.date, "PPP")}<br />
+//                     <strong>Time:</strong> {bookingData.time}
+//                   </p>
+
+//                   <p className="text-sm text-gray-600 italic">
+//                     You will receive a confirmation email shortly.<br />
+//                     To cancel or change your appointment, please contact <br/><strong>Shohre</strong> at <strong>778-513-9006</strong>.
+//                   </p>
+
+//                   <button
+//                     onClick={() => {
+//                       setShowFinalPopup(false);
+//                       setShowQuestions(false);
+//                       setShowDateTime(false);
+//                       setBookingData(null);
+//                       setBookingTime(null);
+//                       setSelection({ selected: [], total: 0 });
+//                     }}
+
+//                     className="mt-2 px-5 py-2 bg-purplecolor text-white rounded-lg shadow hover:translate-y-[-1px]"
+//                   >
+//                     Close
+//                   </button>
+//                 </div>
+//               </div>
+//             )}
+
+
+
+//             <button
+//               className="mt-6 w-full py-3 bg-purplecolor text-white font-bold rounded-lg opacity-90"
+//               disabled={selection.selected.length === 0}
+//               onClick={() => setShowDateTime(true)}
+//             >
+//               Continue
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 import React, { useState } from "react";
 import BookingForm from "../components/BookingForm";
 import BackgroundPic from "../assets/hero.jpg";
@@ -6,14 +160,12 @@ import DateTimePicker from "../components/DatePicker";
 import services from "../data/services";
 import { format } from "date-fns";
 
-
 function calculateTotalDuration(selected) {
   return selected.reduce((sum, name) => {
     const s = services.find((s) => s.name === name);
     return sum + (s?.duration || 60);
   }, 0);
 }
-
 
 export default function Booking() {
   const [selection, setSelection] = useState({ selected: [], total: 0 });
@@ -23,124 +175,75 @@ export default function Booking() {
   const [showFinalPopup, setShowFinalPopup] = useState(false);
   const [bookingData, setBookingData] = useState(null);
 
-
   return (
-    <div
-      className="w-full h-full overflow-hidden relative font-bodonimoda"
-    >
-      {/* Fixed background image */}
+    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa]">
+      {/* Background */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 "
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10"
         style={{ backgroundImage: `url(${BackgroundPic})` }}
       />
 
       {/* Foreground */}
-      <div className="relative z-10 flex items-center justify-center px-4 bg-white/50 backdrop-blur-med" 
->
+      <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-8">
 
-        <div className="w-full max-w-5xl grid grid-cols-[1fr_260px] gap-6" style={{ height: 'calc(-100px + 100vh)' }}
->
+          {/* LEFT: Service + Forms */}
+          <div className="flex-1 rounded-[30px] p-5 sm:p-8 overflow-y-auto max-h-[calc(100vh-120px)]">
+            {!showDateTime ? (
+              <BookingForm onSelectionChange={setSelection} />
+            ) : !showQuestions ? (
+              <DateTimePicker
+                duration={calculateTotalDuration(selection.selected)}
+                onSelect={(value) => {
+                  setBookingTime(value);
+                  setShowQuestions(true);
+                }}
+              />
+            ) : (
+              <QuestionsForm
+                selection={selection}
+                bookingTime={bookingTime}
+                onSubmit={(formData) => {
+                  setBookingData(formData);
+                  setShowFinalPopup(true);
+                }}
+              />
+            )}
+          </div>
 
-          
-          {/* LEFT SCROLLABLE CARD */}
-          <div className="rounded-[30px] p-6 overflow-y-auto">
-          {!showDateTime ? (
-            <BookingForm onSelectionChange={setSelection} />
-          ) : !showQuestions ? (
-            <DateTimePicker
-              duration={calculateTotalDuration(selection.selected)}
-              onSelect={(value) => {
-                setBookingTime(value); // value = { date, time }
-                setShowQuestions(true);
-              }}
-            />
-          ) : (
-            <QuestionsForm
-              selection={selection}
-              bookingTime={bookingTime}
-              onSubmit={(formData) => {
-                console.log("Booking Submitted", formData);
-
-                // Send email here if needed...
-
-                // Show popup
-                setBookingData(formData)
-                setShowFinalPopup(true);
-              }}
-            />
-
-          )}
-        </div>
-
-
-          <div className="bg-white/90 rounded-[25px] shadow-xl p-8 h-fit self-start sticky top-36">
-            <h4 className="font-bold text-lg mb-1">Beauty Shohre Studio</h4>
+          {/* RIGHT: Summary Menu */}
+          <div className="w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
+            <h4 className="font-bold text-xl text-purplecolor mb-1">Beauty Shohre Studio</h4>
             <p className="text-sm text-gray-500 mb-4">275 Gilmore Ave, Burnaby</p>
 
-            <p className="text-sm font-medium mb-2">Selected Services:</p>
+            <p className="text-sm font-semibold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (
-              <p className="text-sm text-gray-400">No services selected</p>
+              <p className="text-sm text-gray-400 italic">No services selected</p>
             ) : (
-              <ul className="text-sm space-y-1 mb-4">
+              <ul className="text-sm space-y-1 mb-4 text-gray-700">
                 {selection.selected.map((name) => (
                   <li key={name}>• {name}</li>
                 ))}
               </ul>
             )}
 
-            <hr className="my-4" />
-            <div className="text-lg font-semibold">
-              <div className="flex justify-between mb-2">
-                <span>Estimated Total</span>
+            <hr className="my-4 border-pink-100" />
+            <div className="text-lg font-semibold text-purplecolor">
+              <div className="flex justify-between mb-1">
+                <span>Total</span>
                 <span>${selection.total}</span>
               </div>
-              <p className="text-sm italic text-gray-400 leading-tight">
-                * Final pricing will be confirmed by Sherry, as it depends on the hair’s length, volume, and thickness.
+              <p className="text-sm italic text-gray-400 mt-2 leading-tight">
+                * Final pricing depends on hair length, volume, and thickness.
               </p>
             </div>
-            {showFinalPopup && bookingData && (
-              <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
-                <div className="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-md space-y-4">
-                  <h3 className="text-lg font-semibold text-purplecolor">Booking Confirmed ✅</h3>
-
-                  <p className="text-sm text-gray-700">
-                    Dear <span className="font-semibold">{bookingData.name}</span>,<br />
-                    your booking has been confirmed.
-                  </p>
-
-                  <p className="text-sm text-gray-700">
-                    <strong>Services:</strong> {bookingData.services.join(", ")}<br />
-                    <strong>Date:</strong> {format(bookingData.date, "PPP")}<br />
-                    <strong>Time:</strong> {bookingData.time}
-                  </p>
-
-                  <p className="text-sm text-gray-600 italic">
-                    You will receive a confirmation email shortly.<br />
-                    To cancel or change your appointment, please contact <br/><strong>Shohre</strong> at <strong>778-513-9006</strong>.
-                  </p>
-
-                  <button
-                    onClick={() => {
-                      setShowFinalPopup(false);
-                      setShowQuestions(false);
-                      setShowDateTime(false);
-                      setBookingData(null);
-                      setBookingTime(null);
-                      setSelection({ selected: [], total: 0 });
-                    }}
-
-                    className="mt-2 px-5 py-2 bg-purplecolor text-white rounded-lg shadow hover:translate-y-[-1px]"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            )}
-
-
 
             <button
-              className="mt-6 w-full py-3 bg-purplecolor text-white font-bold rounded-lg opacity-90"
+              className={`mt-6 w-full py-3 rounded-full text-white font-bold transition ${
+                selection.selected.length === 0
+                  ? "bg-purplecolor/20 cursor-not-allowed"
+                  : "bg-purplecolor hover:brightness-110"
+              }`}
               disabled={selection.selected.length === 0}
               onClick={() => setShowDateTime(true)}
             >
@@ -149,7 +252,45 @@ export default function Booking() {
           </div>
         </div>
       </div>
+
+      {/* ✅ FINAL POPUP */}
+      {showFinalPopup && bookingData && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
+          <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-md space-y-4">
+            <h3 className="text-xl font-semibold text-purplecolor">Booking Confirmed ✅</h3>
+
+            <p className="text-sm text-gray-700">
+              Dear <span className="font-semibold">{bookingData.name}</span>,<br />
+              your booking has been confirmed.
+            </p>
+
+            <p className="text-sm text-gray-700">
+              <strong>Services:</strong> {bookingData.services.join(", ")}<br />
+              <strong>Date:</strong> {format(bookingData.date, "PPP")}<br />
+              <strong>Time:</strong> {bookingData.time}
+            </p>
+
+            <p className="text-sm text-gray-600 italic">
+              You will receive a confirmation email shortly.<br />
+              For changes, contact <strong>Shohre</strong> at <strong>778-513-9006</strong>.
+            </p>
+
+            <button
+              onClick={() => {
+                setShowFinalPopup(false);
+                setShowQuestions(false);
+                setShowDateTime(false);
+                setBookingData(null);
+                setBookingTime(null);
+                setSelection({ selected: [], total: 0 });
+              }}
+              className="mt-2 px-5 py-2 bg-purplecolor text-white rounded-lg shadow hover:brightness-110"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-

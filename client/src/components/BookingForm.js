@@ -28,9 +28,12 @@ const tabs = ["Featured", "Hair", "Face", "Add-ons", "Men"];
 
   return (
     <div className="space-y-6 font-bodonimoda">
-      <h2 className="mb-12 px-6 py-3 text-2xl font-bold text-purplecolor bg-white/80 rounded-full shadow-md drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] w-fit tracking-wide">
-        Services
-      </h2>
+      <div className="text-center">
+        <h2 className="text-3xl text-purplecolor mb-6">
+          <span className="border-t border-b border-gray-300 px-6">Services</span>
+        </h2>
+
+      </div>
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-3 mb-6">

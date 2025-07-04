@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Booking from "../assets/booking.jpg";
 
-
 export default function HeroSection() {
   const navigate = useNavigate();
   const handleBooking = () => {
@@ -10,19 +9,19 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative h-screen bg-fixed bg-center bg-cover bg-no-repeat flex flex-col justify-center items-center  "
+      className="relative min-h-[80vh] sm:min-h-screen bg-fixed bg-center bg-cover bg-no-repeat flex flex-col justify-center items-center"
       style={{
         backgroundImage: `url(${Booking})`,
       }}
     >
-<div className="bg-black/10 backdrop-blur-sm p-6 md:p-10 rounded-full max-w-xl text-center transform -translate-y-10">
-        <h2 className="text-4xl md:text-3xl font-bodonimoda text-white mb-4">
+      <div className="bg-black/10 backdrop-blur-sm px-4 py-6 sm:px-6 sm:py-8 md:px-10 rounded-2xl max-w-xl w-[90%] sm:w-auto text-center">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bodonimoda text-white mb-3 sm:mb-4">
           Book Your Appointment
         </h2>
-        <p className="text-white mb-2 font-bodonimoda text-lg">
+        <p className="text-white font-bodonimoda text-base sm:text-lg mb-1">
           Phone Number: (778) 513-9006
         </p>
-        <p className="text-white mb-4 font-bodonimoda text-lg">
+        <p className="text-white font-bodonimoda text-base sm:text-lg mb-4">
           Choose your service and easily book online today!
         </p>
         <button
@@ -35,4 +34,3 @@ export default function HeroSection() {
     </section>
   );
 }
-
