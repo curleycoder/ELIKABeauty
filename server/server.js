@@ -5,7 +5,7 @@ require("dotenv").config();
 const path = require("path"); 
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3001" }));
+app.use(cors());
 app.use(express.json());
 
 const bookingRoutes = require("./routes/bookings");
