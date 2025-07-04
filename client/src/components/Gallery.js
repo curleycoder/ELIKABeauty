@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 
-const baseURL = process.env.REACT_APP_API_URL;
+const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
 
 
@@ -14,7 +14,7 @@ export default function Gallery() {
 
 
   useEffect(() => {
-    fetch("/api/gallery")
+    fetch(`${baseURL}/api/gallery`)
       .then((res) => res.json())
       .then((data) => {
         setGalleryImages(data.images);

@@ -10,7 +10,7 @@ export default function GoogleReview() {
   const [expanded, setExpanded] = useState({});
 
   const fetchReviews = () => {
-    fetch("http://localhost:3000/api/google/reviews")
+    fetch(`${baseURL}/google-reviews`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data.reviews)) {
