@@ -16,7 +16,6 @@ export default function GoogleReview() {
     fetch(`${baseURL}/api/google/reviews`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("📣 Google Reviews fetched:", data.reviews);
         setReviews(Array.isArray(data.reviews) ? data.reviews : []);
         setLoading(false);
       })
