@@ -5,6 +5,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000";
+
+
 export default function GoogleReview() {
   const [reviews, setReviews] = useState([]);
   const [expanded, setExpanded] = useState({});
