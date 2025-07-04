@@ -9,12 +9,14 @@ app.use(cors({ origin: "http://localhost:3001" }));
 app.use(express.json());
 
 const bookingRoutes = require("./routes/bookings");
-const serviceRoutes = require("./routes/services")
 const galleryRoutes = require("./routes/gallery")
 const googleRoutes = require("./routes/googleReview")
+const emailRoutes = require("./routes/email");
+
+
 
 app.use("/api/bookings", bookingRoutes)
-app.use("/api/services", serviceRoutes)
+app.use("/api/email", emailRoutes);
 app.use("/api/gallery", galleryRoutes)
 app.use("/api/google", googleRoutes)
 
