@@ -13,7 +13,7 @@ export default function GoogleReview() {
   const [expanded, setExpanded] = useState({});
 
   const fetchReviews = () => {
-    fetch(`${baseURL}/google-reviews`)
+    fetch(`${baseURL}/api/google-reviews`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data.reviews)) {

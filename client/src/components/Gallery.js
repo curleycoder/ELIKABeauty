@@ -17,8 +17,11 @@ export default function Gallery() {
     fetch(`${baseURL}/api/gallery`)
       .then((res) => res.json())
       .then((data) => {
-        setGalleryImages(data.images);
-        setSelectedImage(baseURL + data.images[0]);
+        if (Array.isArray(data.images) && data.images.length > 0) {
+          setGalleryImages(data.images);
+          setSelectedImage(baseURL + data.images[0]);
+        }
+
       })
       .catch((err) => console.log("Failed to load gallery images:", err));
   }, []);
