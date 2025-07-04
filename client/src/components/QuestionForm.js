@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 
 
+const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
 
 export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
@@ -22,7 +23,7 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch("/api/email/send-confirmation", {
+    await fetch(`${baseURL}/api/email/send-confirmation`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
