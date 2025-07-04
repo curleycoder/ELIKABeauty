@@ -20,7 +20,7 @@ app.use("/api/email", emailRoutes);
 app.use("/api/gallery", galleryRoutes)
 app.use("/api/google", googleRoutes)
 
-app.use('/gallery', express.static(path.join(__dirname, 'public/gallery')))
+app.use('/gallery', express.static(path.join(__dirname, 'public', 'gallery')))
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))

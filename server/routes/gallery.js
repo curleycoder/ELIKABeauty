@@ -6,7 +6,7 @@ const path = require("path");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  const galleryPath = path.join(__dirname, "../public/gallery");
+  const galleryPath = path.join(__dirname,"..", "public","gallery");
 
   fs.readdir(galleryPath, (err, files) => {
     if (err) {
@@ -21,5 +21,8 @@ router.get("/", (req, res) => {
     res.json({ images: imageUrls });
   });
 });
+
+
+
 
 module.exports = router;
