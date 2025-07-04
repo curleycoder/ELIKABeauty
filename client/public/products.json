@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "1",
+    "name": "Keratin Smooth Shampoo",
+    "description": "Sulfate-free formula for frizz-free hair.",
+    "price": 32,
+    "image": "/images/keratin-shampoo.jpg"
+  },
+  {
+    "_id": "2",
+    "name": "Argan Oil Serum",
+    "description": "Deep hydration and shine for damaged hair.",
+    "price": 28,
+    "image": "/images/argan-serum.jpg"
+  },
+  {
+    "_id": "3",
+    "name": "Volumizing Spray",
+    "description": "Boosts hair volume and texture instantly.",
+    "price": 25,
+    "image": "/images/volume-spray.jpg"
+  },
+  {
+    "_id": "4",
+    "name": "Volumizing Spray",
+    "description": "Boosts hair volume and texture instantly.",
+    "price": 25,
+    "image": "/images/volume.jpg"
+  },
+  {
+    "_id": "5",
+    "name": "Volumizing Spray",
+    "description": "Boosts hair volume and texture instantly.",
+    "price": 25,
+    "image": "/images/shampoo.jpg"
+  },
+  {
+    "_id": "6",
+    "name": "Volumizing Spray",
+    "description": "Boosts hair volume and texture instantly.",
+    "price": 25,
+    "image": "/images/conditioner.jpg"
+  }
+]

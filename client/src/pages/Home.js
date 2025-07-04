@@ -7,6 +7,7 @@ import Gallery  from "../components/Gallery";
 import Instagram from "../components/Instagram";
 import GoogleReview from "../components/GoogleReview";
 import HeroSection from "../components/HeroSection";
+import AboutMe from "../components/AboutMe";
 
 
 
@@ -15,12 +16,13 @@ export default function Home(){
         <>
             <HeroSection /> 
 
+            
             <div className="px-7 py-5">
                 <GoogleReview/>
                 <Gallery />
 
-                <div className="text-center">
-                    <h2 className="text-3xl font-bodonimoda text-[#55203d] mb-6">
+                <div className="text-center mt-20">
+                    <h2 className="text-3xl font-bodonimoda text-[#55203d] mb-10">
                         <span className="border-t border-b border-gray-300 px-6">
                             Healthy Hair
                         </span>
@@ -46,6 +48,7 @@ export default function Home(){
                 </div>
   
             </div>
+            <AboutMe/>
             <Instagram />
         </>
     )

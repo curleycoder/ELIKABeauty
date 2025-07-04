@@ -34,7 +34,7 @@ export default function GoogleReview() {
   };
 
   return (
-    <section className="bg-white p-6 rounded-lg max-w-6xl mx-auto my-10">
+    <section className="bg-white p-6 rounded-lg max-w-6xl mx-auto">
       <div className="text-center">
         <h2 className="text-3xl pt-10 font-bodonimoda text-[#55203d] mb-4">
           <span className="border-t border-b border-gray-300 px-6">

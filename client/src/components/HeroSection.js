@@ -27,7 +27,7 @@ export default function HeroSection() {
         </p>
         <button
           onClick={handleBooking}
-          className="bg-[#eabec5] font-bodonimoda text-[#55203d] px-6 py-2 rounded-full hover:bg-pink-700 hover:text-white transition"
+          className="bg-[#eabec5] font-bodonimoda text-[#55203d] px-6 py-2 rounded-full hover:bg-purplecolor hover:text-white transition"
         >
           BOOK NOW
         </button>

@@ -1,147 +1,74 @@
-import React, { useState } from "react";
-import emailjs from "emailjs-com";
+import React, { useState, useEffect } from "react";
+import { FaPlus } from "react-icons/fa";
+import services from "../data/services";
 
-const servicesList = [
-  { name: "Balayage", price: 180 },
-  { name: "Eyebrows Threading", price: 25 },
-  { name: "Hair Styling", price: 60 },
-  { name: "Hair Cut", price: 45 },
-  { name: "Makeup", price: 120 },
-  { name: "Microblading", price: 300 },
-  { name: "Perms", price: 140 },
-  { name: "Highlight", price: 150 },
-  { name: "Hair Color", price: 130 },
-  { name: "Keratin", price: 250 },
-];
 
-export default function BookingForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    date: "",
-    time: "",
-    services: [],
-  });
+export default function BookingForm({ onSelectionChange }) {
+  const [selected, setSelected] = useState([]);
+  const [activeTab, setActiveTab] = useState("Featured");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+const tabs = ["Featured", "Hair", "Face", "Add-ons", "Men"];
+
+
+  const handleSelect = (name) => {
+    setSelected((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+    );
   };
 
-  const handleServiceChange = (service) => {
-    const newServices = formData.services.includes(service)
-      ? formData.services.filter((s) => s !== service)
-      : [...formData.services, service];
-    setFormData({ ...formData, services: newServices });
-  };
+  const total = selected.reduce((sum, name) => {
+    const s = services.find((s) => s.name === name);
+    return sum + (s?.price || 0);
+  }, 0);
 
-  const calculateTotal = () => {
-    return formData.services.reduce((sum, serviceName) => {
-      const service = servicesList.find((s) => s.name === serviceName);
-      return sum + (service ? service.price : 0);
-    }, 0);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const templateParams = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      date: formData.date,
-      time: formData.time,
-      services: formData.services.join(", "),
-      total: `$${calculateTotal()}`,
-    };
-
-    emailjs
-      .send(
-        "service_jsib11b", 
-        "template_ktll0pe",
-        templateParams,
-        "your_user_id" // replace with your EmailJS public key
-      )
-      .then(
-        (response) => {
-          alert("Booking request sent successfully!");
-        },
-        (error) => {
-          alert("Failed to send booking request.");
-          console.error(error);
-        }
-      );
-  };
+  // Notify parent (Booking.jsx) when selection or total changes
+  useEffect(() => {
+    onSelectionChange?.({ selected, total });
+  }, [selected, total, onSelectionChange]);
 
   return (
-    <section className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-lg">
-      <h2 className="text-3xl font-bodonimoda text-center text-[#55203d] mb-6">Book an Appointment</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          required
-          placeholder="Your Name"
-          className="w-full border border-gray-300 p-2 rounded"
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          required
-          placeholder="Your Email"
-          className="w-full border border-gray-300 p-2 rounded"
-          onChange={handleChange}
-        />
-        <input
-          type="tel"
-          name="phone"
-          required
-          placeholder="Phone Number"
-          className="w-full border border-gray-300 p-2 rounded"
-          onChange={handleChange}
-        />
-        <input
-          type="date"
-          name="date"
-          required
-          className="w-full border border-gray-300 p-2 rounded"
-          onChange={handleChange}
-        />
-        <input
-          type="time"
-          name="time"
-          required
-          className="w-full border border-gray-300 p-2 rounded"
-          onChange={handleChange}
-        />
+    <div className="space-y-6 font-bodonimoda">
+      <h2 className="mb-12 px-6 py-3 text-2xl font-bold text-purplecolor bg-white/80 rounded-full shadow-md drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] w-fit tracking-wide">
+        Services
+      </h2>
 
-        <div className="border border-gray-200 p-4 rounded">
-          <h3 className="text-lg font-semibold mb-2 text-[#55203d]">Select Services:</h3>
-          {servicesList.map((service, index) => (
-            <label key={index} className="block">
-              <input
-                type="checkbox"
-                value={service.name}
-                checked={formData.services.includes(service.name)}
-                onChange={() => handleServiceChange(service.name)}
-                className="mr-2"
-              />
-              {service.name} — ${service.price}
-            </label>
-          ))}
-        </div>
+      {/* Tabs */}
+      <div className="flex flex-wrap gap-3 mb-6">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-4 py-2 rounded-full font-bold text-sm transition ${
+              activeTab === tab
+                ? "bg-purplecolor text-white shadow scale-110" 
+                : " bg-white text-purplecolor hover:translate-y-[-2px]"
+            }`}
 
-        <div className="text-right text-lg font-bold text-[#55203d]">
-          Total: ${calculateTotal()}
-        </div>
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
 
+
+      {/* Service Cards */}
+      <div className="space-y-4 overflow-y-auto pr-2" style={{ flex: 1, minHeight: 0 }}>
+    {services.map((s, index) => (
+      <div
+        key={index + s.name}
+        className="bg-white rounded-[20px] shadow p-6 flex justify-between items-center"
+      >
+        <p className="font-medium text-lg">{s.name}</p>
         <button
-          type="submit"
-          className="w-full bg-[#eabec5] text-[#55203d] font-semibold py-2 rounded-full hover:bg-pink-600 hover:text-white transition"
+          onClick={() => handleSelect(s.name)}
+          className="p-2 rounded-full border hover:bg-purplecolor hover:text-white"
         >
-          Submit Booking
+          <FaPlus />
         </button>
-      </form>
-    </section>
+      </div>
+    ))}
+  </div>
+
+    </div>
   );
 }

@@ -1,47 +1,104 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import logo from "../logo2.png"
+import React from "react";
+import logo from "../logo2.png";
+import { useNavigate, useLocation } from "react-router-dom";
+import { scroller } from "react-scroll";
 
-export default function Navbar(){
-    return(
-        // <div className="bg-white shadow-md">
-        //     <nav className="text-purplecolor p-4 max-w-6xl flex justify-between items-center mx-auto">
-        //         <div className="flex items-center space-x-4">
-        //             <img src={logo} alt="Beauty Shohre Studio Logo" className="h-16 w-auto" />
-        //             <h1 className="text-xl font-bodonimoda font-bold">BEAUTY SHOHRE STUDIO</h1>
-        //         </div>
-        //         <div className="font-bodonimoda space-x-6">
-        //             <Link to="/" className="hover:text-pinkcolor transition-colors duration-300">Home</Link>
-        //             <Link to="/booking" className="hover:text-pinkcolor transition-colors duration-300">Booking</Link>
-        //             <Link to="/product" className="hover:text-pinkcolor transition-colors duration-300">Products</Link>
-        //             <Link to="/about" className="hover:text-pinkcolor transition-colors duration-300">About Me</Link>
-        //         </div>
-        //     </nav>
-        // </div>
-        <div className="bg-white shadow-md sticky top-0 z-50">
+export default function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleScrollToAbout = () => {
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        scroller.scrollTo("about-section", {
+          smooth: true,
+          duration: 500,
+          offset: -80,
+        });
+      }, 500);
+    } else {
+      scroller.scrollTo("about-section", {
+        smooth: true,
+        duration: 500,
+        offset: -80,
+      });
+    }
+  };
+
+  const handleScrollToGallery = () => {
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        scroller.scrollTo("gallery-section", {
+          smooth: true,
+          duration: 500,
+          offset: -80,
+        });
+      }, 500);
+    } else {
+      scroller.scrollTo("gallery-section", {
+        smooth: true,
+        duration: 500,
+        offset: -80,
+      });
+    }
+  };
+
+  const routeMap = {
+    Home: "/",
+    Booking: "/booking",
+    Products: "/product",
+  };
+
+  return (
+    <div className="bg-white shadow-md sticky top-0 z-50">
       <nav className="text-purplecolor p-4 max-w-6xl flex justify-between items-center mx-auto">
-
+        {/* Left: Logo and Studio name */}
         <div className="flex items-center space-x-4">
           <img src={logo} alt="Beauty Shohre Studio Logo" className="h-16 w-auto" />
           <h1 className="text-xl font-bodonimoda font-bold">BEAUTY SHOHRE STUDIO</h1>
         </div>
 
-      
-        <div className="font-bodonimoda space-x-4">
-          {["Home", "Booking", "Products", "About Me"].map((item, index) => {
-            const route = item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "")}`;
+        {/* Right: Navigation */}
+        <div className="flex items-center gap-4 font-bodonimoda">
+          {["Home", "Booking", "Products", "Gallery", "About Me"].map((item, index) => {
+            if (item === "About Me") {
+              return (
+                <div
+                  key={index}
+                  onClick={handleScrollToAbout}
+                  className="cursor-pointer px-3 py-2 rounded-md border border-transparent hover:translate-y-[-2px] hover:text-pinkcolor transition-all duration-300"
+                >
+                  {item}
+                </div>
+              );
+            }
+
+            if (item === "Gallery") {
+              return (
+                <div
+                  key={index}
+                  onClick={handleScrollToGallery}
+                  className="cursor-pointer px-3 py-2 rounded-md border border-transparent hover:translate-y-[-2px] hover:text-pinkcolor transition-all duration-300"
+                >
+                  {item}
+                </div>
+              );
+            }
+
             return (
-              <Link
+              <div
                 key={index}
-                to={route}
-                className="px-3 py-2 rounded-md border border-transparent hover:border-[#55203d] hover:bg-[#55203d] hover:text-white transition-all duration-300"
+                onClick={() => navigate(routeMap[item])}
+                className="cursor-pointer px-3 py-2 rounded-md border border-transparent hover:translate-y-[-2px] hover:text-pinkcolor transition-all duration-300"
               >
                 {item}
-              </Link>
+              </div>
             );
           })}
         </div>
       </nav>
     </div>
-    )
+  );
 }

@@ -6,6 +6,9 @@
 @import 'swiper/css/navigation';
 @import 'swiper/css/pagination';
 
+@import "react-datepicker/dist/react-datepicker.css";
+
+
 body {
   margin: 0;
   padding: 0;

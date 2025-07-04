@@ -14,7 +14,7 @@ export default function Instagram() {
   }, []);
 
   return (
-    <section className="bg-white pt-20 rounded-lg mx-4 ">
+    <section className="bg-white pt-10 rounded-lg mb-0 ">
       <div className="text-center">
         <h2 className="text-3xl font-bodonimoda text-purplecolor mb-6 pt-10">
           <span className="border-t border-b border-gray-300 px-6">
