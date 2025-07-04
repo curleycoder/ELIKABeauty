@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from "../logo2.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
-import { Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";   
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
