@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from "../logo2.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
-import { Menu, X } from "lucide-react";   
+import { FiMenu, FiX } from "react-icons/fi"; 
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,8 +63,9 @@ export default function Navbar() {
         {/* Mobile menu toggle */}
         <div className="sm:hidden">
           <button onClick={() => setMenuOpen(!menuOpen)} className="text-purplecolor focus:outline-none">
-            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+            {menuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
           </button>
+
         </div>
 
         {/* Desktop Menu */}
