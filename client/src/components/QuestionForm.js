@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
 
-const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000";
+const baseURL =
+  process.env.REACT_APP_API_URL || "https://api.beautyshohrestudio.ca";
+
 
 export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
   const [form, setForm] = useState({
