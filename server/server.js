@@ -4,24 +4,15 @@ const cors = require('cors');
 require("dotenv").config();
 const path = require("path"); 
 
-const allowedOrigins = [
-  "http://localhost:3001",              // local dev
-  "https://beautyshohrestudio.com",     // frontend
-  "https://api.beautyshohrestudio.com"  // if frontend fetches from API directly
-];
-
-
 
 const app = express();
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  }
+origin: ["https://beautyshohrestudio.ca", "https://www.beautyshohrestudio.ca"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
 }));
+
 app.use(express.json());
 
 const bookingRoutes = require("./routes/bookings");
@@ -51,4 +42,4 @@ app.get("/api/google/reviews", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`)) ;
