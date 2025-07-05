@@ -9,11 +9,13 @@ export default function ArticleCard({ title, text, image }) {
       <img src={image} alt={title} className="w-full h-48 object-cover" />
 
       <div className="p-4 text-purplecolor">
-        <h3 className="text-lg sm:text-xl font-semibold mb-2">{title}</h3>
+        <h3 className="text-lg sm:text-xl font-semibold mb-4">{title}</h3>
 
-        <p className={`text-sm text-gray-700 mb-2 ${!isExpanded ? "line-clamp-4" : ""}`}>
-          {text}
-        </p>
+        <div className="text-sm text-gray-700 space-y-3 mb-3">
+          {(isExpanded ? text : text.slice(0, 2)).map((para, index) => (
+            <p key={index}>{para}</p>
+          ))}
+        </div>
 
         <button
           onClick={toggleText}

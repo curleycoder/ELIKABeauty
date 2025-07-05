@@ -21,22 +21,28 @@ export default function AboutMe() {
           className="w-40 h-40 sm:w-60 sm:h-60 rounded-full object-cover shadow-md mx-auto sm:mx-0"
         />
 
-        <div className="text-base sm:text-lg leading-relaxed">
+        <div className="mb-6 text-gray-800">
           <p className="mb-4">
             I’m <strong>Shohreh</strong> — a passionate and experienced hairstylist with over <strong>30 years</strong> of professional experience in the beauty industry. I proudly serve clients across <strong>Metro Vancouver</strong>, combining artistry, precision, and care to bring out your unique beauty.
+          </p>
 
-              At Beauty Shohre Studio, my specialized services include:
-                  •    Balayage and hair highlights
-                  •    Hair coloring and damage repair
-                  •    Keratin treatments and hair smoothing
-                  •    Haircuts and blowouts
-                  •    Eyebrow and facial threading
-                  •    Bridal makeup and professional updos
-                  •    Facials (deep cleansing and rejuvenation)
+          <p className="mb-2">At Beauty Shohre Studio, my specialized services include:</p>
 
-              My focus is always on the health and natural beauty of your hair and skin — not just how it looks, but how it makes you feel. Every appointment is a step toward feeling more confident, radiant, and empowered.
+          <ul className="list-disc list-inside mb-4 space-y-1">
+            <li>Balayage and hair highlights</li>
+            <li>Hair coloring and damage repair</li>
+            <li>Keratin treatments and hair smoothing</li>
+            <li>Haircuts and blowouts</li>
+            <li>Eyebrow and facial threading</li>
+            <li>Bridal makeup and professional updos</li>
+            <li>Facials (deep cleansing and rejuvenation)</li>
+          </ul>
+
+          <p>
+            My focus is always on the health and natural beauty of your hair and skin — not just how it looks, but how it makes you feel. Every appointment is a step toward feeling more confident, radiant, and empowered.
           </p>
         </div>
+
       </div>
     </section>
   );
