@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaPlus, FaCheck } from "react-icons/fa";
 import services from "../data/services";
 
-export default function BookingForm({ onSelectionChange, averageDuration }) {
+export default function BookingForm({ onSelectionChange, averageDuration, onContinue }) {
   const [selected, setSelected] = useState([]);
   const [activeTab, setActiveTab] = useState("Hair");
   const [conflictWarning, setConflictWarning] = useState(false);
