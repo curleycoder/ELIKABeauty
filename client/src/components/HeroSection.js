@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Booking from "../assets/booking.jpg";
+import Booking from "../assets/booking.webp";
 
 export default function HeroSection() {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative min-h-[80vh] sm:min-h-screen bg-fixed bg-center bg-cover bg-no-repeat flex flex-col justify-center items-center"
+      className="relative min-h-[80vh] sm:min-h-screen bg-center bg-cover bg-no-repeat flex flex-col justify-center items-center"
       style={{
         backgroundImage: `url(${Booking})`,
       }}
