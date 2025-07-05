@@ -154,9 +154,16 @@ export default function BookingForm({ onSelectionChange, averageDuration }) {
                 </div>
 
 
-                <button className="mt-4 w-full bg-purplecolor text-white py-2 rounded-xl font-bold">
+                <button 
+                  className="mt-4 w-full bg-purplecolor text-white py-2 rounded-xl font-bold"
+                  onClick={() => {
+                    setShowDetails(false); // optional: collapse box
+                    onContinue?.();        // ✅ trigger the parent navigation
+                  }}
+                >
                   Continue
                 </button>
+
               </div>
             </div>
           )}

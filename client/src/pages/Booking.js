@@ -43,7 +43,8 @@ export default function Booking() {
             {!showDateTime ? (
               <BookingForm 
               onSelectionChange={setSelection}
-              averageDuration={durationStats.avg} />
+              averageDuration={durationStats.avg}
+              onContinue={() => setShowDateTime(true)} />
             ) : !showQuestions ? (
               <DateTimePicker
                 duration={durationStats.total}
