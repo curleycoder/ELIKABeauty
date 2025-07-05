@@ -23,11 +23,18 @@ export default function AboutMe() {
 
         <div className="text-base sm:text-lg leading-relaxed">
           <p className="mb-4">
-            I’m <strong>Sherry</strong> — a passionate and experienced hairstylist proudly serving clients in <strong>Metro Vancouver</strong>. With over <strong>40 years of experience</strong> in the beauty industry — <strong>34 years in Iran</strong> and <strong>6 years in Canada</strong> — I blend traditional artistry with modern techniques to help each client feel beautiful and confident.
-          </p>
+            I’m <strong>Shohreh</strong> — a passionate and experienced hairstylist with over <strong>30 years</strong> of professional experience in the beauty industry. I proudly serve clients across <strong>Metro Vancouver</strong>, combining artistry, precision, and care to bring out your unique beauty.
 
-          <p>
-            At <strong>Beauty Shohre Studio</strong>, I specialize in haircuts, balayage, keratin, makeup, and more. My top priority is the <strong>health of your hair</strong> — not just its appearance. Every appointment is a step toward looking and feeling amazing.
+              At Beauty Shohre Studio, my specialized services include:
+                  •    Balayage and hair highlights
+                  •    Hair coloring and damage repair
+                  •    Keratin treatments and hair smoothing
+                  •    Haircuts and blowouts
+                  •    Eyebrow and facial threading
+                  •    Bridal makeup and professional updos
+                  •    Facials (deep cleansing and rejuvenation)
+
+              My focus is always on the health and natural beauty of your hair and skin — not just how it looks, but how it makes you feel. Every appointment is a step toward feeling more confident, radiant, and empowered.
           </p>
         </div>
       </div>
