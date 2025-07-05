@@ -4,12 +4,23 @@ const cors = require('cors');
 require("dotenv").config();
 const path = require("path"); 
 
+const allowedOrigins = [
+  "https://beautyshohrestudio.ca",
+  "https://www.beautyshohrestudio.ca",
+];
 
 const app = express();
 
 app.use(cors({
-origin: ["https://beautyshohrestudio.ca", "https://www.beautyshohrestudio.ca"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error("Blocked by CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
 }));
 
