@@ -19,7 +19,8 @@ router.post("/send-confirmation", async (req, res) => {
     <ul>
       <li><strong>Date:</strong> ${date}</li>
       <li><strong>Time:</strong> ${time}</li>
-      <li><strong>Services:</strong> ${services.join(", ")}</li>
+      <li><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : "Not provided"}</li>
+
     </ul>
     <p>You will receive a reminder before your appointment.</p>
     <p>If you need to cancel or reschedule, contact Shohre at <strong>778-513-9006</strong>.</p>
@@ -32,7 +33,7 @@ router.post("/send-confirmation", async (req, res) => {
     <ul>
       <li><strong>Date:</strong> ${date}</li>
       <li><strong>Time:</strong> ${time}</li>
-      <li><strong>Services:</strong> ${services.join(", ")}</li>
+      <li><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : "Not provided"}</li>
       <li><strong>Email:</strong> ${email}</li>
     </ul>
   `;
@@ -61,28 +62,5 @@ router.post("/send-confirmation", async (req, res) => {
   }
 });
 
-router.get("/test", async (req, res) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  try {
-    await transporter.sendMail({
-      from: `"Test Email" <${process.env.SMTP_USER}>`,
-      to: "shabnam_beiraghian@yahoo.com",
-      subject: "Test Email",
-      html: "<p>This is a test email from Beauty Shohre Studio</p>",
-    });
-
-    res.send("✅ Email sent successfully");
-  } catch (err) {
-    console.error("❌ Email error:", err);
-    res.status(500).send("❌ Failed to send email");
-  }
-});
 
 module.exports = router;
