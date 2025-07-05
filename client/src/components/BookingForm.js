@@ -55,22 +55,32 @@ const tabs = ["Featured", "Hair", "Face", "Add-ons", "Men"];
 
 
       {/* Service Cards */}
+
       <div className="space-y-4 overflow-y-auto pr-2" style={{ flex: 1, minHeight: 0 }}>
-    {services.map((s, index) => (
-      <div
-        key={index + s.name}
-        className="bg-white rounded-[20px] shadow p-6 flex justify-between items-center"
-      >
-        <p className="font-medium text-lg">{s.name}</p>
-        <button
-          onClick={() => handleSelect(s.name)}
-          className="p-2 rounded-full border hover:bg-purplecolor hover:text-white"
-        >
-          <FaPlus />
-        </button>
+        {services
+          .filter((s) => activeTab === "Featured" || s.categories?.includes(activeTab))
+          .map((s, index) => (
+            <div
+              key={index + s.name}
+              className="bg-white rounded-[20px] shadow p-6 flex justify-between items-start gap-4"
+            >
+              <div>
+                <p className="font-medium text-lg">{s.name}</p>
+                <p className="text-gray-600 text-sm">
+                  ${s.price}{s.fromPrice ? "+" : ""} – {s.description}
+                </p>
+
+              </div>
+              <button
+                onClick={() => handleSelect(s.name)}
+                className="p-2 rounded-full border hover:bg-purplecolor hover:text-white"
+              >
+                <FaPlus />
+              </button>
+            </div>
+        ))}
       </div>
-    ))}
-  </div>
+
 
     </div>
   );
