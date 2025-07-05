@@ -11,8 +11,8 @@ export default function ArticleCard({ title, text, image }) {
       <div className="p-4 text-purplecolor">
         <h3 className="text-lg sm:text-xl font-semibold mb-2">{title}</h3>
 
-        <p className="text-sm text-gray-700 mb-2 line-clamp-3 sm:line-clamp-4">
-          {isExpanded ? text : `${text.slice(0, 120)}...`}
+        <p className={`text-sm text-gray-700 mb-2 ${!isExpanded ? "line-clamp-4" : ""}`}>
+          {text}
         </p>
 
         <button
