@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaCheck } from "react-icons/fa";
 import services from "../data/services";
 
-
-export default function BookingForm({ onSelectionChange }) {
+export default function BookingForm({ onSelectionChange, averageDuration }) {
   const [selected, setSelected] = useState([]);
-  const [activeTab, setActiveTab] = useState("Featured");
+  const [activeTab, setActiveTab] = useState("Hair");
+  const [conflictWarning, setConflictWarning] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
-const tabs = ["Featured", "Hair", "Face", "Add-ons", "Men"];
-
+  const tabs = ["Hair", "Face", "Men", "Add-ons"];
 
   const handleSelect = (name) => {
     setSelected((prev) =>
@@ -21,67 +21,147 @@ const tabs = ["Featured", "Hair", "Face", "Add-ons", "Men"];
     return sum + (s?.price || 0);
   }, 0);
 
-  // Notify parent (Booking.jsx) when selection or total changes
   useEffect(() => {
     onSelectionChange?.({ selected, total });
   }, [selected, total, onSelectionChange]);
 
+  useEffect(() => {
+    const hasKeratin = selected.includes("Keratin");
+    const conflicting = ["Highlight", "Balayage", "Hair Color"];
+    const hasConflict = conflicting.some((s) => selected.includes(s));
+    setConflictWarning(hasKeratin && hasConflict);
+  }, [selected]);
+
   return (
-    <div className="space-y-6 font-bodonimoda">
+    <div className="space-y-6 font-bodonimoda px-4 pb-28">
       <div className="text-center">
         <h2 className="text-3xl text-purplecolor mb-6">
           <span className="border-t border-b border-gray-300 px-6">Services</span>
         </h2>
-
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-wrap gap-3 mb-6">
+      <div className="flex flex-wrap gap-2 justify-center mb-4">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-full font-bold text-sm transition ${
+            className={`px-3 py-1.5 rounded-full font-semibold text-sm transition-all ${
               activeTab === tab
-                ? "bg-purplecolor text-white shadow scale-110" 
-                : " bg-white text-purplecolor hover:translate-y-[-2px]"
+                ? "bg-purplecolor text-white shadow-md scale-105"
+                : "bg-gray-100 text-purplecolor hover:bg-purple-100"
             }`}
-
           >
             {tab}
           </button>
         ))}
       </div>
 
+      {/* Warning */}
+      {conflictWarning && (
+        <div className="transition-opacity duration-300 ease-in-out opacity-100 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+          <strong className="font-bold">⚠️ Warning:</strong>
+          <span className="block sm:inline ml-2">
+            These two services can't be done in one day. We care about the health of your hair 💜
+          </span>
+        </div>
+      )}
 
-      {/* Service Cards */}
-
-      <div className="space-y-4 overflow-y-auto pr-2" style={{ flex: 1, minHeight: 0 }}>
+      {/* Services List */}
+      <div className="space-y-4 overflow-y-auto">
         {services
-          .filter((s) => activeTab === "Featured" || s.categories?.includes(activeTab))
+          .filter((s) => s.category === activeTab)
           .map((s, index) => (
             <div
               key={index + s.name}
-              className="bg-white rounded-[20px] shadow p-6 flex justify-between items-start gap-4"
+              className={`bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 ${
+                selected.includes(s.name) ? "border-2 border-purplecolor" : ""
+              }`}
             >
-              <div>
-                <p className="font-medium text-lg">{s.name}</p>
-                <p className="text-gray-600 text-sm">
-                  ${s.price}{s.fromPrice ? "+" : ""} – {s.description}
-                </p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-gray-900">{s.name}</h3>
+                <div className="text-sm text-gray-600 mt-1">
+                  
+                  <span className="block">
+                    ${s.price}
+                    {s.fromPrice && <span className="text-xs text-gray-400 ml-0.5 align-top">+</span>}
+                  </span>
 
+                  <span className="block truncate">{s.description}</span>
+                </div>
               </div>
-              <button
-                onClick={() => handleSelect(s.name)}
-                className="p-2 rounded-full border hover:bg-purplecolor hover:text-white"
-              >
-                <FaPlus />
-              </button>
+
+              <div className="sm:self-end sm:ml-4">
+                <button
+                  onClick={() => handleSelect(s.name)}
+                  className={`mt-2 sm:mt-0 p-2 border rounded-full transition ${
+                    selected.includes(s.name)
+                      ? "bg-purplecolor text-white border-purplecolor"
+                      : "text-purplecolor hover:bg-purplecolor hover:text-white"
+                  }`}
+                >
+                  {selected.includes(s.name) ? <FaCheck /> : <FaPlus />}
+                </button>
+              </div>
             </div>
-        ))}
+          ))}
       </div>
 
+      {/* Sticky Bar */}
+      {selected.length > 0 && (
+        <>
+          <div className="fixed bottom-0 left-0 w-full bg-white border-t shadow z-50 p-4 sm:hidden">
+            <div className="flex justify-between items-center text-purplecolor font-semibold text-lg">
+              <div>
+                {selected.length} service{selected.length > 1 ? "s" : ""} • ${total}
+              </div>
+              <button onClick={() => setShowDetails(!showDetails)}>
+                {showDetails ? "▲" : "▼"}
+              </button>
+            </div>
+          </div>
 
+          {/* Expandable Detail Box */}
+          {showDetails && (
+            <div className="fixed bottom-16 left-0 w-full px-4 sm:hidden z-40">
+              <div className="bg-white rounded-t-2xl shadow-lg p-4 border">
+                <h3 className="font-bold text-purplecolor mb-3">Selected Services</h3>
+                <ul className="space-y-2 max-h-48 overflow-y-auto text-sm">
+                  {selected.map((sName, i) => {
+                    const item = services.find((s) => s.name === sName);
+                    return (
+                      <li key={i} className="flex justify-between">
+                        <span>{item?.name}</span>
+                        <span>${item?.price}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                  <div className="flex justify-between text-sm text-gray-500 mt-1">
+                    <span>Time on Service</span>
+                    <span>{averageDuration} min</span>
+                  </div>
+
+                <div className="mt-4 border-t pt-3 text-purplecolor">
+                  <div className="flex justify-between text-lg font-bold">
+                    <span>Total:</span>
+                    <span>${total}</span>
+                  </div>
+
+                  <p className="text-sm italic text-gray-400 mt-2 leading-tight">
+                    * Final pricing depends on hair length, volume, and thickness.
+                  </p>
+                </div>
+
+
+                <button className="mt-4 w-full bg-purplecolor text-white py-2 rounded-xl font-bold">
+                  Continue
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

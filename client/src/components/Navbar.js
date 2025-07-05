@@ -8,6 +8,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  
 
   const scrollTo = (target) => {
     const scrollFn = () => {
