@@ -7,8 +7,8 @@ import services from "../data/services";
 import { format } from "date-fns";
 
 function getDurationStats(selected) {
-  const durations = selected
-    .map((name) => services.find((s) => s.name === name)?.duration || 60);
+  const durations = selected.map((s) => s?.duration || 60);
+
   const total = durations.reduce((sum, d) => sum + d, 0);
   const avg = durations.length ? Math.round(total / durations.length) : 0;
   return { total, avg };
@@ -77,8 +77,8 @@ export default function Booking() {
               <p className="text-sm text-gray-400 italic">No services selected</p>
             ) : (
               <ul className="text-sm space-y-1 mb-4 text-gray-700">
-                {selection.selected.map((name) => (
-                  <li key={name}>• {name}</li>
+                {selection.selected.map((s) => (
+                  <li key={s._id}>• {s.name}</li>
                 ))}
               </ul>
             )}

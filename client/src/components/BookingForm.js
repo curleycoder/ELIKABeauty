@@ -96,7 +96,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
           .filter((s) => s.category === activeTab)
           .map((s, index) => (
             <div
-              key={index + s.name}
+              key={s._id || index}
               className={`bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 ${
                 selected.some(sel => sel._id === s._id) ? "border-2 border-purplecolor" : ""
               }`}
@@ -151,17 +151,19 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
               <div className="bg-white rounded-t-2xl shadow-lg p-4 border">
                 <h3 className="font-bold text-purplecolor mb-3">Selected Services</h3>
                 <ul className="space-y-2 max-h-48 overflow-y-auto text-sm">
-                  {Array.isArray(selected) &&
-                    selected.map((item, i) =>
-                      item?.name && typeof item?.price === "number" ? (
-                        <li key={i} className="flex justify-between">
-                          <span>{item.name}</span>
-                          <span>${item.price}</span>
+                  {selected?.length > 0 &&
+                    selected.map((s, i) => {
+                      if (!s || typeof s.name !== "string" || typeof s.price !== "number") return null;
+                      return (
+                        <li key={s._id || i} className="flex justify-between">
+                          <span>{s.name}</span>
+                          <span>${s.price}</span>
                         </li>
-                      ) : null
-                    )}
+                      );
+                    })}
                 </ul>
-                              
+
+                                              
                   <div className="flex justify-between text-sm text-gray-500 mt-1">
                     <span>Time on Service</span>
                     <span>{averageDuration} min</span>
