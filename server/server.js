@@ -7,21 +7,21 @@ const path = require("path");
 const allowedOrigins = [
   "https://beautyshohrestudio.ca",
   "https://www.beautyshohrestudio.ca",
+  "http://localhost:3000",
 ];
 
 const app = express();
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error("Blocked by CORS:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  credentials: true,
+  if (!origin || allowedOrigins.includes(origin)) {
+    callback(null, true);
+  } else {
+    console.error("Blocked by CORS:", origin);
+    callback(new Error("Not allowed by CORS"));
+  }
+}
+
 }));
 
 app.use(express.json());
