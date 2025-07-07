@@ -30,6 +30,7 @@ const bookingRoutes = require("./routes/bookings");
 const galleryRoutes = require("./routes/gallery")
 const googleRoutes = require("./routes/googleReview")
 const emailRoutes = require("./routes/email");
+const serviceRoutes = require("./routes/services")
 
 
 
@@ -37,6 +38,7 @@ app.use("/api/bookings", bookingRoutes)
 app.use("/api/email", emailRoutes);
 app.use("/api/gallery", galleryRoutes)
 app.use("/api/google", googleRoutes)
+app.use("/api/services", serviceRoutes)
 
 app.use('/gallery', express.static(path.join(__dirname, 'public', 'gallery')))
 
