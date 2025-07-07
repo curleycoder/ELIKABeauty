@@ -91,7 +91,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
           const isToday = d.full === format(today, "yyyy-MM-dd");
           const isSelected =
             selectedDate?.toDateString() === d.date.toDateString();
-          const isDisabled = isBefore(d.date, today);
+          const isDisabled = isBefore(d.date, new Date().setHours(0,0,0,0));
           return (
             <button
               key={d.full}
