@@ -50,6 +50,17 @@ function isBlocked(date, time, bookedSlots) {
   });
 }
 
+useEffect(() => {
+  const fetchBooked = async () => {
+    if (!selectedDate) return;
+    const response = await fetch(`/api/booked?date=${format(selectedDate, "yyyy-MM-dd")}`);
+    const data = await response.json();
+    setBookedSlots(data); // useState needed
+  };
+  fetchBooked();
+}, [selectedDate]);
+
+
 export default function DateTimePicker({ onSelect, duration = 30 }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -57,7 +68,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
 
   const today = new Date();
   const monthDates = generateMonthDates(today.getFullYear(), today.getMonth());
-  const timeSlots = generateTimeSlots(30);
+  const timeSlots = generateTimeSlots(30, 10, 21 - duration / 60);
 
   const bookedSlots = [
     { date: "2025-07-07", start: "3:00 PM", duration: 240 },
