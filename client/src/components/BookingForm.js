@@ -72,7 +72,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
             className={`px-3 py-1.5 rounded-full font-semibold text-sm transition-all ${
               activeTab === tab
                 ? "bg-purplecolor text-white shadow-md scale-105"
-                : "bg-gray-100 text-purplecolor hover:bg-purple-100"
+                : "bg-gray-100 text-purplecolor hover:translate-y-[-2px]"
             }`}
           >
             {tab}
@@ -151,15 +151,14 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
               <div className="bg-white rounded-t-2xl shadow-lg p-4 border">
                 <h3 className="font-bold text-purplecolor mb-3">Selected Services</h3>
                 <ul className="space-y-2 max-h-48 overflow-y-auto text-sm">
-                  {selected.map((sName, i) => {
-                    const item = services.find((s) => s.name === sName);
-                    return (
-                      <li key={i} className="flex justify-between">
-                        <span>{item?.name}</span>
-                        <span>${item?.price}</span>
-                      </li>
-                    );
-                  })}
+                  {selected.map((item, i) => (
+                    <li key={i} className="flex justify-between">
+                      <span>{item?.name}</span>
+                      <span>${item?.price}</span>
+                    </li>
+                  ))}
+
+
                 </ul>
                   <div className="flex justify-between text-sm text-gray-500 mt-1">
                     <span>Time on Service</span>
