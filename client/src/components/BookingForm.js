@@ -45,9 +45,9 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 
 
   useEffect(() => {
-    const hasKeratin = selected.includes("Keratin");
+    const hasKeratin = selected.some((s)=> s.name === "Keratin");
     const conflicting = ["Highlight", "Balayage", "Hair Color"];
-    const hasConflict = conflicting.some((s) => selected.includes(s));
+    const hasConflict = selected.some((s) => conflicting.includes(s.name));
     setConflictWarning(hasKeratin && hasConflict);
   }, [selected]);
 
@@ -104,7 +104,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
             <div
               key={index + s.name}
               className={`bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 ${
-                selected.includes(s.name) ? "border-2 border-purplecolor" : ""
+                selected.some(sel => sel._id === s._id) ? "border-2 border-purplecolor" : ""
               }`}
             >
               <div className="flex-1">
