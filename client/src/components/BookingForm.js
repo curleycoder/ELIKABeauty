@@ -145,7 +145,8 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
                 <div className="mt-4 border-t pt-3 text-purplecolor">
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total:</span>
-                    <span>${total}</span>
+                    <span>{total > 0 ? `+$${total}` : `$0`}</span>
+
                   </div>
 
                   <p className="text-sm italic text-gray-400 mt-2 leading-tight">

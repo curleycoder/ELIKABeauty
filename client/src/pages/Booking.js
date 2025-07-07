@@ -91,7 +91,9 @@ export default function Booking() {
             <div className="text-lg font-semibold text-purplecolor">
               <div className="flex justify-between mb-1">
                 <span>Total</span>
-                <span>${selection.total}</span>
+                {/* <span>${selection.total}</span> */}
+                <span>{selection.total > 0 ? `+$${selection.total}` : `$0`}</span>
+
               </div>
               <p className="text-sm italic text-gray-400 mt-2 leading-tight">
                 * Final pricing depends on hair length, volume, and thickness.

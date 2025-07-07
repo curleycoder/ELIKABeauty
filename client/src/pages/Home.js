@@ -6,7 +6,7 @@ import GoogleReview from "../components/GoogleReview";
 import HeroSection from "../components/HeroSection";
 import AboutMe from "../components/AboutMe";
 import articles from "../data/articles";
-import FAQ from "../components/QA"
+import FAQ from "../components/FQA"
 
 export default function Home() {
   return (
