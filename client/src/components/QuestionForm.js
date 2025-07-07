@@ -27,11 +27,13 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
       body: JSON.stringify({
         name: form.name,
         email: form.email,
-        services: selection.selected,
+        phone: form.phone,
+        services: selection.selected.map(s => s._id),
         date: format(bookingTime.date, "PPP"),
         time: bookingTime.time,
+        duration: selection.duration || 60,
       }),
-    });
+    })
 
     if (!response.ok) {
       throw new Error("❌ Failed to send confirmation email.");

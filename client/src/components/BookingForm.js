@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus, FaCheck } from "react-icons/fa";
-import services from "../data/services";
 
 export default function BookingForm({ onSelectionChange, averageDuration, onContinue }) {
   const [selected, setSelected] = useState([]);
@@ -8,22 +7,42 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
   const [conflictWarning, setConflictWarning] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  const tabs = ["Hair", "Face", "Men", "Add-ons"];
+  const [services, setServices] = useState([]);
 
-  const handleSelect = (name) => {
-    setSelected((prev) =>
-      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
-    );
-  };
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("/api/services");
+        const data = await response.json();
+        setServices(data);
+      } catch (err) {
+        console.error("Error fetching services:", err);
+      }
+    };
+    fetchServices();
+  }, []);
 
-  const total = selected.reduce((sum, name) => {
-    const s = services.find((s) => s.name === name);
-    return sum + (s?.price || 0);
-  }, 0);
+
+    const tabs = ["Hair", "Face", "Men", "Add-ons"];
+
+    {services
+    .filter((s) => s.category === activeTab)
+    .map((s) => (
+      <div key={s._id}>  {/* use _id */}
+        ...
+        <button onClick={() => handleSelect(s)}>
+          {selected.some(sel => sel._id === s._id) ? <FaCheck /> : <FaPlus />}
+        </button>
+      </div>
+  ))}
+
+
+    const total = selected.reduce((sum, s) => sum + (s?.price || 0), 0);
 
   useEffect(() => {
     onSelectionChange?.({ selected, total });
   }, [selected, total, onSelectionChange]);
+
 
   useEffect(() => {
     const hasKeratin = selected.includes("Keratin");
@@ -31,6 +50,16 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
     const hasConflict = conflicting.some((s) => selected.includes(s));
     setConflictWarning(hasKeratin && hasConflict);
   }, [selected]);
+
+
+  const handleSelect = (service) => {
+  const alreadySelected = selected.find((s) => s._id === service._id);
+  if (alreadySelected) {
+    setSelected((prev) => prev.filter((s) => s._id !== service._id));
+  } else {
+    setSelected((prev) => [...prev, service]);
+  }
+};
 
   return (
     <div className="space-y-6 font-bodonimoda px-4 pb-28">
@@ -93,9 +122,10 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 
               <div className="sm:self-end sm:ml-4">
                 <button
-                  onClick={() => handleSelect(s.name)}
+                  onClick={() => handleSelect(s)}
                   className={`mt-2 sm:mt-0 p-2 border rounded-full transition ${
-                    selected.includes(s.name)
+                    selected.some((sel) => sel._id === s._id)
+
                       ? "bg-purplecolor text-white border-purplecolor"
                       : "text-purplecolor hover:bg-purplecolor hover:text-white"
                   }`}
