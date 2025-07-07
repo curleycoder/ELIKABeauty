@@ -8,19 +8,28 @@ const allowedOrigins = [
   "https://beautyshohrestudio.ca",
   "https://www.beautyshohrestudio.ca",
   "http://localhost:3000",
+
+  // ✅ Add your Vercel URLs
+  "https://beautyshohre-e8um0lq0j-shabnams-projects-2a0f3163.vercel.app",
+  "https://beautyshohre-pq8mtno5a-shabnams-projects-2a0f3163.vercel.app"
 ];
 
 const app = express();
 
 app.use(cors({
   origin: function (origin, callback) {
-  if (!origin || allowedOrigins.includes(origin)) {
+  if (
+    !origin ||
+    allowedOrigins.includes(origin) ||
+    origin?.endsWith(".vercel.app")
+  ) {
     callback(null, true);
   } else {
     console.error("Blocked by CORS:", origin);
     callback(new Error("Not allowed by CORS"));
   }
 }
+
 
 }));
 
