@@ -22,6 +22,15 @@ router.get("/", async (req, res) =>{
         res.status(500).json({error: " Could not fetch booking "})
     }
 })
+router.get("/booked", async (req, res) => {
+  const { date } = req.query;
+  try {
+    const bookings = await Booking.find({ date });
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 
 module.exports = router;

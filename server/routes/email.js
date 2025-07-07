@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
+const Booking = require("../models/booking");
+
 router.post("/send-confirmation", async (req, res) => {
-  const { name, email, services, date, time } = req.body;
+  const { name, email, phone, Service, services, date, time, duration, note } = req.body;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -25,6 +27,9 @@ router.post("/send-confirmation", async (req, res) => {
     <p>You will receive a reminder before your appointment.</p>
     <p>If you need to cancel or reschedule, contact Shohre at <strong>778-513-9006</strong>.</p>
     <p>— Beauty Shohre Studio</p>
+    <div style="text-align:center; margin-top:30px;">
+    <img src="https://i.imgur.com/h0iPt1G.png" alt="Beauty Shohre Logo" style="max-width: 150px;" />
+  </div>
   `;
 
   // ✅ Email to the business owner
@@ -39,6 +44,17 @@ router.post("/send-confirmation", async (req, res) => {
   `;
 
   try {
+
+    await Booking.create({
+      name,
+      email,
+      phone,
+      Service,
+      date,
+      time,
+      duration,
+      note,
+    })
     // Send to client
     await transporter.sendMail({
       from: `"Beauty Shohre Studio" <${process.env.SMTP_USER}>`,
@@ -50,7 +66,7 @@ router.post("/send-confirmation", async (req, res) => {
     // Send to owner
     await transporter.sendMail({
       from: `"Beauty Shohre Booking Notification" <${process.env.SMTP_USER}>`,
-      to: process.env.SMTP_USER,
+      to: [process.env.SMTP_USER, "shohrehelkaei@gmail.com"],
       subject: `New Booking from ${name}`,
       html: ownerHtml,
     });
