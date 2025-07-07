@@ -151,15 +151,17 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
               <div className="bg-white rounded-t-2xl shadow-lg p-4 border">
                 <h3 className="font-bold text-purplecolor mb-3">Selected Services</h3>
                 <ul className="space-y-2 max-h-48 overflow-y-auto text-sm">
-                  {selected.map((item, i) => (
-                    <li key={i} className="flex justify-between">
-                      <span>{item?.name}</span>
-                      <span>${item?.price}</span>
-                    </li>
-                  ))}
-
-
+                  {Array.isArray(selected) &&
+                    selected.map((item, i) =>
+                      item?.name && typeof item?.price === "number" ? (
+                        <li key={i} className="flex justify-between">
+                          <span>{item.name}</span>
+                          <span>${item.price}</span>
+                        </li>
+                      ) : null
+                    )}
                 </ul>
+                              
                   <div className="flex justify-between text-sm text-gray-500 mt-1">
                     <span>Time on Service</span>
                     <span>{averageDuration} min</span>
