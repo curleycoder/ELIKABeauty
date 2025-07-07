@@ -28,7 +28,7 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
         name: form.name,
         email: form.email,
         phone: form.phone,
-        services: selection.selected.map(s => s._id),
+        services: selection.selected.map(s => s.name),
         date: format(bookingTime.date, "PPP"),
         time: bookingTime.time,
         duration: selection.duration || 60,
