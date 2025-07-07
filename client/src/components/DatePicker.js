@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   format,
   isBefore,
@@ -8,6 +8,7 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
+  parse,
 } from "date-fns";
 
 // Generate full calendar month
@@ -58,6 +59,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
   const [selectedTime, setSelectedTime] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([])
+  const timeRef = useRef(null);
 
   const today = new Date();
   const monthDates = generateMonthDates(today.getFullYear(), today.getMonth());
@@ -96,8 +98,19 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
             <button
               key={d.full}
               onClick={() => {
-                if (!isDisabled) setSelectedDate(d.date);
+                if (!isDisabled) {
+                  setSelectedDate(d.date);
+                  setTimeout(() => {
+                    if (timeRef.current) {
+                      timeRef.current.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }
+                  }, 200);
+                }
               }}
+
               disabled={isDisabled}
               className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full border font-semibold text-sm transition ${
                 isSelected
@@ -122,18 +135,19 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
 
       {/* Time Selection */}
       {selectedDate && (
-        <div>
+        <div ref={timeRef}>
           <p className="text-center text-purplecolor font-semibold mb-3 mt-4">
             Select a time:
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
             {timeSlots.map((time) => {
               const isToday =
-                selectedDate &&
                 format(selectedDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
-              const [hour, minPart] = time.split(":"), minutes = parseInt(minPart), hourNum = parseInt(hour);
-              const slotDateTime = setHours(setMinutes(new Date(selectedDate), minutes), hourNum);
-
+              const slotDateTime = parse(
+                `${format(selectedDate, "yyyy-MM-dd")} ${time}`,
+                "yyyy-MM-dd h:mm a",
+                new Date()
+              );
               const isPast = isToday && isBefore(slotDateTime, new Date());
               const blocked = isBlocked(selectedDate, time, bookedSlots);
 
@@ -158,6 +172,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
             })}
           </div>
         </div>
+
       )}
 
       {/* Confirmation Modal */}
