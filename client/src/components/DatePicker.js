@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   format,
   isBefore,
@@ -50,7 +50,22 @@ function isBlocked(date, time, bookedSlots) {
   });
 }
 
-useEffect(() => {
+
+
+
+export default function DateTimePicker({ onSelect, duration = 30 }) {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState([])
+
+  const today = new Date();
+  const monthDates = generateMonthDates(today.getFullYear(), today.getMonth());
+  const timeSlots = generateTimeSlots(30, 10, 21 - duration / 60);
+
+ 
+
+  useEffect(() => {
   const fetchBooked = async () => {
     if (!selectedDate) return;
     const response = await fetch(`/api/booked?date=${format(selectedDate, "yyyy-MM-dd")}`);
@@ -59,21 +74,6 @@ useEffect(() => {
   };
   fetchBooked();
 }, [selectedDate]);
-
-
-export default function DateTimePicker({ onSelect, duration = 30 }) {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const today = new Date();
-  const monthDates = generateMonthDates(today.getFullYear(), today.getMonth());
-  const timeSlots = generateTimeSlots(30, 10, 21 - duration / 60);
-
-  const bookedSlots = [
-    { date: "2025-07-07", start: "3:00 PM", duration: 240 },
-    { date: "2025-07-07", start: "11:00 AM", duration: 90 },
-  ];
 
   return (
     <div className="space-y-6 bg-white/60 backdrop-blur-md rounded-[30px] shadow-2xl p-6 sm:p-8 max-w-2xl w-full mx-auto mt-20 sm:mt-28">
