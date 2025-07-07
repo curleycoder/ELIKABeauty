@@ -3,6 +3,7 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const Booking = require("../models/booking");
 
+
 router.post("/send-confirmation", async (req, res) => {
   const { name, email, phone, Service, services, date, time, duration, note } = req.body;
 
@@ -44,12 +45,14 @@ router.post("/send-confirmation", async (req, res) => {
   `;
 
   try {
+    console.log("✅ Booking request body:", req.body);
+
 
     await Booking.create({
       name,
       email,
       phone,
-      Service,
+      services,
       date,
       time,
       duration,
@@ -73,10 +76,11 @@ router.post("/send-confirmation", async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    console.error("❌ Email send error:", err);
+    console.error("❌ Email send error:", err.message, err.stack);
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
 
 
 module.exports = router;
