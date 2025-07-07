@@ -29,7 +29,7 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
         email: form.email,
         phone: form.phone,
         services: selection.selected.map(s => s.name),
-        date: format(bookingTime.date, "PPP"),
+        date: format(bookingTime.date),
         time: bookingTime.time,
         duration: selection.duration || 60,
       }),
