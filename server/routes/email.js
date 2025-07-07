@@ -11,7 +11,7 @@ router.post("/send-confirmation", async (req, res) => {
       pass: process.env.SMTP_PASS,
     },
   });
-
+         
   // ✅ Email to the client
   const clientHtml = `
     <p>Dear <strong>${name}</strong>,</p>
