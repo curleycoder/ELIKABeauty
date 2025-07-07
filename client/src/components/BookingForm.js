@@ -9,10 +9,15 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 
   const [services, setServices] = useState([]);
 
+  const baseURL = process.env.REACT_APP_API_URL || "";
+
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch("/api/services");
+        const response = await fetch(`${baseURL}/api/services`);
+        // const response = await fetch("https://api.beautyshohrestudio.ca/api/services");
+
         const data = await response.json();
         setServices(data);
       } catch (err) {
@@ -24,17 +29,6 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 
 
     const tabs = ["Hair", "Face", "Men", "Add-ons"];
-
-    {services
-    .filter((s) => s.category === activeTab)
-    .map((s) => (
-      <div key={s._id}>  {/* use _id */}
-        ...
-        <button onClick={() => handleSelect(s)}>
-          {selected.some(sel => sel._id === s._id) ? <FaCheck /> : <FaPlus />}
-        </button>
-      </div>
-  ))}
 
 
     const total = selected.reduce((sum, s) => sum + (s?.price || 0), 0);
@@ -130,7 +124,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
                       : "text-purplecolor hover:bg-purplecolor hover:text-white"
                   }`}
                 >
-                  {selected.includes(s.name) ? <FaCheck /> : <FaPlus />}
+                  {selected.some(sel => sel._id === s._id ) ? <FaCheck /> : <FaPlus />}
                 </button>
               </div>
             </div>
