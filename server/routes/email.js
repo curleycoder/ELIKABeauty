@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
 const Booking = require("../models/booking");
+const { format } = require("date-fns");
+
 
 
 router.post("/send-confirmation", async (req, res) => {
@@ -20,7 +22,7 @@ router.post("/send-confirmation", async (req, res) => {
     <p>Dear <strong>${name}</strong>,</p>
     <p>Your booking has been confirmed with Beauty Shohre Studio:</p>
     <ul>
-      <li><strong>Date:</strong> ${date}</li>
+      <li><strong>Date:</strong> ${format(new Date(date), "PPP")}</li>
       <li><strong>Time:</strong> ${time}</li>
       <li><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : "Not provided"}</li>
 
@@ -37,7 +39,7 @@ router.post("/send-confirmation", async (req, res) => {
   const ownerHtml = `
     <p><strong>${name}</strong> just booked an appointment:</p>
     <ul>
-      <li><strong>Date:</strong> ${date}</li>
+      <li><strong>Date:</strong> ${format(new Date(date), "PPP")}</li>
       <li><strong>Time:</strong> ${time}</li>
       <li><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : "Not provided"}</li>
       <li><strong>Email:</strong> ${email}</li>
