@@ -72,7 +72,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
             className={`px-3 py-1.5 rounded-full font-semibold text-sm transition-all ${
               activeTab === tab
                 ? "bg-purplecolor text-white shadow-md scale-105"
-                : "bg-gray-100 text-purplecolor hover:translate-y-[-2px]"
+                : "bg-white text-purplecolor hover:translate-y-[-2px]"
             }`}
           >
             {tab}
