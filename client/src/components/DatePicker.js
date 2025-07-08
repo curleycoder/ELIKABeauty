@@ -60,32 +60,36 @@ function isBlocked(date, time, bookedSlots) {
   });
 }
 
-
-
-
+const baseURL = process.env.REACT_APP_API_URL || "";
 
 export default function DateTimePicker({ onSelect, duration = 30 }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [bookedSlots, setBookedSlots] = useState([])
+  const [bookedSlots, setBookedSlots] = useState([]);
   const timeRef = useRef(null);
 
   const today = new Date();
   const monthDates = generateMonthDates(today.getFullYear(), today.getMonth());
   const timeSlots = generateTimeSlots(30, 10, 21 - duration / 60);
 
- 
-
   useEffect(() => {
-  const fetchBooked = async () => {
-    if (!selectedDate) return;
-    const response = await fetch(`/api/booked?date=${format(selectedDate, "yyyy-MM-dd")}`);
-    const data = await response.json();
-    setBookedSlots(data); // useState needed
-  };
-  fetchBooked();
-}, [selectedDate]);
+    const fetchBookedTimes = async () => {
+      if (!selectedDate) return;
+
+      try {
+        const res = await fetch(
+          `${baseURL}/api/bookings/booked?date=${format(selectedDate, "yyyy-MM-dd")}`
+        );
+        const data = await res.json();
+        setBookedSlots(data);
+      } catch (err) {
+        console.error("Failed to fetch booked slots:", err);
+      }
+    };
+
+    fetchBookedTimes();
+  }, [selectedDate]);
 
   return (
     <div className="space-y-6 bg-white/60 backdrop-blur-md rounded-[30px] shadow-2xl p-6 sm:p-8 max-w-2xl w-full mx-auto mt-20 sm:mt-28">
@@ -103,7 +107,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
           const isToday = d.full === format(today, "yyyy-MM-dd");
           const isSelected =
             selectedDate?.toDateString() === d.date.toDateString();
-          const isDisabled = isBefore(d.date, new Date().setHours(0,0,0,0));
+          const isDisabled = isBefore(d.date, new Date().setHours(0, 0, 0, 0));
           return (
             <button
               key={d.full}
@@ -120,7 +124,6 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
                   }, 200);
                 }
               }}
-
               disabled={isDisabled}
               className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full border font-semibold text-sm transition ${
                 isSelected
@@ -182,7 +185,6 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
             })}
           </div>
         </div>
-
       )}
 
       {/* Confirmation Modal */}
