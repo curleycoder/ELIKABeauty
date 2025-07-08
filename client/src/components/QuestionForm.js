@@ -157,21 +157,22 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit, setLoa
       <button
         type="submit"
         disabled={loading}
-        className={`mt-6 w-full py-3 rounded-full font-bold text-lg transition ${
+        className={`mt-6 w-full py-3 rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
           loading
             ? "bg-purplecolor/60 cursor-wait text-white"
             : "bg-purplecolor text-white hover:brightness-110"
         }`}
       >
-        {loading ? "Submitting..." : "Submit Booking"}
+        {loading ? (
+          <>
+            <ClipLoader color="#fff" size={22} />
+            Submitting...
+          </>
+        ) : (
+          "Submit Booking"
+        )}
       </button>
 
-      
-     {loading && (
-        <div className="flex justify-center mt-4">
-          <ClipLoader color="#9333EA" size={35} />
-        </div>
-      )}
 
     </form>
   );
