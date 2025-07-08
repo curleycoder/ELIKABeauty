@@ -5,16 +5,16 @@ require("dotenv").config()
 mongoose.connect(process.env.MONGO_URI);
 
 const services = [
-  { name: "Balayage", price: 180, fromPrice: true, duration: 240, category: "Hair", description: "Natural hand-painted highlights.Extra charge for base color if needed" },
+  { name: "Balayage", price: 180, fromPrice: true, duration: 240, category: "Hair", description: "Natural hand-painted highlights. *(Extra charge for base color if needed.)" },
   { name: "Hair Cut", price: 35, duration: 45, fromPrice: true, category: "Hair", description: "Professional haircut tailored to you." },
   { name: "Keratin", price: 250, duration: 240,fromPrice: true, category: "Hair", description: "Smooth and straighten frizzy hair." },
-  { name: "Highlight", price: 180, duration: 210, fromPrice: true, category: "Hair", description: "Lighter strands to add dimension. Extra charge for base color if needed" },
+  { name: "Highlight", price: 180, duration: 210, fromPrice: true, category: "Hair", description: "Lighter strands to add dimension.  *(Extra charge for base color if needed.)" },
   { name: "Root Colour", price: 55, duration: 90, category: "Hair", description: "Touch up your hair roots." },
   { name: "Hair Color", price: 120, duration: 120, fromPrice: true, category: "Hair", description: "All-over color for a new look." },
   { name: "Perms", price: 120, duration: 180, category: "Hair", description: "Add curls or waves to your hair." },
   { name: "Hair Wash", price: 10, duration: 15, category: "Add-ons", description: "Quick wash and cleanse." },
   { name: "Hair Wash + Style", price: 45, duration: 45, category: "Add-ons", description: "Wash and blow-dry styling." },
-  { name: "Base Color", price: 50, duration: 30, fromPrice: true, category: "Add-ones", description: "Add a base color to enhance your highlight or balayage. Great for full coverage or color correction."},
+  { name: "Base Color", price: 50, duration: 30, fromPrice: true, category: "Add-ons", description: "Add a base color to enhance your highlight or balayage. Great for full coverage or color correction."},
   { name: "Hair Styling", price: 35, duration: 45, category: "Hair", description: "Custom hairstyle for any event." },
   { name: "Makeup", price: 80, duration: 60, category: "Face", description: "Professional makeup application." },
   { name: "Microblading", price: 300, duration: 120, category: "Face", description: "Semi-permanent eyebrow shaping, lip blush, eyeliner." },
