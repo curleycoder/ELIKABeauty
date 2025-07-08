@@ -48,16 +48,6 @@ router.post("/send-confirmation", async (req, res) => {
     console.log("✅ Booking request body:", req.body);
 
 
-    await Booking.create({
-      name,
-      email,
-      phone,
-      services,
-      date,
-      time,
-      duration,
-      note,
-    })
     // Send to client
     await transporter.sendMail({
       from: `"Beauty Shohre Studio" <${process.env.SMTP_USER}>`,
