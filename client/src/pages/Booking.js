@@ -22,6 +22,8 @@ export default function Booking() {
   const [bookingTime, setBookingTime] = useState(null);
   const [showFinalPopup, setShowFinalPopup] = useState(false);
   const [bookingData, setBookingData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   const durationStats = getDurationStats(selection.selected);
 
@@ -62,6 +64,7 @@ export default function Booking() {
                   setBookingData(formData);
                   setShowFinalPopup(true);
                 }}
+                setLoading={setLoading}
               />
             )}
           </div>
@@ -127,7 +130,7 @@ export default function Booking() {
             </p>
 
             <p className="text-sm text-gray-700">
-              <strong>Services:</strong> {bookingData.services.join(", ")}<br />
+              <strong>Services:</strong> {bookingData.services.map(s => s.name).join(", ")}<br />
               <strong>Date:</strong> {format(bookingData.date, "PPP")}<br />
               <strong>Time:</strong> {bookingData.time}
             </p>

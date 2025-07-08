@@ -5,7 +5,7 @@ const baseURL =
   process.env.REACT_APP_API_URL || "https://api.beautyshohrestudio.ca";
 
 
-export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
+export default function QuestionsForm({ selection, bookingTime, onSubmit, setLoading, loading }) {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -19,6 +19,7 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+  setLoading(true)
 
   if (!bookingTime?.date || !bookingTime?.time) {
     alert("Please select a date and time.");
@@ -78,6 +79,8 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
   } catch (error) {
     console.error("❌ Error submitting booking:", error);
     alert("❌ Failed to complete booking. Please try again.");
+  } finally{
+    setLoading(false)
   }
 };
 
@@ -149,10 +152,16 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
       {/* Submit */}
       <button
         type="submit"
-        className="mt-6 w-full py-3 bg-purplecolor text-white rounded-full font-bold text-lg hover:brightness-110 transition"
+        disabled={loading}
+        className={`mt-6 w-full py-3 rounded-full font-bold text-lg transition ${
+          loading
+            ? "bg-purplecolor/60 cursor-wait text-white"
+            : "bg-purplecolor text-white hover:brightness-110"
+        }`}
       >
-        Submit Booking
+        {loading ? "Submitting..." : "Submit Booking"}
       </button>
+
     </form>
   );
 }
