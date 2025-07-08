@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
+import {ClipLoader } from "react-spinners"
 
 const baseURL =
   process.env.REACT_APP_API_URL || "https://api.beautyshohrestudio.ca";
@@ -11,6 +12,7 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit, setLoa
     email: "",
     phone: "",
     referredBy: "",
+    note: ""
   });
 
   const handleChange = (e) => {
@@ -22,9 +24,11 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit, setLoa
   setLoading(true)
 
   if (!bookingTime?.date || !bookingTime?.time) {
-    alert("Please select a date and time.");
-    return;
-  }
+  alert("Please select a date and time.");
+  setLoading(false); // <-- add this
+  return;
+}
+
 
   const bookingPayload = {
     name: form.name,
@@ -161,6 +165,13 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit, setLoa
       >
         {loading ? "Submitting..." : "Submit Booking"}
       </button>
+
+      
+     {loading && (
+        <div className="flex justify-center mt-4">
+          <ClipLoader color="#9333EA" size={35} />
+        </div>
+      )}
 
     </form>
   );
