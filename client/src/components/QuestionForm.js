@@ -20,26 +20,53 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
   const handleSubmit = async (e) => {
   e.preventDefault();
 
+  if (!bookingTime?.date || !bookingTime?.time) {
+    alert("Please select a date and time.");
+    return;
+  }
+
+  const bookingPayload = {
+    name: form.name,
+    email: form.email,
+    phone: form.phone,
+    referredBy: form.referredBy,
+    services: selection.selected.map((s) => s._id),
+    date: bookingTime.date,
+    time: bookingTime.time,
+    note: form.note || "",
+  };
+
   try {
-    const response = await fetch(`${baseURL}/api/email/send-confirmation`, {
+    // 1. Save booking to MongoDB
+    const dbRes = await fetch(`${baseURL}/api/bookings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bookingPayload),
+    });
+
+    if (!dbRes.ok) {
+      throw new Error("Failed to save booking to database.");
+    }
+
+    // 2. Send confirmation email
+    const emailRes = await fetch(`${baseURL}/api/email/send-confirmation`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        services: selection.selected.map(s => s.name),
-        date: format(bookingTime.date),
+        ...form,
+        services: selection.selected.map((s) => s.name),
+        date: bookingTime.date,
         time: bookingTime.time,
-        duration: selection.duration || 60,
+        duration: selection.duration,
+        note: form.note || "",
       }),
-    })
+    });
 
-    if (!response.ok) {
-      throw new Error("❌ Failed to send confirmation email.");
+    if (!emailRes.ok) {
+      throw new Error("Failed to send confirmation email.");
     }
 
-    // ✅ Trigger popup via parent
+    // 3. Notify parent of success
     onSubmit({
       ...form,
       services: selection.selected,
@@ -50,9 +77,11 @@ export default function QuestionsForm({ selection, bookingTime, onSubmit }) {
 
   } catch (error) {
     console.error("❌ Error submitting booking:", error);
-    alert("Failed to submit booking. Please try again.");
+    alert("❌ Failed to complete booking. Please try again.");
   }
 };
+
+
 
 
   return (

@@ -38,18 +38,28 @@ function generateTimeSlots(duration = 30, startHour = 10, endHour = 21) {
 
 // Check if a time is blocked
 function isBlocked(date, time, bookedSlots) {
-  const [h, mPart] = time.split(":"), minutes = parseInt(mPart), hour = parseInt(h);
-  const slotStart = setHours(setMinutes(new Date(date), minutes), hour);
-
+  const slotStart = parse(
+    `${format(date, "yyyy-MM-dd")} ${time}`,
+    "yyyy-MM-dd h:mm a",
+    new Date()
+  );
 
   return bookedSlots.some((b) => {
-    if (b.date !== format(date, "yyyy-MM-dd")) return false;
-    const [bh, bmPart] = b.start.split(":"), bminutes = parseInt(bmPart), bhour = parseInt(bh);
-    const bookedStart = setHours(setMinutes(new Date(date), bminutes), bhour);
+    const bookingDateStr = format(new Date(b.date), "yyyy-MM-dd");
+    const currentDateStr = format(date, "yyyy-MM-dd");
+    if (bookingDateStr !== currentDateStr) return false;
+
+    const bookedStart = parse(
+      `${bookingDateStr} ${b.time}`,
+      "yyyy-MM-dd h:mm a",
+      new Date()
+    );
     const bookedEnd = addMinutes(bookedStart, b.duration);
+
     return slotStart >= bookedStart && slotStart < bookedEnd;
   });
 }
+
 
 
 
