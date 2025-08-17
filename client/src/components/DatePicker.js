@@ -10,16 +10,7 @@ import {
   parse,
 } from "date-fns";
 
-// // Generate full calendar month
-// function generateMonthDates(year, month) {
-//   const start = startOfMonth(new Date(year, month));
-//   const end = endOfMonth(new Date(year, month));
-//   return eachDayOfInterval({ start, end }).map((date) => ({
-//     date,
-//     number: format(date, "d"),
-//     full: format(date, "yyyy-MM-dd"),
-//   }));
-// }
+
 function generateNext30Days(startDate = new Date()){
   return eachDayOfInterval({
     start: startDate,
@@ -28,7 +19,7 @@ function generateNext30Days(startDate = new Date()){
   }).map((date)=>({
     date,
     number: format(date, "d"),
-    full: format(date, "yyy-MM-dd")
+    full: format(date, "yyyy-MM-dd")
   }));
 }
 
@@ -112,64 +103,64 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
       </h3>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4 justify-center py-4">
+      <div className="py-4">
         {Object.entries(
-  monthDates.reduce((groups, day) => {
-    const month = format(day.date, "MMMM yyyy");
-    if (!groups[month]) groups[month] = [];
-    groups[month].push(day);
-    return groups;
-  }, {})
-).map(([month, days]) => (
-  <div key={month}>
-    <h4 className="text-left text-md sm:text-lg font-bold text-purplecolor mb-2 mt-6">{month}</h4>
-    <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
-      {days.map((d) => {
-        const isToday = d.full === format(today, "yyyy-MM-dd");
-        const isSelected = selectedDate?.toDateString() === d.date.toDateString();
-        const isDisabled = isBefore(d.date, new Date().setHours(0, 0, 0, 0));
+          monthDates.reduce((groups, day) => {
+            const month = format(day.date, "MMMM yyyy");
+            if (!groups[month]) groups[month] = [];
+            groups[month].push(day);
+            return groups;
+          }, {})
+        ).map(([month, days]) => (
+          <div key={month} className="mb-6">
+            <h4 className="text-left text-md sm:text-lg font-bold text-purplecolor mb-2 mt-6">{month}</h4>
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
+              {days.map((d) => {
+                const isToday = d.full === format(today, "yyyy-MM-dd");
+                const isSelected = selectedDate?.toDateString() === d.date.toDateString();
+                const isDisabled = isBefore(d.date, new Date().setHours(0, 0, 0, 0));
 
-        return (
-          <button
-            key={d.full}
-            onClick={() => {
-              if (!isDisabled) {
-                setSelectedDate(d.date);
-                setTimeout(() => {
-                  if (timeRef.current) {
-                    timeRef.current.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                  }
-                }, 200);
-              }
-            }}
-            disabled={isDisabled}
-            className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full border font-semibold text-sm transition ${
-              isSelected
-                ? "bg-purplecolor text-white shadow-md scale-105"
-                : isToday
-                ? "border-purplecolor text-purplecolor"
-                : "border-purplecolor/20 text-purplecolor/70 hover:border-purplecolor hover:bg-purplecolor/10"
-            } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
-          >
-            <div className="flex flex-col items-center">
-              <span className="text-[10px] sm:text-xs font-medium">
-                {format(d.date, "EEE")}
-              </span>
-              <span className="text-sm sm:text-base font-semibold">
-                {d.number}
-              </span>
+                return (
+                  <button
+                    key={d.full}
+                    onClick={() => {
+                      if (!isDisabled) {
+                        setSelectedDate(d.date);
+                        setTimeout(() => {
+                          if (timeRef.current) {
+                            timeRef.current.scrollIntoView({
+                              behavior: "smooth",
+                              block: "start",
+                            });
+                          }
+                        }, 200);
+                      }
+                    }}
+                    disabled={isDisabled}
+                    className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full border font-semibold text-sm transition ${
+                      isSelected
+                        ? "bg-purplecolor text-white shadow-md scale-105"
+                        : isToday
+                        ? "border-purplecolor text-purplecolor"
+                        : "border-purplecolor/20 text-purplecolor/70 hover:border-purplecolor hover:bg-purplecolor/10"
+                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  >
+                    <div className="flex flex-col items-center">
+                      <span className="text-[10px] sm:text-xs font-medium">
+                        {format(d.date, "EEE")}
+                      </span>
+                      <span className="text-sm sm:text-base font-semibold">
+                        {d.number}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-          </button>
-        );
-      })}
-    </div>
-  </div>
-))}
-
+          </div>
+        ))}
       </div>
+
 
       {/* Time Selection */}
       {selectedDate && (
