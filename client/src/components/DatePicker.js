@@ -98,9 +98,9 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
         Choose a Date
       </h2>
 
-      <h3 className="text-center text-lg font-bold text-purplecolor mt-4">
+      {/* <h3 className="text-center text-lg font-bold text-purplecolor mt-4">
         {format(today, "MMMM yyyy")}
-      </h3>
+      </h3> */}
 
       {/* Calendar Grid */}
       <div className="py-4">
