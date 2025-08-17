@@ -10,16 +10,7 @@ import {
   parse,
 } from "date-fns";
 
-// // Generate full calendar month
-// function generateMonthDates(year, month) {
-//   const start = startOfMonth(new Date(year, month));
-//   const end = endOfMonth(new Date(year, month));
-//   return eachDayOfInterval({ start, end }).map((date) => ({
-//     date,
-//     number: format(date, "d"),
-//     full: format(date, "yyyy-MM-dd"),
-//   }));
-// }
+
 function generateNext30Days(startDate = new Date()){
   return eachDayOfInterval({
     start: startDate,
