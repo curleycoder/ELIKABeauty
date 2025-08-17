@@ -5,20 +5,30 @@ import {
   addMinutes,
   setHours,
   setMinutes,
-  startOfMonth,
-  endOfMonth,
   eachDayOfInterval,
+  addDays,
   parse,
 } from "date-fns";
 
-// Generate full calendar month
-function generateMonthDates(year, month) {
-  const start = startOfMonth(new Date(year, month));
-  const end = endOfMonth(new Date(year, month));
-  return eachDayOfInterval({ start, end }).map((date) => ({
+// // Generate full calendar month
+// function generateMonthDates(year, month) {
+//   const start = startOfMonth(new Date(year, month));
+//   const end = endOfMonth(new Date(year, month));
+//   return eachDayOfInterval({ start, end }).map((date) => ({
+//     date,
+//     number: format(date, "d"),
+//     full: format(date, "yyyy-MM-dd"),
+//   }));
+// }
+function generateNext30Days(startDate = new Date()){
+  return eachDayOfInterval({
+    start: startDate,
+    end: addDays(startDate, 29),
+
+  }).map((date)=>({
     date,
     number: format(date, "d"),
-    full: format(date, "yyyy-MM-dd"),
+    full: format(date, "yyy-MM-dd")
   }));
 }
 
@@ -70,7 +80,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
   const timeRef = useRef(null);
 
   const today = new Date();
-  const monthDates = generateMonthDates(today.getFullYear(), today.getMonth());
+  const monthDates = generateNext30Days(today);
   const timeSlots = generateTimeSlots(30, 10, 21 - duration / 60);
 
   useEffect(() => {
@@ -103,11 +113,22 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
 
       {/* Calendar Grid */}
       <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4 justify-center py-4">
-        {monthDates.map((d) => {
+        {Object.entries(
+  monthDates.reduce((groups, day) => {
+    const month = format(day.date, "MMMM yyyy");
+    if (!groups[month]) groups[month] = [];
+    groups[month].push(day);
+    return groups;
+  }, {})
+).map(([month, days]) => (
+  <div key={month}>
+    <h4 className="text-left text-md sm:text-lg font-bold text-purplecolor mb-2 mt-6">{month}</h4>
+    <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
+        {days.map((d) => {
           const isToday = d.full === format(today, "yyyy-MM-dd");
-          const isSelected =
-            selectedDate?.toDateString() === d.date.toDateString();
+          const isSelected = selectedDate?.toDateString() === d.date.toDateString();
           const isDisabled = isBefore(d.date, new Date().setHours(0, 0, 0, 0));
+
           return (
             <button
               key={d.full}
@@ -144,6 +165,10 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
             </button>
           );
         })}
+      </div>
+    </div>
+  ))}
+
       </div>
 
       {/* Time Selection */}
