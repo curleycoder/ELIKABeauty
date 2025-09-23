@@ -10,6 +10,7 @@ import Product from "./pages/Product"
 import AboutMe from "./components/AboutMe"
 import Navbar from "./components/Navbar"
 import Gallery from './components/Gallery';
+import {SpeedInsights} from "@vercel/speed-insights/react"
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/product" element={<Product />}/>
           <Route path="/aboutme" element={<AboutMe />}/>
         </Routes>
+        <SpeedInsights/>
       </div>
     </Router>
 
