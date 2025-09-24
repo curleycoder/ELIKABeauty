@@ -84,8 +84,8 @@ export default function GoogleReview() {
             <div
               ref={trackRef}
               className="
-                flex gap-6 overflow-x-auto scrollbar-hide
-                snap-x snap-mandatory
+                flex gap-6 overflow-x-auto overflow-y-hidden overscroll-x-contain scrollbar-hide
+                snap-x snap-mandatory snap-always
                 scroll-px-4
                 px-4
               "
@@ -107,7 +107,7 @@ export default function GoogleReview() {
                       w-[85%] sm:w-[48%] lg:w-[32%]
                     "
                   >
-                    <div className="h-[200px] flex flex-col justify-between bg-white border border-purplecolor rounded-xl shadow-md p-5">
+                    <div className="h-[220px] flex flex-col bg-white border border-purplecolor rounded-xl shadow-md p-5 overflow-hidden">
                       <div>
                         <div className="flex items-center space-x-3 mb-2">
                           <img
@@ -124,7 +124,17 @@ export default function GoogleReview() {
                             </span>
                           </div>
                         </div>
-                        <p className="text-gray-700 text-sm leading-snug">{text}</p>
+                        <p
+                          className={`text-gray-700 text-sm leading-snug ${isExpanded ? "" : "line-clamp-4"}`}
+                          style={isExpanded ? undefined : {
+                            display: "-webkit-box",
+                            WebkitLineClamp: 4,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden"
+                          }}
+                        >
+                          {fullText}
+                        </p>
                         {showReadMore && (
                           <button
                             onClick={() => toggleExpanded(i)}
