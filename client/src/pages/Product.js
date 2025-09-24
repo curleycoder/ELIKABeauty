@@ -67,7 +67,7 @@ export default function Product() {
         {/* Notify + lightweight filter placeholder */}
         <div className="mt-4 flex items-center justify-center gap-3 flex-wrap">
           <a
-            href={`mailto:beauty.shohre@gmail.com?subject=Notify%20me%20when%20products%20are%20in%20stock&body=Hi%20Shohre%2C%0A%0APlease%20notify%20me%20when%20products%20are%20available.%0A%0AName%3A%0APhone%3A%0AInterested%20in%3A%20(anti-yellow%20shampoo%2C%20keratin-safe%2C%20moisture%20treatments%2C%20...)`}
+            href={`mailto:beautyshohrestudio@gmail.com?subject=Notify%20me%20when%20products%20are%20in%20stock&body=Hi%20Shohre%2C%0A%0APlease%20notify%20me%20when%20products%20are%20available.%0A%0AName%3A%0APhone%3A%0AInterested%20in%3A%20(anti-yellow%20shampoo%2C%20keratin-safe%2C%20moisture%20treatments%2C%20...)`}
             className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-purplecolor text-white text-sm font-semibold shadow hover:brightness-110"
           >
             Get Notified
@@ -181,7 +181,7 @@ export default function Product() {
 
                     {/* {unavailable ? (
                       <a
-                        href={`mailto:beauty.shohre@gmail.com?subject=Waitlist%3A%20${encodeURIComponent(
+                        href={`mailto:beautyshohrestudio@gmail.com?subject=Waitlist%3A%20${encodeURIComponent(
                           product.name || "Hair Product"
                         )}&body=Hi%20Shohre%2C%0A%0AAdd%20me%20to%20the%20waitlist%20for%3A%20${encodeURIComponent(
                           product.name || ""
