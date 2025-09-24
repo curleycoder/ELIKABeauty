@@ -33,13 +33,13 @@ export default function Booking() {
     {/* mobile: 800px */}
     <div
       className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
-      style={{ backgroundImage: 'url(/assets/hero-bg-800.webp)' }}
+      style={{ backgroundImage: 'url(/assets/hero-800.webp)' }}
       aria-hidden="true"
     />
     {/* >= sm: 1600px */}
     <div
       className="hidden sm:block absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10"
-      style={{ backgroundImage: 'url(/assets/hero-bg-1600.webp)' }}
+      style={{ backgroundImage: 'url(/assets/hero-1600.webp)' }}
       aria-hidden="true"
     />
 
