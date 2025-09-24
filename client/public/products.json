@@ -1,44 +1,44 @@
 [
   {
     "_id": "1",
-    "name": "Keratin Smooth Shampoo",
-    "description": "Sulfate-free formula for frizz-free hair.",
-    "price": 32,
-    "image": "/images/keratin-shampoo.jpg"
+    "name": "Farmavita Argan Sublime Oil Elixir (100 ml)",
+    "description": "A sublime multi-use Argan oil Elixir with intense exotic fragrance for seductive, silky and shiny hair. Ideal for all hair types. ",
+    "price": 38.99,
+    "image": "/images/oil-big.jpg"
   },
   {
     "_id": "2",
-    "name": "Argan Oil Serum",
-    "description": "Deep hydration and shine for damaged hair.",
-    "price": 28,
-    "image": "/images/argan-serum.jpg"
+    "name": "Farmavita Argan Sublime Mask (250-1000 ml)",
+    "description": "A rich restorative Argan oil Mask with intense exotic fragrance and golden creamy texture, specially designed to bring lush softness, shine and nourishment to the hair. Ideal for all hair types. ",
+    "price": 58.99,
+    "image": "/images/mask-big.jpg"
   },
   {
     "_id": "3",
-    "name": "Volumizing Spray",
-    "description": "Boosts hair volume and texture instantly.",
-    "price": 25,
-    "image": "/images/volume-spray.jpg"
+    "name": "Moroccanoil Treatment Hair Oil (50 ml)",
+    "description": "A versatile hair treatment and styler that works on damp or dry hair to promote a healthier look and feel. ",
+    "price": 49.99,
+    "image": "/images/oil.webp"
   },
   {
     "_id": "4",
-    "name": "Volumizing Spray",
-    "description": "Boosts hair volume and texture instantly.",
-    "price": 25,
-    "image": "/images/volume.jpg"
+    "name": "Moroccanoil Hair and Body Fragrance Mist (100 ml)",
+    "description": "A lightweight fragrance mist featuring a blend of spicy amber and sweet floral notes. Perfect for spritzing on hair and skin throughout the day.",
+    "price": 40.99,
+    "image": "/images/mist-hair.webp"
   },
   {
     "_id": "5",
-    "name": "Volumizing Spray",
-    "description": "Boosts hair volume and texture instantly.",
-    "price": 25,
-    "image": "/images/shampoo.jpg"
+    "name": "Intense Hydrating Mask (250 ml)",
+    "description": "A high-performance, argan-oil-rich mask formulated for medium to thick dry hair that improves hydration, texture, elasticity, shine, and manageability.",
+    "price": 59.99,
+    "image": "/images/mask.webp"
   },
   {
     "_id": "6",
-    "name": "Volumizing Spray",
-    "description": "Boosts hair volume and texture instantly.",
-    "price": 25,
-    "image": "/images/conditioner.jpg"
+    "name": "Color wow Dream Coat Supernatural Treatment Spray for Frizzy Hair (200 ml)",
+    "description": "A spray that keeps straight, wavy, or curly frizz-prone hair silky, glassy, and frizz-free for days.",
+    "price": 35.99,
+    "image": "/images/wow.webp"
   }
 ]
