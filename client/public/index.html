@@ -10,7 +10,23 @@
       content="Web site created using create-react-app"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo2.png" />
-    <link rel="preload" as="image" href="/assets/hero.webp" />
+    <!-- <link rel="preload" as="image" href="/assets/hero.webp" /> -->
+     <link
+      rel="preload"
+      as="image"
+      href="/assets/hero-1200.avif"
+      imagesrcset="/assets/hero-800.webp 800w, /assets/hero-1200.webp 1200w, /assets/hero-1600.webp 1600w"
+      imagesizes="(max-width: 768px) 100vw, 90vw"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/booking-1200.webp"
+      imagesrcset="/assets/booking-800.webp 800w, /assets/booking-1200.webp 1200w, /assets/booking-1600.webp 1600w"
+      imagesizes="(max-width: 768px) 100vw, 90vw"
+    />
+
+
 
     <!--
       manifest.json provides metadata used when your web app is installed on a

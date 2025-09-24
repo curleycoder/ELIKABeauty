@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import BookingForm from "../components/BookingForm";
-import BackgroundPic from "../assets/hero.jpg";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
 import services from "../data/services";
@@ -31,10 +30,18 @@ export default function Booking() {
   return (
     <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa]">
       {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10"
-        style={{ backgroundImage: `url(${BackgroundPic})` }}
-      />
+    {/* mobile: 800px */}
+    <div
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
+      style={{ backgroundImage: 'url(/assets/hero-bg-800.webp)' }}
+      aria-hidden="true"
+    />
+    {/* >= sm: 1600px */}
+    <div
+      className="hidden sm:block absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10"
+      style={{ backgroundImage: 'url(/assets/hero-bg-1600.webp)' }}
+      aria-hidden="true"
+    />
 
       {/* Foreground */}
       <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto">
