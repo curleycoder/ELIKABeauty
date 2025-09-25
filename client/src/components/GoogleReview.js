@@ -107,7 +107,11 @@ export default function GoogleReview() {
                       w-[85%] sm:w-[48%] lg:w-[32%]
                     "
                   >
-                    <div className="h-[220px] flex flex-col bg-white border border-purplecolor rounded-xl shadow-md p-5 overflow-hidden">
+                    <div className={
+                        `flex flex-col bg-white border border-purplecolor rounded-xl shadow-md p-5 ` +
+                        (isExpanded ? "h-auto" : "h-[220px] overflow-hidden")
+                      }
+                    >
                       <div>
                         <div className="flex items-center space-x-3 mb-2">
                           <img
@@ -124,14 +128,22 @@ export default function GoogleReview() {
                             </span>
                           </div>
                         </div>
+                        {/* Clamp when collapsed; full text when expanded */}
                         <p
-                          className={`text-gray-700 text-sm leading-snug ${isExpanded ? "" : "line-clamp-4"}`}
-                          style={isExpanded ? undefined : {
-                            display: "-webkit-box",
-                            WebkitLineClamp: 4,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden"
-                          }}
+                          className={
+                            `text-gray-700 text-sm leading-snug break-words ` +
+                            (isExpanded ? "" : "line-clamp-4")
+                          }
+                          style={
+                            isExpanded
+                              ? undefined
+                              : {
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 4,
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden",
+                                }
+                          }
                         >
                           {fullText}
                         </p>
