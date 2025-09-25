@@ -104,9 +104,9 @@ export default function Product() {
           </p>
           <h2 className="text-xl font-semibold text-purplecolor">Client Favorites</h2>
           <p>
-            Our most-requested picks include <strong>anti-yellow shampoos</strong> for
-            bright blondes, <strong>keratin-safe care</strong> to extend smoothness,
-            and <strong>deep moisture masks</strong> for color-treated hair. Not sure
+            Our most-requested picks include <strong>Argan Oil</strong> for
+            dry hair, <strong>color safe shampoo and conditioner</strong> to keep your color lasting longer,
+            and <strong>deep moisture masks</strong> color-treated hair. Not sure
             what you need? Ask us at your appointment—we’ll match products to your hair.
           </p>
         </div>
