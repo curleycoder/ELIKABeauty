@@ -171,7 +171,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 
                 <div className="mt-4 border-t pt-3 text-purplecolor">
                   <div className="flex justify-between text-lg font-bold">
-                    <span>Total:</span>
+                    <span>Estimated Total:</span>
                     <span>{total > 0 ? `+$${total}` : `$0`}</span>
 
                   </div>
