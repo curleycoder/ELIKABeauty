@@ -119,11 +119,11 @@ export default function Booking() {
             late? Text/call <strong>778-513-9006</strong> and we’ll do our best to help.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">Location</h2>
+          {/* <h2 className="text-xl font-semibold text-purplecolor mt-4">Location</h2>
           <p className="mt-1">
             <strong>275 Gilmore Ave, Burnaby</strong>. Near Brentwood. Free street
             parking nearby.
-          </p>
+          </p> */}
         </section>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -159,7 +159,7 @@ export default function Booking() {
           {/* RIGHT: Summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
             <h4 className="font-bold text-xl text-purplecolor mb-1">Beauty Shohre Studio</h4>
-            <p className="text-sm text-gray-500 mb-4">275 Gilmore Ave, Burnaby</p>
+            {/* <p className="text-sm text-gray-500 mb-4">275 Gilmore Ave, Burnaby</p> */}
 
             <p className="text-sm font-semibold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (
