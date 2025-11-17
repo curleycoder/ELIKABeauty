@@ -20,6 +20,14 @@ export default function Home() {
 
         {/* Article Section */}
         <section>
+        <h2>Hair Care Articles</h2>
+        <div className="article-grid">
+          {articles.map((article) => (
+            <ArticleCard key={article.id} article={article} />
+          ))}
+        </div>
+      </section>
+        {/* <section>
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl font-bodonimoda text-[#55203d] mb-10">
               <span className="border-t border-b border-gray-300 px-4 sm:px-6">
@@ -38,7 +46,7 @@ export default function Home() {
               />
             ))}
           </div>
-        </section>
+        </section> */}
 
         <AboutMe />
         <FAQ/>
