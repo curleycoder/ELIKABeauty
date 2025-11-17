@@ -1,11 +1,13 @@
+// src/pages/ArticlePage.js
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import articles from "../data/articles"; // <-- adjust path if needed
+import articles from "../data/articles"; // adjust path if needed
 
 export default function ArticlePage() {
   const { slug } = useParams();
   const article = articles.find((a) => a.slug === slug);
 
+  // If slug doesn't match anything → 404-ish
   if (!article) {
     return (
       <main className="p-4 max-w-3xl mx-auto">
@@ -65,7 +67,7 @@ export default function ArticlePage() {
         "@type": "ListItem",
         position: 2,
         name: "Articles",
-        item: origin + "/", // later you can point to /articles if you make a list page
+        item: origin + "/articles",
       },
       {
         "@type": "ListItem",
@@ -76,7 +78,7 @@ export default function ArticlePage() {
     ],
   };
 
-  // ---- UI (same as your original) ----
+  // ---- UI (same look as before) ----
   return (
     <main className="p-4 max-w-3xl mx-auto">
       <Helmet>
@@ -114,7 +116,7 @@ export default function ArticlePage() {
         </script>
       </Helmet>
 
-      <Link to="/" className="text-blue-500">
+      <Link to="/articles" className="text-blue-500">
         ← Back to articles
       </Link>
 
@@ -136,7 +138,6 @@ export default function ArticlePage() {
     </main>
   );
 }
-
 
 // import { useParams, Link } from "react-router-dom";
 // import { articles } from "../articles";

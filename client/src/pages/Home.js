@@ -17,41 +17,6 @@ export default function Home() {
         
         <GoogleReview />
         <Gallery />
-
-        {/* Article Section */}
-        <section id="articles-section" className="mt-16 px-4">
-        <h2 className="text-2xl font-bold mb-4 text-purplecolor">
-          Hair Care Articles
-        </h2>
-        <div className="grid gap-6 md:grid-cols-3">
-  {articles.map((article) => (
-    <ArticleCard key={article.id} article={article} />
-  ))}
-</div>
-
-      </section>
-
-        {/* <section>
-          <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl font-bodonimoda text-[#55203d] mb-10">
-              <span className="border-t border-b border-gray-300 px-4 sm:px-6">
-                Healthy Hair
-              </span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 font-bodonimoda">
-            {articles.map((article, index) => (
-              <ArticleCard
-                key={index}
-                image={article.image}
-                title={article.title}
-                text={article.text}
-              />
-            ))}
-          </div>
-        </section> */}
-
         <AboutMe />
         <FAQ/>
         <Instagram />
