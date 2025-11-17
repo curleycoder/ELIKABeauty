@@ -8,23 +8,25 @@ export default function ArticlePage() {
 
   if (!article) {
     return (
-      <main className="p-4 max-w-3xl mx-auto">
-        <Helmet>
-          <title>Article Not Found | Beauty Shohre Studio</title>
-          <meta
-            name="description"
-            content="The article you are looking for could not be found."
-          />
-        </Helmet>
-        <Link to="/articles" className="text-blue-500">
-          ← Back
-        </Link>
-        <p>Article not found.</p>
-      </main>
+      <div className="min-h-screen bg-pinkcolor/5 text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda mb-16">
+        <div className="max-w-3xl mx-auto">
+          <Helmet>
+            <title>Article Not Found | Beauty Shohre Studio</title>
+            <meta
+              name="description"
+              content="The article you are looking for could not be found."
+            />
+          </Helmet>
+
+          <Link to="/articles" className="text-blue-500">
+            ← Back to articles
+          </Link>
+          <p className="mt-4">Article not found.</p>
+        </div>
+      </div>
     );
   }
 
-  // ---- SEO values ----
   const origin =
     typeof window !== "undefined" ? window.location.origin : "";
   const pageTitle = `${article.title} | Beauty Shohre Studio`;
@@ -32,8 +34,6 @@ export default function ArticlePage() {
   const pageUrl = origin
     ? `${origin}/articles/${article.slug}`
     : `/articles/${article.slug}`;
-
-  // For meta only; UI will still use article.image directly
   const pageImage =
     origin && article.image && !article.image.startsWith("http")
       ? origin + article.image
@@ -82,20 +82,16 @@ export default function ArticlePage() {
   };
 
   return (
-    <main className="p-4 max-w-3xl mx-auto">
+    <div className="min-h-screen bg-pinkcolor/5 text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda mb-16">
       <Helmet>
-        {/* BASIC SEO */}
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <meta
           name="keywords"
           content="hair care, balayage, bleached hair repair, hair growth, hair salon Burnaby, Beauty Shohre Studio, hair colour tips"
         />
-
-        {/* CANONICAL */}
         <link rel="canonical" href={pageUrl} />
 
-        {/* OPEN GRAPH */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
@@ -103,13 +99,11 @@ export default function ArticlePage() {
         <meta property="og:url" content={pageUrl} />
         <meta property="og:site_name" content="Beauty Shohre Studio" />
 
-        {/* TWITTER CARD */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={pageImage} />
 
-        {/* JSON-LD SCHEMA */}
         <script type="application/ld+json">
           {JSON.stringify(articleJsonLd)}
         </script>
@@ -118,26 +112,30 @@ export default function ArticlePage() {
         </script>
       </Helmet>
 
-      <Link to="/articles" className="text-blue-500">
-        ← Back to articles
-      </Link>
+      <div className="max-w-3xl mx-auto">
+        <Link to="/articles" className="text-blue-500">
+          ← Back to articles
+        </Link>
 
-      <h1 className="mt-4 text-3xl font-bold">{article.title}</h1>
+        <h1 className="mt-4 text-3xl font-bold text-purplecolor">
+          {article.title}
+        </h1>
 
-      {/* ⬇️ THIS is the important part for your bug */}
-      <img
-        src={article.image}
-        alt={article.title}
-        className="mt-4 w-full max-h-96 object-cover rounded-lg"
-      />
+        {/* THIS is the hero image – same data as card */}
+        <img
+          src={article.image}
+          alt={article.title}
+          className="mt-6 w-full max-h-96 object-cover rounded-xl shadow-md"
+        />
 
-      <div className="mt-6 space-y-4">
-        {article.text.map((para, idx) => (
-          <p key={idx} className="leading-relaxed whitespace-pre-line">
-            {para}
-          </p>
-        ))}
+        <div className="mt-6 space-y-4 text-base leading-relaxed">
+          {article.text.map((para, idx) => (
+            <p key={idx} className="whitespace-pre-line">
+              {para}
+            </p>
+          ))}
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
