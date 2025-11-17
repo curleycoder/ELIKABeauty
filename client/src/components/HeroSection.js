@@ -32,7 +32,7 @@ export default function HeroSection() {
           Book Your Appointment
         </h2>
         <p className="text-white font-bodonimoda text-base sm:text-lg mb-1">
-          Address: 3939 Hastings Street, Burnaby - Unit 105 V5C 2H8
+          Address: 3939 Hastings Street #105, Burnaby  V5C 2H8
         </p>
         <p className="text-white font-bodonimoda text-base sm:text-lg mb-1">
           Phone Number: (778) 513-9006

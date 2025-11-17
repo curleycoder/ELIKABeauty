@@ -121,7 +121,7 @@ export default function Booking() {
 
           <h2 className="text-xl font-semibold text-purplecolor mt-4">Location</h2>
           <p className="mt-1">
-            <strong>Unit 105 - 3939 Hastings Street, Burnaby</strong>
+            <strong>3939 Hastings Street #105, Burnaby  V5C 2H8</strong>
           </p>
         </section>
 
@@ -158,7 +158,7 @@ export default function Booking() {
           {/* RIGHT: Summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
             <h4 className="font-bold text-xl text-purplecolor mb-1">Beauty Shohre Studio</h4>
-            <p className="text-sm text-gray-500 mb-4"> Unit 105 - 3939 Hastings Street, Burnaby</p>
+            <p className="text-sm text-gray-500 mb-4">3939 Hastings Street #105, Burnaby  V5C 2H8</p>
 
             <p className="text-sm font-semibold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (
