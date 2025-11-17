@@ -21,12 +21,10 @@ export default function Booking() {
   const [bookingData, setBookingData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // NEW: collapsed info
   const [showInfo, setShowInfo] = useState(false);
 
   const durationStats = getDurationStats(selection.selected);
 
-  // ✅ Title + meta (no extra libs)
   useEffect(() => {
     document.title = "Book Your Hair Appointment | Beauty Shohre Studio, North Burnaby";
     const meta =
@@ -44,7 +42,7 @@ export default function Booking() {
   }, []);
 
   return (
-<div className="w-full h-screen relative font-bodonimoda bg-[#fff8fa] pb-16 sm:pb-20 overflow-hidden">
+<div className="w-full h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10 overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
