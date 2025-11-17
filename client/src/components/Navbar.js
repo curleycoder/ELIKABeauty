@@ -31,7 +31,7 @@ export default function Navbar() {
     setMenuOpen(false);
   };
 
-  const routeMap = { Home: "/", Booking: "/booking", Products: "/product" };
+  const routeMap = { Home: "/", Booking: "/booking",Articles: "/articles", Products: "/product" };
 
   const handleNavClick = (item) => {
     if (item.scroll) {

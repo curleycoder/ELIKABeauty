@@ -1,12 +1,13 @@
+// src/components/ArticleCard.js
 import React from "react";
 import { Link } from "react-router-dom";
 
 export default function ArticleCard({ article }) {
-  const { image, title, text, slug, intro } = article;
+  const { image, title, text, slug } = article;
 
-  // use intro if available, otherwise first paragraph as preview
+  // short preview: first paragraph only
   const preview =
-    intro || (Array.isArray(text) && text.length > 0 ? text[0] : "");
+    Array.isArray(text) && text.length > 0 ? text[0] : "";
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden w-full max-w-md border border-pink-100 mx-auto">
@@ -15,7 +16,7 @@ export default function ArticleCard({ article }) {
       <div className="p-4 text-purplecolor">
         <h3 className="text-lg sm:text-xl font-semibold mb-3">{title}</h3>
 
-        <p className="text-sm text-gray-700 mb-3 line-clamp-4">
+        <p className="text-sm text-gray-700 mb-3">
           {preview}
         </p>
 
@@ -29,8 +30,6 @@ export default function ArticleCard({ article }) {
     </div>
   );
 }
-
-
 
 
 // import React, { useState } from "react";
