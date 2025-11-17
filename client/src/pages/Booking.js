@@ -92,7 +92,7 @@ export default function Booking() {
         >
           <p>
             We’re excited to welcome you to <strong>Beauty Shohre Studio</strong> in{" "}
-            <strong>3939 Hastings Street, Unit 105</strong>, Evolution Beauty Salon. Whether you’re booking{" "}
+            <strong>3939 Hastings Street #105, Burnaby</strong>. Whether you’re booking{" "}
             <em>highlights, balayage, a keratin treatment, or a precision haircut</em>,
             our goal is healthy, beautiful hair that fits your lifestyle.
           </p>
@@ -157,7 +157,8 @@ export default function Booking() {
           {/* RIGHT: Summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
             <h4 className="font-bold text-xl text-purplecolor mb-1">Beauty Shohre Studio</h4>
-            <p className="text-sm text-gray-500 mb-4">3939 Hastings Street #105, Burnaby  V5C 2H8</p>
+            <p className="text-sm text-gray-500 mb-4">3939 Hastings Street #105, Burnaby
+               V5C 2H8</p>
 
             <p className="text-sm font-semibold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (
