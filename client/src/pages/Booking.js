@@ -44,7 +44,7 @@ export default function Booking() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa] pb-16 sm:pb-20">
+<div className="w-full h-screen relative font-bodonimoda bg-[#fff8fa] pb-16 sm:pb-20 overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
@@ -58,7 +58,7 @@ export default function Booking() {
       />
 
       {/* Foreground */}
-      <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto">
+<div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full">
         {/* Minimal header */}
         <header className="mb-6 text-center">
           <h1 className="text-2xl sm:text-3xl text-purplecolor font-bold">
@@ -125,9 +125,10 @@ export default function Booking() {
           </p>
         </section>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
+
           {/* LEFT: Service + Forms */}
-          <div className="flex-1 rounded-[30px] p-5 sm:p-8 overflow-y-auto max-h-[calc(100vh-120px)] bg-transparent">
+<div className="flex-1 min-h-0 rounded-[30px] p-5 sm:p-8 overflow-y-auto bg-transparent">
             {!showDateTime ? (
               <BookingForm
                 onSelectionChange={setSelection}
