@@ -67,7 +67,7 @@ export default function Booking() {
             </span>
           </h1>
           <p className="text-gray-600 text-sm mt-2">
-            105-3939 Hastings Street • Evolution Beauty Salon • 30+ years experience
+            3939 Hastings Street #105, Burnaby • 30+ years experience
           </p>
 
           <div className="mt-4 flex items-center justify-center gap-3">
