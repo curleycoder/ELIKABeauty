@@ -34,10 +34,12 @@ export default function ArticlePage() {
   const pageUrl = origin
     ? `${origin}/articles/${article.slug}`
     : `/articles/${article.slug}`;
-  const pageImage =
-    origin && article.image && !article.image.startsWith("http")
-      ? origin + article.image
-      : article.image;
+  // const pageImage =
+  //   origin && article.image && !article.image.startsWith("http")
+  //     ? origin + article.image
+  //     : article.image;
+  const pageImage = article.image;
+
 
   const articleJsonLd = {
     "@context": "https://schema.org",
