@@ -42,7 +42,7 @@ export default function Booking() {
   }, []);
 
   return (
-<div className="w-full h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10 overflow-hidden">
+    <div className="w-full h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10 overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
@@ -55,8 +55,8 @@ export default function Booking() {
         aria-hidden="true"
       />
 
-      {/* Foreground */}
-<div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full">
+      {/* Foreground */}    
+    <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full">
         {/* Minimal header */}
         <header className="mb-6 text-center">
           <h1 className="text-2xl sm:text-3xl text-purplecolor font-bold">
@@ -123,10 +123,15 @@ export default function Booking() {
           </p>
         </section>
 
-        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
+        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0 space-y-6 font-bodonimoda">
 
           {/* LEFT: Service + Forms */}
-<div className="flex-1 min-h-0 rounded-[30px] p-5 sm:p-8 overflow-y-auto bg-transparent">
+      <div className="text-center">
+        <h2 className="text-3xl text-purplecolor mb-6">
+          <span className="border-t border-b border-gray-300 px-6">Services</span>
+        </h2>
+      </div>
+      <div className="flex-1 min-h-0 rounded-[30px] p-5 sm:p-8 overflow-y-auto bg-transparent">
             {!showDateTime ? (
               <BookingForm
                 onSelectionChange={setSelection}
