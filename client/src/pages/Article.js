@@ -1,13 +1,11 @@
-// src/pages/ArticlePage.js
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import articles from "../data/articles"; // adjust path if needed
+import articles from "../data/articles";
 
 export default function ArticlePage() {
   const { slug } = useParams();
   const article = articles.find((a) => a.slug === slug);
 
-  // If slug doesn't match anything → 404-ish
   if (!article) {
     return (
       <main className="p-4 max-w-3xl mx-auto">
@@ -18,7 +16,7 @@ export default function ArticlePage() {
             content="The article you are looking for could not be found."
           />
         </Helmet>
-        <Link to="/" className="text-blue-500">
+        <Link to="/articles" className="text-blue-500">
           ← Back
         </Link>
         <p>Article not found.</p>
@@ -26,7 +24,7 @@ export default function ArticlePage() {
     );
   }
 
-  // ---- SEO + JSON-LD (invisible) ----
+  // ---- SEO values ----
   const origin =
     typeof window !== "undefined" ? window.location.origin : "";
   const pageTitle = `${article.title} | Beauty Shohre Studio`;
@@ -34,7 +32,12 @@ export default function ArticlePage() {
   const pageUrl = origin
     ? `${origin}/articles/${article.slug}`
     : `/articles/${article.slug}`;
-  const pageImage = origin ? origin + article.image : article.image;
+
+  // For meta only; UI will still use article.image directly
+  const pageImage =
+    origin && article.image && !article.image.startsWith("http")
+      ? origin + article.image
+      : article.image;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -78,7 +81,6 @@ export default function ArticlePage() {
     ],
   };
 
-  // ---- UI (same look as before) ----
   return (
     <main className="p-4 max-w-3xl mx-auto">
       <Helmet>
@@ -122,6 +124,7 @@ export default function ArticlePage() {
 
       <h1 className="mt-4 text-3xl font-bold">{article.title}</h1>
 
+      {/* ⬇️ THIS is the important part for your bug */}
       <img
         src={article.image}
         alt={article.title}
@@ -138,42 +141,3 @@ export default function ArticlePage() {
     </main>
   );
 }
-
-// import { useParams, Link } from "react-router-dom";
-// import { articles } from "../articles";
-
-// export default function ArticlePage() {
-//   const { slug } = useParams();
-//   const article = articles.find((a) => a.slug === slug);
-
-//   if (!article) {
-//     return (
-//       <main className="p-4">
-//         <Link to="/" className="text-blue-500">← Back</Link>
-//         <p>Article not found.</p>
-//       </main>
-//     );
-//   }
-
-//   return (
-//     <main className="p-4 max-w-3xl mx-auto">
-//       <Link to="/" className="text-blue-500">← Back to articles</Link>
-
-//       <h1 className="mt-4 text-3xl font-bold">{article.title}</h1>
-
-//       <img
-//         src={article.image}
-//         alt={article.title}
-//         className="mt-4 w-full max-h-96 object-cover rounded-lg"
-//       />
-
-//       <div className="mt-6 space-y-4">
-//         {article.text.map((para, idx) => (
-//           <p key={idx} className="leading-relaxed whitespace-pre-line">
-//             {para}
-//           </p>
-//         ))}
-//       </div>
-//     </main>
-//   );
-// }
