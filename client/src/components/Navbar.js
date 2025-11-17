@@ -46,7 +46,7 @@ export default function Navbar() {
     { name: "Home" },
     { name: "Booking" },
     { name: "Gallery", scroll: "gallery-section" },
-    { name: "Articles", scroll: "articles-section" },
+    { name: "Articles" },
     { name: "Products" },
     { name: "About Me", scroll: "about-section" },
   ];
