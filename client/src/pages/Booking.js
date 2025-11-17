@@ -28,7 +28,7 @@ export default function Booking() {
 
   // ✅ Title + meta (no extra libs)
   useEffect(() => {
-    document.title = "Book Your Hair Appointment | Beauty Shohre Studio, Burnaby";
+    document.title = "Book Your Hair Appointment | Beauty Shohre Studio, North Burnaby";
     const meta =
       document.querySelector('meta[name="description"]') ||
       (() => {
@@ -39,7 +39,7 @@ export default function Booking() {
       })();
     meta.setAttribute(
       "content",
-      "Book your hair appointment at Beauty Shohre Studio in Burnaby. Highlights, balayage, keratin, haircuts near Brentwood. Easy online scheduling and clear policies."
+      "Book your hair appointment at Beauty Shohre Studio in North Burnaby. Highlights, balayage, keratin, haircuts near Brentwood. Easy online scheduling and clear policies."
     );
   }, []);
 
@@ -67,7 +67,7 @@ export default function Booking() {
             </span>
           </h1>
           <p className="text-gray-600 text-sm mt-2">
-            North Burnaby • 30+ years experience
+            105-3939 Hastings Street • Evolution Beauty Salon • 30+ years experience
           </p>
 
           <div className="mt-4 flex items-center justify-center gap-3">
@@ -94,7 +94,7 @@ export default function Booking() {
         >
           <p>
             We’re excited to welcome you to <strong>Beauty Shohre Studio</strong> in{" "}
-            <strong>Burnaby</strong>, near Brentwood. Whether you’re booking{" "}
+            <strong>3939 Hastings Street, Unit 105</strong>, Evolution Beauty Salon. Whether you’re booking{" "}
             <em>highlights, balayage, a keratin treatment, or a precision haircut</em>,
             our goal is healthy, beautiful hair that fits your lifestyle.
           </p>
@@ -119,11 +119,10 @@ export default function Booking() {
             late? Text/call <strong>778-513-9006</strong> and we’ll do our best to help.
           </p>
 
-          {/* <h2 className="text-xl font-semibold text-purplecolor mt-4">Location</h2>
+          <h2 className="text-xl font-semibold text-purplecolor mt-4">Location</h2>
           <p className="mt-1">
-            <strong>275 Gilmore Ave, Burnaby</strong>. Near Brentwood. Free street
-            parking nearby.
-          </p> */}
+            <strong>Unit 105 - 3939 Hastings Street, Burnaby</strong>
+          </p>
         </section>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -159,7 +158,7 @@ export default function Booking() {
           {/* RIGHT: Summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
             <h4 className="font-bold text-xl text-purplecolor mb-1">Beauty Shohre Studio</h4>
-            {/* <p className="text-sm text-gray-500 mb-4">275 Gilmore Ave, Burnaby</p> */}
+            <p className="text-sm text-gray-500 mb-4"> Unit 105 - 3939 Hastings Street, Burnaby</p>
 
             <p className="text-sm font-semibold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (

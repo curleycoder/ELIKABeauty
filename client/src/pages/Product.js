@@ -8,7 +8,7 @@ export default function Product() {
 
   useEffect(() => {
     // Simple SEO: title + meta description (no extra libs)
-    document.title = "Professional Hair Care | Beauty Shohre Studio (Burnaby)";
+    document.title = "Professional Hair Care | Beauty Shohre Studio (North Burnaby)";
     const meta =
       document.querySelector('meta[name="description"]') ||
       (() => {
@@ -19,7 +19,7 @@ export default function Product() {
       })();
     meta.setAttribute(
       "content",
-      "Curated, stylist-approved professional hair care at Beauty Shohre Studio in Burnaby. Online shop launching soon. Get notified when items restock."
+      "Curated, stylist-approved professional hair care at Beauty Shohre Studio in North Burnaby. Online shop launching soon. Get notified when items restock."
     );
   }, []);
 
@@ -91,7 +91,7 @@ export default function Product() {
       >
         <div className="space-y-6 text-gray-700 leading-relaxed bg-white/70 rounded-2xl p-5 sm:p-7 shadow-sm border border-pink-100">
           <p>
-            At <strong>Beauty Shohre Studio</strong> in Burnaby, we hand-pick{" "}
+            At <strong>Beauty Shohre Studio</strong> in North Burnaby, we hand-pick{" "}
             <em>professional hair care</em> that keeps color vibrant, supports blonding
             services, and protects keratin results. Each item is stylist-tested and
             chosen for performance and hair health.
