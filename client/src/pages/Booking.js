@@ -123,7 +123,7 @@ export default function Booking() {
           </p>
         </section>
 
-        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0 space-y-6 font-bodonimoda">
+        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0 space-y-6 font-bodonimoda px-4 pb-28">
 
           {/* LEFT: Service + Forms */}
       <div className="text-center">
@@ -131,7 +131,7 @@ export default function Booking() {
           <span className="border-t border-b border-gray-300 px-6">Services</span>
         </h2>
       </div>
-      <div className="flex-1 min-h-0 rounded-[30px] p-5 sm:p-8 overflow-y-auto bg-transparent">
+      <div className="flex-1 min-h-0 rounded-[30px] p-5 sm:p-8 overflow-y-auto bg-transparent overflow-hidden">
             {!showDateTime ? (
               <BookingForm
                 onSelectionChange={setSelection}
