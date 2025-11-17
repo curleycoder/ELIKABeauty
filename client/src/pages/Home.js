@@ -19,14 +19,22 @@ export default function Home() {
         <Gallery />
 
         {/* Article Section */}
-        <section>
-        <h2>Hair Care Articles</h2>
-        <div className="article-grid">
+        <section id="articles-section" className="mt-16 px-4">
+        <h2 className="text-2xl font-bold mb-4 text-purplecolor">
+          Hair Care Articles
+        </h2>
+        <div className="grid gap-6 md:grid-cols-3">
           {articles.map((article) => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard
+              key={article.id}
+              title={article.title}
+              text={article.text}
+              image={article.image}
+            />
           ))}
         </div>
       </section>
+
         {/* <section>
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl font-bodonimoda text-[#55203d] mb-10">

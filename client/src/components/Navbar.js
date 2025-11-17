@@ -45,8 +45,9 @@ export default function Navbar() {
   const navItems = [
     { name: "Home" },
     { name: "Booking" },
-    { name: "Products" },
     { name: "Gallery", scroll: "gallery-section" },
+    { name: "Articles", scroll: "articles-section" },
+    { name: "Products" },
     { name: "About Me", scroll: "about-section" },
   ];
 
