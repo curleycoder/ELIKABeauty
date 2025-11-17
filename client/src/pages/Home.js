@@ -24,15 +24,11 @@ export default function Home() {
           Hair Care Articles
         </h2>
         <div className="grid gap-6 md:grid-cols-3">
-          {articles.map((article) => (
-            <ArticleCard
-              key={article.id}
-              title={article.title}
-              text={article.text}
-              image={article.image}
-            />
-          ))}
-        </div>
+  {articles.map((article) => (
+    <ArticleCard key={article.id} article={article} />
+  ))}
+</div>
+
       </section>
 
         {/* <section>
