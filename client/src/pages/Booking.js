@@ -123,7 +123,7 @@ export default function Booking() {
           </p>
         </section>
 
-        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0 space-y-6 font-bodonimoda px-4 pb-28">
+        <div className="flex flex-col lg:flex-row gap-8 font-bodonimoda">
 
           {/* LEFT: Service + Forms */}
       <div className="text-center">
