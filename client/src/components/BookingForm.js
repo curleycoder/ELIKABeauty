@@ -60,7 +60,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
     {/* ⛔ Not scrollable: title + tabs */}
     <div className="text-center">
       <h2 className="text-3xl text-purplecolor mb-4">
-        <span className="border-t border-b px-6">Services</span>
+        Services
       </h2>
     </div>
 
