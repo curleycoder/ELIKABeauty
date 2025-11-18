@@ -142,7 +142,7 @@ export default function Booking() {
         <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
 
           {/* LEFT: Service + Forms */}
-    <div className="flex-1 min-h-0 rounded-[30px] p-5 sm:p-8 bg-transparent flex flex-col">
+    <div className="flex-1 min-h-0 rounded-[30px] bg-transparent flex flex-col">
 
             {!showDateTime ? (
               <BookingForm
