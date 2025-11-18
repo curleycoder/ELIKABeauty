@@ -57,11 +57,11 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 
   return (
     <div className="space-y-6 font-bodonimoda px-4 pb-28">
-      {/* <div className="text-center">
+      <div className="text-center">
         <h2 className="text-3xl text-purplecolor mb-6">
           <span className="border-t border-b border-gray-300 px-6">Services</span>
         </h2>
-      </div> */}
+      </div>
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 justify-center mb-4">
