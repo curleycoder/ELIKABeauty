@@ -14,10 +14,10 @@ export default function Home() {
       <HeroSection />
 
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 py-10 max-w-screen-xl mx-auto space-y-20">
-        
-        <GoogleReview />
         <Gallery />
         <AboutMe />
+        <GoogleReview />
+        
         <FAQ/>
         <Instagram />
       </div>
