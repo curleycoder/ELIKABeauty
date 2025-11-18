@@ -4,6 +4,7 @@ module.exports = {
     extend: {
       fontFamily: {
         bodonimoda: ['Bodoni-moda', 'sans serif'],
+        ranade: ['Ranade', 'sans-serif'],
       },
       colors: {
         purplecolor: "#55203d",

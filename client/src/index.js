@@ -10,7 +10,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <HelmetProvider>
   <React.StrictMode>
+    <div className="font-ranade">
     <App />
+    </div>
+
     <Analytics/>
   </React.StrictMode>
   </HelmetProvider>
