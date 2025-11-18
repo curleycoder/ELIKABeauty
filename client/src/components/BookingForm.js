@@ -57,87 +57,85 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 
   return (
   <div className="font-bodonimoda px-4 pb-28 h-full flex flex-col">
-    {/* Sticky header: title + tabs */}
-    <div className="sticky top-0 z-10 pb-4">
-      <div className="text-center">
-        <h2 className="text-3xl text-purplecolor mb-4">
-          <span className="border-t border-b border-gray-300 px-6">Services</span>
-        </h2>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex flex-wrap gap-2 justify-center">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-3 py-1.5 rounded-full font-semibold text-sm transition-all ${
-              activeTab === tab
-                ? "bg-purplecolor text-white shadow-md scale-105"
-                : "bg-white text-purplecolor hover:translate-y-[-2px]"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+    {/* ⛔ Not scrollable: title + tabs */}
+    <div className="text-center">
+      <h2 className="text-3xl text-purplecolor mb-4">
+        <span className="border-t border-b border-gray-300 px-6">Services</span>
+      </h2>
     </div>
 
-    {/* Warning – unchanged */}
-    {conflictWarning && (
-      <div className="transition-opacity duration-300 ease-in-out border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4">
-        <strong className="font-bold">⚠️ Warning:</strong>
-        <span className="block sm:inline ml-2">
-          These two services can't be done in one day. We care about the health of your hair 💜
-        </span>
-      </div>
-    )}
+    <div className="flex flex-wrap gap-2 justify-center">
+      {tabs.map((tab) => (
+        <button
+          key={tab}
+          onClick={() => setActiveTab(tab)}
+          className={`px-3 py-1.5 rounded-full font-semibold text-sm transition-all ${
+            activeTab === tab
+              ? "bg-purplecolor text-white shadow-md scale-105"
+              : "bg-white text-purplecolor hover:translate-y-[-2px]"
+          }`}
+        >
+          {tab}
+        </button>
+      ))}
+    </div>
 
-    {/* Services List – IMPORTANT: no overflow-y-auto here */}
-    <div className="space-y-4 mt-4">
-      {services
-        .filter((s) => s.category === activeTab)
-        .map((s, index) => (
-          <div
-            key={s._id || index}
-            className={`bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 ${
-              selected.some((sel) => sel._id === s._id)
-                ? "border-2 border-purplecolor"
-                : ""
-            }`}
-          >
-            <div className="flex-1">
-              <h3 className="font-semibold text-lg text-gray-900">{s.name}</h3>
-              <div className="text-sm text-gray-600 mt-1">
-                <span className="block">
-                  ${s.price}
-                  {s.fromPrice && (
-                    <span className="text-xs text-gray-400 ml-0.5 align-top">+</span>
+    {/* ✅ Only this area scrolls */}
+    <div className="mt-4 flex-1 min-h-0 overflow-y-auto">
+      {conflictWarning && (
+        <div className="transition-opacity duration-300 ease-in-out border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+          <strong className="font-bold">⚠️ Warning:</strong>
+          <span className="block sm:inline ml-2">
+            These two services can't be done in one day. We care about the health of your hair 💜
+          </span>
+        </div>
+      )}
+
+      <div className="space-y-4">
+        {services
+          .filter((s) => s.category === activeTab)
+          .map((s, index) => (
+            <div
+              key={s._id || index}
+              className={`bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 ${
+                selected.some((sel) => sel._id === s._id)
+                  ? "border-2 border-purplecolor"
+                  : ""
+              }`}
+            >
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-gray-900">{s.name}</h3>
+                <div className="text-sm text-gray-600 mt-1">
+                  <span className="block">
+                    ${s.price}
+                    {s.fromPrice && (
+                      <span className="text-xs text-gray-400 ml-0.5 align-top">+</span>
+                    )}
+                  </span>
+
+                  <span className="block truncate">{s.description}</span>
+                </div>
+              </div>
+
+              <div className="sm:self-end sm:ml-4">
+                <button
+                  onClick={() => handleSelect(s)}
+                  className={`mt-2 sm:mt-0 p-2 border rounded-full transition ${
+                    selected.some((sel) => sel._id === s._id)
+                      ? "bg-purplecolor text-white border-purplecolor"
+                      : "bg-white text-purplecolor border-purplecolor hover:bg-purplecolor/5"
+                  }`}
+                >
+                  {selected.some((sel) => sel._id === s._id) ? (
+                    <FaCheck />
+                  ) : (
+                    <FaPlus />
                   )}
-                </span>
-
-                <span className="block truncate">{s.description}</span>
+                </button>
               </div>
             </div>
-
-            <div className="sm:self-end sm:ml-4">
-              <button
-                onClick={() => handleSelect(s)}
-                className={`mt-2 sm:mt-0 p-2 border rounded-full transition ${
-                  selected.some((sel) => sel._id === s._id)
-                    ? "bg-purplecolor text-white border-purplecolor"
-                    : "bg-white text-purplecolor border-purplecolor hover:bg-purplecolor/5"
-                }`}
-              >
-                {selected.some((sel) => sel._id === s._id) ? (
-                  <FaCheck />
-                ) : (
-                  <FaPlus />
-                )}
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
 
 
