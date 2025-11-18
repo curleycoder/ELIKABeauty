@@ -17,10 +17,9 @@ export default function Home() {
         <Gallery />
         <AboutMe />
         <GoogleReview />
-        
         <FAQ/>
-        <Instagram />
       </div>
+      <Instagram />
     </>
   );
 }

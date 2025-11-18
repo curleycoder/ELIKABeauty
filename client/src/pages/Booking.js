@@ -40,6 +40,22 @@ export default function Booking() {
       "Book your hair appointment at Beauty Shohre Studio in North Burnaby. Highlights, balayage, keratin, haircuts near Brentwood. Easy online scheduling and clear policies."
     );
   }, []);
+  useEffect(() => {
+  // Save previous overflow
+  const prevBodyOverflow = document.body.style.overflow;
+  const prevHtmlOverflow = document.documentElement.style.overflow;
+
+  // Disable page scroll
+  document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
+
+  // Cleanup when leaving this page
+  return () => {
+    document.body.style.overflow = prevBodyOverflow || "";
+    document.documentElement.style.overflow = prevHtmlOverflow || "";
+  };
+}, []);
+
 
   return (
     <div className="w-full h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10 overflow-hidden">
