@@ -56,11 +56,11 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
 };
 
   return (
-  <div className="font-bodonimoda px-4 pb-20 h-full flex flex-col">
+  <div className="font-bodonimoda px-2 pb-16 h-full flex flex-col">
     {/* ⛔ Not scrollable: title + tabs */}
     <div className="text-center">
-      <h2 className="text-3xl">
-        <span className="border-t border-b border-gray-300 px-6">Services</span>
+      <h2 className="text-3xl text-purplecolor mb-4">
+        <span className="border-t border-b px-6">Services</span>
       </h2>
     </div>
 
