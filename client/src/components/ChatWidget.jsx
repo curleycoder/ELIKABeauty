@@ -28,7 +28,11 @@ export default function ChatWidget() {
         <div className="h-12 flex items-center justify-between px-4 border-b border-black/5 bg-gradient-to-b from-pink-100/70 to-white/80">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-full bg-pink-200/70 grid place-items-center">
-              <span className="text-sm">💬</span>
+              <img
+            src="/sherry1.jpg"
+            alt="Beauty Shohre Assistant"
+            className="h-18 w-18 rounded-full object-cover"
+            />
             </div>
             <div className="leading-tight">
               <div className="text-sm font-semibold text-black/90">Beauty Shohre Assistant</div>
@@ -49,7 +53,7 @@ export default function ChatWidget() {
         {/* Iframe */}
         <iframe
           title="Beauty Shohre Chat"
-          src="https://client-sand-kappa.vercel.app"
+          src="https://client-sand-kappa.vercel.app/?biz=beautyshohre"
           className="w-full h-[calc(100%-3rem)] border-0"
         />
       </div>
@@ -70,7 +74,7 @@ export default function ChatWidget() {
         <img
             src="/sherry1.jpg"
             alt="Beauty Shohre Assistant"
-            className="h-18 w-18 rounded-full object-cover"
+            className="h-18 w-18 ring-1 ring-white rounded-full object-cover"
             />
 
       </button>
