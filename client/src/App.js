@@ -2,6 +2,7 @@ import './App.css';
 
 import React from "react";
 import { BrowserRouter as Router , Routes, Route} from "react-router-dom";
+import ChatWidget from './components/ChatWidget';
 
 import Home from "./pages/Home"
 import Booking from "./pages/Booking"
@@ -20,6 +21,7 @@ function App() {
  
     <Router>
       <Navbar />
+      <ChatWidget/>
 
       <div >
         <Routes>
