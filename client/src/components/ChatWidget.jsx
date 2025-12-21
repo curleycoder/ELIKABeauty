@@ -58,7 +58,7 @@ export default function ChatWidget() {
       <button
         onClick={() => setOpen((v) => !v)}
         className={[
-          "fixed z-[999999] right-4 bottom-4 h-14 w-14 rounded-full",
+          "fixed z-[999999] right-8 bottom-8 h-20 w-20 rounded-full",
           "grid place-items-center shadow-2xl",
           "bg-white",
           "hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]",
@@ -69,8 +69,8 @@ export default function ChatWidget() {
       >
         <img
             src="/sherry1.jpg"
-            alt="Chat"
-            className="h-12 w-12 rounded-full object-cover"
+            alt="Beauty Shohre Assistant"
+            className="h-18 w-18 rounded-full object-cover"
             />
 
       </button>
