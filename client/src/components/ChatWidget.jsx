@@ -60,7 +60,7 @@ export default function ChatWidget() {
         className={[
           "fixed z-[999999] right-4 bottom-4 h-14 w-14 rounded-full",
           "grid place-items-center shadow-2xl",
-          "bg-gradient-to-b from-pink-200 to-pink-300",
+          "bg-gradient-to-b from-pink-100 to-purplecolor",
           "border border-white/40",
           "hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]",
           "transition",
@@ -71,7 +71,7 @@ export default function ChatWidget() {
         <img
             src="/sherry1.jpg"
             alt="Chat"
-            className="h-6 w-6 object-contain"
+            className="h-7 w-7 rounded-full ring-2 ring-white object-cover"
             />
 
       </button>
