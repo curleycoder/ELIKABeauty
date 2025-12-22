@@ -14,7 +14,7 @@ export default function ChatWidget() {
       {/* Panel */}
       <div
         className={[
-          "fixed z-[999999] right-4 bottom-20 w-[380px] h-[560px]",
+          "fixed z-[999999] right-4 bottom-28 w-[380px] h-[560px]",
           "max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)]",
           "rounded-2xl overflow-hidden border border-black/10",
           "bg-white/90 backdrop-blur-md shadow-2xl",
@@ -31,7 +31,7 @@ export default function ChatWidget() {
               <img
             src="/sherry1.jpg"
             alt="Beauty Shohre Assistant"
-            className="h-18 w-18 rounded-full object-cover"
+            className="h-7 w-7 rounded-full object-cover"
             />
             </div>
             <div className="leading-tight">
@@ -59,25 +59,26 @@ export default function ChatWidget() {
       </div>
 
       {/* Bubble */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className={[
-          "fixed z-[999999] right-8 bottom-8 h-20 w-20 rounded-full",
-          "grid place-items-center shadow-2xl",
-          "bg-white",
-          "hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]",
-          "transition",
-        ].join(" ")}
-        aria-label={open ? "Close chat" : "Open chat"}
-        title={open ? "Close chat" : "Chat"}
-      >
-        <img
+      {!open && (
+        <button
+            onClick={() => setOpen(true)}
+            className={[
+            "fixed z-[999998] right-8 bottom-8 h-20 w-20 rounded-full",
+            "grid place-items-center shadow-2xl",
+            "bg-white",
+            "hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]",
+            "transition",
+            ].join(" ")}
+            aria-label="Open chat"
+            title="Chat"
+        >
+            <img
             src="/sherry1.jpg"
             alt="Beauty Shohre Assistant"
-            className="h-18 w-18 ring-1 ring-white rounded-full object-cover"
+            className="h-16 w-16 ring-1 ring-white rounded-full object-cover"
             />
-
-      </button>
+        </button>
+        )}
     </>
   );
 }
