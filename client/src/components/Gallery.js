@@ -8,45 +8,54 @@ function joinURL(base, path) {
 }
 
 export default function Gallery() {
-  const [galleryImages, setGalleryImages] = useState([]);      // e.g. ["/uploads/a.jpg", ...]
+  // galleryImages = [{ thumb, preview, full }, ...]
+  const [galleryImages, setGalleryImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [selectedImage, setSelectedImage] = useState("");       // full URL
+  const [selectedImage, setSelectedImage] = useState(""); // full URL for the main image
   const timerRef = useRef(null);
 
-  // fetch images once
+  // fetch images once (ALLOW caching)
   useEffect(() => {
     let mounted = true;
-    fetch(`${baseURL}/api/gallery`, { cache: "no-store" })
+
+    fetch(`${baseURL}/api/gallery`)
       .then((r) => r.json())
       .then((data) => {
         if (!mounted) return;
+
         const imgs = Array.isArray(data.images) ? data.images : [];
-        if (imgs.length) {
-          setGalleryImages(imgs);
-          const first = joinURL(baseURL, imgs[0]);
-          setSelectedImage(first);
-          setCurrentIndex(0);
-        }
+        if (!imgs.length) return;
+
+        setGalleryImages(imgs);
+
+        // Start with preview (fast)
+        setSelectedImage(joinURL(baseURL, imgs[0].preview || imgs[0].full || imgs[0].thumb));
+        setCurrentIndex(0);
       })
       .catch((err) => console.log("Failed to load gallery images:", err));
-    return () => { mounted = false; };
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // derived urls
+  // derived urls (use PREVIEW for stage side images)
   const prevUrl = useMemo(() => {
     if (!galleryImages.length) return "";
     const i = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-    return joinURL(baseURL, galleryImages[i]);
+    const item = galleryImages[i];
+    return joinURL(baseURL, item.preview || item.full || item.thumb);
   }, [galleryImages, currentIndex]);
 
   const nextUrl = useMemo(() => {
     if (!galleryImages.length) return "";
     const i = (currentIndex + 1) % galleryImages.length;
-    return joinURL(baseURL, galleryImages[i]);
+    const item = galleryImages[i];
+    return joinURL(baseURL, item.preview || item.full || item.thumb);
   }, [galleryImages, currentIndex]);
 
-  // prefetch the *next* full image so the click feels instant
+  // prefetch the next PREVIEW (not full)
   useEffect(() => {
     if (!nextUrl) return;
     const img = new Image();
@@ -54,18 +63,18 @@ export default function Gallery() {
     img.src = nextUrl;
   }, [nextUrl]);
 
-  // single timer (no stacking) + pause on hidden tab and on hover
+  // single timer (no stacking) + pause on hidden tab
   useEffect(() => {
     if (!isAutoPlaying || !galleryImages.length) return;
 
-    // respect reduced motion
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const delay = prefersReduced ? 6000 : 3000;
 
     function tick() {
       setCurrentIndex((i) => {
         const next = (i + 1) % galleryImages.length;
-        setSelectedImage(joinURL(baseURL, galleryImages[next]));
+        const item = galleryImages[next];
+        setSelectedImage(joinURL(baseURL, item.preview || item.full || item.thumb));
         return next;
       });
     }
@@ -87,13 +96,18 @@ export default function Gallery() {
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = null;
     };
-  }, [isAutoPlaying, galleryImages.length]);
+  }, [isAutoPlaying, galleryImages]); // use galleryImages, not galleryImages.length
 
   // handlers
   const handleSelectImage = (idx) => {
     if (!galleryImages.length) return;
+
+    const item = galleryImages[idx];
     setCurrentIndex(idx);
-    setSelectedImage(joinURL(baseURL, galleryImages[idx]));
+
+    // show preview by default
+    setSelectedImage(joinURL(baseURL, item.preview || item.full || item.thumb));
+
     setIsAutoPlaying(false);
   };
 
@@ -120,7 +134,6 @@ export default function Gallery() {
     return () => window.removeEventListener("keydown", onKey);
   }, [currentIndex, galleryImages.length]);
 
-  // pause on hover over the main stage
   const onMouseEnter = () => setIsAutoPlaying(false);
 
   return (
@@ -132,11 +145,7 @@ export default function Gallery() {
       </div>
 
       {/* Stage */}
-      <div
-        className="relative flex justify-center items-center mb-6 h-[500px] select-none"
-        onMouseEnter={onMouseEnter}
-      >
-        {/* Prev arrow */}
+      <div className="relative flex justify-center items-center mb-6 h-[500px] select-none" onMouseEnter={onMouseEnter}>
         <button
           onClick={handlePrev}
           className="absolute left-2 bg-white/70 rounded-full p-2 hover:bg-white shadow"
@@ -145,7 +154,7 @@ export default function Gallery() {
           ◀
         </button>
 
-        {/* Blurry previews (lazy, low priority) */}
+        {/* Side previews (preview size) */}
         {prevUrl && (
           <img
             src={prevUrl}
@@ -156,7 +165,7 @@ export default function Gallery() {
           />
         )}
 
-        {/* Main image */}
+        {/* Main image (preview size) */}
         {selectedImage && (
           <img
             src={selectedImage}
@@ -165,7 +174,6 @@ export default function Gallery() {
             width={1200}
             height={800}
             loading="eager"
-            fetchPriority="high"
             decoding="async"
           />
         )}
@@ -180,7 +188,6 @@ export default function Gallery() {
           />
         )}
 
-        {/* Next arrow */}
         <button
           onClick={handleNext}
           className="absolute right-2 bg-white/70 rounded-full p-2 hover:bg-white shadow"
@@ -190,10 +197,10 @@ export default function Gallery() {
         </button>
       </div>
 
-      {/* Thumbnails (lazy) */}
+      {/* Thumbnails (thumb size) */}
       <div className="flex overflow-x-auto space-x-3 px-4 scrollbar-hide">
         {galleryImages.map((img, idx) => {
-          const url = joinURL(baseURL, img);
+          const url = joinURL(baseURL, img.thumb || img.preview || img.full);
           return (
             <img
               key={idx}
@@ -214,4 +221,3 @@ export default function Gallery() {
     </section>
   );
 }
-
