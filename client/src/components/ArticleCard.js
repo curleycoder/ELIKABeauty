@@ -18,8 +18,6 @@ export default function ArticleCard({ article }) {
     >
       <img
         src={image}
-        srcSet={`${image480} 480w, ${image800} 800w`}
-        sizes="(max-width: 640px) 100vw, 448px"
         alt={title}
         className="w-full h-56 object-cover"
         loading="lazy"
