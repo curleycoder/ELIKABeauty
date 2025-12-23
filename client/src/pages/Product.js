@@ -52,7 +52,7 @@ export default function Product() {
   }, [products]);
 
   return (
-    <div className="min-h-screen bg-pinkcolor/5 text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda mb-16">
+    <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda mb-16">
       {/* Intro header (short & elegant) */}
       <div className="text-center mb-6 max-w-3xl mx-auto">
         <h1 className="text-2xl sm:text-3xl text-purplecolor mb-2">
@@ -151,7 +151,7 @@ export default function Product() {
               return (
                 <div
                   key={product._id}
-                  className="group bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 p-4 border border-purplecolor/10 relative overflow-hidden"
+                  className="group bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 p-4 border border-pinkcolor/30 relative overflow-hidden"
                 >
                   {unavailable && (
                     <span className="absolute top-3 right-3 text-[11px] uppercase tracking-wide bg-gray-900/80 text-white px-2 py-1 rounded-full">
@@ -175,7 +175,7 @@ export default function Product() {
                   </p>
 
                   <div className="mt-3 flex items-center justify-between">
-                    <p className="text-pinkcolor font-bold">
+                    <p className="text-lg font-bold">
                       {typeof product.price === "number" ? `$${product.price}` : ""}
                     </p>
 
