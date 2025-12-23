@@ -6,23 +6,24 @@ const path = require("path");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  const galleryPath = path.join(__dirname,"..", "public","gallery");
+  const dir = path.join(__dirname, "..", "public", "gallery", "thumb");
 
-  fs.readdir(galleryPath, (err, files) => {
-    if (err) {
-      console.error("Error reading gallery folder:", err);
-      return res.status(500).json({ error: "Unable to read directory" });
-    }
+  fs.readdir(dir, (err, files) => {
+    if (err) return res.status(500).json({ error: "Unable to read directory" });
 
-    const imageUrls = files
-      .filter((file) => /\.(jpg|jpeg|png|gif)$/.test(file))
-      .map((file) => `/gallery/${file}`);
+    const images = files
+      .filter((f) => /\.jpg$/i.test(f))
+      .sort((a, b) => a.localeCompare(b))
+      .map((file) => ({
+        thumb: `/gallery/thumb/${file}`,
+        preview: `/gallery/preview/${file}`,
+        full: `/gallery/full/${file}`,
+      }));
 
-    res.json({ images: imageUrls });
+    res.set("Cache-Control", "public, max-age=300"); // 5 min
+    res.json({ images });
   });
 });
-
-
 
 
 module.exports = router;

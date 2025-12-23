@@ -21,7 +21,8 @@
     "node-fetch": "^2.7.0",
     "nodemailer": "^7.0.4",
     "react-email": "^4.0.17",
-    "resend": "^4.6.0"
+    "resend": "^4.6.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
