@@ -2,43 +2,11 @@ import React, { useEffect, useState } from "react";
 
 const API = process.env.REACT_APP_API_URL || "";
 
-const rescheduleBooking = async (booking) => {
-  // Ask admin for new date/time
-  const newDate = window.prompt("New date (YYYY-MM-DD):", "");
-  if (!newDate) return;
-
-  const newTime = window.prompt("New time (24h HH:MM):", "");
-  if (!newTime) return;
-
-  try {
-    const res = await fetch(`${API}/api/bookings/${booking._id}/reschedule`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "x-admin-key": process.env.REACT_APP_ADMIN_KEY,
-      },
-      body: JSON.stringify({ date: newDate, time: newTime }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.error || "Reschedule failed");
-      return;
-    }
-
-    // Update UI
-    setBookings((prev) => prev.map((b) => (b._id === booking._id ? data : b)));
-  } catch (err) {
-    alert("Reschedule failed");
-  }
-};
-
-
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch bookings
   const fetchBookings = async () => {
     try {
       const res = await fetch(`${API}/api/bookings`);
@@ -55,6 +23,7 @@ export default function AdminBookings() {
     fetchBookings();
   }, []);
 
+  // ❌ Cancel booking (owner only)
   const cancelBooking = async (id) => {
     const confirm = window.confirm(
       "Are you sure you want to cancel this booking?"
@@ -69,11 +38,47 @@ export default function AdminBookings() {
         },
       });
 
-
-      // remove from UI instantly
+      // update UI
       setBookings((prev) => prev.filter((b) => b._id !== id));
     } catch (err) {
       alert("Cancellation failed");
+    }
+  };
+
+  // 🔁 Reschedule booking (owner only)
+  const rescheduleBooking = async (booking) => {
+    const newDate = window.prompt("New date (YYYY-MM-DD):");
+    if (!newDate) return;
+
+    const newTime = window.prompt("New time (24h HH:MM):");
+    if (!newTime) return;
+
+    try {
+      const res = await fetch(
+        `${API}/api/bookings/${booking._id}/reschedule`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": process.env.REACT_APP_ADMIN_KEY,
+          },
+          body: JSON.stringify({ date: newDate, time: newTime }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Reschedule failed");
+        return;
+      }
+
+      // update UI with new booking
+      setBookings((prev) =>
+        prev.map((b) => (b._id === booking._id ? data : b))
+      );
+    } catch (err) {
+      alert("Reschedule failed");
     }
   };
 
