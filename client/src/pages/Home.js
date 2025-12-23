@@ -17,7 +17,7 @@ export default function Home() {
         <Gallery />
         <AboutMe />
         <GoogleReview />
-        <FAQ/>
+        {/* <FAQ/> */}
       </div>
       <Instagram />
     </>
