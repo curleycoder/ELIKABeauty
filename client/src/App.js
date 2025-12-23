@@ -13,6 +13,7 @@ import Gallery from './components/Gallery';
 import {SpeedInsights} from "@vercel/speed-insights/react"
 import ArticlePage from "./pages/Article"
 import ArticlesPage from './pages/ArticlesPage';
+import ScrollToTop from './components/ScrollToTop';
 
 
 
@@ -22,7 +23,7 @@ function App() {
     <Router>
       <Navbar />
       <ChatWidget/>
-
+      <ScrollToTop/>
       <div >
         <Routes>
           <Route path="/" element={<Home />}/>
