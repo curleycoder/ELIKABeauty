@@ -12,7 +12,7 @@ export default function ArticleCard({ article }) {
       to={`/articles/${slug}`}
       className="
         block bg-white rounded-xl overflow-hidden w-full max-w-md
-        border border-pinkcolor mx-auto
+        border border-pinkcolor/30 mx-auto
         hover:-translate-y-1 transition-transform duration-200
       "
     >
