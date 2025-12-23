@@ -68,12 +68,12 @@ export default function GoogleReview() {
   return (
     <section className="bg-white p-3 rounded-lg max-w-6xl mx-auto">
       <div className="text-center">
-        <h2 className="text-3xl pt-10 font-bodonimoda text-[#55203d] mb-4">
+        <h2 className="text-3xl font-bodonimoda text-[#55203d] mb-6">
           <span className="border-t border-b border-gray-300 px-6">What Our Clients Say</span>
         </h2>
       </div>
 
-      <div className="mt-10 relative">
+      <div className="mt-6 relative">
         {loading ? (
           <p className="text-center text-gray-500 mt-6">Loading reviews...</p>
         ) : reviews.length === 0 ? (

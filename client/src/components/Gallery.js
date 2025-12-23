@@ -137,9 +137,9 @@ export default function Gallery() {
   const onMouseEnter = () => setIsAutoPlaying(false);
 
   return (
-    <section id="gallery-section" className="text-center px-4 py-10">
+    <section id="gallery-section" className="text-center px-4 py-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bodonimoda text-[#55203d] mb-16">
+        <h2 className="text-3xl font-bodonimoda text-[#55203d] mb-6">
           <span className="border-t border-b border-gray-300 px-6">Photo Gallery</span>
         </h2>
       </div>
