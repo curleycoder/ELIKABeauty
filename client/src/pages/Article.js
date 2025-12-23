@@ -18,7 +18,7 @@ export default function ArticlePage() {
             />
           </Helmet>
 
-          <Link to="/articles" className="text-blue-500">
+          <Link to="/articles" className="text-pinkcolor">
             ← Back to articles
           </Link>
           <p className="mt-4">Article not found.</p>
@@ -84,7 +84,7 @@ export default function ArticlePage() {
   };
 
   return (
-    <div className="min-h-screen bg-pinkcolor/5 text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda mb-16">
+    <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda pb-16">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
