@@ -7,14 +7,14 @@ export default function ArticleCard({ article }) {
   const preview =
     intro || (Array.isArray(text) && text.length > 0 ? text[0] : "");
 
-  // super light placeholder
-  const fallback =
-    "data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA="; // 1x1 pixel
-
   return (
     <Link
       to={`/articles/${slug}`}
-      className="block bg-white rounded-xl shadow-sm overflow-hidden w-full max-w-md border border-pink-100 mx-auto hover:shadow-md hover:-translate-y-1 transition-transform duration-200"
+      className="
+        block bg-pinkcolor/5 rounded-xl overflow-hidden w-full max-w-md
+        border border-black/10 mx-auto
+        hover:-translate-y-1 transition-transform duration-200
+      "
     >
       <img
         src={image}
@@ -22,12 +22,9 @@ export default function ArticleCard({ article }) {
         className="w-full h-56 object-cover"
         loading="lazy"
         decoding="async"
-        fetchpriority="low"
         width="800"
         height="448"
-        onError={(e) => {
-          e.currentTarget.src = fallback;
-        }}
+        fetchpriority="low"
       />
 
       <div className="p-4 text-purplecolor">
