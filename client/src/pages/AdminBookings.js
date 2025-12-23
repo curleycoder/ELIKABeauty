@@ -84,6 +84,25 @@ export default function AdminBookings() {
 
   if (loading) return <p className="p-6">Loading bookings...</p>;
 
+  const formatWhen = (b) => {
+  // New bookings (have start)
+  if (b?.start) {
+    const d = new Date(b.start);
+    if (!isNaN(d.getTime())) return d.toLocaleString();
+  }
+
+  // Old bookings (no start) — show date + time separately (no parsing needed)
+  if (b?.date) {
+    const dd = new Date(b.date);
+    const dateStr = isNaN(dd.getTime()) ? String(b.date) : dd.toLocaleDateString();
+    const timeStr = b?.time ? ` ${b.time}` : "";
+    return `${dateStr}${timeStr}`;
+  }
+
+  return "No date";
+};
+
+
   return (
     <div className="max-w-5xl mx-auto p-6 font-bodonimoda">
       <h1 className="text-2xl text-purplecolor mb-6">
@@ -103,7 +122,7 @@ export default function AdminBookings() {
             <div>
               <p className="font-semibold">{b.name}</p>
               <p className="text-sm text-gray-600">
-                {new Date(b.start).toLocaleString()}
+                {formatWhen(b)}
               </p>
               <p className="text-sm text-gray-500">
                 Duration: {b.duration} min
