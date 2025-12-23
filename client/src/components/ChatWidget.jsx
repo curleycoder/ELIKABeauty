@@ -65,7 +65,7 @@ export default function ChatWidget() {
             className={[
             "fixed z-[999998] right-8 bottom-8 h-20 w-20 rounded-full",
             "grid place-items-center shadow-2xl",
-            "bg-white ring-1 ring-[#eabec5]",
+            "bg-white ring-2 ring-[#eabec5]",
             "hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]",
             "transition",
             ].join(" ")}
