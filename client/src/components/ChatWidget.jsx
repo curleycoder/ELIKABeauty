@@ -30,12 +30,12 @@ export default function ChatWidget() {
             <div className="h-7 w-7 rounded-full bg-pink-200/70 grid place-items-center">
               <img
             src="/sherry1.jpg"
-            alt="Beauty Shohre Assistant"
+            alt="Beauty Shohre Studio"
             className="h-7 w-7 rounded-full object-cover"
             />
             </div>
             <div className="leading-tight">
-              <div className="text-sm font-semibold text-black/90">Beauty Shohre Assistant</div>
+              <div className="text-sm font-semibold text-black/90">Beauty Shohre Studio</div>
               <div className="text-[11px] text-black/50">Quick answers • Booking help</div>
             </div>
           </div>
