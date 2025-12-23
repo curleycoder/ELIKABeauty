@@ -11,7 +11,7 @@ export default function ArticleCard({ article }) {
     <Link
       to={`/articles/${slug}`}
       className="
-        block bg-pinkcolor/5 rounded-xl overflow-hidden w-full max-w-md
+        block bg-white rounded-xl overflow-hidden w-full max-w-md
         border border-black/10 mx-auto
         hover:-translate-y-1 transition-transform duration-200
       "
@@ -32,7 +32,7 @@ export default function ArticleCard({ article }) {
 
         <p className="text-sm text-gray-700 mb-3 line-clamp-4">{preview}</p>
 
-        <span className="text-sm text-blue-600 font-semibold">Read More →</span>
+        <span className="text-sm text-pinkcolor font-semibold">Read More →</span>
       </div>
     </Link>
   );
