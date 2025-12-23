@@ -115,7 +115,7 @@ export default function ArticlePage() {
       </Helmet>
 
       <div className="max-w-3xl mx-auto">
-        <Link to="/articles" className="text-blue-500">
+        <Link to="/articles" className="text-pinkcolor">
           ← Back to articles
         </Link>
 
