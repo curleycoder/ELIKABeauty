@@ -25,7 +25,7 @@ export default function ChatWidget() {
         ].join(" ")}
       >
         {/* Header */}
-        <div className="h-12 flex items-center justify-between px-4 border-b border-black/5 bg-gradient-to-b from-pink-100/70 to-white/80">
+        <div className="h-12 flex items-center justify-between px-4 border-b border-black/5 bg-white">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-full bg-pink-200/70 grid place-items-center">
               <img
