@@ -1,10 +1,10 @@
-const P = process.env.PUBLIC_URL || "";
 
 const articles = [
+  // ARTICLE 1 — Bleach Damage
   {
     id: 1,
     slug: "fix-damaged-bleached-hair",
-    image: `${P}/articles/bleach-damage.jpg`,
+    image: "/articles/bleach-damage.jpg",
     title: "How to Fix Damaged Hair After Bleaching (Professional Guide)",
     intro:
       "Bleached hair feeling dry, rough, or breaking? Here’s how to repair it the professional way.",
@@ -23,7 +23,7 @@ const articles = [
   {
     id: 2,
     slug: "why-balayage-turns-brassy",
-    image: `${P}/articles/brassy-balayage.jpg`,
+    image: "/articles/brassy-balayage.jpg",
     title: "Why Your Balayage Turns Brassy — And How to Fix It",
     intro:
       "If your balayage keeps turning yellow or orange, this guide explains why and how to fix it.",
@@ -42,7 +42,7 @@ const articles = [
   {
     id: 3,
     slug: "best-hair-care-routine-for-colored-hair",
-    image: `${P}/articles/colored-hair-routine.jpg`,
+    image: "/articles/colored-hair-routine.jpg",
     title: "Best Hair Care Routine for Colored Hair",
     intro:
       "Colored hair needs extra love. Here’s the routine to keep it shiny and vibrant.",
