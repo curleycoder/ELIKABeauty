@@ -1,25 +1,43 @@
 const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema({
+  // Client info
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  
-  services: [{
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "Service",
-  required: true
-}],
 
-  date: { type: Date, required: true },         // e.g. 2025-07-09
-  time: { type: String, required: true },        // e.g. "3:00 PM"
-  duration: { type: Number, required: true },    // e.g. 240 (in minutes)
-  note: String,
-  
+  // Services
+  services: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Service",
+      required: true,
+    },
+  ],
+
+  // Date & time (for display)
+  date: { type: Date, required: true },      // e.g. 2025-07-09
+  time: { type: String, required: true },    // e.g. "15:00"
+
+  // 🔑 REAL booking time (for logic)
+  start: { type: Date, required: true },     // exact start datetime
+  end: { type: Date, required: true },       // exact end datetime (includes buffer)
+
+  // Duration (service only, NOT buffer)
+  duration: { type: Number, required: true }, // minutes
+
+  // Google Calendar integration
+  calendarEventId: { type: String },          // used for owner cancellation
+
+  note: { type: String },
+
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model("booking", bookingSchema);
+// 🔥 CRITICAL INDEX: prevents race-condition double booking
+bookingSchema.index({ start: 1, end: 1 });
+
+module.exports = mongoose.model("Booking", bookingSchema);

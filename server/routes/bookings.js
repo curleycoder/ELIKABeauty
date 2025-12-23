@@ -1,33 +1,69 @@
 const express = require("express");
 const router = express.Router();
-const Booking = require("../models/booking")
-const Service = require("../models/service")
-
-
+const Booking = require("../models/booking");
+const Service = require("../models/service");
 const mongoose = require("mongoose");
+const { createBookingEvent } = require("../services/calendar");
+const { deleteBookingEvent } = require("../services/calendar");
+const { sendCancellationEmail } = require("../services/email");
+const { updateBookingEvent } = require("../services/calendar");
+
+const BUFFER_MINUTES = 15;
+const ADMIN_KEY = process.env.ADMIN_KEY;
 
 
 router.post("/", async (req, res) => {
-  console.log("📥 POST /api/bookings HIT!");
+  console.log("📥 POST /api/bookings HIT");
 
   try {
-    console.log("📦 Incoming body:", req.body);
+    const {
+      services,
+      name,
+      email,
+      phone,
+      referredBy,
+      date,
+      time,
+      note,
+    } = req.body;
 
-    const { services, name, email, phone, referredBy, date, time, note } = req.body;
-
-    const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
-
+    // 1️⃣ Validate services
+    const serviceIds = services.map(id => new mongoose.Types.ObjectId(id));
     const servicesData = await Service.find({ _id: { $in: serviceIds } });
 
     if (servicesData.length !== serviceIds.length) {
-      console.log("❌ Some service IDs are invalid");
-      return res.status(400).json({ error: "One or more service IDs are invalid." });
+      return res.status(400).json({ error: "Invalid service selection." });
     }
 
-    const totalDuration = servicesData.reduce((sum, s) => sum + (s.duration || 0), 0);
+    // 2️⃣ Calculate duration
+    const serviceDuration = servicesData.reduce(
+      (sum, s) => sum + (s.duration || 0),
+      0
+    );
 
-    console.log("🧮 Total duration calculated:", totalDuration);
+    const totalBlockedMinutes = serviceDuration + BUFFER_MINUTES;
 
+    // 3️⃣ Build start & end datetime
+    const start = new Date(`${date}T${time}`);
+    const end = new Date(start.getTime() + totalBlockedMinutes * 60000);
+
+    // 4️⃣ 🔴 DOUBLE BOOKING CHECK (THIS IS THE KEY)
+    const conflict = await Booking.findOne({
+      $expr: {
+        $and: [
+          { $lt: ["$start", end] },
+          { $gt: ["$end", start] },
+        ],
+      },
+    });
+
+    if (conflict) {
+      return res.status(409).json({
+        error: "This time slot is no longer available. Please choose another.",
+      });
+    }
+
+    // 5️⃣ Save booking
     const booking = new Booking({
       name,
       email,
@@ -36,50 +72,122 @@ router.post("/", async (req, res) => {
       services: serviceIds,
       date,
       time,
-      duration: totalDuration,
+      start,
+      end,
+      duration: serviceDuration,
       note,
     });
 
     await booking.save();
-    console.log("✅ Booking saved:", booking);
 
+    // 6️⃣ Add to Google Calendar
+    await createBookingEvent({
+      name,
+      services: servicesData.map(s => s.name),
+      start: start.toISOString(),
+      end: end.toISOString(),
+    });
+
+    console.log("✅ Booking saved + calendar event created");
     res.status(201).json(booking);
 
   } catch (error) {
-    console.error("❌ Booking creation failed:", error);
-    res.status(400).json({ error: error.message });
+    console.error("❌ Booking failed:", error);
+    res.status(500).json({ error: "Booking failed. Please try again." });
   }
 });
 
+await sendCancellationEmail({
+  to: booking.email,
+  name: booking.name,
+  date: booking.date.toDateString(),
+  time: booking.time,
+});
 
 
+router.delete("/:id", async (req, res) => {
+  // 🔐 ADMIN KEY CHECK
+  if (req.headers["x-admin-key"] !== ADMIN_KEY) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
 
-router.get("/", async (req, res) =>{
-    try{
-        const bookings = await Booking.find().sort({ date: -1 });
-        res.json(bookings);
-    } catch (error) {
-        res.status(500).json({error: " Could not fetch booking "})
-    }
-})
-
-router.get("/booked", async (req, res) => {
-  const { date } = req.query;
   try {
-    const start = new Date(date);
-    const end = new Date(date);
-    end.setDate(end.getDate() + 1);
+    const booking = await Booking.findById(req.params.id);
 
-    const bookings = await Booking.find({
-      date: { $gte: start, $lt: end }
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    // remove from Google Calendar
+    await deleteBookingEvent(booking.calendarEventId);
+
+    // remove from DB
+    await booking.deleteOne();
+
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error("❌ Cancellation failed:", error);
+    res.status(500).json({ error: "Cancellation failed" });
+  }
+});
+router.put("/:id/reschedule", async (req, res) => {
+  // 🔐 ADMIN KEY CHECK
+  if (req.headers["x-admin-key"] !== ADMIN_KEY) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  try {
+    const { date, time } = req.body; // date: "YYYY-MM-DD", time: "HH:MM"
+    if (!date || !time) {
+      return res.status(400).json({ error: "date and time are required" });
+    }
+
+    const booking = await Booking.findById(req.params.id).populate("services");
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    // Build new start/end
+    const start = new Date(`${date}T${time}`);
+    if (isNaN(start.getTime())) {
+      return res.status(400).json({ error: "Invalid date/time format. Use YYYY-MM-DD and HH:MM (24h)." });
+    }
+
+    const totalBlockedMinutes = (booking.duration || 0) + BUFFER_MINUTES;
+    const end = new Date(start.getTime() + totalBlockedMinutes * 60000);
+
+    // 🔴 Overlap check (exclude itself)
+    const conflict = await Booking.findOne({
+      _id: { $ne: booking._id },
+      $expr: {
+        $and: [{ $lt: ["$start", end] }, { $gt: ["$end", start] }],
+      },
     });
 
-    res.json(bookings);
+    if (conflict) {
+      return res.status(409).json({
+        error: "This new time overlaps with another booking. Choose another.",
+      });
+    }
+
+    // Update DB
+    booking.date = new Date(date);
+    booking.time = time;
+    booking.start = start;
+    booking.end = end;
+    await booking.save();
+
+    // Update Google Calendar event
+    await updateBookingEvent({
+      eventId: booking.calendarEventId,
+      start: start.toISOString(),
+      end: end.toISOString(),
+    });
+
+    res.json(booking);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("❌ Reschedule failed:", err);
+    res.status(500).json({ error: "Reschedule failed" });
   }
 });
-
-
-
-module.exports = router;
