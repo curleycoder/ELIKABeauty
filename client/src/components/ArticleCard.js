@@ -18,13 +18,15 @@ export default function ArticleCard({ article }) {
     >
       <img
         src={image}
+        srcSet={`${image480} 480w, ${image800} 800w`}
+        sizes="(max-width: 640px) 100vw, 448px"
         alt={title}
         className="w-full h-56 object-cover"
         loading="lazy"
         decoding="async"
         fetchpriority="low"
-        width="640"
-        height="360"
+        width="800"
+        height="448"
         onError={(e) => {
           e.currentTarget.src = fallback;
         }}
