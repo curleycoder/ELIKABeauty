@@ -14,6 +14,7 @@ import {SpeedInsights} from "@vercel/speed-insights/react"
 import ArticlePage from "./pages/Article"
 import ArticlesPage from './pages/ArticlesPage';
 import ScrollToTop from './components/ScrollToTop';
+import AdminBookings from './pages/AdminBookings';
 
 
 
@@ -33,6 +34,10 @@ function App() {
           <Route path="/articles" element={<ArticlesPage />} />
           <Route path="/product" element={<Product />}/>
           <Route path="/aboutme" element={<AboutMe />}/>
+          <Route
+          path="/admin-bookings-secret"
+          element={<AdminBookings />}
+        />
         </Routes>
         <SpeedInsights/>
       </div>
