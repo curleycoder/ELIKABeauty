@@ -75,7 +75,7 @@ export default function ChatWidget() {
             <img
             src="/sherry1.jpg"
             alt="Beauty Shohre Assistant"
-            className="h-16 w-16 ring-1 ring-white rounded-full object-cover"
+            className="h-16 w-16 ring-1 ring-[#eabec5] rounded-full object-cover"
             />
         </button>
         )}
