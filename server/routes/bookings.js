@@ -1,59 +1,76 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
+
 const Booking = require("../models/booking");
 const Service = require("../models/service");
-const mongoose = require("mongoose");
-const { createBookingEvent } = require("../services/calendar");
-const { deleteBookingEvent } = require("../services/calendar");
+
+const {
+  createBookingEvent,
+  deleteBookingEvent,
+  updateBookingEvent,
+} = require("../services/calendar");
+
 const { sendCancellationEmail } = require("../services/email");
-const { updateBookingEvent } = require("../services/calendar");
 
 const BUFFER_MINUTES = 15;
 const ADMIN_KEY = process.env.ADMIN_KEY;
 
+// Helper: convert "3:05 PM" -> "15:05"
+function to24h(time12h) {
+  const m = String(time12h).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m) return null;
 
+  let hh = parseInt(m[1], 10);
+  const mm = m[2];
+  const ap = m[3].toUpperCase();
+
+  if (ap === "AM") hh = hh === 12 ? 0 : hh;
+  if (ap === "PM") hh = hh === 12 ? 12 : hh + 12;
+
+  return `${String(hh).padStart(2, "0")}:${mm}`;
+}
+
+// ✅ Create booking
 router.post("/", async (req, res) => {
   console.log("📥 POST /api/bookings HIT");
 
   try {
-    const {
-      services,
-      name,
-      email,
-      phone,
-      referredBy,
-      date,
-      time,
-      note,
-    } = req.body;
+    const { services, name, email, phone, referredBy, date, time, note } = req.body;
 
-    // 1️⃣ Validate services
-    const serviceIds = services.map(id => new mongoose.Types.ObjectId(id));
+    if (!Array.isArray(services) || services.length === 0) {
+      return res.status(400).json({ error: "Please select at least one service." });
+    }
+
+    // Validate services
+    const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
     const servicesData = await Service.find({ _id: { $in: serviceIds } });
 
     if (servicesData.length !== serviceIds.length) {
       return res.status(400).json({ error: "Invalid service selection." });
     }
 
-    // 2️⃣ Calculate duration
-    const serviceDuration = servicesData.reduce(
-      (sum, s) => sum + (s.duration || 0),
-      0
-    );
-
+    // Duration (service only)
+    const serviceDuration = servicesData.reduce((sum, s) => sum + (s.duration || 0), 0);
     const totalBlockedMinutes = serviceDuration + BUFFER_MINUTES;
 
-    // 3️⃣ Build start & end datetime
-    const start = new Date(`${date}T${time}`);
+    // Build start/end (your time is like "3:00 PM")
+    const hhmm = to24h(time);
+    if (!hhmm) {
+      return res.status(400).json({ error: "Invalid time format. Use like '3:00 PM'." });
+    }
+
+    const start = new Date(`${date}T${hhmm}:00`);
     const end = new Date(start.getTime() + totalBlockedMinutes * 60000);
 
-    // 4️⃣ 🔴 DOUBLE BOOKING CHECK (THIS IS THE KEY)
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({ error: "Invalid date/time." });
+    }
+
+    // Double-booking check (overlap)
     const conflict = await Booking.findOne({
       $expr: {
-        $and: [
-          { $lt: ["$start", end] },
-          { $gt: ["$end", start] },
-        ],
+        $and: [{ $lt: ["$start", end] }, { $gt: ["$end", start] }],
       },
     });
 
@@ -63,15 +80,15 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // 5️⃣ Save booking
+    // Save booking first
     const booking = new Booking({
       name,
       email,
       phone,
       referredBy,
       services: serviceIds,
-      date,
-      time,
+      date: new Date(date),
+      time, // keep original display format
       start,
       end,
       duration: serviceDuration,
@@ -80,84 +97,99 @@ router.post("/", async (req, res) => {
 
     await booking.save();
 
-    // 6️⃣ Add to Google Calendar
-    await createBookingEvent({
-      name,
-      services: servicesData.map(s => s.name),
-      start: start.toISOString(),
-      end: end.toISOString(),
-    });
+    // Create calendar event + save eventId
+    try {
+      const eventId = await createBookingEvent({
+        name,
+        services: servicesData.map((s) => s.name),
+        start: start.toISOString(),
+        end: end.toISOString(),
+      });
 
-    console.log("✅ Booking saved + calendar event created");
+      booking.calendarEventId = eventId;
+      await booking.save();
+    } catch (err) {
+      console.error("🔥 Google Calendar insert failed:", err?.response?.data || err);
+      // booking still exists even if calendar fails
+    }
+
+    console.log("✅ Booking saved");
     res.status(201).json(booking);
-
   } catch (error) {
     console.error("❌ Booking failed:", error);
     res.status(500).json({ error: "Booking failed. Please try again." });
   }
 });
 
-await sendCancellationEmail({
-  to: booking.email,
-  name: booking.name,
-  date: booking.date.toDateString(),
-  time: booking.time,
+// ✅ List bookings
+router.get("/", async (req, res) => {
+  try {
+    const bookings = await Booking.find().sort({ start: -1 });
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ error: "Could not fetch bookings" });
+  }
 });
 
-
+// ✅ Owner cancels booking
 router.delete("/:id", async (req, res) => {
-  // 🔐 ADMIN KEY CHECK
   if (req.headers["x-admin-key"] !== ADMIN_KEY) {
     return res.status(403).json({ error: "Forbidden" });
   }
 
   try {
     const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
 
-    if (!booking) {
-      return res.status(404).json({ error: "Booking not found" });
+    // Delete from Google Calendar
+    try {
+      await deleteBookingEvent(booking.calendarEventId);
+    } catch (err) {
+      console.error("🔥 Google Calendar delete failed:", err?.response?.data || err);
     }
 
-    // remove from Google Calendar
-    await deleteBookingEvent(booking.calendarEventId);
+    // Email client (optional)
+    try {
+      await sendCancellationEmail({
+        to: booking.email,
+        name: booking.name,
+        date: booking.date ? new Date(booking.date).toDateString() : "",
+        time: booking.time || "",
+      });
+    } catch (err) {
+      console.error("🔥 Cancellation email failed:", err);
+    }
 
-    // remove from DB
     await booking.deleteOne();
-
     res.json({ success: true });
-
   } catch (error) {
     console.error("❌ Cancellation failed:", error);
     res.status(500).json({ error: "Cancellation failed" });
   }
 });
+
+// ✅ Owner reschedules booking
 router.put("/:id/reschedule", async (req, res) => {
-  // 🔐 ADMIN KEY CHECK
   if (req.headers["x-admin-key"] !== ADMIN_KEY) {
     return res.status(403).json({ error: "Forbidden" });
   }
 
   try {
-    const { date, time } = req.body; // date: "YYYY-MM-DD", time: "HH:MM"
-    if (!date || !time) {
-      return res.status(400).json({ error: "date and time are required" });
-    }
+    const { date, time } = req.body; // time should be "HH:MM" (24h) from admin prompt
+    if (!date || !time) return res.status(400).json({ error: "date and time are required" });
 
-    const booking = await Booking.findById(req.params.id).populate("services");
-    if (!booking) {
-      return res.status(404).json({ error: "Booking not found" });
-    }
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
 
-    // Build new start/end
-    const start = new Date(`${date}T${time}`);
+    const start = new Date(`${date}T${time}:00`);
     if (isNaN(start.getTime())) {
-      return res.status(400).json({ error: "Invalid date/time format. Use YYYY-MM-DD and HH:MM (24h)." });
+      return res.status(400).json({ error: "Invalid date/time. Use YYYY-MM-DD and HH:MM (24h)." });
     }
 
     const totalBlockedMinutes = (booking.duration || 0) + BUFFER_MINUTES;
     const end = new Date(start.getTime() + totalBlockedMinutes * 60000);
 
-    // 🔴 Overlap check (exclude itself)
+    // Overlap check (exclude itself)
     const conflict = await Booking.findOne({
       _id: { $ne: booking._id },
       $expr: {
@@ -166,24 +198,26 @@ router.put("/:id/reschedule", async (req, res) => {
     });
 
     if (conflict) {
-      return res.status(409).json({
-        error: "This new time overlaps with another booking. Choose another.",
-      });
+      return res.status(409).json({ error: "This new time overlaps with another booking." });
     }
 
     // Update DB
     booking.date = new Date(date);
-    booking.time = time;
+    booking.time = time; // now stored as 24h from admin tool (fine)
     booking.start = start;
     booking.end = end;
     await booking.save();
 
-    // Update Google Calendar event
-    await updateBookingEvent({
-      eventId: booking.calendarEventId,
-      start: start.toISOString(),
-      end: end.toISOString(),
-    });
+    // Update calendar event
+    try {
+      await updateBookingEvent({
+        eventId: booking.calendarEventId,
+        start: start.toISOString(),
+        end: end.toISOString(),
+      });
+    } catch (err) {
+      console.error("🔥 Google Calendar update failed:", err?.response?.data || err);
+    }
 
     res.json(booking);
   } catch (err) {
@@ -191,3 +225,5 @@ router.put("/:id/reschedule", async (req, res) => {
     res.status(500).json({ error: "Reschedule failed" });
   }
 });
+
+module.exports = router;

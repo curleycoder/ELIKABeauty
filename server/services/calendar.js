@@ -8,6 +8,13 @@ const auth = new google.auth.GoogleAuth({
 const calendar = google.calendar({ version: "v3", auth });
 
 async function createBookingEvent({ name, services, start, end }) {
+  console.log("📅 CALENDAR_ID:", process.env.GOOGLE_CALENDAR_ID);
+  console.log(
+    "🤖 SERVICE ACCOUNT:",
+    JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON).client_email
+  );
+  console.log("🕒 EVENT:", { name, start, end });
+
   const response = await calendar.events.insert({
     calendarId: process.env.GOOGLE_CALENDAR_ID,
     requestBody: {
