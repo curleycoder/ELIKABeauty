@@ -141,32 +141,37 @@ router.delete("/:id", async (req, res) => {
     const booking = await Booking.findById(req.params.id);
     if (!booking) return res.status(404).json({ error: "Booking not found" });
 
-    // Delete from Google Calendar
-    try {
-      await deleteBookingEvent(booking.calendarEventId);
-    } catch (err) {
-      console.error("🔥 Google Calendar delete failed:", err?.response?.data || err);
-    }
-
-    // Email client (optional)
+    // 1) Email client (log failures)
     try {
       await sendCancellationEmail({
         to: booking.email,
         name: booking.name,
-        date: booking.date ? new Date(booking.date).toDateString() : "",
+        date: booking.start ? new Date(booking.start).toDateString() : new Date(booking.date).toDateString(),
         time: booking.time || "",
       });
+      console.log("📧 Cancellation email sent to:", booking.email);
     } catch (err) {
       console.error("🔥 Cancellation email failed:", err);
     }
 
+    // 2) Delete from Google Calendar (log failures)
+    try {
+      await deleteBookingEvent(booking.calendarEventId);
+      console.log("📅 Calendar event deleted:", booking.calendarEventId);
+    } catch (err) {
+      console.error("🔥 Calendar delete failed:", err?.response?.data || err);
+    }
+
+    // 3) Delete from DB
     await booking.deleteOne();
+
     res.json({ success: true });
   } catch (error) {
     console.error("❌ Cancellation failed:", error);
     res.status(500).json({ error: "Cancellation failed" });
   }
 });
+
 
 // ✅ Owner reschedules booking
 router.put("/:id/reschedule", async (req, res) => {
