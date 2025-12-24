@@ -120,6 +120,24 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Booking failed. Please try again." });
   }
 });
+// ✅ Booked slots for a day (used by DatePicker/slots)
+router.get("/booked", async (req, res) => {
+  const { date } = req.query; // "YYYY-MM-DD"
+  try {
+    if (!date) return res.status(400).json({ error: "date is required" });
+
+    const dayStart = new Date(`${date}T00:00:00`);
+    const dayEnd = new Date(`${date}T23:59:59.999`);
+
+    const bookings = await Booking.find({
+      start: { $gte: dayStart, $lte: dayEnd },
+    }).select("start end");
+
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ✅ List bookings
 router.get("/", async (req, res) => {
