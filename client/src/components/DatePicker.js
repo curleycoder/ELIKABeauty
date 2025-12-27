@@ -24,7 +24,7 @@ function generateNext30Days(startDate = new Date()){
 }
 
 // Generate time slots
-function generateTimeSlots(duration = 30, startHour = 10, endHour = 19) {
+function generateTimeSlots(duration = 30, startHour = 11, endHour = 19) {
   const slots = [];
   let time = setHours(setMinutes(new Date(), 0), startHour);
   const end = setHours(setMinutes(new Date(), 0), endHour);
