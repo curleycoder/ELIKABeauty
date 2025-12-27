@@ -43,7 +43,7 @@ export default function Booking() {
 
 
   return (
-      <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10 overflow-y-auto">
+    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
