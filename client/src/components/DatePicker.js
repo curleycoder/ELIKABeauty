@@ -260,7 +260,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
             <div className="flex justify-center gap-4 mt-4">
               <button
                 onClick={() => {
-                  onSelect({ date: selectedDate, time: selectedTime });
+                onSelect({ date: format(selectedDate, "yyyy-MM-dd"), time: selectedTime });
                   setShowConfirm(false);
                 }}
                 className="px-4 py-2 bg-purplecolor text-white rounded-2xl shadow hover:translate-y-[-2px] transition"
