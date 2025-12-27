@@ -1,19 +1,45 @@
 import React, { useEffect, useState } from "react";
 
-const API = process.env.REACT_APP_API_URL || "";
+const API = process.env.REACT_APP_API_URL || "https://api.beautyshohrestudio.ca";
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  // Fetch bookings
   const fetchBookings = async () => {
+    setLoading(true);
+    setErrorMsg("");
+
     try {
-      const res = await fetch(`${API}/api/bookings`);
+      const url = `${API}/api/bookings`;
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        console.error("❌ Fetch bookings failed:", {
+          url,
+          status: res.status,
+          statusText: res.statusText,
+          body: text?.slice(0, 300),
+        });
+        throw new Error(`Fetch failed (${res.status})`);
+      }
+
       const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        console.error("❌ Unexpected bookings payload:", data);
+        throw new Error("Invalid response shape from server");
+      }
+
       setBookings(data);
     } catch (err) {
       console.error("Failed to load bookings", err);
+      setErrorMsg(
+        "Couldn’t load bookings. Your Admin page is probably calling the wrong API URL (or the server is down)."
+      );
+      setBookings([]);
     } finally {
       setLoading(false);
     }
@@ -23,29 +49,32 @@ export default function AdminBookings() {
     fetchBookings();
   }, []);
 
-  // ❌ Cancel booking (owner only)
   const cancelBooking = async (id) => {
-    const confirm = window.confirm(
-      "Are you sure you want to cancel this booking?"
-    );
-    if (!confirm) return;
+    const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");
+    if (!confirmCancel) return;
 
     try {
-      await fetch(`${API}/api/bookings/${id}`, {
+      const res = await fetch(`${API}/api/bookings/${id}`, {
         method: "DELETE",
         headers: {
           "x-admin-key": process.env.REACT_APP_ADMIN_KEY,
         },
       });
 
-      // update UI
+      const bodyText = await res.text().catch(() => "");
+      if (!res.ok) {
+        console.error("❌ Cancel failed:", res.status, bodyText);
+        alert(`Cancellation failed: ${bodyText || res.status}`);
+        return;
+      }
+
       setBookings((prev) => prev.filter((b) => b._id !== id));
     } catch (err) {
+      console.error("❌ Cancellation failed:", err);
       alert("Cancellation failed");
     }
   };
 
-  // 🔁 Reschedule booking (owner only)
   const rescheduleBooking = async (booking) => {
     const newDate = window.prompt("New date (YYYY-MM-DD):");
     if (!newDate) return;
@@ -54,62 +83,70 @@ export default function AdminBookings() {
     if (!newTime) return;
 
     try {
-      const res = await fetch(
-        `${API}/api/bookings/${booking._id}/reschedule`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-key": process.env.REACT_APP_ADMIN_KEY,
-          },
-          body: JSON.stringify({ date: newDate, time: newTime }),
-        }
-      );
+      const res = await fetch(`${API}/api/bookings/${booking._id}/reschedule`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": process.env.REACT_APP_ADMIN_KEY,
+        },
+        body: JSON.stringify({ date: newDate, time: newTime }),
+      });
 
-      const data = await res.json();
+      const data = await res.json().catch(async () => {
+        const t = await res.text().catch(() => "");
+        return { error: t || "Reschedule failed" };
+      });
 
       if (!res.ok) {
         alert(data.error || "Reschedule failed");
         return;
       }
 
-      // update UI with new booking
-      setBookings((prev) =>
-        prev.map((b) => (b._id === booking._id ? data : b))
-      );
+      setBookings((prev) => prev.map((b) => (b._id === booking._id ? data : b)));
     } catch (err) {
+      console.error("❌ Reschedule failed:", err);
       alert("Reschedule failed");
     }
   };
 
-  if (loading) return <p className="p-6">Loading bookings...</p>;
-
   const formatWhen = (b) => {
-  // New bookings (have start)
-  if (b?.start) {
-    const d = new Date(b.start);
-    if (!isNaN(d.getTime())) return d.toLocaleString();
-  }
+    if (b?.start) {
+      const d = new Date(b.start);
+      if (!isNaN(d.getTime())) return d.toLocaleString();
+    }
 
-  // Old bookings (no start) — show date + time separately (no parsing needed)
-  if (b?.date) {
-    const dd = new Date(b.date);
-    const dateStr = isNaN(dd.getTime()) ? String(b.date) : dd.toLocaleDateString();
-    const timeStr = b?.time ? ` ${b.time}` : "";
-    return `${dateStr}${timeStr}`;
-  }
+    if (b?.date) {
+      const dd = new Date(b.date);
+      const dateStr = isNaN(dd.getTime()) ? String(b.date) : dd.toLocaleDateString();
+      const timeStr = b?.time ? ` ${b.time}` : "";
+      return `${dateStr}${timeStr}`;
+    }
 
-  return "No date";
-};
+    return "No date";
+  };
 
+  if (loading) return <p className="p-6">Loading bookings...</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-6 font-bodonimoda">
-      <h1 className="text-2xl text-purplecolor mb-6">
-        Admin – Bookings
-      </h1>
+      <h1 className="text-2xl text-purplecolor mb-4">Admin – Bookings</h1>
 
-      {bookings.length === 0 && (
+      {errorMsg && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+          {errorMsg}
+          <div className="mt-2 text-xs text-red-600">
+            API used: <span className="font-mono">{API}</span>
+          </div>
+          <button
+            onClick={fetchBookings}
+            className="mt-3 inline-flex rounded-full bg-red-600 px-4 py-2 text-white font-semibold"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {!errorMsg && bookings.length === 0 && (
         <p className="text-gray-500">No bookings found.</p>
       )}
 
@@ -121,18 +158,14 @@ export default function AdminBookings() {
           >
             <div>
               <p className="font-semibold">{b.name}</p>
-              <p className="text-sm text-gray-600">
-                {formatWhen(b)}
-              </p>
-              <p className="text-sm text-gray-500">
-                Duration: {b.duration} min
-              </p>
+              <p className="text-sm text-gray-600">{formatWhen(b)}</p>
+              <p className="text-sm text-gray-500">Duration: {b.duration} min</p>
             </div>
 
             <div className="flex gap-4">
               <button
                 onClick={() => rescheduleBooking(b)}
-                className="text-purplecolor font-semibold hover:underline"
+                className="text-green-700 font-semibold hover:underline"
               >
                 Reschedule
               </button>
