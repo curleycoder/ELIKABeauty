@@ -88,7 +88,7 @@ router.post("/", async (req, res) => {
       referredBy,
       services: serviceIds,
       date: new Date(date),
-      time, // keep original display format
+      time: hhmm,
       start,
       end,
       duration: serviceDuration,
