@@ -10,6 +10,10 @@ import {
   parse,
 } from "date-fns";
 
+const OPEN_HOUR = 11; // 11 AM
+const CLOSE_HOUR = 19; // 7 PM
+const SLOT_STEP_MINUTES = 15;
+
 function generateNext30Days(startDate = new Date()) {
   return eachDayOfInterval({
     start: startDate,
@@ -22,15 +26,15 @@ function generateNext30Days(startDate = new Date()) {
 }
 
 // Generate time slots (only show slots whose END <= closing)
-function generateTimeSlots(serviceDuration, startHour = 10) {
+function generateTimeSlots(totalBlockedMinutes, startHour = 11, closeHour = 19) {
   const slots = [];
 
   let time = setHours(setMinutes(new Date(), 0), startHour);
-  const closingTime = setHours(setMinutes(new Date(), 0), 19); // 7 PM
+  const closingTime = setHours(setMinutes(new Date(), 0), closeHour);
 
   while (
-    isBefore(addMinutes(time, serviceDuration), closingTime) ||
-    +addMinutes(time, serviceDuration) === +closingTime
+    isBefore(addMinutes(time, totalBlockedMinutes), closingTime) ||
+    +addMinutes(time, totalBlockedMinutes) === +closingTime
   ) {
     slots.push(format(time, "h:mm a"));
     time = addMinutes(time, 15);
@@ -38,6 +42,7 @@ function generateTimeSlots(serviceDuration, startHour = 10) {
 
   return slots;
 }
+
 
 
 // Check if a time is blocked
@@ -76,7 +81,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
 
   // IMPORTANT: closing hour is 21 (9pm). Last start must end by 9pm.
   // If you want last end at 6:30, set endHour=18.5 OR closing rule per service.
-  const timeSlots = generateTimeSlots(duration, 10); // open 10am, close 9pm
+const timeSlots = generateTimeSlots(duration, 11, 19);
 
   useEffect(() => {
     const fetchBookedTimes = async () => {
