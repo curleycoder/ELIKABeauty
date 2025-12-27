@@ -49,20 +49,16 @@ function isBlocked(date, time, bookedSlots) {
   );
 
   return bookedSlots.some((b) => {
-    const bookingDateStr = format(new Date(b.date), "yyyy-MM-dd");
-    const currentDateStr = format(date, "yyyy-MM-dd");
-    if (bookingDateStr !== currentDateStr) return false;
+    // backend returns start/end
+    const bookedStart = new Date(b.start);
+    const bookedEnd = new Date(b.end);
 
-    const bookedStart = parse(
-      `${bookingDateStr} ${b.time}`,
-      "yyyy-MM-dd h:mm a",
-      new Date()
-    );
-    const bookedEnd = addMinutes(bookedStart, b.duration);
+    if (isNaN(bookedStart.getTime()) || isNaN(bookedEnd.getTime())) return false;
 
     return slotStart >= bookedStart && slotStart < bookedEnd;
   });
 }
+
 
 const baseURL = process.env.REACT_APP_API_URL || "";
 
@@ -80,7 +76,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
 
   // IMPORTANT: closing hour is 21 (9pm). Last start must end by 9pm.
   // If you want last end at 6:30, set endHour=18.5 OR closing rule per service.
-  const timeSlots = generateTimeSlots(duration, 10, 21); // open 10am, close 9pm
+  const timeSlots = generateTimeSlots(duration, 10); // open 10am, close 9pm
 
   useEffect(() => {
     const fetchBookedTimes = async () => {
