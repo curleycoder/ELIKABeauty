@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const API = process.env.REACT_APP_API_URL || "https://api.beautyshohrestudio.ca";
+const API = ""; // not needed anymore for admin routes
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -12,8 +12,9 @@ export default function AdminBookings() {
     setErrorMsg("");
 
     try {
-      const url = `${API}/api/bookings`;
-      const res = await fetch(url);
+      const url = `/api/admin/bookings`;
+      const res = await fetch(url, { credentials: "include" });
+
 
       if (!res.ok) {
         const text = await res.text().catch(() => "");
@@ -54,12 +55,11 @@ export default function AdminBookings() {
     if (!confirmCancel) return;
 
     try {
-      const res = await fetch(`${API}/api/bookings/${id}`, {
+      const res = await fetch(`/api/admin/bookings/${id}`, {
         method: "DELETE",
-        headers: {
-          "x-admin-key": process.env.REACT_APP_ADMIN_KEY,
-        },
+        credentials: "include",
       });
+
 
       const bodyText = await res.text().catch(() => "");
       if (!res.ok) {
@@ -83,14 +83,13 @@ export default function AdminBookings() {
     if (!newTime) return;
 
     try {
-      const res = await fetch(`${API}/api/bookings/${booking._id}/reschedule`, {
+      const res = await fetch(`/api/admin/bookings/${booking._id}/reschedule`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-key": process.env.REACT_APP_ADMIN_KEY,
-        },
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date: newDate, time: newTime }),
       });
+
 
       const data = await res.json().catch(async () => {
         const t = await res.text().catch(() => "");
@@ -135,7 +134,7 @@ export default function AdminBookings() {
         <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
           {errorMsg}
           <div className="mt-2 text-xs text-red-600">
-            API used: <span className="font-mono">{API}</span>
+            Endpoint: <span className="font-mono">/api/admin/bookings</span>
           </div>
           <button
             onClick={fetchBookings}

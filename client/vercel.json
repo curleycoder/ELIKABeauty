@@ -38,9 +38,9 @@
       ]
     }
   ],
-
   "rewrites": [
-    { "source": "/admin-bookings-secret", "destination": "/" },
+    { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
+
