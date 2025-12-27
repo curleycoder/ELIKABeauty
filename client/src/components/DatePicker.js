@@ -26,10 +26,12 @@ function generateNext30Days(startDate = new Date()){
 // Generate time slots
 function generateTimeSlots(duration = 30, startHour = 11, endHour = 19) {
   const slots = [];
-  let time = setHours(setMinutes(new Date(), 0), startHour);
-  const end = setHours(setMinutes(new Date(), 0), endHour);
 
-  while (isBefore(time, end)) {
+  let time = setHours(setMinutes(new Date(), 0), startHour);
+  const closingTime = setHours(setMinutes(new Date(), 0), endHour);
+
+  while (isBefore(addMinutes(time, duration), closingTime) || 
+         +addMinutes(time, duration) === +closingTime) {
     slots.push(format(time, "h:mm a"));
     time = addMinutes(time, duration);
   }
