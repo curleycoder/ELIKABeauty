@@ -26,14 +26,14 @@ function generateTimeSlots(serviceDuration, startHour = 10) {
   const slots = [];
 
   let time = setHours(setMinutes(new Date(), 0), startHour);
-  const closingTime = setHours(setMinutes(new Date(), 0), 18); // 6 PM
+  const closingTime = setHours(setMinutes(new Date(), 0), 19); // 7 PM
 
   while (
     isBefore(addMinutes(time, serviceDuration), closingTime) ||
     +addMinutes(time, serviceDuration) === +closingTime
   ) {
     slots.push(format(time, "h:mm a"));
-    time = addMinutes(time, 30);
+    time = addMinutes(time, 15);
   }
 
   return slots;

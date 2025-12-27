@@ -166,6 +166,8 @@ export default function QuestionsForm({
           value={form.name}
           onChange={handleChange}
           required
+          autoComplete="name"
+          placeholder="Full name"
           className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
         />
       </div>
@@ -178,8 +180,12 @@ export default function QuestionsForm({
           value={form.email}
           onChange={handleChange}
           required
+          autoComplete="email"
+          inputMode="email"
+          placeholder="you@example.com"
           className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
         />
+
       </div>
 
       <div>
@@ -190,8 +196,12 @@ export default function QuestionsForm({
           value={form.phone}
           onChange={handleChange}
           required
+          autoComplete="tel"
+          inputMode="tel"
+          placeholder="e.g. 604-555-1234"
           className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
         />
+
       </div>
 
       <h2 className="text-2xl font-bold pt-6">Additional Questions</h2>

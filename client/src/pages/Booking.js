@@ -41,6 +41,22 @@ export default function Booking() {
     );
   }, []);
 
+  const NO_BUFFER_SERVICE_NAMES = new Set([
+    "Eyebrows Threading",
+    "Full Threading",
+  ]);
+
+  const bufferMinutes = selection.selected.length
+    ? Math.max(
+        ...selection.selected.map((s) =>
+          NO_BUFFER_SERVICE_NAMES.has(s.name) ? 0 : 15
+        ),
+        0
+      )
+    : 0;
+
+  const totalBlockedMinutes = durationStats.total + bufferMinutes;
+
 
   return (
     <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10">
@@ -137,12 +153,13 @@ export default function Booking() {
               />
             ) : !showQuestions ? (
               <DateTimePicker
-                duration={durationStats.total}
+                duration={totalBlockedMinutes}
                 onSelect={(value) => {
                   setBookingTime(value);
                   setShowQuestions(true);
                 }}
               />
+
             ) : (
               <QuestionsForm
                 selection={selection}
