@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
 import { format, parseISO } from "date-fns";
+
+const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
+const DEFAULT_BUFFER_MINUTES = 15;
 
 function getDurationStats(selected) {
   const durations = selected.map((s) => s?.duration || 60);
@@ -19,13 +22,12 @@ export default function Booking() {
   const [showFinalPopup, setShowFinalPopup] = useState(false);
   const [bookingData, setBookingData] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [showInfo, setShowInfo] = useState(false);
 
-  const durationStats = getDurationStats(selection.selected);
-
   useEffect(() => {
-    document.title = "Book Your Hair Appointment | Beauty Shohre Studio, North Burnaby";
+    document.title =
+      "Book Your Hair Appointment | Beauty Shohre Studio, North Burnaby";
+
     const meta =
       document.querySelector('meta[name="description"]') ||
       (() => {
@@ -34,47 +36,49 @@ export default function Booking() {
         document.head.appendChild(m);
         return m;
       })();
+
     meta.setAttribute(
       "content",
       "Book your hair appointment at Beauty Shohre Studio in North Burnaby. Highlights, balayage, keratin, haircuts near Brentwood. Easy online scheduling and clear policies."
     );
   }, []);
 
-  const NO_BUFFER_SERVICE_NAMES = new Set([
-    "Eyebrows Threading",
-    "Full Threading",
-  ]);
+  const durationStats = useMemo(
+    () => getDurationStats(selection.selected),
+    [selection.selected]
+  );
 
-  const bufferMinutes = selection.selected.length
-    ? Math.max(
-        ...selection.selected.map((s) =>
-          NO_BUFFER_SERVICE_NAMES.has(s.name) ? 0 : 15
-        ),
-        0
-      )
-    : 0;
+  const bufferMinutes = useMemo(() => {
+    if (!selection.selected.length) return 0;
+
+    // if ANY selected service requires buffer -> buffer = 15
+    const needsBuffer = selection.selected.some(
+      (s) => !NO_BUFFER_SERVICE_NAMES.has(String(s?.name || "").trim())
+    );
+
+    return needsBuffer ? DEFAULT_BUFFER_MINUTES : 0;
+  }, [selection.selected]);
 
   const totalBlockedMinutes = durationStats.total + bufferMinutes;
 
-
   return (
-    <div className="w-full h-[100dvh] overflow-hidden relative font-bodonimoda bg-[#fff8fa]">
+    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa] pb-10">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
-        style={{ backgroundImage: 'url(/assets/hero-800.webp)' }}
+        style={{ backgroundImage: "url(/assets/hero-800.webp)" }}
         aria-hidden="true"
       />
       <div
         className="hidden sm:block absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10"
-        style={{ backgroundImage: 'url(/assets/hero-1600.webp)' }}
+        style={{ backgroundImage: "url(/assets/hero-1600.webp)" }}
         aria-hidden="true"
       />
 
-      {/* Foreground */}    
+      {/* Foreground */}
       <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full min-h-0">
-        {/* Minimal header */}
-        <header className="mb-6 text-center">
+        {/* Header */}
+        <header className="mb-6 text-center shrink-0">
           <h1 className="text-2xl sm:text-3xl text-purplecolor font-bold">
             <span className="border-t border-b border-gray-300 px-4 sm:px-6">
               Book Your Hair Appointment
@@ -96,10 +100,10 @@ export default function Booking() {
           </div>
         </header>
 
-        {/* Collapsible SEO copy — hidden on initial load */}
+        {/* Optional info (this can be long, so it must be able to shrink) */}
         <section
           id="booking-info"
-          className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 ${
+          className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 shrink-0 ${
             showInfo
               ? "p-5 sm:p-7 mb-6 opacity-100 max-h-[2000px]"
               : "p-0 mb-2 opacity-0 max-h-0 overflow-hidden"
@@ -107,76 +111,92 @@ export default function Booking() {
           aria-hidden={!showInfo}
         >
           <p>
-            We’re excited to welcome you to <strong>Beauty Shohre Studio</strong> in{" "}
-            <strong>3939 Hastings Street #105, Burnaby</strong>. Whether you’re booking{" "}
-            <em>highlights, balayage, a keratin treatment, or a precision haircut</em>,
-            our goal is healthy, beautiful hair that fits your lifestyle.
+            We’re excited to welcome you to <strong>Beauty Shohre Studio</strong>{" "}
+            in <strong>3939 Hastings Street #105, Burnaby</strong>. Whether you’re
+            booking{" "}
+            <em>
+              highlights, balayage, a keratin treatment, or a precision haircut
+            </em>
+            , our goal is healthy, beautiful hair that fits your lifestyle.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">How Online Booking Works</h2>
+          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+            How Online Booking Works
+          </h2>
           <p className="mt-1">
             1) <strong>Select your service(s)</strong>. 2) We estimate the{" "}
-            <strong>time needed</strong>. 3) Pick a <strong>date & time</strong>. 4) Add a few
-            details. You’ll receive instant confirmation.
+            <strong>time needed</strong>. 3) Pick a <strong>date & time</strong>.
+            4) Add a few details. You’ll receive instant confirmation.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">Pricing & Timing</h2>
+          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+            Pricing & Timing
+          </h2>
           <p className="mt-1">
-            Prices are starting points and may vary with <em>hair length, volume, thickness</em>.
-            For big color changes (e.g., dark to blonde), mention it in notes so we can reserve
-            enough time.
+            Prices are starting points and may vary with{" "}
+            <em>hair length, volume, thickness</em>. For big color changes (e.g.,
+            dark to blonde), mention it in notes so we can reserve enough time.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">Policies</h2>
+          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+            Policies
+          </h2>
           <p className="mt-1">
-            Please give <strong>24 hours’ notice</strong> for cancellations/rescheduling. Running
-            late? Text/call <strong>778-513-9006</strong> and we’ll do our best to help.
+            Please give <strong>24 hours’ notice</strong> for
+            cancellations/rescheduling. Running late? Text/call{" "}
+            <strong>778-513-9006</strong> and we’ll do our best to help.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">Location</h2>
+          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+            Location
+          </h2>
           <p className="mt-1">
-            <strong>3939 Hastings Street #105, Burnaby  V5C 2H8</strong>
+            <strong>3939 Hastings Street #105, Burnaby V5C 2H8</strong>
           </p>
         </section>
 
+        {/* Main row */}
         <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0 overflow-hidden">
-
-          {/* LEFT: Service + Forms */}
-        <div className="flex-1 min-h-0 bg-transparent flex flex-col">
-          {!showDateTime ? (
-            <BookingForm
-              onSelectionChange={setSelection}
-              averageDuration={durationStats.avg}
-              onContinue={() => setShowDateTime(true)}
-            />
-          ) : !showQuestions ? (
-            <DateTimePicker
-              duration={totalBlockedMinutes}
-              onSelect={(value) => {
-                setBookingTime(value);
-                setShowQuestions(true);
-              }}
-            />
-          ) : (
-            <QuestionsForm
-              selection={selection}
-              bookingTime={bookingTime}
-              onSubmit={(formData) => {
-                setBookingData(formData);
-                setShowFinalPopup(true);
-              }}
-              setLoading={setLoading}
-              loading={loading}
-            />
-          )}
-        </div>
-
+          {/* LEFT: single scroll container */}
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain [webkit-overflow-scrolling:touch] pr-1">
+              {!showDateTime ? (
+                <BookingForm
+                  onSelectionChange={setSelection}
+                  averageDuration={durationStats.avg}
+                  onContinue={() => setShowDateTime(true)}
+                />
+              ) : !showQuestions ? (
+                <DateTimePicker
+                  duration={totalBlockedMinutes}
+                  onSelect={(value) => {
+                    setBookingTime(value);
+                    setShowQuestions(true);
+                  }}
+                />
+              ) : (
+                <QuestionsForm
+                  selection={selection}
+                  bookingTime={bookingTime}
+                  onSubmit={(formData) => {
+                    setBookingData(formData);
+                    setShowFinalPopup(true);
+                  }}
+                  setLoading={setLoading}
+                  loading={loading}
+                />
+              )}
+            </div>
+          </div>
 
           {/* RIGHT: Summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
-            <h4 className="font-bold text-xl text-purplecolor mb-1">Beauty Shohre Studio</h4>
-            <p className="text-sm text-gray-500 mb-4">3939 Hastings Street #105, Burnaby
-               V5C 2H8</p>
+            <h4 className="font-bold text-xl text-purplecolor mb-1">
+              Beauty Shohre Studio
+            </h4>
+            <p className="text-sm text-gray-500 mb-4">
+              3939 Hastings Street #105, Burnaby V5C 2H8
+            </p>
 
             <p className="text-sm font-semibold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (
@@ -188,12 +208,14 @@ export default function Booking() {
                 ))}
               </ul>
             )}
+
             <div className="flex justify-between text-sm text-gray-500 mt-1">
               <span>Time on Service</span>
               <span>{durationStats.avg} min</span>
             </div>
 
             <hr className="my-4 border-pink-100" />
+
             <div className="text-lg font-semibold text-purplecolor">
               <div className="flex justify-between mb-1">
                 <span>Total</span>
@@ -219,27 +241,35 @@ export default function Booking() {
         </div>
       </div>
 
-      {/* ✅ FINAL POPUP */}
+      {/* FINAL POPUP */}
       {showFinalPopup && bookingData && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-md space-y-4">
-            <h3 className="text-xl font-semibold text-purplecolor">Booking Confirmed ✅</h3>
+            <h3 className="text-xl font-semibold text-purplecolor">
+              Booking Confirmed ✅
+            </h3>
 
             <p className="text-sm text-gray-700">
-              Dear <span className="font-semibold">{bookingData.name}</span>,<br />
+              Dear <span className="font-semibold">{bookingData.name}</span>,
+              <br />
               your booking has been confirmed.
             </p>
 
             <p className="text-sm text-gray-700">
               <strong>Services:</strong>{" "}
-              {bookingData.services.map((s) => s.name).join(", ")}<br />
-              <strong>Date:</strong> {format(parseISO(bookingData.date), "PPP")}<br />
+              {bookingData.services.map((s) => s.name).join(", ")}
+              <br />
+              <strong>Date:</strong>{" "}
+              {format(parseISO(bookingData.date), "PPP")}
+              <br />
               <strong>Time:</strong> {bookingData.time}
             </p>
 
             <p className="text-sm text-gray-600 italic">
-              You will receive a confirmation email shortly.<br />
-              For changes, contact <strong>Shohre</strong> at <strong>778-513-9006</strong>.
+              You will receive a confirmation email shortly.
+              <br />
+              For changes, contact <strong>Shohre</strong> at{" "}
+              <strong>778-513-9006</strong>.
             </p>
 
             <button
