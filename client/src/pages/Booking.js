@@ -3,7 +3,7 @@ import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
 import services from "../data/services";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 function getDurationStats(selected) {
   const durations = selected.map((s) => s?.duration || 60);
@@ -217,7 +217,7 @@ export default function Booking() {
             <p className="text-sm text-gray-700">
               <strong>Services:</strong>{" "}
               {bookingData.services.map((s) => s.name).join(", ")}<br />
-              <strong>Date:</strong> {format(bookingData.date, "PPP")}<br />
+              <strong>Date:</strong> {format(parseISO(bookingData.date), "PPP")}<br />
               <strong>Time:</strong> {bookingData.time}
             </p>
 
