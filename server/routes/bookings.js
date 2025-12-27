@@ -149,10 +149,14 @@ router.post("/", async (req, res) => {
     try {
       const eventId = await createBookingEvent({
         name,
+        email,
+        phone,
         services: servicesData.map((s) => s.name),
+        note,
         start: start.toISOString(),
         end: end.toISOString(),
       });
+
 
       booking.calendarEventId = eventId;
       await booking.save();

@@ -7,25 +7,54 @@ const auth = new google.auth.GoogleAuth({
 
 const calendar = google.calendar({ version: "v3", auth });
 
-async function createBookingEvent({ name, services, start, end }) {
+function clean(v) {
+  return String(v ?? "").trim();
+}
+
+async function createBookingEvent({
+  name,
+  email,
+  phone,
+  services = [],
+  note,
+  start,
+  end,
+}) {
   console.log("📅 CALENDAR_ID:", process.env.GOOGLE_CALENDAR_ID);
   console.log(
     "🤖 SERVICE ACCOUNT:",
     JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON).client_email
   );
-  console.log("🕒 EVENT:", { name, start, end });
+  console.log("🕒 EVENT:", { name, email, phone, start, end });
+
+  const safeName = clean(name) || "Client";
+  const safeEmail = clean(email) || "—";
+  const safePhone = clean(phone) || "—";
+  const safeNote = clean(note) || "—";
+  const safeServices = Array.isArray(services) ? services.filter(Boolean) : [];
+
+  const descriptionLines = [
+    `Client: ${safeName}`,
+    `Phone: ${safePhone}`,
+    `Email: ${safeEmail}`,
+    "",
+    "Services:",
+    safeServices.length ? safeServices.map((s) => `- ${s}`).join("\n") : "- —",
+    "",
+    `Notes: ${safeNote}`,
+  ];
 
   const response = await calendar.events.insert({
     calendarId: process.env.GOOGLE_CALENDAR_ID,
     requestBody: {
-      summary: `${name} – ${services.join(", ")}`,
-      description: `Client: ${name}`,
-      start: { dateTime: start },
-      end: { dateTime: end },
+      summary: `Booking – ${safeName}${safeServices.length ? ` – ${safeServices.join(", ")}` : ""}`,
+      description: descriptionLines.join("\n"),
+      start: { dateTime: start, timeZone: "America/Vancouver" },
+      end: { dateTime: end, timeZone: "America/Vancouver" },
     },
   });
 
-  return response.data.id; // ✅ IMPORTANT
+  return response.data.id;
 }
 
 async function deleteBookingEvent(eventId) {
@@ -44,8 +73,8 @@ async function updateBookingEvent({ eventId, start, end }) {
     calendarId: process.env.GOOGLE_CALENDAR_ID,
     eventId,
     requestBody: {
-      start: { dateTime: start },
-      end: { dateTime: end },
+      start: { dateTime: start, timeZone: "America/Vancouver" },
+      end: { dateTime: end, timeZone: "America/Vancouver" },
     },
   });
 }
