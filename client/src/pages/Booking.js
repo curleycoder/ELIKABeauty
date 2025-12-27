@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
-import services from "../data/services";
 import { format, parseISO } from "date-fns";
 
 function getDurationStats(selected) {
@@ -59,7 +58,7 @@ export default function Booking() {
 
 
   return (
-    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa] pb-8 sm:pb-10">
+    <div className="w-full h-[100dvh] overflow-hidden relative font-bodonimoda bg-[#fff8fa]">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
@@ -73,7 +72,7 @@ export default function Booking() {
       />
 
       {/* Foreground */}    
-      <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col">
+      <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full min-h-0">
         {/* Minimal header */}
         <header className="mb-6 text-center">
           <h1 className="text-2xl sm:text-3xl text-purplecolor font-bold">
@@ -140,38 +139,38 @@ export default function Booking() {
           </p>
         </section>
 
-        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
+        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0 overflow-hidden">
 
           {/* LEFT: Service + Forms */}
-    <div className="flex-1 min-h-0 rounded-[30px] bg-transparent flex flex-col">
+        <div className="flex-1 min-h-0 bg-transparent flex flex-col">
+          {!showDateTime ? (
+            <BookingForm
+              onSelectionChange={setSelection}
+              averageDuration={durationStats.avg}
+              onContinue={() => setShowDateTime(true)}
+            />
+          ) : !showQuestions ? (
+            <DateTimePicker
+              duration={totalBlockedMinutes}
+              onSelect={(value) => {
+                setBookingTime(value);
+                setShowQuestions(true);
+              }}
+            />
+          ) : (
+            <QuestionsForm
+              selection={selection}
+              bookingTime={bookingTime}
+              onSubmit={(formData) => {
+                setBookingData(formData);
+                setShowFinalPopup(true);
+              }}
+              setLoading={setLoading}
+              loading={loading}
+            />
+          )}
+        </div>
 
-            {!showDateTime ? (
-              <BookingForm
-                onSelectionChange={setSelection}
-                averageDuration={durationStats.avg}
-                onContinue={() => setShowDateTime(true)}
-              />
-            ) : !showQuestions ? (
-              <DateTimePicker
-                duration={totalBlockedMinutes}
-                onSelect={(value) => {
-                  setBookingTime(value);
-                  setShowQuestions(true);
-                }}
-              />
-
-            ) : (
-              <QuestionsForm
-                selection={selection}
-                bookingTime={bookingTime}
-                onSubmit={(formData) => {
-                  setBookingData(formData);
-                  setShowFinalPopup(true);
-                }}
-                setLoading={setLoading}
-              />
-            )}
-          </div>
 
           {/* RIGHT: Summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
