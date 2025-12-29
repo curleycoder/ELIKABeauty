@@ -18,8 +18,6 @@ const allowedOrigins = new Set([
 
 const app = express();
 
-// If you later need cookies:
-// app.use(cors({ origin: ..., credentials: true }))
 app.use(
   cors({
     origin(origin, cb) {
@@ -30,31 +28,36 @@ app.use(
       console.error("❌ Blocked by CORS:", origin);
       return cb(new Error("Not allowed by CORS"));
     },
+    credentials: true,
   })
 );
 
 app.use(express.json());
 
-// Routes
+// ✅ Routes
 app.use("/api/bookings", bookingRoutes);
+
+// ✅ FIX: Admin page expects /api/admin/bookings
+app.use("/api/admin/bookings", bookingRoutes);
+
 app.use("/api/email", emailRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/google", googleRoutes);
 app.use("/api/services", serviceRoutes);
 
-// Static
+// ✅ Static
 app.use("/gallery", express.static(path.join(__dirname, "public", "gallery")));
 
-// Health check
+// ✅ Health check
 app.get("/", (req, res) => res.send("✅ Beauty Shohre API is running"));
 
-// DB
+// ✅ DB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Render needs this port
+// ✅ Port (Render provides PORT)
 const PORT = Number(process.env.PORT) || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
