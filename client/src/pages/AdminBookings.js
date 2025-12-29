@@ -1,46 +1,74 @@
 import React, { useEffect, useState } from "react";
 
-const API = ""; // not needed anymore for admin routes
+const ADMIN_KEY_STORAGE = "beautyshohre_admin_key";
+const API_BASE = "/api/admin/bookings"; // ✅ match your server mount
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const getAdminKey = () => {
+    const saved = localStorage.getItem(ADMIN_KEY_STORAGE);
+    if (saved) return saved;
+
+    const key = window.prompt("Enter Admin Key:");
+    if (!key) return "";
+    localStorage.setItem(ADMIN_KEY_STORAGE, key);
+    return key;
+  };
+
+  const parseError = async (res) => {
+    const contentType = res.headers.get("content-type") || "";
+    try {
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        return data?.error ? String(data.error) : JSON.stringify(data);
+      }
+      const text = await res.text();
+      return text || res.statusText;
+    } catch {
+      return res.statusText || "Request failed";
+    }
+  };
+
   const fetchBookings = async () => {
     setLoading(true);
     setErrorMsg("");
 
-    try {
-      const url = `/api/admin/bookings`;
-      const res = await fetch(url, { credentials: "include" });
+    const adminKey = getAdminKey();
+    if (!adminKey) {
+      setErrorMsg("Admin key is required.");
+      setLoading(false);
+      return;
+    }
 
+    try {
+      const res = await fetch(API_BASE, {
+        method: "GET",
+        headers: { "x-admin-key": adminKey },
+      });
 
       if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        console.error("❌ Fetch bookings failed:", {
-          url,
-          status: res.status,
-          statusText: res.statusText,
-          body: text?.slice(0, 300),
-        });
-        throw new Error(`Fetch failed (${res.status})`);
+        const msg = await parseError(res);
+        // ✅ actionable hints
+        const hint =
+          res.status === 403
+            ? " (403: Wrong key OR ADMIN_KEY is missing in your server env.)"
+            : res.status === 404
+            ? " (404: Server route not deployed / wrong path.)"
+            : "";
+        throw new Error(`${msg}${hint}`);
       }
 
       const data = await res.json();
-
-      if (!Array.isArray(data)) {
-        console.error("❌ Unexpected bookings payload:", data);
-        throw new Error("Invalid response shape from server");
-      }
+      if (!Array.isArray(data)) throw new Error("Server returned invalid data (expected array).");
 
       setBookings(data);
     } catch (err) {
-      console.error("Failed to load bookings", err);
-      setErrorMsg(
-        "Couldn’t load bookings. Your Admin page is probably calling the wrong API URL (or the server is down)."
-      );
+      console.error("❌ Failed to load bookings:", err);
       setBookings([]);
+      setErrorMsg(err?.message || "Couldn’t load bookings.");
     } finally {
       setLoading(false);
     }
@@ -48,137 +76,88 @@ export default function AdminBookings() {
 
   useEffect(() => {
     fetchBookings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cancelBooking = async (id) => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");
-    if (!confirmCancel) return;
+    const adminKey = getAdminKey();
+    if (!adminKey) return;
+
+    const ok = window.confirm("Cancel this booking?");
+    if (!ok) return;
 
     try {
-      const res = await fetch(`/api/admin/bookings/${id}`, {
+      const res = await fetch(`${API_BASE}/${id}`, {
         method: "DELETE",
-        credentials: "include",
+        headers: { "x-admin-key": adminKey },
       });
 
-
-      const bodyText = await res.text().catch(() => "");
       if (!res.ok) {
-        console.error("❌ Cancel failed:", res.status, bodyText);
-        alert(`Cancellation failed: ${bodyText || res.status}`);
-        return;
+        const msg = await parseError(res);
+        throw new Error(msg);
       }
 
       setBookings((prev) => prev.filter((b) => b._id !== id));
     } catch (err) {
-      console.error("❌ Cancellation failed:", err);
-      alert("Cancellation failed");
+      console.error("❌ Cancel failed:", err);
+      alert(err?.message || "Cancellation failed");
     }
   };
 
-  const rescheduleBooking = async (booking) => {
-    const newDate = window.prompt("New date (YYYY-MM-DD):");
-    if (!newDate) return;
-
-    const newTime = window.prompt("New time (24h HH:MM):");
-    if (!newTime) return;
-
-    try {
-      const res = await fetch(`/api/admin/bookings/${booking._id}/reschedule`, {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date: newDate, time: newTime }),
-      });
-
-
-      const data = await res.json().catch(async () => {
-        const t = await res.text().catch(() => "");
-        return { error: t || "Reschedule failed" };
-      });
-
-      if (!res.ok) {
-        alert(data.error || "Reschedule failed");
-        return;
-      }
-
-      setBookings((prev) => prev.map((b) => (b._id === booking._id ? data : b)));
-    } catch (err) {
-      console.error("❌ Reschedule failed:", err);
-      alert("Reschedule failed");
-    }
+  const clearKey = () => {
+    localStorage.removeItem(ADMIN_KEY_STORAGE);
+    setErrorMsg("Admin key cleared. Refresh and enter it again.");
   };
 
-  const formatWhen = (b) => {
-    if (b?.start) {
-      const d = new Date(b.start);
-      if (!isNaN(d.getTime())) return d.toLocaleString();
-    }
-
-    if (b?.date) {
-      const dd = new Date(b.date);
-      const dateStr = isNaN(dd.getTime()) ? String(b.date) : dd.toLocaleDateString();
-      const timeStr = b?.time ? ` ${b.time}` : "";
-      return `${dateStr}${timeStr}`;
-    }
-
-    return "No date";
-  };
-
-  if (loading) return <p className="p-6">Loading bookings...</p>;
+  if (loading) return <p className="p-6">Loading bookings…</p>;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 font-bodonimoda">
-      <h1 className="text-2xl text-purplecolor mb-4">Admin – Bookings</h1>
+    <div className="max-w-5xl mx-auto p-6">
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <h1 className="text-2xl">Admin – Bookings</h1>
+        <div className="flex gap-2">
+          <button onClick={fetchBookings} className="px-3 py-2 rounded bg-black text-white">
+            Refresh
+          </button>
+          <button onClick={clearKey} className="px-3 py-2 rounded border">
+            Clear Key
+          </button>
+        </div>
+      </div>
 
       {errorMsg && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+        <div className="mb-4 p-4 rounded border border-red-200 bg-red-50 text-red-700">
           {errorMsg}
-          <div className="mt-2 text-xs text-red-600">
-            Endpoint: <span className="font-mono">/api/admin/bookings</span>
+          <div className="mt-2 text-xs">
+            Endpoint used: <span className="font-mono">{API_BASE}</span>
           </div>
-          <button
-            onClick={fetchBookings}
-            className="mt-3 inline-flex rounded-full bg-red-600 px-4 py-2 text-white font-semibold"
-          >
-            Retry
-          </button>
         </div>
       )}
 
-      {!errorMsg && bookings.length === 0 && (
-        <p className="text-gray-500">No bookings found.</p>
+      {bookings.length === 0 ? (
+        <p className="text-gray-600">No bookings found.</p>
+      ) : (
+        <div className="space-y-3">
+          {bookings.map((b) => (
+            <div key={b._id} className="p-4 rounded border">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-semibold">{b?.name || "No name"}</div>
+                  <div className="text-sm text-gray-700">
+                    {b?.email || "No email"} • {b?.phone || "No phone"}
+                  </div>
+                </div>
+                <button
+                  onClick={() => cancelBooking(b._id)}
+                  className="text-red-600 font-semibold"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
-
-      <div className="space-y-4">
-        {bookings.map((b) => (
-          <div
-            key={b._id}
-            className="border border-black/10 rounded-lg p-4 flex justify-between items-start"
-          >
-            <div>
-              <p className="font-semibold">{b.name}</p>
-              <p className="text-sm text-gray-600">{formatWhen(b)}</p>
-              <p className="text-sm text-gray-500">Duration: {b.duration} min</p>
-            </div>
-
-            <div className="flex gap-4">
-              <button
-                onClick={() => rescheduleBooking(b)}
-                className="text-green-700 font-semibold hover:underline"
-              >
-                Reschedule
-              </button>
-
-              <button
-                onClick={() => cancelBooking(b._id)}
-                className="text-red-600 font-semibold hover:underline"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
