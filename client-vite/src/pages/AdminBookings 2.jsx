@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const ADMIN_KEY_STORAGE = "beautyshohre_admin_key";
-const API_BASE = "/api/admin/bookings"; // ✅ match your server mount
+const API_BASE = "https://api.beautyshohrestudio.ca/api/admin/bookings";
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);

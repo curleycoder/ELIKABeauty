@@ -1,0 +1,27 @@
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "react-datepicker/dist/react-datepicker.css";
+@import url("https://fonts.googleapis.com/css2?family=Ranade:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 72px; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Ranade", sans-serif;
+}
