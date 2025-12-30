@@ -265,7 +265,7 @@ export default function Booking() {
               <strong>Time:</strong> {bookingData.time}
             </p>
 
-            <p className="text-sm font-display text-gray-600 italic">
+            <p className="text-sm font-display text-gray-600">
               You will receive a confirmation email shortly.
               <br />
               For changes, contact <strong>Shohre</strong> at{" "}
