@@ -14,7 +14,6 @@ const Service = require("../models/service");
 const {
   createBookingEvent,
   deleteBookingEvent,
-  updateBookingEvent,
 } = require("../services/calendar");
 
 const { sendCancellationEmail } = require("../services/email");
@@ -23,12 +22,9 @@ const BUFFER_MINUTES = 15;
 const ADMIN_KEY = process.env.ADMIN_KEY;
 
 const SHOP_TZ = "America/Vancouver";
-const CLOSE_HOUR = 19; // 7pm Vancouver
-const OPEN_HOUR = 11;  // 11am Vancouver
+const CLOSE_HOUR = 19;
+const OPEN_HOUR = 11;
 
-/* ---------------- HELPERS ---------------- */
-
-// "3:05 PM" → "15:05"
 function to24h(time12h) {
   const m = String(time12h).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
   if (!m) return null;
@@ -56,7 +52,7 @@ function normalizeDateYYYYMMDD(dateInput) {
   ).padStart(2, "0")}`;
 }
 
-// YYYY-MM-DD + 1 day → YYYY-MM-DD
+// YYYY-MM-DD + N day → YYYY-MM-DD
 function addDaysYYYYMMDD(dateStr, days = 1) {
   const d = new Date(`${dateStr}T00:00:00Z`);
   if (isNaN(d.getTime())) return null;
@@ -91,12 +87,11 @@ function normalizeTimeToHHMM(input) {
   return to24h(s);
 }
 
-function minutes(ms) {
-  return ms * 60000;
+function minutesToMs(mins) {
+  return mins * 60000;
 }
 
 /* ---------------- CREATE BOOKING ---------------- */
-
 router.post("/", async (req, res) => {
   try {
     const { services, name, email, phone, referredBy, date, time, note } = req.body;
@@ -135,28 +130,32 @@ router.post("/", async (req, res) => {
 
     const totalBlockedMinutes = serviceDuration + bufferMinutes;
 
-    // ✅ start/end in UTC based on Vancouver local
+    // start/end in UTC based on Vancouver local
     const start = vancouverLocalToUtcDate(dateStr, hhmm);
-    const end = new Date(start.getTime() + minutes(totalBlockedMinutes));
+    const end = new Date(start.getTime() + minutesToMs(totalBlockedMinutes));
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return res.status(400).json({ error: "Invalid date/time." });
     }
 
-    // ✅ Opening hour enforcement (optional but recommended)
+    // Opening hour enforcement
     const openUtc = vancouverLocalToUtcDate(dateStr, `${String(OPEN_HOUR).padStart(2, "0")}:00`);
     if (start < openUtc) {
       return res.status(400).json({ error: `We open at ${OPEN_HOUR}:00 AM.` });
     }
 
-    // ✅ Closing: must finish by 7PM Vancouver time
-    const closingUtc = vancouverLocalToUtcDate(dateStr, `${String(CLOSE_HOUR).padStart(2, "0")}:00`);
+    // Closing: must finish by 7PM Vancouver time
+    const closingUtc = vancouverLocalToUtcDate(
+      dateStr,
+      `${String(CLOSE_HOUR).padStart(2, "0")}:00`
+    );
     if (end > closingUtc) {
       return res.status(400).json({ error: "Selected service must finish by 7:00 PM." });
     }
 
-    // ✅ Conflict check (true overlap only; back-to-back allowed)
+    // Conflict check (true overlap only; back-to-back allowed)
     const conflict = await Booking.findOne({
+      status: { $ne: "cancelled" },
       $expr: { $and: [{ $lt: ["$start", end] }, { $gt: ["$end", start] }] },
     }).select("_id start end");
 
@@ -195,8 +194,10 @@ router.post("/", async (req, res) => {
       booking.calendarEventId = eventId;
       await booking.save();
     } catch (err) {
-      console.error("🔥 Calendar insert failed:", err);
+      console.error("🔥 Calendar insert failed:");
+      console.error(err?.response?.data || err?.message || err);
     }
+
 
     return res.status(201).json(booking);
   } catch (err) {
@@ -217,6 +218,7 @@ router.get("/booked", async (req, res) => {
     const nextDayStartUtc = vancouverLocalToUtcDate(nextDayStr, "00:00");
 
     const bookings = await Booking.find({
+      status: { $ne: "cancelled" },
       start: { $gte: dayStartUtc, $lt: nextDayStartUtc },
     }).select("start end");
 
@@ -230,12 +232,12 @@ router.get("/booked", async (req, res) => {
   }
 });
 
-
 /* ---------------- ADMIN: LIST ALL BOOKINGS ---------------- */
 router.get("/", async (req, res) => {
   if (req.headers["x-admin-key"] !== ADMIN_KEY) {
     return res.status(403).json({ error: "Forbidden" });
   }
+
   try {
     const bookings = await Booking.find({})
       .sort({ start: 1 })
@@ -257,84 +259,56 @@ router.delete("/:id", async (req, res) => {
     const booking = await Booking.findById(req.params.id).populate("services", "name");
     if (!booking) return res.status(404).json({ error: "Booking not found" });
 
+    // Calendar delete (non-blocking)
     try {
-      await deleteBookingEvent(booking.calendarEventId);
+      if (booking.calendarEventId) {
+        await deleteBookingEvent(booking.calendarEventId);
+      }
     } catch (err) {
-      console.error("🔥 Calendar delete failed:", err);
+      console.error("🔥 Calendar insert failed:");
+      console.error(err?.response?.data || err?.message || err);
     }
 
+
+    const startDate = booking.start ? new Date(booking.start) : null;
+
+    const prettyDate = startDate
+      ? startDate.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" })
+      : (booking.date
+          ? new Date(booking.date).toLocaleDateString("en-CA", { timeZone: "America/Vancouver" })
+          : "");
+
+    const prettyTime = startDate
+      ? startDate.toLocaleTimeString("en-US", {
+          timeZone: "America/Vancouver",
+          hour: "numeric",
+          minute: "2-digit",
+        })
+      : booking.time;
+
+    let emailSent = false;
     try {
-      await sendCancellationEmail?.({
-        name: booking.name,
+      const info = await sendCancellationEmail({
         email: booking.email,
-        date: booking.start || booking.date,
-        time: booking.time,
-        services: (booking.services || []).map((s) => s.name),
+        name: booking.name,
+        date: prettyDate,
+        time: prettyTime,
       });
+      console.log("✅ Cancellation email sent:", info?.messageId || info);
+      emailSent = true;
     } catch (err) {
-      console.error("🔥 Cancellation email failed:", err);
+      console.error("🔥 Cancellation email failed:", err?.stack || err);
     }
 
-    await Booking.deleteOne({ _id: booking._id });
-    res.json({ success: true });
+
+    // NOTE: You should eventually switch to status="cancelled" instead of delete
+    booking.status = "cancelled";
+    booking.cancelledAt = new Date();
+    await booking.save();
+
+    res.json({ success: true, emailSent });
   } catch (err) {
     console.error("❌ Cancel booking failed:", err);
     res.status(500).json({ error: "Cancel booking failed" });
   }
 });
-
-/* ---------------- ADMIN: RESCHEDULE ---------------- */
-router.put("/:id/reschedule", async (req, res) => {
-  if (req.headers["x-admin-key"] !== ADMIN_KEY) {
-    return res.status(403).json({ error: "Forbidden" });
-  }
-
-  const dateStr = normalizeDateYYYYMMDD(req.body.date);
-  const hhmm = normalizeTimeToHHMM(req.body.time);
-  if (!dateStr || !hhmm) {
-    return res.status(400).json({ error: "Invalid date or time." });
-  }
-
-  const booking = await Booking.findById(req.params.id);
-  if (!booking) return res.status(404).json({ error: "Booking not found" });
-
-  const start = vancouverLocalToUtcDate(dateStr, hhmm);
-
-  const totalBlockedMinutes = (booking.duration || 0) + (booking.bufferMinutes || 0);
-  const end = new Date(start.getTime() + minutes(totalBlockedMinutes));
-
-  const closingUtc = vancouverLocalToUtcDate(dateStr, `${String(CLOSE_HOUR).padStart(2, "0")}:00`);
-  if (end > closingUtc) {
-    return res.status(400).json({ error: "Selected service must finish by 7:00 PM." });
-  }
-
-  const conflict = await Booking.findOne({
-    _id: { $ne: booking._id },
-    $expr: { $and: [{ $lt: ["$start", end] }, { $gt: ["$end", start] }] },
-  });
-
-  if (conflict) {
-    return res.status(409).json({ error: "This new time overlaps another booking." });
-  }
-
-  booking.date = new Date(`${dateStr}T00:00:00.000Z`);
-  booking.start = start;
-  booking.end = end;
-  booking.time = hhmm;
-
-  await booking.save();
-
-  try {
-    await updateBookingEvent({
-      eventId: booking.calendarEventId,
-      start: start.toISOString(),
-      end: end.toISOString(),
-    });
-  } catch (err) {
-    console.error("🔥 Calendar update failed:", err);
-  }
-
-  res.json(booking);
-});
-
-module.exports = router;

@@ -38,7 +38,7 @@ app.use(express.json());
 app.use("/api/bookings", bookingRoutes);
 
 // ✅ FIX: Admin page expects /api/admin/bookings
-app.use("/api/admin/bookings", bookingRoutes);
+// app.use("/api/admin/bookings", bookingRoutes);
 
 app.use("/api/email", emailRoutes);
 app.use("/api/gallery", galleryRoutes);

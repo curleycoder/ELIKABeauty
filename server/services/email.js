@@ -8,21 +8,22 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function sendCancellationEmail({ to, name, date, time }) {
-  await transporter.sendMail({
+async function sendCancellationEmail({ email, name, date, time }) {
+  if (!email) throw new Error("No recipient email provided");
+
+  return transporter.sendMail({
     from: `"Beauty Shohre Studio" <${process.env.BUSINESS_EMAIL}>`,
-    to,
+    to: email,
     subject: "Your Appointment Has Been Cancelled",
-    text: `
-Hi ${name},
+    text: `Hi ${name},
 
 Your appointment scheduled for ${date} at ${time} has been cancelled.
 
-Please contact us if you would like to reschedule.
+If you'd like to reschedule, reply to this email.
 
-Beauty Shohre Studio
-`,
+Beauty Shohre Studio`,
   });
 }
+
 
 module.exports = { sendCancellationEmail };
