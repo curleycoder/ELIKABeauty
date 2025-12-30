@@ -51,12 +51,11 @@ export default function AdminBookings() {
 
       if (!res.ok) {
         const msg = await parseError(res);
-        // ✅ actionable hints
         const hint =
           res.status === 403
-            ? " (403: Wrong key OR ADMIN_KEY is missing in your server env.)"
+            ? " (403: Wrong key OR ADMIN_KEY missing on server.)"
             : res.status === 404
-            ? " (404: Server route not deployed / wrong path.)"
+            ? " (404: Route not deployed / wrong path.)"
             : "";
         throw new Error(`${msg}${hint}`);
       }
@@ -79,30 +78,44 @@ export default function AdminBookings() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-const cancelBooking = async (id) => {
-  const adminKey = getAdminKey();
-  if (!adminKey) return;
+  const cancelBooking = async (id) => {
+    const adminKey = getAdminKey();
+    if (!adminKey) return;
 
-  const ok = window.confirm("Cancel this booking?");
-  if (!ok) return;
+    const booking = bookings.find((b) => b._id === id);
+    if (!booking) return;
 
-  try {
-    const res = await fetch(`${API_BASE}/${id}/cancel`, {
-      method: "PATCH",
-      headers: { "x-admin-key": adminKey },
-    });
+    if (booking.status === "cancelled") return;
 
-    if (!res.ok) throw new Error(await parseError(res));
+    const ok = window.confirm(`Cancel booking for ${booking?.name || "this customer"}?`);
+    if (!ok) return;
 
-    const updated = await res.json();
+    try {
+      // ✅ BACKEND EXPECTS: DELETE /api/admin/bookings/:id
+      const res = await fetch(`${API_BASE}/${id}`, {
+        method: "DELETE",
+        headers: { "x-admin-key": adminKey },
+      });
 
-    setBookings((prev) => prev.map((b) => (b._id === id ? updated : b)));
-  } catch (err) {
-    console.error("❌ Cancel failed:", err);
-    alert(err?.message || "Cancellation failed");
-  }
-};
+      if (!res.ok) throw new Error(await parseError(res));
 
+      const result = await res.json(); // { success:true, emailSent:true/false, ... }
+
+      // Optimistic UI update: mark cancelled locally
+      setBookings((prev) =>
+        prev.map((b) =>
+          b._id === id ? { ...b, status: "cancelled", cancelledAt: new Date().toISOString() } : b
+        )
+      );
+
+      if (result?.emailSent === false) {
+        alert("Cancelled, but cancellation email did NOT send. Check server logs / email settings.");
+      }
+    } catch (err) {
+      console.error("❌ Cancel failed:", err);
+      alert(err?.message || "Cancellation failed");
+    }
+  };
 
   const clearKey = () => {
     localStorage.removeItem(ADMIN_KEY_STORAGE);
@@ -138,31 +151,38 @@ const cancelBooking = async (id) => {
         <p className="text-gray-600">No bookings found.</p>
       ) : (
         <div className="space-y-3">
-          {bookings.map((b) => (
-            <div key={b._id} className="p-4 rounded border">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <div className="font-semibold text-[#55203d]">
-                    {b?.name?.trim() ? b.name : "No name"}
+          {bookings.map((b) => {
+            const isCancelled = b?.status === "cancelled";
+            return (
+              <div key={b._id} className="p-4 rounded border">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="font-semibold text-[#55203d]">
+                      {b?.name?.trim() ? b.name : "No name"}
+                    </div>
+
+                    <div className="text-sm text-gray-700">
+                      {b?.email || "No email"} • {b?.phone || "No phone"}
+                      {isCancelled && (
+                        <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="text-sm text-gray-700">
-                    {b?.email || "No email"} • {b?.phone || "No phone"}
-                    {b?.status === "cancelled" && (
-                      <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>
-                    )}
-                  </div>
+                  <button
+                    onClick={() => cancelBooking(b._id)}
+                    disabled={isCancelled}
+                    className={[
+                      "font-display font-semibold",
+                      isCancelled ? "text-gray-400 cursor-not-allowed" : "text-red-600",
+                    ].join(" ")}
+                  >
+                    Cancel
+                  </button>
                 </div>
-
-                <button
-                  onClick={() => cancelBooking(b._id)}
-                  className="text-red-600 font-display font-semibold"
-                >
-                  Cancel
-                </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
