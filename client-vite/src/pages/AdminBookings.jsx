@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const ADMIN_KEY_STORAGE = "beautyshohre_admin_key";
-const API_BASE = "https://api.beautyshohrestudio.ca/api/admin/bookings";
+const API_BASE = "https://api.beautyshohrestudio.ca/api/bookings";
 const SHOP_TZ = "America/Vancouver";
 
 function formatWhen(b) {
