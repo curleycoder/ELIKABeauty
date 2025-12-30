@@ -56,7 +56,7 @@ export default function Product() {
       {/* Intro header (short & elegant) */}
       <div className="text-center mb-6 max-w-3xl mx-auto">
         <h1 className="text-2xl sm:text-3xl text-purplecolor mb-2">
-          <span className="border-t border-b border-gray-300 px-4 sm:px-6">
+          <span className="border-t border-b font-display py-2 border-gray-300 px-4 sm:px-6">
             Professional Hair Care
           </span>
         </h1>
@@ -68,13 +68,13 @@ export default function Product() {
         <div className="mt-4 flex items-center justify-center gap-3 flex-wrap">
           <a
             href={`mailto:beautyshohrestudio@gmail.com?subject=Notify%20me%20when%20products%20are%20in%20stock&body=Hi%20Shohre%2C%0A%0APlease%20notify%20me%20when%20products%20are%20available.%0A%0AName%3A%0APhone%3A%0AInterested%20in%3A%20(anti-yellow%20shampoo%2C%20keratin-safe%2C%20moisture%20treatments%2C%20...)`}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-purplecolor text-white text-sm font-semibold shadow hover:brightness-110"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-purplecolor text-white text-sm font-semibold font-display shadow hover:brightness-110"
           >
             Get Notified
           </a>
           <button
             onClick={() => setShowInfo((s) => !s)}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-purplecolor/30 text-purplecolor text-sm font-semibold shadow hover:bg-purplecolor/5"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-purplecolor/30 text-purplecolor text-sm font-display font-semibold shadow hover:bg-purplecolor/5"
             aria-expanded={showInfo}
           >
             {showInfo ? "Hide details" : "Learn more"}
@@ -151,7 +151,7 @@ export default function Product() {
               return (
                 <div
                   key={product._id}
-                  className="group bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 p-4 border border-pinkcolor/30 relative overflow-hidden"
+                  className="group bg-white rounded-2xl shadow transition duration-300 p-4 border border-pinkcolor/30 relative overflow-hidden"
                 >
                   {unavailable && (
                     <span className="absolute top-3 right-3 text-[11px] uppercase tracking-wide bg-gray-900/80 text-white px-2 py-1 rounded-full">
@@ -167,7 +167,7 @@ export default function Product() {
                       className="max-h-full max-w-full object-contain object-center"
                     />
                   </div>
-                  <h2 className="text-lg font-semibold text-purplecolor line-clamp-2">
+                  <h2 className="text-lg font-display font-semibold text-purplecolor line-clamp-2">
                     {product.name}
                   </h2>
                   <p className="text-sm text-gray-600 mt-1 line-clamp-3">

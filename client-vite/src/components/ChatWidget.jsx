@@ -35,8 +35,8 @@ export default function ChatWidget() {
             />
             </div>
             <div className="leading-tight">
-              <div className="text-sm font-semibold text-black/90">Beauty Shohre Studio</div>
-              <div className="text-[11px] text-black/50">Quick answers • Booking help</div>
+              <div className="text-sm font-display font-semibold text-[#55203d]">Beauty Shohre Studio</div>
+              <div className="text-[11px] text-[#55203d]/70">Quick answers • Booking help</div>
             </div>
           </div>
 

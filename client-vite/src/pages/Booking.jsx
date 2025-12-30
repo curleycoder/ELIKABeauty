@@ -245,7 +245,7 @@ export default function Booking() {
       {showFinalPopup && bookingData && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-md space-y-4">
-            <h3 className="text-xl font-semibold text-[#55203d]">
+            <h3 className="text-xl font-display font-semibold text-[#55203d]">
               Booking Confirmed ✅
             </h3>
 
@@ -265,7 +265,7 @@ export default function Booking() {
               <strong>Time:</strong> {bookingData.time}
             </p>
 
-            <p className="text-sm text-gray-600 italic">
+            <p className="text-sm font-display text-gray-600 italic">
               You will receive a confirmation email shortly.
               <br />
               For changes, contact <strong>Shohre</strong> at{" "}
@@ -281,7 +281,7 @@ export default function Booking() {
                 setBookingTime(null);
                 setSelection({ selected: [], total: 0 });
               }}
-              className="mt-2 px-5 py-2 bg-[#55203d] text-white rounded-lg shadow hover:brightness-110"
+              className="mt-2 px-5 py-2 font-display bg-[#55203d] text-white rounded-lg shadow hover:brightness-110"
             >
               Close
             </button>
