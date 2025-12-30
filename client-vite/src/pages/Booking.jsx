@@ -202,7 +202,7 @@ export default function Booking() {
             {selection.selected.length === 0 ? (
               <p className="text-sm text-gray-400 italic">No services selected</p>
             ) : (
-              <ul className="text-sm space-y-1 mb-4 text-gray-700">
+              <ul className="text-sm space-y-1 font-display mb-4 text-gray-700">
                 {selection.selected.map((s) => (
                   <li key={s._id}>• {s.name}</li>
                 ))}
@@ -250,7 +250,7 @@ export default function Booking() {
             </h3>
 
             <p className="text-sm text-gray-700">
-              Dear <span className="font-semibold">{bookingData.name}</span>,
+              Dear <span className="font-display">{bookingData.name}</span>,
               <br />
               your booking has been confirmed.
             </p>
