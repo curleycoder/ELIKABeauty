@@ -157,10 +157,10 @@ export default function QuestionsForm({
       onSubmit={handleSubmit}
       className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl overflow-y-auto text-purplecolor w-full max-w-2xl mx-auto"
     >
-      <h2 className="text-2xl font-bold mb-2">Your Details</h2>
+      <h2 className="text-2xl font-display font-bold mb-2">Your Details</h2>
 
       <div>
-        <label className="block text-md font-medium mb-1">Full Name *</label>
+        <label className="block text-md font-display font-medium mb-1">Full Name *</label>
         <input
           name="name"
           value={form.name}
@@ -173,7 +173,7 @@ export default function QuestionsForm({
       </div>
 
       <div>
-        <label className="block text-md font-medium mb-1">Email Address *</label>
+        <label className="block text-md font-display font-medium mb-1">Email Address *</label>
         <input
           type="email"
           name="email"
@@ -189,7 +189,7 @@ export default function QuestionsForm({
       </div>
 
       <div>
-        <label className="block text-md font-medium mb-1">Phone Number *</label>
+        <label className="block text-md font-display font-medium mb-1">Phone Number *</label>
         <input
           type="tel"
           name="phone"
@@ -204,10 +204,10 @@ export default function QuestionsForm({
 
       </div>
 
-      <h2 className="text-2xl font-bold pt-6">Additional Questions</h2>
+      <h2 className="text-2xl font-bold font-display pt-6">Additional Questions</h2>
 
       <div>
-        <label className="block text-md font-medium mb-2">Did someone refer you?</label>
+        <label className="block text-md font-display font-medium mb-2">Did someone refer you?</label>
         <input
           type="text"
           name="referredBy"
@@ -219,7 +219,7 @@ export default function QuestionsForm({
       </div>
 
       <div>
-        <label className="block text-md font-medium mb-2">Note (optional)</label>
+        <label className="block text-md font-display font-medium mb-2">Note (optional)</label>
         <textarea
           name="note"
           value={form.note}
@@ -232,7 +232,7 @@ export default function QuestionsForm({
       <button
         type="submit"
         disabled={loading}
-        className={`mt-6 w-full py-3 rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
+        className={`mt-6 w-full py-3 font-display rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
           loading
             ? "bg-purplecolor/60 cursor-wait text-white"
             : "bg-purplecolor text-white hover:brightness-110"

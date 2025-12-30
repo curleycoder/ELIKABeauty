@@ -107,7 +107,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
   };
 
   return (
-    <div className="bg-white/60 backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-20 sm:mt-28 flex flex-col max-h-[80dvh]">
+    <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-20 sm:mt-28 flex flex-col max-h-[80dvh]">
       <div className="p-6 sm:p-8 pb-3">
         <h2 className="text-xl font-bold font-display text-purplecolor tracking-wide text-center">
           Choose a Date
