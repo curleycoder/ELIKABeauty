@@ -176,11 +176,18 @@ export default function AdminBookings() {
                     </div>
 
                     <div className="text-sm text-gray-600 mt-1">
-                      {(b.services || [])
-                        .map((s) => s?.name)
-                        .filter(Boolean)
-                        .join(", ") || "No services"}
+                      {Array.isArray(b.services) && b.services.length > 0 ? (
+                        <span>
+                          {b.services
+                            .map((s) => (typeof s === "string" ? s : s?.name))
+                            .filter(Boolean)
+                            .join(", ")}
+                        </span>
+                      ) : (
+                        "No services"
+                      )}
                     </div>
+
                   </div>
 
                   <button
