@@ -227,7 +227,7 @@ export default function Booking() {
             </div>
 
             <button
-              className={`mt-6 w-full py-3 rounded-full text-white font-bold transition ${
+              className={`mt-6 w-full py-3 rounded-full text-white font-display font-bold transition ${
                 selection.selected.length === 0
                   ? "bg-[#55203d]/20 cursor-not-allowed"
                   : "bg-[#55203d] hover:brightness-110"

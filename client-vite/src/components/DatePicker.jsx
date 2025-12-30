@@ -109,7 +109,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
   return (
     <div className="bg-white/60 backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-20 sm:mt-28 flex flex-col max-h-[80dvh]">
       <div className="p-6 sm:p-8 pb-3">
-        <h2 className="text-xl font-bold text-purplecolor tracking-wide text-center">
+        <h2 className="text-xl font-bold font-display text-purplecolor tracking-wide text-center">
           Choose a Date
         </h2>
       </div>
@@ -130,7 +130,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
                 {month}
               </h4>
 
-              <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
+              <div className="grid font-display grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
                 {days.map((d) => {
                   const isToday = d.full === format(today, "yyyy-MM-dd");
                   const isSelected = selectedDate?.toDateString() === d.date.toDateString();
@@ -170,7 +170,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
         {/* Times */}
         {selectedDate && (
           <div ref={timeRef} className="pt-2">
-            <p className="text-center text-purplecolor font-semibold mb-3 mt-2">Select a time:</p>
+            <p className="text-center text-purplecolor font-display font-semibold mb-3 mt-2">Select a time:</p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {timeSlots.map((time) => {
@@ -213,13 +213,13 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
       {showConfirm && selectedDate && selectedTime && (
         <div className="fixed inset-0 rounded-3xl bg-purplecolor/60 flex items-center justify-center px-4 sm:px-8 z-50">
           <div className="bg-white rounded-2xl p-5 sm:p-8 w-[90%] max-w-md shadow-xl text-center space-y-4">
-            <h3 className="text-lg font-semibold">Confirm Your Selection</h3>
+            <h3 className="text-lg font-display text-purplecolor font-semibold">Confirm Your Selection</h3>
             <p className="text-sm text-gray-700">
               You selected <span className="font-medium text-purplecolor">{format(selectedDate, "PPP")}</span>{" "}
               at <span className="font-medium text-purplecolor">{selectedTime}</span>.
             </p>
 
-            <div className="flex justify-center gap-4 mt-4">
+            <div className="flex justify-center font-display font-bold gap-4 mt-4">
               <button
                 onClick={() => {
                   onSelect({ date: format(selectedDate, "yyyy-MM-dd"), time: selectedTime });
