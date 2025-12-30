@@ -142,11 +142,18 @@ const cancelBooking = async (id) => {
             <div key={b._id} className="p-4 rounded border">
               <div className="flex items-center justify-between gap-3">
                 <div>
+                  <div className="font-semibold text-[#55203d]">
+                    {b?.name?.trim() ? b.name : "No name"}
+                  </div>
+
                   <div className="text-sm text-gray-700">
                     {b?.email || "No email"} • {b?.phone || "No phone"}
-                    {b?.status === "cancelled" && <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>}
+                    {b?.status === "cancelled" && (
+                      <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>
+                    )}
                   </div>
                 </div>
+
                 <button
                   onClick={() => cancelBooking(b._id)}
                   className="text-red-600 font-display font-semibold"
