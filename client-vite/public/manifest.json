@@ -1,0 +1,15 @@
+{
+  "short_name": "Beauty Shohre",
+  "name": "Beauty Shohre Studio",
+  "icons": [
+    {
+      "src": "logo2.jpg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#55203d",
+  "background_color": "#f098a6"
+}
