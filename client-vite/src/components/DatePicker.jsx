@@ -64,7 +64,7 @@ function isBlocked(date, time, bookedSlots) {
   });
 }
 
-const baseURL = process.env.REACT_APP_API_URL || "";
+const baseURL = import.meta.env.VITE_API_URL || "";
 
 export default function DateTimePicker({ onSelect, duration = 30 }) {
   const [selectedDate, setSelectedDate] = useState(null);

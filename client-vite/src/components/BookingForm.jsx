@@ -66,7 +66,7 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
   const sheetRef = useRef(null);
 
   const baseURL =
-    process.env.REACT_APP_API_URL || "https://api.beautyshohrestudio.ca";
+    import.meta.env.VITE_API_URL || "https://api.beautyshohrestudio.ca";
 
   // Fetch services once
   useEffect(() => {

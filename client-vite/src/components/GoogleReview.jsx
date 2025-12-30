@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-const baseURL = (process.env.REACT_APP_API_URL || "http://localhost:3000").replace(/\/$/, "");
+const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 export default function GoogleReview() {
   const [reviews, setReviews] = useState([]);
