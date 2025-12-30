@@ -79,30 +79,30 @@ export default function AdminBookings() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const cancelBooking = async (id) => {
-    const adminKey = getAdminKey();
-    if (!adminKey) return;
+const cancelBooking = async (id) => {
+  const adminKey = getAdminKey();
+  if (!adminKey) return;
 
-    const ok = window.confirm("Cancel this booking?");
-    if (!ok) return;
+  const ok = window.confirm("Cancel this booking?");
+  if (!ok) return;
 
-    try {
-      const res = await fetch(`${API_BASE}/${id}`, {
-        method: "DELETE",
-        headers: { "x-admin-key": adminKey },
-      });
+  try {
+    const res = await fetch(`${API_BASE}/${id}/cancel`, {
+      method: "PATCH",
+      headers: { "x-admin-key": adminKey },
+    });
 
-      if (!res.ok) {
-        const msg = await parseError(res);
-        throw new Error(msg);
-      }
+    if (!res.ok) throw new Error(await parseError(res));
 
-      setBookings((prev) => prev.filter((b) => b._id !== id));
-    } catch (err) {
-      console.error("❌ Cancel failed:", err);
-      alert(err?.message || "Cancellation failed");
-    }
-  };
+    const updated = await res.json();
+
+    setBookings((prev) => prev.map((b) => (b._id === id ? updated : b)));
+  } catch (err) {
+    console.error("❌ Cancel failed:", err);
+    alert(err?.message || "Cancellation failed");
+  }
+};
+
 
   const clearKey = () => {
     localStorage.removeItem(ADMIN_KEY_STORAGE);
@@ -113,13 +113,13 @@ export default function AdminBookings() {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <div className="flex items-center justify-between gap-3 mb-4">
+      <div className="flex font-display items-center justify-between gap-3 mb-4">
         <h1 className="text-2xl">Admin – Bookings</h1>
         <div className="flex gap-2">
-          <button onClick={fetchBookings} className="px-3 py-2 rounded bg-black text-white">
+          <button onClick={fetchBookings} className="px-3 py-2 rounded bg-[#55203d] text-white">
             Refresh
           </button>
-          <button onClick={clearKey} className="px-3 py-2 rounded border">
+          <button onClick={clearKey} className="px-3 py-2 text-[#55203d] rounded border">
             Clear Key
           </button>
         </div>
@@ -142,9 +142,9 @@ export default function AdminBookings() {
             <div key={b._id} className="p-4 rounded border">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <div className="font-semibold">{b?.name || "No name"}</div>
                   <div className="text-sm text-gray-700">
                     {b?.email || "No email"} • {b?.phone || "No phone"}
+                    {b?.status === "cancelled" && <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>}
                   </div>
                 </div>
                 <button
