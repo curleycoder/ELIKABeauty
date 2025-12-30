@@ -18,7 +18,7 @@ export default function ArticlePage() {
             />
           </Helmet>
 
-          <Link to="/articles" className="text-pinkcolor">
+          <Link to="/articles" className="text-[#f098a6] font-display">
             ← Back to articles
           </Link>
           <p className="mt-4">Article not found.</p>
@@ -115,7 +115,7 @@ export default function ArticlePage() {
       </Helmet>
 
       <div className="max-w-3xl mx-auto">
-        <Link to="/articles" className="text-pinkcolor">
+        <Link to="/articles" className="text-[#f098a6] font-display">
           ← Back to articles
         </Link>
 

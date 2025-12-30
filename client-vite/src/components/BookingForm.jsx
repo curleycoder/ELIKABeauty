@@ -136,14 +136,14 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
       {/* Header (fixed, like DateTimePicker) */}
       <div className="p-6 sm:p-8 pb-4 border-b border-purplecolor/10">
         <div className="text-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-purplecolor">Services</h2>
+          <h2 className="text-xl sm:text-2xl font-display font-bold text-[#55203d]">Services</h2>
           <p className="text-sm text-gray-500 mt-1">
             Select your service(s). You can combine them.
           </p>
         </div>
 
         {/* Tabs (same “pill” style) */}
-        <div className="mt-4 flex flex-wrap gap-2 justify-center">
+        <div className="mt-4 flex font-display font-bold flex-wrap gap-2 justify-center">
           {TABS.map((tab) => (
             <button
               key={tab}

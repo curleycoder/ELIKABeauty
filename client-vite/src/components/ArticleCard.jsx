@@ -27,12 +27,12 @@ export default function ArticleCard({ article }) {
         fetchpriority="low"
       />
 
-      <div className="p-4 text-purplecolor">
+      <div className="p-4 text-[#55203d] font-display">
         <h3 className="text-lg sm:text-xl font-semibold mb-3">{title}</h3>
 
         <p className="text-sm text-gray-700 mb-3 line-clamp-4">{preview}</p>
 
-        <span className="text-sm text-pinkcolor font-semibold">Read More →</span>
+        <span className="text-sm text-[#f098a6] font-display font-semibold">Read More →</span>
       </div>
     </Link>
   );

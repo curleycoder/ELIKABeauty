@@ -2,7 +2,16 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Josefin Sans", "system-ui"],
+        display: ["Ranade", "Josefin Sans"],
+      },
+      colors: {
+        purplecolor: "#55203d",
+        pinkcolor: "#f098a6"
+      },
+    },
   },
   plugins: [],
 }

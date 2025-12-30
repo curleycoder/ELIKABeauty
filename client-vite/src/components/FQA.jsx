@@ -26,9 +26,9 @@ export default function FAQ() {
 
 
   return (
-    <section className=" max-w-4xl mx-auto font-bodonimoda">
+    <section className=" max-w-4xl mx-auto">
       <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl font-bodonimoda text-[#55203d] mb-10">
+            <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-10">
               <span className="border-t border-b border-gray-300 px-4 sm:px-6">
                 Frequently Asked Questions
               </span>

@@ -19,12 +19,12 @@ export default function Gallery() {
   useEffect(() => {
     let mounted = true;
 
-    fetch(`${baseURL}/api/gallery`)
+    fetch("/api/gallery")
       .then((r) => r.json())
       .then((data) => {
         if (!mounted) return;
 
-        const imgs = Array.isArray(data.images) ? data.images : [];
+      const imgs = Array.isArray(data) ? data : Array.isArray(data.images) ? data.images : [];
         if (!imgs.length) return;
 
         setGalleryImages(imgs);
@@ -139,8 +139,8 @@ export default function Gallery() {
   return (
     <section id="gallery-section" className="text-center px-4 py-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bodonimoda text-[#55203d] mb-6">
-          <span className="border-t border-b border-gray-300 px-6">Photo Gallery</span>
+        <h2 className="text-3xl text-[#55203d] mb-6">
+          <span className="border-t border-b font-display border-gray-300 py-2 px-8">Photo Gallery</span>
         </h2>
       </div>
 

@@ -79,8 +79,8 @@ export default function Booking() {
       <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full min-h-0">
         {/* Header */}
         <header className="mb-6 text-center shrink-0">
-          <h1 className="text-2xl sm:text-3xl text-purplecolor font-bold">
-            <span className="border-t border-b border-gray-300 px-4 sm:px-6">
+          <h1 className="text-2xl sm:text-3xl text-[#55203d] font-display font-bold">
+            <span className="border-t border-b border-gray-300 py-2 px-4 sm:px-6">
               Book Your Hair Appointment
             </span>
           </h1>
@@ -91,7 +91,7 @@ export default function Booking() {
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
               onClick={() => setShowInfo((s) => !s)}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-purplecolor/30 text-purplecolor text-sm font-semibold shadow hover:bg-purplecolor/5"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-[#55203d]/30 text-[#55203d] text-sm font-semibold font-display shadow hover:bg-[#55203d]/5"
               aria-expanded={showInfo}
               aria-controls="booking-info"
             >
@@ -120,7 +120,7 @@ export default function Booking() {
             , our goal is healthy, beautiful hair that fits your lifestyle.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
             How Online Booking Works
           </h2>
           <p className="mt-1">
@@ -129,7 +129,7 @@ export default function Booking() {
             4) Add a few details. You’ll receive instant confirmation.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
             Pricing & Timing
           </h2>
           <p className="mt-1">
@@ -138,7 +138,7 @@ export default function Booking() {
             dark to blonde), mention it in notes so we can reserve enough time.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
             Policies
           </h2>
           <p className="mt-1">
@@ -147,7 +147,7 @@ export default function Booking() {
             <strong>778-513-9006</strong> and we’ll do our best to help.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor mt-4">
+          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
             Location
           </h2>
           <p className="mt-1">
@@ -191,14 +191,14 @@ export default function Booking() {
 
           {/* RIGHT: Summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
-            <h4 className="font-bold text-xl text-purplecolor mb-1">
+            <h4 className="font-bold text-xl font-display text-[#55203d] mb-1">
               Beauty Shohre Studio
             </h4>
             <p className="text-sm text-gray-500 mb-4">
               3939 Hastings Street #105, Burnaby V5C 2H8
             </p>
 
-            <p className="text-sm font-semibold mb-2">Selected Services:</p>
+            <p className="text-med font-bold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (
               <p className="text-sm text-gray-400 italic">No services selected</p>
             ) : (
@@ -216,12 +216,12 @@ export default function Booking() {
 
             <hr className="my-4 border-pink-100" />
 
-            <div className="text-lg font-semibold text-purplecolor">
-              <div className="flex justify-between mb-1">
+            <div className="text-lg font-semibold text-[#55203d]">
+              <div className="flex font-display justify-between mb-1">
                 <span>Total</span>
                 <span>{selection.total > 0 ? `+$${selection.total}` : `$0`}</span>
               </div>
-              <p className="text-sm italic text-gray-400 mt-2 leading-tight">
+              <p className="text-sm italic text-[#55203d] mt-2 leading-tight">
                 * Final pricing depends on hair length, volume, and thickness.
               </p>
             </div>
@@ -229,8 +229,8 @@ export default function Booking() {
             <button
               className={`mt-6 w-full py-3 rounded-full text-white font-bold transition ${
                 selection.selected.length === 0
-                  ? "bg-purplecolor/20 cursor-not-allowed"
-                  : "bg-purplecolor hover:brightness-110"
+                  ? "bg-[#55203d]/20 cursor-not-allowed"
+                  : "bg-[#55203d] hover:brightness-110"
               }`}
               disabled={selection.selected.length === 0}
               onClick={() => setShowDateTime(true)}
@@ -245,7 +245,7 @@ export default function Booking() {
       {showFinalPopup && bookingData && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-md space-y-4">
-            <h3 className="text-xl font-semibold text-purplecolor">
+            <h3 className="text-xl font-semibold text-[#55203d]">
               Booking Confirmed ✅
             </h3>
 
@@ -281,7 +281,7 @@ export default function Booking() {
                 setBookingTime(null);
                 setSelection({ selected: [], total: 0 });
               }}
-              className="mt-2 px-5 py-2 bg-purplecolor text-white rounded-lg shadow hover:brightness-110"
+              className="mt-2 px-5 py-2 bg-[#55203d] text-white rounded-lg shadow hover:brightness-110"
             >
               Close
             </button>
