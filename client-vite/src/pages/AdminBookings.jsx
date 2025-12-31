@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 const ADMIN_KEY_STORAGE = "beautyshohre_admin_key";
-const API_BASE = "https://api.beautyshohrestudio.ca/api/bookings"; // change to /api/admin/bookings if that's your real admin route
+const API_BASE = "https://api.beautyshohrestudio.ca/api/admin/bookings";
+
 const SHOP_TZ = "America/Vancouver";
 
 function getAdminKey() {
