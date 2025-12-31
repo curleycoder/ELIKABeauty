@@ -14,15 +14,28 @@ function getDurationStats(selected) {
   return { total, avg };
 }
 
+const STEPS = [
+  { key: "services", title: "Choose services" },
+  { key: "datetime", title: "Pick a time" },
+  { key: "details", title: "Your details" },
+];
+
 export default function Booking() {
   const [selection, setSelection] = useState({ selected: [], total: 0 });
-  const [showDateTime, setShowDateTime] = useState(false);
-  const [showQuestions, setShowQuestions] = useState(false);
+
+  // ✅ Stepper (replaces showDateTime/showQuestions)
+  const [step, setStep] = useState(0);
+
   const [bookingTime, setBookingTime] = useState(null);
+
   const [showFinalPopup, setShowFinalPopup] = useState(false);
   const [bookingData, setBookingData] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+
+  // Used to trigger QuestionsForm submission from the bottom CTA (no ref hacks)
+  const [submitTick, setSubmitTick] = useState(0);
 
   useEffect(() => {
     document.title =
@@ -51,7 +64,6 @@ export default function Booking() {
   const bufferMinutes = useMemo(() => {
     if (!selection.selected.length) return 0;
 
-    // if ANY selected service requires buffer -> buffer = 15
     const needsBuffer = selection.selected.some(
       (s) => !NO_BUFFER_SERVICE_NAMES.has(String(s?.name || "").trim())
     );
@@ -61,8 +73,31 @@ export default function Booking() {
 
   const totalBlockedMinutes = durationStats.total + bufferMinutes;
 
+  const canContinue = useMemo(() => {
+    if (step === 0) return selection.selected.length > 0;
+    if (step === 1) return !!bookingTime;
+    if (step === 2) return true;
+    return false;
+  }, [step, selection.selected.length, bookingTime]);
+
+  const goBack = () => setStep((s) => Math.max(0, s - 1));
+  const goNext = () => setStep((s) => Math.min(STEPS.length - 1, s + 1));
+
+  // If they change services after picking a time, time might no longer fit -> reset
+  useEffect(() => {
+    if (step > 0) setBookingTime(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selection.selected]);
+
+  // Scroll to top on step change (feels premium)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
+
+  const progressPct = ((step + 1) / STEPS.length) * 100;
+
   return (
-    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa] pb-10">
+    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa]">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
@@ -75,10 +110,56 @@ export default function Booking() {
         aria-hidden="true"
       />
 
+      {/* ✅ Sticky stepper header (Apple vibe) */}
+      <div className="sticky top-0 z-30 bg-[#fff8fa]/90 backdrop-blur border-b border-[#55203d]/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={goBack}
+              disabled={step === 0}
+              className={`text-sm font-semibold font-display ${
+                step === 0 ? "opacity-30 cursor-not-allowed" : "text-[#55203d]"
+              }`}
+            >
+              Back
+            </button>
+
+            <div className="text-center">
+              <div className="text-xs text-gray-500">
+                Step {step + 1} of {STEPS.length}
+              </div>
+              <h1 className="text-lg sm:text-xl font-display font-bold text-[#55203d]">
+                {STEPS[step].title}
+              </h1>
+            </div>
+
+            <button
+              onClick={() => {
+                // reset everything
+                setStep(0);
+                setBookingTime(null);
+                setSelection({ selected: [], total: 0 });
+                setShowInfo(false);
+              }}
+              className="text-sm font-semibold font-display text-[#55203d]/70 hover:text-[#55203d]"
+            >
+              Reset
+            </button>
+          </div>
+
+          <div className="mt-3 h-1.5 bg-black/5 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#55203d] transition-all duration-300"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Foreground */}
-      <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full min-h-0">
-        {/* Header */}
-        <header className="mb-6 text-center shrink-0">
+      <div className="relative z-10 px-4 sm:px-6 py-8 max-w-6xl mx-auto">
+        {/* Header (kept, but not huge) */}
+        <header className="mb-6 text-center">
           <h2 className="text-2xl sm:text-3xl text-[#55203d] font-display font-bold">
             <span className="border-t border-b border-gray-300 py-2 px-4 sm:px-6">
               Book Your Hair Appointment
@@ -100,10 +181,10 @@ export default function Booking() {
           </div>
         </header>
 
-        {/* Optional info (this can be long, so it must be able to shrink) */}
+        {/* Optional info */}
         <section
           id="booking-info"
-          className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 shrink-0 ${
+          className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 ${
             showInfo
               ? "p-5 sm:p-7 mb-6 opacity-100 max-h-[2000px]"
               : "p-0 mb-2 opacity-0 max-h-0 overflow-hidden"
@@ -119,7 +200,6 @@ export default function Booking() {
             </em>
             , our goal is healthy, beautiful hair that fits your lifestyle.
           </p>
-
           <h2 className="text-xl font-semibold text-[#55203d] mt-4">
             How Online Booking Works
           </h2>
@@ -128,69 +208,44 @@ export default function Booking() {
             <strong>time needed</strong>. 3) Pick a <strong>date & time</strong>.
             4) Add a few details. You’ll receive instant confirmation.
           </p>
-
-          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
-            Pricing & Timing
-          </h2>
-          <p className="mt-1">
-            Prices are starting points and may vary with{" "}
-            <em>hair length, volume, thickness</em>. For big color changes (e.g.,
-            dark to blonde), mention it in notes so we can reserve enough time.
-          </p>
-
-          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
-            Policies
-          </h2>
-          <p className="mt-1">
-            Please give <strong>24 hours’ notice</strong> for
-            cancellations/rescheduling. Running late? Text/call{" "}
-            <strong>778-513-9006</strong> and we’ll do our best to help.
-          </p>
-
-          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
-            Location
-          </h2>
-          <p className="mt-1">
-            <strong>3939 Hastings Street #105, Burnaby V5C 2H8</strong>
-          </p>
         </section>
 
         {/* Main row */}
-        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0 overflow-hidden">
-          {/* LEFT: single scroll container */}
-          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain [webkit-overflow-scrolling:touch] pr-1">
-              {!showDateTime ? (
-                <BookingForm
-                  onSelectionChange={setSelection}
-                  averageDuration={durationStats.avg}
-                  onContinue={() => setShowDateTime(true)}
-                />
-              ) : !showQuestions ? (
-                <DateTimePicker
-                  duration={totalBlockedMinutes}
-                  onSelect={(value) => {
-                    setBookingTime(value);
-                    setShowQuestions(true);
-                  }}
-                />
-              ) : (
-                <QuestionsForm
-                  selection={selection}
-                  bookingTime={bookingTime}
-                  onSubmit={(formData) => {
-                    setBookingData(formData);
-                    setShowFinalPopup(true);
-                  }}
-                  setLoading={setLoading}
-                  loading={loading}
-                />
-              )}
-            </div>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* LEFT: step content (NO internal scroll!) */}
+          <div className="flex-1">
+            {step === 0 && (
+              <BookingForm
+                onSelectionChange={setSelection}
+                averageDuration={durationStats.avg}
+                // ❌ onContinue removed; stepper owns navigation
+              />
+            )}
+
+            {step === 1 && (
+              <DateTimePicker
+                duration={totalBlockedMinutes}
+                onSelect={(value) => setBookingTime(value)}
+              />
+            )}
+
+            {step === 2 && (
+              <QuestionsForm
+                selection={selection}
+                bookingTime={bookingTime}
+                onSubmit={(formData) => {
+                  setBookingData(formData);
+                  setShowFinalPopup(true);
+                }}
+                setLoading={setLoading}
+                loading={loading}
+                submitSignal={submitTick} // ✅ add this prop in QuestionsForm
+              />
+            )}
           </div>
 
-          {/* RIGHT: Summary */}
-          <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-24">
+          {/* RIGHT: Summary (desktop only, sticky) */}
+          <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-28">
             <h4 className="font-bold text-xl font-display text-[#55203d] mb-1">
               Beauty Shohre Studio
             </h4>
@@ -213,6 +268,10 @@ export default function Booking() {
               <span>Time on Service</span>
               <span>{durationStats.avg} min</span>
             </div>
+            <div className="flex justify-between text-sm text-gray-500 mt-1">
+              <span>Buffer</span>
+              <span>{bufferMinutes} min</span>
+            </div>
 
             <hr className="my-4 border-pink-100" />
 
@@ -225,19 +284,38 @@ export default function Booking() {
                 * Final pricing depends on hair length, volume, and thickness.
               </p>
             </div>
-
-            <button
-              className={`mt-6 w-full py-3 rounded-full text-white font-display font-bold transition ${
-                selection.selected.length === 0
-                  ? "bg-[#55203d]/20 cursor-not-allowed"
-                  : "bg-[#55203d] hover:brightness-110"
-              }`}
-              disabled={selection.selected.length === 0}
-              onClick={() => setShowDateTime(true)}
-            >
-              Continue
-            </button>
           </div>
+        </div>
+      </div>
+
+      {/* ✅ Sticky bottom action bar (ONE CTA) */}
+      <div className="sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-sm font-bold text-[#55203d]">
+              {selection.selected.length} service(s) • ${selection.total}
+            </div>
+            <div className="text-xs text-gray-500">
+              Est. {totalBlockedMinutes} min
+              {bookingTime ? " • time selected" : ""}
+            </div>
+          </div>
+
+          <button
+            disabled={!canContinue || loading}
+            onClick={() => {
+              if (step < 2) return goNext();
+              // step === 2 => submit QuestionsForm
+              setSubmitTick((t) => t + 1);
+            }}
+            className={`px-5 py-2.5 rounded-full font-bold text-white transition whitespace-nowrap ${
+              !canContinue || loading
+                ? "bg-[#55203d]/25 cursor-not-allowed"
+                : "bg-[#55203d] hover:brightness-110"
+            }`}
+          >
+            {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
+          </button>
         </div>
       </div>
 
@@ -259,8 +337,7 @@ export default function Booking() {
               <strong>Services:</strong>{" "}
               {bookingData.services.map((s) => s.name).join(", ")}
               <br />
-              <strong>Date:</strong>{" "}
-              {format(parseISO(bookingData.date), "PPP")}
+              <strong>Date:</strong> {format(parseISO(bookingData.date), "PPP")}
               <br />
               <strong>Time:</strong> {bookingData.time}
             </p>
@@ -275,11 +352,11 @@ export default function Booking() {
             <button
               onClick={() => {
                 setShowFinalPopup(false);
-                setShowQuestions(false);
-                setShowDateTime(false);
                 setBookingData(null);
                 setBookingTime(null);
                 setSelection({ selected: [], total: 0 });
+                setStep(0);
+                setShowInfo(false);
               }}
               className="mt-2 px-5 py-2 font-display bg-[#55203d] text-white rounded-lg shadow hover:brightness-110"
             >

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
 const baseURL =
-   import.meta.env.VITE_API_URL || "https://api.beautyshohrestudio.ca";
+  import.meta.env.VITE_API_URL || "https://api.beautyshohrestudio.ca";
 
 export default function QuestionsForm({
   selection,
@@ -10,7 +10,10 @@ export default function QuestionsForm({
   onSubmit,
   setLoading,
   loading,
+  submitSignal, // ✅ NEW: stepper Confirm triggers this
 }) {
+  const formRef = useRef(null);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -22,6 +25,15 @@ export default function QuestionsForm({
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  // ✅ Stepper Confirm -> triggers native form submission
+  useEffect(() => {
+    if (!submitSignal) return;
+    if (loading) return;
+
+    // Native HTML validation + submit event
+    formRef.current?.requestSubmit?.();
+  }, [submitSignal, loading]);
 
   // Reads server error responses safely (json OR text)
   const readResponseBody = async (res) => {
@@ -44,6 +56,7 @@ export default function QuestionsForm({
   const assertOk = async (res, label) => {
     if (res.ok) return;
     const body = await readResponseBody(res);
+
     console.error(`❌ ${label} FAILED`, {
       url: res.url,
       status: res.status,
@@ -61,6 +74,7 @@ export default function QuestionsForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return; // ✅ guard against double submits
     setLoading(true);
 
     try {
@@ -79,8 +93,8 @@ export default function QuestionsForm({
         phone: form.phone.trim(),
         referredBy: form.referredBy.trim(),
         services: selection.selected.map((s) => s._id),
-        date: bookingTime.date, // keep same shape backend expects
-        time: bookingTime.time, // "h:mm a" e.g. "3:00 PM"
+        date: bookingTime.date,
+        time: bookingTime.time,
         note: (form.note || "").trim(),
       };
 
@@ -138,7 +152,6 @@ export default function QuestionsForm({
         time: bookingTime.time,
       });
 
-      // Optional: warn about email only (don’t scare them with “failed booking”)
       if (!emailOk) {
         alert(
           "✅ Booking confirmed. ⚠️ Email didn’t send right now. If you don’t receive it, we’ll still have your appointment saved."
@@ -146,7 +159,9 @@ export default function QuestionsForm({
       }
     } catch (error) {
       console.error("❌ Error submitting booking:", error);
-      alert(`❌ ${error.message || "Failed to complete booking. Please try again."}`);
+      alert(
+        `❌ ${error.message || "Failed to complete booking. Please try again."}`
+      );
     } finally {
       setLoading(false);
     }
@@ -154,13 +169,17 @@ export default function QuestionsForm({
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
-      className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl overflow-y-auto text-purplecolor w-full max-w-2xl mx-auto"
+      // ❌ removed overflow-y-auto (nested scroll killer)
+      className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl text-purplecolor w-full max-w-2xl mx-auto"
     >
       <h2 className="text-2xl font-display font-bold mb-2">Your Details</h2>
 
       <div>
-        <label className="block text-md font-display font-medium mb-1">Full Name *</label>
+        <label className="block text-md font-display font-medium mb-1">
+          Full Name *
+        </label>
         <input
           name="name"
           value={form.name}
@@ -173,7 +192,9 @@ export default function QuestionsForm({
       </div>
 
       <div>
-        <label className="block text-md font-display font-medium mb-1">Email Address *</label>
+        <label className="block text-md font-display font-medium mb-1">
+          Email Address *
+        </label>
         <input
           type="email"
           name="email"
@@ -185,11 +206,12 @@ export default function QuestionsForm({
           placeholder="you@example.com"
           className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
         />
-
       </div>
 
       <div>
-        <label className="block text-md font-display font-medium mb-1">Phone Number *</label>
+        <label className="block text-md font-display font-medium mb-1">
+          Phone Number *
+        </label>
         <input
           type="tel"
           name="phone"
@@ -201,13 +223,16 @@ export default function QuestionsForm({
           placeholder="e.g. 604-555-1234"
           className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
         />
-
       </div>
 
-      <h2 className="text-2xl font-bold font-display pt-6">Additional Questions</h2>
+      <h2 className="text-2xl font-bold font-display pt-6">
+        Additional Questions
+      </h2>
 
       <div>
-        <label className="block text-md font-display font-medium mb-2">Did someone refer you?</label>
+        <label className="block text-md font-display font-medium mb-2">
+          Did someone refer you?
+        </label>
         <input
           type="text"
           name="referredBy"
@@ -219,7 +244,9 @@ export default function QuestionsForm({
       </div>
 
       <div>
-        <label className="block text-md font-display font-medium mb-2">Note (optional)</label>
+        <label className="block text-md font-display font-medium mb-2">
+          Note (optional)
+        </label>
         <textarea
           name="note"
           value={form.note}
@@ -229,6 +256,8 @@ export default function QuestionsForm({
         />
       </div>
 
+      {/* Optional: keep this button for accessibility / keyboard users.
+          The stepper Confirm will also submit via requestSubmit(). */}
       <button
         type="submit"
         disabled={loading}

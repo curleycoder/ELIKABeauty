@@ -55,18 +55,13 @@ const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle })
   );
 });
 
-export default function BookingForm({ onSelectionChange, averageDuration, onContinue }) {
+export default function BookingForm({ onSelectionChange }) {
   const [selected, setSelected] = useState([]);
   const [activeTab, setActiveTab] = useState("Hair");
   const [conflictWarning, setConflictWarning] = useState(false);
   const [services, setServices] = useState([]);
 
-  // Mobile sheet
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const sheetRef = useRef(null);
-
-  const baseURL =
-    import.meta.env.VITE_API_URL || "https://api.beautyshohrestudio.ca";
+  const baseURL = import.meta.env.VITE_API_URL || "https://api.beautyshohrestudio.ca";
 
   // Fetch services once
   useEffect(() => {
@@ -119,30 +114,26 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
     setConflictWarning(hasKeratin && hasConflict);
   }, [selected]);
 
-  // Auto-close sheet if empty
+  // When switching tabs, scroll to top so it feels instant + clean
+  const listTopRef = useRef(null);
   useEffect(() => {
-    if (selected.length === 0) setSheetOpen(false);
-  }, [selected.length]);
+    listTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [activeTab]);
 
   return (
-    <div
-      className="
-        bg-white/60 backdrop-blur-md rounded-[30px] shadow-2xl
-        max-w-2xl w-full mx-auto
-        flex flex-col
-        max-h-[80dvh]
-      "
-    >
-      {/* Header (fixed, like DateTimePicker) */}
+    <div className="bg-white/60 backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto">
+      {/* Header */}
       <div className="p-6 sm:p-8 pb-4 border-b border-purplecolor/10">
         <div className="text-center">
-          <h2 className="text-xl sm:text-2xl font-display font-bold text-[#55203d]">Services</h2>
+          <h2 className="text-xl sm:text-2xl font-display font-bold text-[#55203d]">
+            Services
+          </h2>
           <p className="text-sm text-gray-500 mt-1">
             Select your service(s). You can combine them.
           </p>
         </div>
 
-        {/* Tabs (same “pill” style) */}
+        {/* Tabs */}
         <div className="mt-4 flex font-display font-bold flex-wrap gap-2 justify-center">
           {TABS.map((tab) => (
             <button
@@ -168,10 +159,49 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
             </div>
           </div>
         )}
+
+        {/* Compact selected “chips” row (optional, premium, no sheet) */}
+        {selected.length > 0 && (
+          <div className="mt-4 rounded-2xl border border-purplecolor/10 bg-white/70 p-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-sm font-semibold text-purplecolor">
+                {selected.length} selected • ${total}
+              </div>
+              <button
+                className="text-xs font-bold text-purplecolor underline underline-offset-2"
+                onClick={() => setSelected([])}
+                type="button"
+              >
+                Clear
+              </button>
+            </div>
+
+            <div className="mt-2 flex flex-wrap gap-2">
+              {selected.slice(0, 6).map((s) => (
+                <button
+                  key={s._id}
+                  type="button"
+                  onClick={() => handleToggle(s)}
+                  className="px-3 py-1 rounded-full text-xs bg-purplecolor/10 text-purplecolor border border-purplecolor/15 hover:bg-purplecolor/15"
+                  aria-label={`Remove ${s.name}`}
+                >
+                  {s.name} ✕
+                </button>
+              ))}
+              {selected.length > 6 && (
+                <div className="px-3 py-1 rounded-full text-xs bg-black/5 text-gray-600">
+                  +{selected.length - 6} more
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Scroll body (exact pattern as DateTimePicker) */}
-      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 sm:px-8 py-5">
+      {/* Body (NO internal scroll) */}
+      <div className="px-6 sm:px-8 py-5">
+        <div ref={listTopRef} />
+
         {filteredServices.length === 0 ? (
           <div className="text-center text-gray-500 py-10">
             No services in this category.
@@ -189,110 +219,6 @@ export default function BookingForm({ onSelectionChange, averageDuration, onCont
           </div>
         )}
       </div>
-
-      {/* Desktop: NO extra footer — use the right-side summary column */}
-      {/* Mobile: sticky actions (because right-side summary is hidden) */}
-      <div className="sm:hidden border-t border-purplecolor/10 bg-white/90 backdrop-blur px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="text-purplecolor">
-            <div className="font-bold leading-tight">
-              {selected.length || 0} selected • ${total}
-            </div>
-            <div className="text-xs text-gray-500">{averageDuration} min est.</div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              disabled={selected.length === 0}
-              onClick={() => setSheetOpen(true)}
-              className={[
-                "px-4 py-2 rounded-full font-semibold border transition",
-                selected.length === 0
-                  ? "border-purplecolor/15 text-purplecolor/40"
-                  : "border-purplecolor/30 text-purplecolor bg-white",
-              ].join(" ")}
-            >
-              View
-            </button>
-
-            <button
-              disabled={selected.length === 0}
-              onClick={() => onContinue?.()}
-              className={[
-                "px-4 py-2 rounded-full font-bold transition",
-                selected.length === 0
-                  ? "bg-purplecolor/20 text-white cursor-not-allowed"
-                  : "bg-purplecolor text-white hover:brightness-110",
-              ].join(" ")}
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile bottom sheet */}
-      {sheetOpen && selected.length > 0 && (
-        <div className="sm:hidden fixed inset-0 z-[9999]">
-          <button
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setSheetOpen(false)}
-            aria-label="Close"
-          />
-          <div
-            ref={sheetRef}
-            className="
-              absolute bottom-0 left-0 right-0
-              bg-white rounded-t-[28px] shadow-2xl
-              p-5
-              max-h-[70dvh] overflow-y-auto
-            "
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-purplecolor">Your Selection</h3>
-              <button
-                onClick={() => setSheetOpen(false)}
-                className="px-3 py-1 rounded-full border border-purplecolor/20 text-purplecolor font-semibold"
-              >
-                Close
-              </button>
-            </div>
-
-            <div className="mt-4 space-y-2">
-              {selected.map((s) => (
-                <div key={s._id} className="flex justify-between text-sm">
-                  <span className="text-gray-800">{s.name}</span>
-                  <span className="text-gray-700 font-semibold">${s.price}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 rounded-2xl border border-purplecolor/10 bg-purplecolor/5 p-4">
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Time on Service</span>
-                <span className="font-semibold">{averageDuration} min</span>
-              </div>
-              <div className="flex justify-between mt-2 text-purplecolor font-bold text-lg">
-                <span>Total</span>
-                <span>${total}</span>
-              </div>
-              <p className="text-xs italic text-gray-400 mt-2">
-                * Final pricing depends on hair length, volume, and thickness.
-              </p>
-
-              <button
-                className="mt-4 w-full py-3 rounded-full bg-purplecolor text-white font-bold hover:brightness-110 transition"
-                onClick={() => {
-                  setSheetOpen(false);
-                  onContinue?.();
-                }}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
