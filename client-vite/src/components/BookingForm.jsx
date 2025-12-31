@@ -14,7 +14,7 @@ const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle })
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="font-semibold text-[16px] sm:text-lg text-purplecolor">
+          <h3 className="font-display font-semibold text-[17px] sm:text-lg tracking-tight text-purplecolor">
             {s.name}
           </h3>
 
