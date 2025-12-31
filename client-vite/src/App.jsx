@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
 import ChatWidget from "./components/ChatWidget.jsx";
@@ -16,14 +16,18 @@ import AboutMe from "./components/AboutMe.jsx";
 import AdminBookings from "./pages/AdminBookings.jsx";
 import Instagram from "./components/Instagram.jsx";
 
-
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export default function App() {
+  const { pathname } = useLocation();
+
+  // ✅ hide chat widget on booking flow (add more paths if needed)
+  const hideChatWidget = pathname.startsWith("/booking");
+
   return (
     <>
       <Navbar />
-      <ChatWidget />
+      {!hideChatWidget && <ChatWidget />}
       <ScrollToTop />
 
       <Routes>
@@ -36,7 +40,6 @@ export default function App() {
         <Route path="/aboutme" element={<AboutMe />} />
         <Route path="/admin-bookings-secret" element={<AdminBookings />} />
         <Route path="/instagram" element={<Instagram />} />
-
       </Routes>
 
       <SpeedInsights />

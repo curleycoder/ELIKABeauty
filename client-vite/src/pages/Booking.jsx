@@ -217,8 +217,6 @@ export default function Booking() {
             {step === 0 && (
               <BookingForm
                 onSelectionChange={setSelection}
-                averageDuration={durationStats.avg}
-                // ❌ onContinue removed; stepper owns navigation
               />
             )}
 
@@ -289,7 +287,7 @@ export default function Booking() {
       </div>
 
       {/* ✅ Sticky bottom action bar (ONE CTA) */}
-      <div className="sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
+      <div className="sm:hidden sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <div className="min-w-0">
             <div className="text-sm font-bold text-[#55203d]">
