@@ -79,11 +79,11 @@ export default function Booking() {
       <div className="relative z-10 px-4 sm:px-6 py-10 max-w-6xl mx-auto flex flex-col h-full min-h-0">
         {/* Header */}
         <header className="mb-6 text-center shrink-0">
-          <h1 className="text-2xl sm:text-3xl text-[#55203d] font-display font-bold">
+          <h2 className="text-2xl sm:text-3xl text-[#55203d] font-display font-bold">
             <span className="border-t border-b border-gray-300 py-2 px-4 sm:px-6">
               Book Your Hair Appointment
             </span>
-          </h1>
+          </h2>
           <p className="text-gray-600 text-sm mt-2">
             3939 Hastings Street #105, Burnaby • 30+ years experience
           </p>

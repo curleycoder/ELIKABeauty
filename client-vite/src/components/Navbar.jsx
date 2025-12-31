@@ -65,9 +65,10 @@ export default function Navbar() {
             className="h-12 sm:h-16 w-auto cursor-pointer"
             onClick={() => navigate("/")}
           />
-          <h1 className="text-lg sm:text-xl font-bold">
+          <span className="text-lg sm:text-xl font-bold">
             Beauty Shohre Studio
-          </h1>
+          </span>
+
         </div>
 
         <div className="sm:hidden">

@@ -55,11 +55,11 @@ export default function Product() {
     <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda mb-16">
       {/* Intro header (short & elegant) */}
       <div className="text-center mb-6 max-w-3xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl text-purplecolor mb-2">
+        <h2 className="text-2xl sm:text-3xl text-purplecolor mb-2">
           <span className="border-t border-b font-display py-2 border-gray-300 px-4 sm:px-6">
             Professional Hair Care
           </span>
-        </h1>
+        </h2>
         <p className="text-sm text-gray-600">
           Curated, stylist-approved products. Online shop launching soon.
         </p>

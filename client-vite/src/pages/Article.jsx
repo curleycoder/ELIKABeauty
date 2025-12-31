@@ -119,9 +119,9 @@ export default function ArticlePage() {
           ← Back to articles
         </Link>
 
-        <h1 className="mt-4 text-3xl font-bold text-purplecolor">
+        <h2 className="mt-4 text-3xl font-bold text-purplecolor">
           {article.title}
-        </h1>
+        </h2>
 
         {/* THIS is the hero image – same data as card */}
         <img
