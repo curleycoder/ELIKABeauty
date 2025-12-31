@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 const ADMIN_KEY_STORAGE = "beautyshohre_admin_key";
-const API_BASE = "https://api.beautyshohrestudio.ca/api/bookings"; // you said this is what you're using
+const API_BASE = "https://api.beautyshohrestudio.ca/api/bookings"; // change to /api/admin/bookings if that's your real admin route
 const SHOP_TZ = "America/Vancouver";
 
 function getAdminKey() {
@@ -23,20 +23,26 @@ async function parseError(res) {
   }
 }
 
-// Best-effort booking "start" timestamp for sorting/grouping
+// get best sortable time for booking
 function getStartMs(b) {
   if (b?.start) {
-    const d = new Date(b.start);
-    const ms = d.getTime();
+    const ms = new Date(b.start).getTime();
     if (!Number.isNaN(ms)) return ms;
   }
-  // fallback: date only (midnight UTC-ish) — not perfect, but keeps UI stable
   if (b?.date) {
-    const d = new Date(b.date);
-    const ms = d.getTime();
+    const ms = new Date(b.date).getTime();
     if (!Number.isNaN(ms)) return ms;
   }
   return Number.POSITIVE_INFINITY;
+}
+
+function ymdInVancouver(date = new Date()) {
+  return date.toLocaleDateString("en-CA", { timeZone: SHOP_TZ }); // YYYY-MM-DD
+}
+
+function startOfTodayMsVancouver() {
+  // Build a Date for local midnight based on Vancouver YMD (best-effort UI filtering)
+  return new Date(`${ymdInVancouver()}T00:00:00`).getTime();
 }
 
 function formatDateHeader(ms) {
@@ -50,19 +56,17 @@ function formatDateHeader(ms) {
 }
 
 function formatTime(b) {
-  const start = b?.start ? new Date(b.start) : null;
-  if (start && !Number.isNaN(start.getTime())) {
-    return start.toLocaleTimeString("en-US", {
-      timeZone: SHOP_TZ,
-      hour: "numeric",
-      minute: "2-digit",
-    });
+  if (b?.start) {
+    const d = new Date(b.start);
+    if (!Number.isNaN(d.getTime())) {
+      return d.toLocaleTimeString("en-US", {
+        timeZone: SHOP_TZ,
+        hour: "numeric",
+        minute: "2-digit",
+      });
+    }
   }
   return b?.time || "No time";
-}
-
-function formatContact(b) {
-  return `${b?.email || "No email"} • ${b?.phone || "No phone"}`;
 }
 
 function servicesText(b) {
@@ -73,17 +77,26 @@ function servicesText(b) {
   return names.length ? names.join(", ") : "No services";
 }
 
-// Vancouver "today start" and "tomorrow start" in user's browser, computed by locale string trick.
-// Good enough for UI filtering (backend should enforce the real rules anyway).
-function getTodayStartMsVancouver() {
-  const now = new Date();
-  const ymd = now.toLocaleDateString("en-CA", { timeZone: SHOP_TZ }); // YYYY-MM-DD
-  // create a Date at local midnight; this is approximate but consistent for filtering in UI
-  return new Date(`${ymd}T00:00:00`).getTime();
+function contactText(b) {
+  return `${b?.email || "No email"} • ${b?.phone || "No phone"}`;
+}
+
+function groupByDate(items) {
+  // items: [{ b, ms }]
+  const map = new Map();
+  for (const it of items) {
+    const key = formatDateHeader(it.ms);
+    if (!map.has(key)) map.set(key, { dateMs: it.ms, list: [] });
+    map.get(key).list.push(it);
+  }
+  return Array.from(map.entries())
+    .map(([dateLabel, v]) => ({ dateLabel, dateMs: v.dateMs, list: v.list }))
+    .sort((a, b) => a.dateMs - b.dateMs);
 }
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
+  const [tab, setTab] = useState("upcoming"); // upcoming | done | cancelled
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -102,7 +115,6 @@ export default function AdminBookings() {
       const res = await fetch(API_BASE, {
         headers: { "x-admin-key": adminKey },
       });
-
       if (!res.ok) throw new Error(await parseError(res));
 
       const data = await res.json();
@@ -138,9 +150,9 @@ export default function AdminBookings() {
         method: "DELETE",
         headers: { "x-admin-key": adminKey },
       });
-
       if (!res.ok) throw new Error(await parseError(res));
 
+      // mark cancelled locally (so it moves into Cancelled tab immediately)
       setBookings((prev) =>
         prev.map((b) =>
           b._id === id ? { ...b, status: "cancelled", cancelledAt: new Date().toISOString() } : b
@@ -157,46 +169,59 @@ export default function AdminBookings() {
     setErrorMsg("Admin key cleared. Refresh and re-enter it.");
   };
 
-  // ✅ FILTER: Today + Upcoming only, and group by date; cancelled separate inside each day
-  const grouped = useMemo(() => {
-    const todayStart = getTodayStartMsVancouver();
+  const { grouped, counts } = useMemo(() => {
+    const todayStart = startOfTodayMsVancouver();
 
-    // 1) filter today+upcoming based on start ms
-    const upcoming = bookings
+    const normalized = bookings
       .map((b) => ({ b, ms: getStartMs(b) }))
-      .filter((x) => x.ms !== Number.POSITIVE_INFINITY && x.ms >= todayStart);
+      .filter((x) => x.ms !== Number.POSITIVE_INFINITY);
 
-    // 2) sort by start time asc
-    upcoming.sort((a, b) => a.ms - b.ms);
+    const upcoming = normalized
+      .filter((x) => x.b?.status !== "cancelled" && x.ms >= todayStart)
+      .sort((a, b) => a.ms - b.ms);
 
-    // 3) group by date header (Vancouver)
-    const map = new Map(); // key: dateHeader, value: { dateMs, active:[], cancelled:[] }
-    for (const { b, ms } of upcoming) {
-      const key = formatDateHeader(ms);
-      if (!map.has(key)) map.set(key, { dateMs: ms, active: [], cancelled: [] });
+    const done = normalized
+      .filter((x) => x.b?.status !== "cancelled" && x.ms < todayStart)
+      .sort((a, b) => b.ms - a.ms); // newest done first
 
-      const bucket = map.get(key);
-      if (b?.status === "cancelled") bucket.cancelled.push({ b, ms });
-      else bucket.active.push({ b, ms });
-    }
+    const cancelled = normalized
+      .filter((x) => x.b?.status === "cancelled")
+      .sort((a, b) => b.ms - a.ms); // newest cancelled first
 
-    // 4) convert to array in date order
-    return Array.from(map.entries())
-      .map(([dateLabel, payload]) => ({
-        dateLabel,
-        dateMs: payload.dateMs,
-        active: payload.active,
-        cancelled: payload.cancelled,
-      }))
-      .sort((a, b) => a.dateMs - b.dateMs);
-  }, [bookings]);
+    const selected =
+      tab === "upcoming" ? upcoming : tab === "done" ? done : cancelled;
+
+    return {
+      grouped: groupByDate(selected),
+      counts: {
+        upcoming: upcoming.length,
+        done: done.length,
+        cancelled: cancelled.length,
+      },
+    };
+  }, [bookings, tab]);
 
   if (loading) return <p className="p-6">Loading bookings…</p>;
 
+  const TabButton = ({ id, label, count }) => {
+    const active = tab === id;
+    return (
+      <button
+        onClick={() => setTab(id)}
+        className={[
+          "px-3 py-2 rounded font-semibold",
+          active ? "bg-[#55203d] text-white" : "border text-[#55203d]",
+        ].join(" ")}
+      >
+        {label} ({count})
+      </button>
+    );
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-[#55203d]">Admin – Today / Upcoming</h1>
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <h1 className="text-2xl font-bold text-[#55203d]">Admin – Bookings</h1>
         <div className="flex gap-2">
           <button onClick={fetchBookings} className="px-3 py-2 rounded bg-[#55203d] text-white">
             Refresh
@@ -207,6 +232,12 @@ export default function AdminBookings() {
         </div>
       </div>
 
+      <div className="flex flex-wrap gap-2 mb-4">
+        <TabButton id="upcoming" label="Upcoming" count={counts.upcoming} />
+        <TabButton id="done" label="Done" count={counts.done} />
+        <TabButton id="cancelled" label="Cancelled" count={counts.cancelled} />
+      </div>
+
       {errorMsg && (
         <div className="mb-4 p-3 border border-red-200 bg-red-50 text-red-700 rounded">
           {errorMsg}
@@ -214,82 +245,57 @@ export default function AdminBookings() {
       )}
 
       {grouped.length === 0 ? (
-        <p className="text-gray-600">No upcoming bookings found.</p>
+        <p className="text-gray-600">No bookings in this tab.</p>
       ) : (
         <div className="space-y-6">
           {grouped.map((day) => (
             <div key={day.dateLabel} className="rounded border p-4">
               <div className="font-bold text-[#55203d] mb-3">📆 {day.dateLabel}</div>
 
-              {/* ACTIVE */}
-              {day.active.length > 0 && (
-                <div className="space-y-3">
-                  {day.active.map(({ b }) => (
-                    <div key={b._id} className="p-3 rounded border">
+              <div className="space-y-3">
+                {day.list.map(({ b }) => {
+                  const isCancelled = b?.status === "cancelled";
+                  return (
+                    <div
+                      key={b._id}
+                      className={[
+                        "p-3 rounded border",
+                        isCancelled ? "bg-red-50" : "bg-white",
+                      ].join(" ")}
+                    >
                       <div className="flex justify-between items-start gap-3">
                         <div>
                           <div className="font-semibold text-[#55203d]">
                             {b?.name?.trim() ? b.name : "No name"}
+                            {isCancelled && (
+                              <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>
+                            )}
                           </div>
-                          <div className="text-sm text-gray-700">{formatContact(b)}</div>
-                          <div className="text-sm text-gray-600 mt-1">
-                            ⏰ {formatTime(b)}
-                          </div>
-                          <div className="text-sm text-gray-600 mt-1">
-                            💇 {servicesText(b)}
-                          </div>
+
+                          <div className="text-sm text-gray-700">{contactText(b)}</div>
+
+                          <div className="text-sm text-gray-600 mt-1">⏰ {formatTime(b)}</div>
+
+                          <div className="text-sm text-gray-600 mt-1">💇 {servicesText(b)}</div>
                         </div>
 
                         <button
                           onClick={() => cancelBooking(b._id)}
-                          className="text-red-600 font-semibold"
+                          disabled={isCancelled || tab === "cancelled"}
+                          className={[
+                            "font-semibold",
+                            isCancelled || tab === "cancelled"
+                              ? "text-gray-400 cursor-not-allowed"
+                              : "text-red-600",
+                          ].join(" ")}
                         >
                           Cancel
                         </button>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-
-              {/* CANCELLED */}
-              {day.cancelled.length > 0 && (
-                <div className="mt-4">
-                  <div className="text-sm font-semibold text-red-700 mb-2">Cancelled</div>
-                  <div className="space-y-3">
-                    {day.cancelled.map(({ b }) => (
-                      <div key={b._id} className="p-3 rounded border bg-red-50">
-                        <div className="flex justify-between items-start gap-3">
-                          <div>
-                            <div className="font-semibold text-[#55203d]">
-                              {b?.name?.trim() ? b.name : "No name"}
-                              <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>
-                            </div>
-                            <div className="text-sm text-gray-700">{formatContact(b)}</div>
-                            <div className="text-sm text-gray-600 mt-1">
-                              ⏰ {formatTime(b)}
-                            </div>
-                            <div className="text-sm text-gray-600 mt-1">
-                              💇 {servicesText(b)}
-                            </div>
-                          </div>
-
-                          <button
-                            disabled
-                            className="text-gray-400 cursor-not-allowed font-semibold"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {day.active.length === 0 && day.cancelled.length === 0 && (
-                <p className="text-gray-600">No bookings.</p>
-              )}
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>
