@@ -19,7 +19,7 @@ export default function Gallery() {
   useEffect(() => {
     let mounted = true;
 
-    fetch("/api/gallery")
+    fetch(`${baseURL}/api/gallery`)
       .then((r) => r.json())
       .then((data) => {
         if (!mounted) return;

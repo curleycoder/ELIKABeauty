@@ -14,6 +14,8 @@ import ArticlesPage from "./pages/ArticlesPage.jsx";
 import Gallery from "./components/Gallery.jsx";
 import AboutMe from "./components/AboutMe.jsx";
 import AdminBookings from "./pages/AdminBookings.jsx";
+import Instagram from "./components/Instagram.jsx";
+
 
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -33,6 +35,8 @@ export default function App() {
         <Route path="/product" element={<Product />} />
         <Route path="/aboutme" element={<AboutMe />} />
         <Route path="/admin-bookings-secret" element={<AdminBookings />} />
+        <Route path="/instagram" element={<Instagram />} />
+
       </Routes>
 
       <SpeedInsights />
