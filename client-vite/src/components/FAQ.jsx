@@ -5,20 +5,20 @@ export default function FAQ() {
     {
       question: "How long should I wait after balayage before doing a keratin treatment?",
       answer:
-        "Ideally wait 10–14 days after balayage before a keratin treatment. This helps the color settle and reduces the chance of overlapping chemical stress on the hair.",
+        "Ideally wait 10–14 days after balayage before a keratin treatment. This helps the colour settle and reduces the chance of overlapping chemical stress on the hair.",
     },
     {
       question: "Can I go blonde if my hair was previously dyed black, red, or with henna?",
       answer:
-        "Sometimes, yes—but it depends on your hair history and current condition. Going blonde from dark dye or henna usually requires a color-correction plan and may take multiple sessions to keep hair healthy.",
+        "Sometimes, yes—but it depends on your hair history and current condition. Going blonde from dark dye or henna usually requires a colour-correction plan and may take multiple sessions to keep hair healthy.",
     },
     {
       question: "How do I maintain balayage or highlights between appointments?",
       answer:
-        "Use a color-safe shampoo, heat protection, and a weekly conditioning mask. Purple shampoo may help if you’re going lighter, and toner refreshes can keep the tone looking clean.",
+        "Use a colour-safe shampoo, heat protection, and a weekly conditioning mask. Purple shampoo may help if you’re going lighter, and toner refreshes can keep the tone looking clean.",
     },
     {
-      question: "How often should I come in for hair color maintenance?",
+      question: "How often should I come in for hair colour maintenance?",
       answer:
         "Most clients refresh every 6–10 weeks depending on the service. Balayage can last longer, while root coverage usually needs more frequent maintenance.",
     },
@@ -41,7 +41,7 @@ export default function FAQ() {
         </h2>
 
         <p className="text-gray-600 max-w-2xl mx-auto mb-10">
-          Quick answers to common questions about hair color, balayage, and treatments.
+          Quick answers to common questions about hair colour, balayage, and treatments.
         </p>
       </div>
 

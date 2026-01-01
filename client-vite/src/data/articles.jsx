@@ -31,29 +31,29 @@ const articles = [
       "Balayage can look stunning when done correctly, but brassiness can show up if maintenance isn’t right. Orange, yellow, or dull tones are common issues.",
       "1. Hard Water Causes Brassiness\nMinerals create orange tones. Use clarifying shampoo and filters.",
       "2. Heat Styling Fades Toner\nAlways use heat protectant.",
-      "3. Sun Exposure Oxidizes Color\nUse UV-protectant sprays.",
+      "3. Sun Exposure Oxidizes Colour\nUse UV-protectant sprays.",
       "4. Washing Too Often\nLimit to 2–3 washes per week.",
       "5. Toner Has Worn Off\nRefresh every 3–6 weeks.",
       "Final Thoughts\nWith proper toning and care, balayage stays bright and beautiful.",
     ],
   },
 
-  // ARTICLE 3 — Colored Hair Routine
+  // ARTICLE 3 — Coloured Hair Routine
   {
     id: 3,
-    slug: "best-hair-care-routine-for-colored-hair",
-    image: "/articles/colored-hair-routine.jpg",
-    title: "Best Hair Care Routine for Colored Hair",
+    slug: "best-hair-care-routine-for-coloured-hair",
+    image: "/articles/coloured-hair-routine.jpg",
+    title: "Best Hair Care Routine for Coloured Hair",
     intro:
-      "Colored hair needs extra love. Here’s the routine to keep it shiny and vibrant.",
+      "Coloured hair needs extra love. Here’s the routine to keep it shiny and vibrant.",
     text: [
-      "Colored hair requires more hydration and protection than natural hair. Following a proper routine keeps color fresh and prevents damage.",
-      "1. Use Sulfate-Free Shampoo\nSulfates fade color fast.",
+      "Coloured hair requires more hydration and protection than natural hair. Following a proper routine keeps colour fresh and prevents damage.",
+      "1. Use Sulfate-Free Shampoo\nSulfates fade colour fast.",
       "2. Wash Less Often\n2–3 times per week is ideal.",
       "3. Deep Condition Weekly\nUse masks with keratin and oils.",
-      "4. Heat Protect Every Time\nHeat damages color-treated hair.",
+      "4. Heat Protect Every Time\nHeat damages colour-treated hair.",
       "5. Gloss & Toner Refresh\nEvery 4–6 weeks.",
-      "Final Thoughts\nWith the right routine, your color stays vibrant and your hair stays healthy.",
+      "Final Thoughts\nWith the right routine, your colour stays vibrant and your hair stays healthy.",
     ],
   },
 ];

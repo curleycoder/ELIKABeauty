@@ -27,7 +27,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-4 text-gray-700 leading-relaxed">
-            Specializing in balayage, highlights, hair color, keratin treatments,
+            Specializing in balayage, highlights, hair colour, keratin treatments,
             and precision haircuts. Focused on healthy, natural-looking results
             delivered with experience and care.
           </p>

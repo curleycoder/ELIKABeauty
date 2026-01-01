@@ -92,7 +92,7 @@ export default function Product() {
         <div className="space-y-6 text-gray-700 leading-relaxed bg-white/70 rounded-2xl p-5 sm:p-7 shadow-sm border border-pink-100">
           <p>
             At <strong>Beauty Shohre Studio</strong> in North Burnaby, we hand-pick{" "}
-            <em>professional hair care</em> that keeps color vibrant, supports blonding
+            <em>professional hair care</em> that keeps colour vibrant, supports blonding
             services, and protects keratin results. Each item is stylist-tested and
             chosen for performance and hair health.
           </p>
@@ -105,8 +105,8 @@ export default function Product() {
           <h2 className="text-xl font-semibold text-purplecolor">Client Favorites</h2>
           <p>
             Our most-requested picks include <strong>Argan Oil</strong> for
-            dry hair, <strong>color safe shampoo and conditioner</strong> to keep your color lasting longer,
-            and <strong>deep moisture masks</strong> color-treated hair. Not sure
+            dry hair, <strong>colour safe shampoo and conditioner</strong> to keep your colour lasting longer,
+            and <strong>deep moisture masks</strong> colour-treated hair. Not sure
             what you need? Ask us at your appointment—we’ll match products to your hair.
           </p>
         </div>

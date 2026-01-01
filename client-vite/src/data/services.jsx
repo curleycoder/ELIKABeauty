@@ -1,17 +1,17 @@
 const services = [
-  { id: "balayage", name: "Balayage", price: 180, fromPrice: true, duration: 240, category: "Hair", description: "Natural hand-painted highlights. Extra charge for base color if needed" },
+  { id: "balayage", name: "Balayage", price: 180, fromPrice: true, duration: 240, category: "Hair", description: "Natural hand-painted highlights. Extra charge for base colour if needed" },
   { id: "hair-cut", name: "Hair Cut", price: 45, fromPrice: true, duration: 45, category: "Hair", description: "Professional haircut tailored to you." },
   { id: "keratin", name: "Keratin", price: 250, fromPrice: true, duration: 240, category: "Hair", description: "Smooth and straighten frizzy hair." },
-  { id: "highlight", name: "Highlight", price: 180, fromPrice: true, duration: 210, category: "Hair", description: "Lighter strands to add dimension. Extra charge for base color if needed" },
+  { id: "highlight", name: "Highlight", price: 180, fromPrice: true, duration: 210, category: "Hair", description: "Lighter strands to add dimension. Extra charge for base colour if needed" },
   { id: "root-colour", name: "Root Colour", price: 65, duration: 90, category: "Hair", description: "Touch up your hair roots." },
-  { id: "hair-color", name: "Hair Color", price: 120, fromPrice: true, duration: 120, category: "Hair", description: "All-over color for a new look." },
+  { id: "hair-colour", name: "Hair Colour", price: 120, fromPrice: true, duration: 120, category: "Hair", description: "All-over colour for a new look." },
   { id: "perms", name: "Perms", price: 120, duration: 180, category: "Hair", description: "Add curls or waves to your hair." },
 
   { id: "hair-wash", name: "Hair Wash", price: 10, duration: 15, category: "Add-ons", description: "Quick wash and cleanse." },
   { id: "hair-wash-style", name: "Hair Wash + Style", price: 45, duration: 45, category: "Add-ons", description: "Wash and blow-dry styling." },
 
   // ✅ FIXED CATEGORY: was "Add-ones" (typo) which breaks your filtering
-  { id: "base-color", name: "Base Color", price: 50, duration: 30, fromPrice: true, category: "Add-ons", description: "Add a base color to enhance your highlight or balayage. Great for full coverage or color correction." },
+  { id: "base-colour", name: "Base Colour", price: 50, duration: 30, fromPrice: true, category: "Add-ons", description: "Add a base colour to enhance your highlight or balayage. Great for full coverage or colour correction." },
 
   { id: "hair-styling", name: "Hair Styling", price: 35, duration: 45, category: "Hair", description: "Custom hairstyle for any event." },
 

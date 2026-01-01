@@ -42,7 +42,7 @@ export default function AboutMe() {
 
           <ul className="list-disc list-inside mb-4 space-y-1">
             <li>Balayage and dimensional highlights</li>
-            <li>Professional hair coloring and color correction</li>
+            <li>Professional hair colouring and colour correction</li>
             <li>Keratin and smoothing treatments</li>
             <li>Women’s haircuts and blowouts</li>
           </ul>
