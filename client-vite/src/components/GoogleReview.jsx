@@ -84,14 +84,21 @@ export default function GoogleReview() {
             <div
               ref={trackRef}
               className="
-                flex gap-6 overflow-x-auto overflow-y-hidden overscroll-x-contain scrollbar-hide
-                snap-x snap-mandatory snap-always
-                scroll-px-4
-                px-4
+                w-full
+                flex gap-6
+                overflow-x-auto overflow-y-hidden
+                touch-pan-x
+                overscroll-x-contain
+                snap-x snap-mandatory
+                scroll-px-4 px-4
               "
+              style={{
+                WebkitOverflowScrolling: "touch",
+              }}
               role="list"
               aria-label="Client reviews carousel"
             >
+
               {reviews.map((review, i) => {
                 const fullText = review.text || "";
                 const showReadMore = fullText.length > 180;

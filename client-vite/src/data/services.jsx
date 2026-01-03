@@ -18,7 +18,7 @@ const services = [
   { id: "makeup", name: "Makeup", price: 80, duration: 60, category: "Face", description: "Professional makeup application." },
   { id: "microblading", name: "Microblading", price: 300, duration: 120, category: "Face", description: "Semi-permanent eyebrow shaping, lip blush, eyeliner." },
   { id: "brow-threading", name: "Eyebrows Threading", price: 15, duration: 20, category: "Face", description: "Define your brows naturally." },
-  { id: "brow-tinting", name: "Eyebrows Tinting", price: 10, duration: 10, category: "Face", description: "Tint for bolder brows." },
+  { id: "brow-tinting", name: "Eyebrows Tinting", price: 17, duration: 10, category: "Face", description: "Tint for bolder brows." },
   { id: "full-threading", name: "Full Threading", price: 35, duration: 30, category: "Face", description: "Remove facial hair by threading + Eyebrow Threading." },
   { id: "facial", name: "Facial", price: 80, duration: 45, category: "Face", description: "Cleanse, exfoliate, and glow." },
 
