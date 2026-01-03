@@ -9,11 +9,11 @@ import Instagram from "../components/Instagram";
 export default function Home() {
   return (
     <>
-      {/* HERO (keep your booking overlay here) */}
+      {/* HERO */}
       <HeroSection />
 
-      {/* SEO INTRO (text only - no booking button here) */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pt-10">
+      {/* SEO INTRO */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pt-6 sm:pt-10">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs sm:text-sm tracking-widest uppercase text-gray-500">
             North Burnaby • Serving Metro Vancouver
@@ -27,28 +27,29 @@ export default function Home() {
           </h1>
 
           <p className="mt-4 text-gray-700 leading-relaxed">
-            Specializing in balayage, highlights, hair colour, keratin treatments,
-            and precision haircuts. Focused on healthy, natural-looking results
-            delivered with experience and care.
+            Specializing in balayage, highlights, hair colour, keratin treatments, and precision
+            haircuts. Focused on healthy, natural-looking results delivered with experience and care.
           </p>
 
-          <div className="mt-7 h-px w-24 mx-auto bg-gray-200" />
+          <div className="mt-6 sm:mt-7 h-px w-24 mx-auto bg-gray-200" />
         </div>
       </section>
 
-      {/* MAIN CONTENT (trust -> proof -> proof) */}
-      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 py-12 max-w-screen-xl mx-auto space-y-20">
+      {/* MAIN CONTENT */}
+      <main className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 space-y-12 sm:space-y-20">
         <AboutMe />
         <GoogleReview />
         <Gallery />
         <FAQ />
-      </div>
+      </main>
 
-      {/* INSPIRATION (heavy JS) */}
-      <Instagram />
+      {/* INSPIRATION */}
+      <section className="mt-10 sm:mt-16">
+        <Instagram />
+      </section>
 
-      {/* FINAL CTA (second booking - only here) */}
-      <section className="bg-[#f8f4f6] py-16 mt-10">
+      {/* FINAL CTA */}
+      <section className="bg-[#f8f4f6] py-12 sm:py-16 mt-10">
         <div className="max-w-3xl mx-auto text-center px-4">
           <h2 className="text-2xl sm:text-3xl font-display text-[#55203d]">
             Ready to Book Your Appointment?
