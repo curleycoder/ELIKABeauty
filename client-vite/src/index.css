@@ -9,7 +9,7 @@
 @tailwind utilities;
 
 html { scroll-behavior: smooth; }
-section[id] { scroll-margin-top: 72px; }
+section[id] { scroll-margin-top: 80px; }
 
 @keyframes fadeIn {
   from { opacity: 0; }

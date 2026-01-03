@@ -1,9 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 
-const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(
-  /\/$/,
-  ""
-);
+const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
@@ -18,6 +15,14 @@ export default function GoogleReview() {
 
   const trackRef = useRef(null);
 
+  // ✅ Drag state (forces horizontal scrolling even when Safari is stubborn)
+  const drag = useRef({
+    active: false,
+    startX: 0,
+    startScrollLeft: 0,
+    pointerId: null,
+  });
+
   // Fetch
   useEffect(() => {
     let alive = true;
@@ -27,7 +32,6 @@ export default function GoogleReview() {
         const r = await fetch(`${baseURL}/api/google/reviews`);
         const data = await r.json();
         if (!alive) return;
-
         setReviews(Array.isArray(data?.reviews) ? data.reviews : []);
       } catch (e) {
         console.error("❌ Failed to fetch reviews:", e);
@@ -41,7 +45,7 @@ export default function GoogleReview() {
     };
   }, []);
 
-  // Responsive visible count (updates on resize/orientation)
+  // Responsive visible count
   useEffect(() => {
     const calc = () => {
       const w = window.innerWidth;
@@ -62,16 +66,16 @@ export default function GoogleReview() {
     setExpanded((p) => ({ ...p, [i]: !p[i] }));
   }, []);
 
-  // Helper: get one card width (first child)
+  // Helper: get one card width (first card only)
   const getCardWidth = useCallback(() => {
     const el = trackRef.current;
     if (!el) return 0;
-    const first = el.querySelector("[data-card='1']");
+    const first = el.querySelector("[data-card='first']");
     if (!first) return 0;
     return first.getBoundingClientRect().width;
   }, []);
 
-  // Update active index on scroll (stable)
+  // Update active index on scroll
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
@@ -122,6 +126,44 @@ export default function GoogleReview() {
     return () => window.removeEventListener("keydown", onKey);
   }, [scrollByCards]);
 
+  // ✅ Pointer drag handlers (the bulletproof part)
+  const onPointerDown = (e) => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    // Only left click or touch/pen
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+
+    drag.current.active = true;
+    drag.current.startX = e.clientX;
+    drag.current.startScrollLeft = el.scrollLeft;
+    drag.current.pointerId = e.pointerId;
+
+    // Capture pointer so move continues even if finger leaves the element
+    el.setPointerCapture?.(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    const el = trackRef.current;
+    if (!el) return;
+    if (!drag.current.active) return;
+    if (drag.current.pointerId !== e.pointerId) return;
+
+    const dx = e.clientX - drag.current.startX;
+    el.scrollLeft = drag.current.startScrollLeft - dx;
+  };
+
+  const endDrag = (e) => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    if (drag.current.pointerId === e.pointerId) {
+      drag.current.active = false;
+      drag.current.pointerId = null;
+      el.releasePointerCapture?.(e.pointerId);
+    }
+  };
+
   return (
     <section className="bg-white px-3 py-4 sm:p-6 rounded-xl max-w-6xl mx-auto">
       <div className="text-center">
@@ -147,21 +189,23 @@ export default function GoogleReview() {
                 w-full flex gap-6
                 overflow-x-auto overflow-y-hidden
                 px-4
-                touch-pan-x
                 overscroll-x-contain
                 [scrollbar-width:none] [-ms-overflow-style:none]
                 sm:snap-x sm:snap-mandatory
               "
               style={{
                 WebkitOverflowScrolling: "touch",
-                touchAction: "pan-x",
+                // ✅ Let vertical scroll happen, we manually handle horizontal.
+                touchAction: "pan-y",
+                cursor: "grab",
               }}
-              onTouchStart={(e) => e.stopPropagation()}
-              onTouchMove={(e) => e.stopPropagation()}
-              onPointerDown={(e) => e.stopPropagation()}
-              onPointerMove={(e) => e.stopPropagation()}
               role="list"
               aria-label="Client reviews carousel"
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={endDrag}
+              onPointerCancel={endDrag}
+              onLostPointerCapture={(e) => endDrag(e)}
             >
               {reviews.map((review, i) => {
                 const fullText = review?.text || "";
@@ -174,8 +218,9 @@ export default function GoogleReview() {
                   <article
                     key={`${review?.author_name || "review"}-${i}`}
                     role="listitem"
-                    data-card="1"
+                    data-card={i === 0 ? "first" : undefined}
                     className="select-none shrink-0 w-[85%] sm:w-[48%] lg:w-[32%] sm:snap-start"
+                    draggable={false}
                   >
                     <div
                       className={[
@@ -192,6 +237,7 @@ export default function GoogleReview() {
                               className="h-10 w-10 rounded-full"
                               loading="lazy"
                               decoding="async"
+                              draggable="false"
                             />
                           ) : (
                             <div className="h-10 w-10 rounded-full bg-gray-200" />
@@ -229,7 +275,11 @@ export default function GoogleReview() {
                         {showReadMore && (
                           <button
                             type="button"
-                            onClick={() => toggleExpanded(i)}
+                            onClick={(e) => {
+                              // prevent drag from stealing this tap
+                              e.stopPropagation();
+                              toggleExpanded(i);
+                            }}
                             className="text-pinkcolor text-xs underline mt-1"
                           >
                             {isExpanded ? "Show less" : "Read more"}
