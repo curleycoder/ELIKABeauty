@@ -14,15 +14,10 @@ export default function GoogleReview() {
   const [idx, setIdx] = useState(0);
 
   const trackRef = useRef(null);
+  const cardWRef = useRef(0); // ✅ cached card width
+  const draggingRef = useRef(false);
+  const drag = useRef({ startX: 0, startScrollLeft: 0, pointerId: null });
 
-  // ✅ Drag state (forces horizontal scrolling even when Safari is stubborn)
-  const drag = useRef({
-    active: false,
-    startX: 0,
-    startScrollLeft: 0,
-    pointerId: null,
-  });
-  
   // Fetch
   useEffect(() => {
     let alive = true;
@@ -66,54 +61,74 @@ export default function GoogleReview() {
     setExpanded((p) => ({ ...p, [i]: !p[i] }));
   }, []);
 
-  // Helper: get one card width (first card only)
-  const getCardWidth = useCallback(() => {
-    const el = trackRef.current;
-    if (!el) return 0;
-    const first = el.querySelector("[data-card='first']");
-    if (!first) return 0;
-    return first.getBoundingClientRect().width;
-  }, []);
+  // ✅ Cache card width only when needed (not every scroll tick)
+  useEffect(() => {
+    const calcCardWidth = () => {
+      const el = trackRef.current;
+      if (!el) return;
+      const first = el.querySelector("[data-card='first']");
+      cardWRef.current = first ? first.getBoundingClientRect().width : 0;
+    };
 
-  // Update active index on scroll
+    // wait a frame so layout is ready
+    const raf = requestAnimationFrame(calcCardWidth);
+    window.addEventListener("resize", calcCardWidth);
+    window.addEventListener("orientationchange", calcCardWidth);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", calcCardWidth);
+      window.removeEventListener("orientationchange", calcCardWidth);
+    };
+  }, [reviews.length]);
+
+  // ✅ Lightweight scroll listener (no layout reads)
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
 
-    let raf = 0;
+    let ticking = false;
+
     const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const cardW = getCardWidth();
-        if (!cardW) return;
-        const i = Math.round(el.scrollLeft / cardW);
-        setIdx(clamp(i, 0, maxIdx));
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        ticking = false;
+
+        // Don’t fight while dragging
+        if (draggingRef.current) return;
+
+        const w = cardWRef.current || 1;
+        const i = Math.round(el.scrollLeft / w);
+        setIdx((prev) => {
+          const next = clamp(i, 0, maxIdx);
+          return prev === next ? prev : next; // ✅ avoid re-render spam
+        });
       });
     };
 
     el.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
-    return () => {
-      cancelAnimationFrame(raf);
-      el.removeEventListener("scroll", onScroll);
-    };
-  }, [getCardWidth, maxIdx]);
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [maxIdx]);
 
   const scrollByCards = useCallback(
     (n) => {
       const el = trackRef.current;
       if (!el) return;
 
-      const cardW = getCardWidth();
-      if (!cardW) return;
+      const w = cardWRef.current || 0;
+      if (!w) return;
 
       const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const behavior = prefersReduced ? "auto" : "smooth";
+      const isMobile = window.matchMedia("(max-width: 640px)").matches;
+      const behavior = prefersReduced || isMobile ? "auto" : "smooth";
 
-      el.scrollBy({ left: cardW * n, behavior });
+      el.scrollBy({ left: w * n, behavior });
     },
-    [getCardWidth]
+    []
   );
 
   // Keyboard arrows (desktop convenience)
@@ -126,27 +141,26 @@ export default function GoogleReview() {
     return () => window.removeEventListener("keydown", onKey);
   }, [scrollByCards]);
 
-  // ✅ Pointer drag handlers (the bulletproof part)
+  // ✅ Pointer drag ONLY for desktop mouse (mobile uses native scroll now)
   const onPointerDown = (e) => {
+    if (e.pointerType !== "mouse") return;
+
     const el = trackRef.current;
     if (!el) return;
+    if (e.button !== 0) return;
 
-    // Only left click or touch/pen
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-
-    drag.current.active = true;
+    draggingRef.current = true;
     drag.current.startX = e.clientX;
     drag.current.startScrollLeft = el.scrollLeft;
     drag.current.pointerId = e.pointerId;
 
-    // Capture pointer so move continues even if finger leaves the element
     el.setPointerCapture?.(e.pointerId);
   };
 
   const onPointerMove = (e) => {
     const el = trackRef.current;
     if (!el) return;
-    if (!drag.current.active) return;
+    if (!draggingRef.current) return;
     if (drag.current.pointerId !== e.pointerId) return;
 
     const dx = e.clientX - drag.current.startX;
@@ -158,7 +172,7 @@ export default function GoogleReview() {
     if (!el) return;
 
     if (drag.current.pointerId === e.pointerId) {
-      drag.current.active = false;
+      draggingRef.current = false;
       drag.current.pointerId = null;
       el.releasePointerCapture?.(e.pointerId);
     }
@@ -195,9 +209,7 @@ export default function GoogleReview() {
               "
               style={{
                 WebkitOverflowScrolling: "touch",
-                // ✅ Let vertical scroll happen, we manually handle horizontal.
-                touchAction: "pan-y",
-                cursor: "grab",
+                touchAction: "pan-x",
               }}
               role="list"
               aria-label="Client reviews carousel"
@@ -205,7 +217,6 @@ export default function GoogleReview() {
               onPointerMove={onPointerMove}
               onPointerUp={endDrag}
               onPointerCancel={endDrag}
-              onLostPointerCapture={(e) => endDrag(e)}
             >
               {reviews.map((review, i) => {
                 const fullText = review?.text || "";
@@ -275,11 +286,7 @@ export default function GoogleReview() {
                         {showReadMore && (
                           <button
                             type="button"
-                            onClick={(e) => {
-                              // prevent drag from stealing this tap
-                              e.stopPropagation();
-                              toggleExpanded(i);
-                            }}
+                            onClick={() => toggleExpanded(i)}
                             className="text-pinkcolor text-xs underline mt-1"
                           >
                             {isExpanded ? "Show less" : "Read more"}
