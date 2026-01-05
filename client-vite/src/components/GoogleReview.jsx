@@ -15,15 +15,6 @@ export default function GoogleReview() {
 
   const trackRef = useRef(null);
 
-  // ✅ Drag state (forces horizontal scrolling even when Safari is stubborn)
-  const drag = useRef({
-    active: false,
-    startX: 0,
-    startScrollLeft: 0,
-    pointerId: null,
-  });
-
-  // Fetch
   useEffect(() => {
     let alive = true;
 
@@ -45,7 +36,6 @@ export default function GoogleReview() {
     };
   }, []);
 
-  // Responsive visible count
   useEffect(() => {
     const calc = () => {
       const w = window.innerWidth;
@@ -66,7 +56,6 @@ export default function GoogleReview() {
     setExpanded((p) => ({ ...p, [i]: !p[i] }));
   }, []);
 
-  // Helper: get one card width (first card only)
   const getCardWidth = useCallback(() => {
     const el = trackRef.current;
     if (!el) return 0;
@@ -75,7 +64,6 @@ export default function GoogleReview() {
     return first.getBoundingClientRect().width;
   }, []);
 
-  // Update active index on scroll
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
@@ -116,7 +104,6 @@ export default function GoogleReview() {
     [getCardWidth]
   );
 
-  // Keyboard arrows (desktop convenience)
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowRight") scrollByCards(1);
@@ -125,44 +112,6 @@ export default function GoogleReview() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [scrollByCards]);
-
-  // ✅ Pointer drag handlers (the bulletproof part)
-  const onPointerDown = (e) => {
-    const el = trackRef.current;
-    if (!el) return;
-
-    // Only left click or touch/pen
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-
-    drag.current.active = true;
-    drag.current.startX = e.clientX;
-    drag.current.startScrollLeft = el.scrollLeft;
-    drag.current.pointerId = e.pointerId;
-
-    // Capture pointer so move continues even if finger leaves the element
-    el.setPointerCapture?.(e.pointerId);
-  };
-
-  const onPointerMove = (e) => {
-    const el = trackRef.current;
-    if (!el) return;
-    if (!drag.current.active) return;
-    if (drag.current.pointerId !== e.pointerId) return;
-
-    const dx = e.clientX - drag.current.startX;
-    el.scrollLeft = drag.current.startScrollLeft - dx;
-  };
-
-  const endDrag = (e) => {
-    const el = trackRef.current;
-    if (!el) return;
-
-    if (drag.current.pointerId === e.pointerId) {
-      drag.current.active = false;
-      drag.current.pointerId = null;
-      el.releasePointerCapture?.(e.pointerId);
-    }
-  };
 
   return (
     <section className="bg-white px-3 py-4 sm:p-6 rounded-xl max-w-6xl mx-auto">
@@ -181,31 +130,16 @@ export default function GoogleReview() {
           <p className="text-center text-gray-500 mt-6">No reviews found.</p>
         ) : (
           <>
-            {/* Track */}
+            {/* Track (FORCED single row + forced scroll) */}
             <div
               ref={trackRef}
-              className="
-                relative z-10
-                w-full flex gap-6
-                overflow-x-auto overflow-y-hidden
-                px-4
-                overscroll-x-contain
-                [scrollbar-width:none] [-ms-overflow-style:none]
-                sm:snap-x sm:snap-mandatory
-              "
+              className="w-full overflow-x-scroll overflow-y-hidden px-4 flex flex-nowrap gap-6"
               style={{
                 WebkitOverflowScrolling: "touch",
-                // ✅ Let vertical scroll happen, we manually handle horizontal.
-                touchAction: "pan-y",
-                cursor: "grab",
+                touchAction: "pan-x",
               }}
               role="list"
               aria-label="Client reviews carousel"
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={endDrag}
-              onPointerCancel={endDrag}
-              onLostPointerCapture={(e) => endDrag(e)}
             >
               {reviews.map((review, i) => {
                 const fullText = review?.text || "";
@@ -219,8 +153,7 @@ export default function GoogleReview() {
                     key={`${review?.author_name || "review"}-${i}`}
                     role="listitem"
                     data-card={i === 0 ? "first" : undefined}
-                    className="select-none shrink-0 w-[85%] sm:w-[48%] lg:w-[32%] sm:snap-start"
-                    draggable={false}
+                    className="select-none shrink-0 min-w-[85%] sm:min-w-[48%] lg:min-w-[32%]"
                   >
                     <div
                       className={[
@@ -275,11 +208,7 @@ export default function GoogleReview() {
                         {showReadMore && (
                           <button
                             type="button"
-                            onClick={(e) => {
-                              // prevent drag from stealing this tap
-                              e.stopPropagation();
-                              toggleExpanded(i);
-                            }}
+                            onClick={() => toggleExpanded(i)}
                             className="text-pinkcolor text-xs underline mt-1"
                           >
                             {isExpanded ? "Show less" : "Read more"}
