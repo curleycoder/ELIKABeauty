@@ -8,8 +8,8 @@ export default {
         display: ["Ranade", "Josefin Sans"],
       },
       colors: {
-        purplecolor: "#55203d",
-        pinkcolor: "#f098a6"
+        purplecolor: "#200027",
+        goldcolor: "#ceaa5b"
       },
     },
   },

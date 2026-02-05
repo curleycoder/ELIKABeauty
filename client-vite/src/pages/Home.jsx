@@ -13,25 +13,31 @@ export default function Home() {
       <HeroSection />
 
       {/* SEO INTRO */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pt-6 sm:pt-10">
+      <section className="bg-[#200027] sm:px-6 lg:px-12 pt-6 pb-10 sm:pt-10">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-xs sm:text-sm tracking-widest uppercase text-gray-500">
-            North Burnaby • Serving Metro Vancouver
+          <p className="text-xs sm:text-sm tracking-widest uppercase text-[#ceaa5b]">
+            Burnaby • Serving Metro Vancouver
           </p>
 
-          <h1 className="mt-3 text-2xl sm:text-4xl font-display text-[#55203d] leading-tight">
-            Beauty Shohre Studio
-            <span className="block text-lg sm:text-2xl font-normal text-gray-700 mt-2">
-              Hair Salon in North Burnaby
+          {/* Location + trust bridge */}
+          <p className="mt-2 text-sm text-[#ceaa5b]">
+            3790 Canada Way #102, Burnaby • Formerly Tangles Hair Design
+          </p>
+
+          <h1 className="mt-3 text-2xl sm:text-4xl font-display font-brownsugar text-[#ceaa5b] leading-tight">
+            <span className="font-lato">
+              ELIKA BEAUTY
+            </span>
+            <span className="block text-lg sm:text-2xl font-lato text-[#ceaa5b] mt-2">
+              Hair Salon in Burnaby
             </span>
           </h1>
 
-          <p className="mt-4 text-gray-700 leading-relaxed">
-            Specializing in balayage, highlights, hair colour, keratin treatments, and precision
-            haircuts. Focused on healthy, natural-looking results delivered with experience and care.
+          <p className="mt-4 text-[#ceaa5b] leading-relaxed">
+            Specializing in balayage, highlights, hair colour, colour correction, and keratin
+            treatments—with precision haircuts available. Focused on healthy, natural-looking results
+            delivered with experience and care.
           </p>
-
-          <div className="mt-6 sm:mt-7 h-px w-24 mx-auto bg-gray-200" />
         </div>
       </section>
 
@@ -59,12 +65,35 @@ export default function Home() {
             Book online, or contact us if you’re not sure which service to choose.
           </p>
 
-          <a
-            href="/booking"
-            className="inline-block mt-6 rounded-xl px-8 py-4 bg-[#55203d] text-white hover:opacity-90 transition"
-          >
-            Book Appointment
-          </a>
+          {/* New client matching (high-conversion) */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="/match"
+              className="inline-block rounded-xl px-8 py-4 border border-[#55203d] text-[#55203d] hover:bg-white/60 transition"
+            >
+              New Client? Get Matched
+            </a>
+
+            <a
+              href="/booking"
+              className="inline-block rounded-xl px-8 py-4 bg-[#55203d] text-white hover:opacity-90 transition"
+            >
+              Book Appointment
+            </a>
+
+            <a
+              href="tel:+1XXXXXXXXXX"
+              className="inline-block rounded-xl px-8 py-4 bg-white text-[#55203d] border border-gray-200 hover:bg-gray-50 transition"
+            >
+              Call Now
+            </a>
+          </div>
+
+          <div className="mt-4">
+            <a href="/pricing" className="text-sm text-gray-700 underline hover:opacity-80">
+              View pricing / starting at
+            </a>
+          </div>
         </div>
       </section>
     </>

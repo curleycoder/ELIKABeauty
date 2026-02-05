@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import logo from "../logo2.png";
+import logo from "../logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import { scrollToId } from "../lib/scrollTo";
@@ -56,18 +56,15 @@ export default function Navbar() {
   };
 
   return (
-    <div className="bg-white shadow-md font-display text-[#55203d] sticky top-0 z-50">
-      <nav className="px-4 py-3 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
-        <div className="flex items-center gap-3">
+    <div className="bg-[#200027] shadow-md text-[#ceaa5b] sticky top-0 z-50">
+      <nav className="font-sans px-4 py-3 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
+        <div className="flex items-center">
           <img
             src={logo}
-            alt="Beauty Shohre Studio Logo"
-            className="h-12 sm:h-16 w-auto cursor-pointer"
+            alt="Elika Beauty Logo"
+            className="h-12 sm:h-16 w-auto cursor-pointer p-0.5"
             onClick={() => navigate("/")}
           />
-          <span className="text-lg sm:text-xl font-bold">
-            Beauty Shohre Studio
-          </span>
 
         </div>
 
@@ -82,7 +79,7 @@ export default function Navbar() {
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className="px-3 py-2 rounded-md hover:-translate-y-1 hover:text-[#f098a6] transition"
+              className="px-3 py-2 rounded-md hover:underline transition"
             >
               {item.name}
             </button>
@@ -91,12 +88,12 @@ export default function Navbar() {
       </nav>
 
       {menuOpen && (
-        <div className="sm:hidden bg-white px-4 pb-4">
+        <div className="sm:hidden bg-[#200027] px-4 pb-4 text-[#ceaa5b]">
           {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className="block w-full text-left py-2 border-b border-gray-200 hover:text-pinkcolor transition"
+              className="block w-full text-left py-2 border-b border-[#ceaa5b]/30 hover:underline transition"
             >
               {item.name}
             </button>

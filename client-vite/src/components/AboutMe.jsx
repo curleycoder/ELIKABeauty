@@ -5,39 +5,39 @@ export default function AboutMe() {
   return (
     <section
       id="about-section"
-      className="bg-white text-gray-800 px-4 sm:px-6 md:px-16 py-8 max-w-5xl mx-auto"
+      className="bg-white text-gray-800 px-4 sm:px-6 md:px-16 py-10 max-w-5xl mx-auto"
     >
       <div className="text-center">
-        <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-6">
-          <span className="border-t border-b py-2 font-display border-gray-300 px-4 sm:px-6">
-            About the Hairstylist
+        <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-8">
+          <span className="border-t border-b py-2 border-gray-300 px-4 sm:px-6">
+            About Elika Beauty
           </span>
         </h2>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-start gap-6">
+      <div className="flex flex-col sm:flex-row items-start gap-8">
         <img
           src={SherryImage}
-          alt="Shohreh, hairstylist in North Burnaby serving Metro Vancouver"
+          alt="Shohreh, hairstylist and owner of Elika Beauty in Burnaby"
           className="w-40 h-40 sm:w-60 sm:h-60 rounded-full object-cover shadow-md mx-auto sm:mx-0"
         />
 
-        <div className="mb-6 text-gray-800 leading-relaxed">
+        <div className="text-gray-800 leading-relaxed">
           <p className="mb-4">
-            I’m <strong>Shohreh</strong>, a professional <strong>hairstylist in North Burnaby</strong> with
-            over <strong>30 years of experience</strong> in the beauty industry. I serve clients across
-            <strong> Metro Vancouver</strong> from my private studio, focusing on high-quality hair
-            services with consistent, natural-looking results.
+            I’m <strong>Shohreh</strong>, a professional hairstylist and the owner of
+            <strong> Elika Beauty</strong> in Burnaby. With over{" "}
+            <strong>30 years of experience</strong> in the beauty industry, I specialize in
+            personalized hair services focused on healthy, natural-looking results.
           </p>
 
           <p className="mb-4">
-            At Beauty Shohre Studio, I work one-on-one with each client from consultation to finish.
-            This independent approach allows for better communication, realistic expectations, and
-            results that grow out beautifully over time.
+            At Elika Beauty, I work one-on-one with each client from consultation to finish.
+            This private studio setting allows for clear communication, realistic expectations,
+            and results that grow out beautifully over time.
           </p>
 
-          <p className="mb-2 font-medium">
-            Hair services offered at Beauty Shohre Studio include:
+          <p className="mb-3 font-medium">
+            Hair services offered at Elika Beauty include:
           </p>
 
           <ul className="list-disc list-inside mb-4 space-y-1">
@@ -48,10 +48,9 @@ export default function AboutMe() {
           </ul>
 
           <p>
-            Clients looking for a trusted hair salon in North Burnaby often choose Beauty Shohre Studio
-            for its calm environment, attention to detail, and focus on long-term hair health. Many
-            clients travel from across Metro Vancouver for a more personalized and professional salon
-            experience.
+            Clients looking for a trusted hair salon in Burnaby choose Elika Beauty for its calm
+            environment, attention to detail, and commitment to long-term hair health. Many clients
+            visit from across Metro Vancouver for a more personalized salon experience.
           </p>
         </div>
       </div>
