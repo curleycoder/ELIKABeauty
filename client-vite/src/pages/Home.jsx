@@ -25,10 +25,10 @@ export default function Home() {
           </p>
 
           <h1 className="mt-3 text-2xl sm:text-4xl font-display font-brownsugar text-[#ceaa5b] leading-tight">
-            <span className="font-lato">
+            <span className="font-sans">
               ELIKA BEAUTY
             </span>
-            <span className="block text-lg sm:text-2xl font-lato text-[#ceaa5b] mt-2">
+            <span className="block text-lg sm:text-2xl font-sans text-[#ceaa5b] mt-2">
               Hair Salon in Burnaby
             </span>
           </h1>
@@ -55,13 +55,13 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="bg-[#f8f4f6] py-12 sm:py-16 mt-10">
+      <section className="bg-[#200027] py-12 sm:py-16 mt-10">
         <div className="max-w-3xl mx-auto text-center px-4">
-          <h2 className="text-2xl sm:text-3xl font-display text-[#55203d]">
+          <h2 className="text-2xl sm:text-3xl font-sans text-[#ceaa5b]">
             Ready to Book Your Appointment?
           </h2>
 
-          <p className="mt-3 text-gray-700">
+          <p className="mt-3 text-[#ceaa5b]/80">
             Book online, or contact us if you’re not sure which service to choose.
           </p>
 
@@ -69,28 +69,28 @@ export default function Home() {
           <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="/match"
-              className="inline-block rounded-xl px-8 py-4 border border-[#55203d] text-[#55203d] hover:bg-white/60 transition"
+              className="inline-block rounded-xl px-8 py-4 border border-[#ceaa5b] text-[#ceaa5b] hover:bg-[#ceaa5b]/40 transition"
             >
               New Client? Get Matched
             </a>
 
             <a
               href="/booking"
-              className="inline-block rounded-xl px-8 py-4 bg-[#55203d] text-white hover:opacity-90 transition"
+              className="inline-block rounded-xl px-8 py-4 bg-[#ceaa5b] text-[#200027] hover:opacity-90 transition"
             >
               Book Appointment
             </a>
 
             <a
               href="tel:+1XXXXXXXXXX"
-              className="inline-block rounded-xl px-8 py-4 bg-white text-[#55203d] border border-gray-200 hover:bg-gray-50 transition"
+              className="inline-block rounded-xl px-8 py-4 bg-white text-[#55203d] border border-gray-200 hover:bg-[#ceaa5b]-50 transition"
             >
               Call Now
             </a>
           </div>
 
           <div className="mt-4">
-            <a href="/pricing" className="text-sm text-gray-700 underline hover:opacity-80">
+            <a href="/pricing" className="text-sm text-[#200027] underline hover:opacity-80">
               View pricing / starting at
             </a>
           </div>

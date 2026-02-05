@@ -9,9 +9,8 @@ export default function AboutMe() {
     >
       <div className="text-center">
         <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-8">
-          <span className="border-t border-b py-2 border-gray-300 px-4 sm:px-6">
-            About Elika Beauty
-          </span>
+            About ELIKA BEAUTY
+
         </h2>
       </div>
 
@@ -24,7 +23,7 @@ export default function AboutMe() {
 
         <div className="text-gray-800 leading-relaxed">
           <p className="mb-4">
-            I’m <strong>Shohreh</strong>, a professional hairstylist and the owner of
+            I’m <strong>Amina</strong>, a professional hairstylist and the owner of
             <strong> Elika Beauty</strong> in Burnaby. With over{" "}
             <strong>30 years of experience</strong> in the beauty industry, I specialize in
             personalized hair services focused on healthy, natural-looking results.

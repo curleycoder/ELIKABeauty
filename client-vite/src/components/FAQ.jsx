@@ -29,15 +29,14 @@ export default function FAQ() {
     },
   ];
 
-  const [openIndex, setOpenIndex] = useState(0);
+  // start closed (better UX)
+  const [openIndex, setOpenIndex] = useState(-1);
 
   return (
     <section className="max-w-4xl mx-auto">
       <div className="text-center">
         <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-8">
-          <span className="border-t border-b py-2 font-display border-gray-300 px-4 sm:px-6">
             Frequently Asked Questions
-          </span>
         </h2>
 
         <p className="text-gray-600 max-w-2xl mx-auto mb-10">

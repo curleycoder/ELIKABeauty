@@ -125,99 +125,111 @@ export default function Gallery() {
 
   // keyboard nav
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "ArrowRight") handleNext();
-      if (e.key === "ArrowLeft") handlePrev();
-      if (e.key === " ") setIsAutoPlaying((p) => !p);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [currentIndex, galleryImages.length]);
+  const onKey = (e) => {
+    const tag = document.activeElement?.tagName?.toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select") return;
+
+    if (e.key === "ArrowRight") handleNext();
+    if (e.key === "ArrowLeft") handlePrev();
+    if (e.code === "Space") {
+      e.preventDefault();
+      setIsAutoPlaying((p) => !p);
+    }
+  };
+
+  window.addEventListener("keydown", onKey);
+  return () => window.removeEventListener("keydown", onKey);
+}, [currentIndex, galleryImages.length]);
+
 
   const onMouseEnter = () => setIsAutoPlaying(false);
 
   return (
-    <section id="gallery-section" className="text-center px-4 py-8">
-      <div className="text-center">
-        <h2 className="text-3xl text-[#55203d] mb-6">
-          <span className="border-t border-b font-display border-gray-300 py-2 px-8">Photo Gallery</span>
-        </h2>
-      </div>
+  <section id="gallery-section" className="text-center px-4 py-8">
+    <div className="text-center">
+      <h2 className="text-3xl text-[#55203d] mb-6">
+          Photo Gallery
+      </h2>
+    </div>
 
-      {/* Stage */}
-      <div className="relative flex justify-center items-center mb-6 h-[500px] select-none" onMouseEnter={onMouseEnter}>
-        <button
-          onClick={handlePrev}
-          className="absolute left-2 bg-white/70 rounded-full p-2 hover:bg-white shadow"
-          aria-label="Previous"
-        >
-          ◀
-        </button>
+    {/* Stage */}
+    <div
+      className="relative flex justify-center items-center mb-6 h-[340px] sm:h-[500px] select-none"
+      onMouseEnter={() => setIsAutoPlaying(false)}
+      onTouchStart={() => setIsAutoPlaying(false)}
+    >
+      <button
+        onClick={handlePrev}
+        className="absolute left-2 bg-white/70 rounded-full p-2 hover:bg-white shadow z-20"
+        aria-label="Previous"
+      >
+        ◀
+      </button>
 
-        {/* Side previews (preview size) */}
-        {prevUrl && (
+      {/* Side previews (hide on mobile) */}
+      {prevUrl && (
+        <img
+          src={prevUrl}
+          alt=""
+          className="hidden sm:block absolute left-14 h-[300px] w-auto object-contain opacity-30 blur-sm"
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+
+      {/* Main image */}
+      {selectedImage && (
+        <img
+          src={selectedImage}
+          alt="Elika Beauty gallery image"
+          className="h-full w-auto max-w-full object-contain rounded-xl shadow-lg z-10"
+          width={1200}
+          height={800}
+          loading="eager"
+          decoding="async"
+        />
+      )}
+
+      {nextUrl && (
+        <img
+          src={nextUrl}
+          alt=""
+          className="hidden sm:block absolute right-14 h-[300px] w-auto object-contain opacity-30 blur-sm"
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+
+      <button
+        onClick={handleNext}
+        className="absolute right-2 bg-white/70 rounded-full p-2 hover:bg-white shadow z-20"
+        aria-label="Next"
+      >
+        ▶
+      </button>
+    </div>
+
+    {/* Thumbnails */}
+    <div className="flex overflow-x-auto space-x-3 px-4 scrollbar-hide">
+      {galleryImages.map((img, idx) => {
+        const url = joinURL(baseURL, img.thumb || img.preview || img.full);
+        return (
           <img
-            src={prevUrl}
-            alt=""
-            className="absolute left-14 h-[300px] w-auto object-contain opacity-30 blur-sm"
+            key={idx}
+            src={url}
+            alt={`Gallery thumbnail ${idx + 1}`}
+            onClick={() => handleSelectImage(idx)}
+            className={`h-20 w-20 object-cover rounded cursor-pointer border-2 ${
+              currentIndex === idx ? "border-[#55203d]" : "border-transparent"
+            }`}
             loading="lazy"
             decoding="async"
+            width={80}
+            height={80}
           />
-        )}
-
-        {/* Main image (preview size) */}
-        {selectedImage && (
-          <img
-            src={selectedImage}
-            alt="Selected"
-            className="h-full w-auto max-w-full object-contain rounded-xl shadow-lg z-10"
-            width={1200}
-            height={800}
-            loading="eager"
-            decoding="async"
-          />
-        )}
-
-        {nextUrl && (
-          <img
-            src={nextUrl}
-            alt=""
-            className="absolute right-14 h-[300px] w-auto object-contain opacity-30 blur-sm"
-            loading="lazy"
-            decoding="async"
-          />
-        )}
-
-        <button
-          onClick={handleNext}
-          className="absolute right-2 bg-white/70 rounded-full p-2 hover:bg-white shadow"
-          aria-label="Next"
-        >
-          ▶
-        </button>
-      </div>
-
-      {/* Thumbnails (thumb size) */}
-      <div className="flex overflow-x-auto space-x-3 px-4 scrollbar-hide">
-        {galleryImages.map((img, idx) => {
-          const url = joinURL(baseURL, img.thumb || img.preview || img.full);
-          return (
-            <img
-              key={idx}
-              src={url}
-              alt={`Thumbnail ${idx + 1}`}
-              onClick={() => handleSelectImage(idx)}
-              className={`h-20 w-20 object-cover rounded cursor-pointer border-2 ${
-                currentIndex === idx ? "border-purplecolor" : "border-transparent"
-              }`}
-              loading="lazy"
-              decoding="async"
-              width={80}
-              height={80}
-            />
-          );
-        })}
-      </div>
-    </section>
-  );
+        );
+      })}
+    </div>
+  </section>
+);
 }

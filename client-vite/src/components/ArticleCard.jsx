@@ -12,7 +12,7 @@ export default function ArticleCard({ article }) {
       to={`/articles/${slug}`}
       className="
         block bg-white rounded-xl overflow-hidden w-full max-w-md
-        border border-pinkcolor/30 mx-auto
+        border border-purplecolor/30 mx-auto
         hover:-translate-y-1 transition-transform duration-200
       "
     >
@@ -27,12 +27,18 @@ export default function ArticleCard({ article }) {
         fetchpriority="low"
       />
 
-      <div className="p-4 text-[#55203d] font-display">
-        <h3 className="text-lg sm:text-xl font-semibold mb-3">{title}</h3>
+      <div className="p-4 text-[#55203d]">
+        <h3 className="text-lg sm:text-xl font-semibold mb-3">
+          {title}
+        </h3>
 
-        <p className="text-sm text-gray-700 mb-3 line-clamp-4">{preview}</p>
+        <p className="text-sm text-gray-700 mb-3 line-clamp-4">
+          {preview}
+        </p>
 
-        <span className="text-sm text-[#f098a6] font-display font-semibold">Read More →</span>
+        <span className="text-sm text-goldcolor font-semibold">
+          Read More →
+        </span>
       </div>
     </Link>
   );

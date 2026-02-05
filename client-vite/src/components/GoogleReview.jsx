@@ -182,10 +182,8 @@ export default function GoogleReview() {
     <section className="bg-white px-3 py-4 sm:p-6 rounded-xl max-w-6xl mx-auto">
       <div className="text-center">
         <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-3 sm:mb-6">
-          <span className="border-t border-b py-2 font-display border-gray-300 px-6">
-            What Our Clients Say
-          </span>
-        </h2>
+    What Clients Say About Us
+</h2>
       </div>
 
       <div className="mt-3 sm:mt-6 relative">
@@ -235,7 +233,7 @@ export default function GoogleReview() {
                   >
                     <div
                       className={[
-                        "flex flex-col bg-white border border-purplecolor rounded-xl shadow-md p-5",
+                        "flex flex-col bg-white border border-[#200027] rounded-xl shadow-md p-5",
                         isExpanded ? "h-auto" : "h-[220px] overflow-hidden",
                       ].join(" ")}
                     >
@@ -287,7 +285,7 @@ export default function GoogleReview() {
                           <button
                             type="button"
                             onClick={() => toggleExpanded(i)}
-                            className="text-pinkcolor text-xs underline mt-1"
+                            className="text-[#200027] text-xs underline mt-1"
                           >
                             {isExpanded ? "Show less" : "Read more"}
                           </button>
@@ -326,11 +324,22 @@ export default function GoogleReview() {
               {Array.from({ length: Math.max(1, reviews.length - visible + 1) }).map((_, i) => (
                 <span
                   key={i}
-                  className={`h-2 w-2 rounded-full ${i === idx ? "bg-purplecolor" : "bg-gray-300"}`}
+                  className={`h-2 w-2 rounded-full ${i === idx ? "bg-[#200027]" : "bg-gray-300"}`}
                   aria-hidden="true"
                 />
               ))}
             </div>
+            <div className="mt-4 flex justify-center">
+              <a
+                href="https://www.google.com/search?q=Elika+Beauty+Burnaby+reviews"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm underline text-[#55203d] hover:opacity-80"
+              >
+                Leave a Google Review
+              </a>
+            </div>
+
           </>
         )}
       </div>

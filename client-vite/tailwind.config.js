@@ -4,8 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Josefin Sans", "system-ui"],
-        display: ["Ranade", "Josefin Sans"],
+        sans: ["Lato", "system-ui", "sans-serif"],
       },
       colors: {
         purplecolor: "#200027",

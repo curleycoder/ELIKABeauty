@@ -53,10 +53,8 @@ export default function Instagram() {
   return (
     <section className="bg-white pt-10 rounded-lg mb-0">
       <div className="text-center">
-        <h2 className="text-3xl text-[#55203d] mb-6 pt-10">
-          <span className="border-t border-b py-2 font-display border-gray-300 px-6">
+        <h2 className="text-3xl text-[#55203d] pt-2">
             Follow Us On Instagram
-          </span>
         </h2>
       </div>
 

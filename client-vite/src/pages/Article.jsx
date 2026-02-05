@@ -2,23 +2,27 @@ import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import articles from "../data/articles";
 
+const SITE_NAME = "Elika Beauty";
+const SITE_ORIGIN = "https://elikabeauty.ca";
+
 export default function ArticlePage() {
   const { slug } = useParams();
   const article = articles.find((a) => a.slug === slug);
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda pb-16">
+      <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 pb-16">
         <div className="max-w-3xl mx-auto">
           <Helmet>
-            <title>Article Not Found | Beauty Shohre Studio</title>
+            <title>Article Not Found | {SITE_NAME}</title>
             <meta
               name="description"
               content="The article you are looking for could not be found."
             />
+            <link rel="canonical" href={`${SITE_ORIGIN}/articles`} />
           </Helmet>
 
-          <Link to="/articles" className="text-[#f098a6] font-display">
+          <Link to="/articles" className="text-[#55203d] underline">
             ← Back to articles
           </Link>
           <p className="mt-4">Article not found.</p>
@@ -27,19 +31,12 @@ export default function ArticlePage() {
     );
   }
 
-  const origin =
-    typeof window !== "undefined" ? window.location.origin : "";
-  const pageTitle = `${article.title} | Beauty Shohre Studio`;
-  const pageDescription = article.intro || article.text[0] || "";
-  const pageUrl = origin
-    ? `${origin}/articles/${article.slug}`
-    : `/articles/${article.slug}`;
-  // const pageImage =
-  //   origin && article.image && !article.image.startsWith("http")
-  //     ? origin + article.image
-  //     : article.image;
-  const pageImage = article.image;
-
+  const pageTitle = `${article.title} | ${SITE_NAME}`;
+  const pageDescription = article.intro || article.text?.[0] || "";
+  const pageUrl = `${SITE_ORIGIN}/articles/${article.slug}`;
+  const pageImage = article.image?.startsWith("http")
+    ? article.image
+    : `${SITE_ORIGIN}${article.image?.startsWith("/") ? "" : "/"}${article.image}`;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -48,49 +45,28 @@ export default function ArticlePage() {
     description: pageDescription,
     image: [pageImage],
     mainEntityOfPage: pageUrl,
-    author: {
-      "@type": "Organization",
-      name: "Beauty Shohre Studio",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Beauty Shohre Studio",
-    },
+    author: { "@type": "Organization", name: SITE_NAME },
+    publisher: { "@type": "Organization", name: SITE_NAME },
   };
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: origin + "/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Articles",
-        item: origin + "/articles",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: article.title,
-        item: pageUrl,
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_ORIGIN}/` },
+      { "@type": "ListItem", position: 2, name: "Articles", item: `${SITE_ORIGIN}/articles` },
+      { "@type": "ListItem", position: 3, name: article.title, item: pageUrl },
     ],
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 font-bodonimoda pb-16">
+    <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 pb-16">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <meta
           name="keywords"
-          content="hair care, balayage, bleached hair repair, hair growth, hair salon Burnaby, Beauty Shohre Studio, hair colour tips"
+          content="hair care, balayage, keratin, colour correction, hair salon Burnaby, Elika Beauty, hair colour tips"
         />
         <link rel="canonical" href={pageUrl} />
 
@@ -99,35 +75,32 @@ export default function ArticlePage() {
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content={pageImage} />
         <meta property="og:url" content={pageUrl} />
-        <meta property="og:site_name" content="Beauty Shohre Studio" />
+        <meta property="og:site_name" content={SITE_NAME} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={pageImage} />
 
-        <script type="application/ld+json">
-          {JSON.stringify(articleJsonLd)}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbJsonLd)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
 
       <div className="max-w-3xl mx-auto">
-        <Link to="/articles" className="text-[#f098a6] font-display">
+        <Link to="/articles" className="text-[#55203d] underline">
           ← Back to articles
         </Link>
 
-        <h2 className="mt-4 text-3xl font-bold text-purplecolor">
+        <h1 className="mt-4 text-3xl font-bold text-purplecolor">
           {article.title}
-        </h2>
+        </h1>
 
-        {/* THIS is the hero image – same data as card */}
         <img
           src={article.image}
           alt={article.title}
           className="mt-6 w-full max-h-96 object-cover rounded-xl shadow-md"
+          loading="lazy"
+          decoding="async"
         />
 
         <div className="mt-6 space-y-4 text-base leading-relaxed">

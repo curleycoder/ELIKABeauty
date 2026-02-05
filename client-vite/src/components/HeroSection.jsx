@@ -35,7 +35,7 @@ export default function HeroSection() {
           // mobile: bottom-center
           "absolute left-1/2 -translate-x-1/2 top-24",
           // desktop+: normal flow on the right
-          "sm:static sm:translate-x-0 sm:ml-auto sm:mr-12 lg:mr-24",
+          "sm:static sm:translate-x-0 sm:ml-auto sm:mr-12 lg:mr-14",
         ].join(" ")}
       >
         <h2 className="font-display text-white text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">

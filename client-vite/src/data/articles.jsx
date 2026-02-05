@@ -42,7 +42,7 @@ const articles = [
   {
     id: 3,
     slug: "best-hair-care-routine-for-coloured-hair",
-    image: "/articles/coloured-hair-routine.jpg",
+    image: "/articles/colored-hair-routine.jpg",
     title: "Best Hair Care Routine for Coloured Hair",
     intro:
       "Coloured hair needs extra love. Here’s the routine to keep it shiny and vibrant.",
