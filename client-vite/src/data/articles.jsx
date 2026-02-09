@@ -3,7 +3,7 @@ const articles = [
     id: 1,
     slug: "fix-damaged-bleached-hair",
     image: "/articles/bleach-damage.jpg",
-    title: "How to Fix Damaged Hair After Bleaching (Professional Guide)",
+    title: "How to Fix Damaged Hair After Bleaching",
     intro:
       "Bleached hair feeling dry, rough, or breaking? Here’s how to repair it the professional way.",
     updatedAt: "2026-01-15",

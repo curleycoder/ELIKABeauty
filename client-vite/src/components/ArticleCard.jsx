@@ -28,7 +28,7 @@ export default function ArticleCard({ article }) {
       />
 
       <div className="p-4 text-[#55203d]">
-        <h3 className="text-lg sm:text-xl font-semibold mb-3">
+        <h3 className="text-lg sm:text-xl font-theseason font-semibold mb-3">
           {title}
         </h3>
 
@@ -36,7 +36,7 @@ export default function ArticleCard({ article }) {
           {preview}
         </p>
 
-        <span className="text-sm text-goldcolor font-semibold">
+        <span className="text-sm text-[#7a3b44] font-semibold">
           Read More →
         </span>
       </div>

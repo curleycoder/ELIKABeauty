@@ -10,7 +10,7 @@ export default function ArticlePage() {
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 pb-16">
+      <div className="min-h-screen bg-white text-gray-800 pt-24 px-4 sm:px-6 pb-16">
         <div className="max-w-3xl mx-auto">
           <Helmet>
             <title>Article Not Found | {SITE_NAME}</title>
