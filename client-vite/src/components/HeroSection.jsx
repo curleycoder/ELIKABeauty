@@ -8,7 +8,7 @@ const HERO_SLIDES = [
   { src: "/assets/cut-hero.jpg", alt: "Elika haircut" },
   { src: "/assets/treading-hero.jpg", alt: "Elika treading" },
   { src: "/assets/balayage-hero.jpg", alt: "Elika balayage" },
-  { src: "/assets/ligh-hero.jpg", alt: "Elika balayage" },
+  { src: "/assets/light-hero.jpg", alt: "Elika balayage" },
 ];
 
 export default function HeroSection() {
