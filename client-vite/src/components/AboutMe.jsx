@@ -22,11 +22,15 @@ export default function AboutMe() {
 
         <div className="text-gray-800 leading-relaxed">
           <p className="mb-4">
-            I’m <strong>Amina</strong>, the new owner of <strong>Elika Beauty</strong> — formerly{" "}
-            <strong>Tangles Hair Design</strong> — located in Burnaby. I’ve worked as a professional
-            hairstylist for <strong>8 years in Canada</strong> and <strong>24 years in Iran</strong>,
-            for a total of <strong>30 years of experience</strong> in the beauty industry.
-          </p>
+  I’m <strong className="text-[#7a3b44]">Amina</strong>, the new owner of{" "}
+  <strong className="font-theseason text-[#7a3b44]">ELIKA Beauty</strong>, formerly{" "}
+  <strong className="text-[#7a3b44]">Tangles Hair Design</strong>, located in Burnaby. 
+  With <strong>30 years of professional experience</strong> — including{" "}
+  <strong>24 years in Iran</strong> and <strong>8 years in Canada</strong> — I bring
+  a deep, hands-on understanding of hair and beauty across different styles, hair
+  types, and client needs.
+</p>
+
 
           <p className="mb-4">
             My focus is hair: healthy color, clean sections, and results that look beautiful in real

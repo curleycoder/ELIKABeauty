@@ -1,84 +1,84 @@
 [
   {
     "_id": "1",
-    "name": "Farmavita Argan Sublime Oil Elixir (100 ml)",
+    "name": "Farmavita Argan Sublime Oil Elixir . 100 ml",
     "description": "A sublime multi-use Argan oil Elixir with intense exotic fragrance for seductive, silky and shiny hair. Ideal for all hair types. ",
     "price": 35.99,
     "image": "/images/oil-big.jpg"
   },
   {
     "_id": "2",
-    "name": "Farmavita Argan Sublime Mask (250 ml)",
+    "name": "Farmavita Argan Sublime Mask . 250 ml",
     "description": "A rich restorative Argan oil Mask with intense exotic fragrance and golden creamy texture, specially designed to bring lush softness, shine and nourishment to the hair. Ideal for all hair types. ",
     "price": 22.99,
     "image": "/images/mask-big.jpg"
   },
   {
     "_id": "3",
-    "name": "Farmavita Argan Sublime Mask (1000 ml)",
+    "name": "Farmavita Argan Sublime Mask . 1000 ml",
     "description": "A rich restorative Argan oil Mask with intense exotic fragrance and golden creamy texture, specially designed to bring lush softness, shine and nourishment to the hair. Ideal for all hair types. ",
     "price": 57.99,
     "image": "/images/1000ml.webp"
   },
   {
     "_id": "4",
-    "name": "Moroccanoil Treatment Hair Oil (50 ml)",
+    "name": "Moroccanoil Treatment Hair Oil . 50 ml",
     "description": "A versatile hair treatment and styler that works on damp or dry hair to promote a healthier look and feel. ",
     "price": 50.99,
     "image": "/images/oil.webp"
   },
   {
     "_id": "5",
-    "name": "Moroccanoil Hair and Body Fragrance Mist (100 ml)",
+    "name": "Moroccanoil Hair and Body Fragrance Mist . 100 ml",
     "description": "A lightweight fragrance mist featuring a blend of spicy amber and sweet floral notes. Perfect for spritzing on hair and skin throughout the day.",
     "price": 46.99,
     "image": "/images/mist-hair.webp"
   },
   {
     "_id": "6",
-    "name": "Moroccanoil Intense Hydrating Mask (250 ml)",
+    "name": "Moroccanoil Intense Hydrating Mask . 250 ml",
     "description": "A high-performance, argan-oil-rich mask formulated for medium to thick dry hair that improves hydration, texture, elasticity, shine, and manageability.",
     "price": 61.99,
     "image": "/images/mask.webp"
   },
   {
     "_id": "7",
-    "name": "COLOR WOW Dream Coat Supernatural Treatment Spray for Frizzy Hair (200 ml)",
+    "name": "COLOR WOW Dream Coat Supernatural Treatment Spray for Frizzy Hair . 200 ml",
     "description": "A spray that keeps straight, wavy, or curly frizz-prone hair silky, glassy, and frizz-free for days.",
     "price": 35.99,
     "image": "/images/wow.webp"
   },
   {
     "_id": "8",
-    "name": "COLOR WOW Dream Cocktail Carb-Infused (200 ml)",
+    "name": "COLOR WOW Dream Cocktail Carb-Infused . 200 ml",
     "description": " A Leave-in thickening treatment. Power-packed with a high-carb complex, this heat-activated formula delivers an instant thickening effect for fine and limp strands so that your hair looks and feels fuller.",
     "price": 43.99,
     "image": "/images/wow cocktail.jpg"
   },
   {
     "_id": "9",
-    "name": "COLOR WOW One Minute Transformation Styling Cream (120 ml)",
+    "name": "COLOR WOW One Minute Transformation Styling Cream . 120 ml",
     "description": "A non-greasy cream that’s applied on dry hair to instantly smooth, tame, and de-frizz on-the-spot. It’s formulated with Avocado oil + Omega 3’s to hydrate and nourish for silky glossy texture.",
     "price": 32.99,
     "image": "/images/wow-cream.webp"
   },
   {
     "_id": "10",
-    "name": "OLAPLEX Nº.7 Bonding Oil (30 ml)",
+    "name": "OLAPLEX Nº.7 Bonding Oil . 30 ml",
     "description": "A highly concentrated, weightless styling oil for every hair type. Just 2-3 drops boost shine and softness instantly, strengthen to reduce breakage, and control frizz and flyaways for sleek, healthy-looking styles. Heat protection up to 450°F/232°C.",
     "price": 43.99,
     "image": "/images/olaplex.webp"
   },
   {
     "_id": "11",
-    "name": "AG Care Colour Savour Colour Protecting Shampoo (1000 ml)",
+    "name": "AG Care Colour Savour Colour Protecting Shampoo . 1000 ml",
     "description": "Gently cleanse and extend the life and vibrancy of colour-treated hair. Our exclusive CARE Complex with sunflower seed extract and powerful polyphenols help protect hair colour from UV/free radical damage.",
     "price": 59.99,
     "image": "/images/agg.jpg"
   },
   {
     "_id": "11",
-    "name": "AG Care Colour Savour Colour Protection Conditioner (1000 ml)",
+    "name": "AG Care Colour Savour Colour Protection Conditioner . 1000 ml",
     "description": "The perfect complement to our Color Savour Shampoo, this rich, creamy conditioner contains a blend of protein, amino acids and moisturizers to feed, repair and revitalize colored hair.",
     "price": 59.99,
     "image": "/images/ag-con.jpg"

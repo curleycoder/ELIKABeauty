@@ -57,9 +57,9 @@ export default function Product() {
   }, [products]);
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 mb-16 pb-16">
+    <div className="min-h-screen bg-[#F8F7F1] text-gray-800 pt-24 px-4 sm:px-6 mb-16 pb-16">
       <div className="text-center mb-6 max-w-3xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl text-purplecolor mb-2">
+        <h1 className="text-2xl sm:text-3xl font-theseason text-[#7a3b44] mb-2">
             Professional Hair Care
         </h1>
 
@@ -70,14 +70,14 @@ export default function Product() {
         <div className="mt-4 flex items-center justify-center gap-3 flex-wrap">
           <a
             href={`mailto:${CONTACT_EMAIL}?subject=Notify%20me%20when%20products%20are%20in%20stock&body=Hi%20Elika%20Beauty%2C%0A%0APlease%20notify%20me%20when%20products%20are%20available.%0A%0AName%3A%0APhone%3A%0AInterested%20in%3A%20(anti-yellow%20shampoo%2C%20keratin-safe%2C%20moisture%20treatments%2C%20...)`}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-purplecolor text-white text-sm font-semibold shadow hover:brightness-110"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-[#7a3b44] text-white text-sm font-semibold shadow hover:brightness-110"
           >
             Get Notified
           </a>
 
           <button
             onClick={() => setShowInfo((s) => !s)}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-purplecolor/30 text-purplecolor text-sm font-semibold shadow hover:bg-purplecolor/5"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-[#7a3b44]/30 text-[#7a3b44] text-sm font-semibold shadow hover:bg-purplecolor/5"
             aria-expanded={showInfo}
           >
             {showInfo ? "Hide details" : "Learn more"}
@@ -87,26 +87,26 @@ export default function Product() {
 
       <section
         className={`max-w-4xl mx-auto transition-all duration-300 ${
-          showInfo ? "mb-8 opacity-100 max-h-[2000px]" : "mb-2 opacity-0 max-h-0 overflow-hidden"
+          showInfo ? "mb-5 opacity-100 max-h-[2000px]" : "mb-2 opacity-0 max-h-0 overflow-hidden"
         }`}
         aria-hidden={!showInfo}
       >
-        <div className="space-y-6 text-gray-700 leading-relaxed bg-white/70 rounded-2xl p-5 sm:p-7 shadow-sm border border-purplecolor/10">
+        <div className="space-y-6 text-gray-700 leading-relaxed bg-white/70 rounded-xl p-5 sm:p-7 shadow-sm border border-purplecolor/10">
           <p>
-            At <strong>{SITE_NAME}</strong> in Burnaby, we hand-pick{" "}
+            At <strong className="font-theseason text-[#7a3b44]">{SITE_NAME}</strong> in Burnaby, we hand-pick{" "}
             <em>professional hair care</em> that helps maintain colour, supports blonding services,
             and protects keratin results. Each item is stylist-tested and chosen for performance and
             hair health.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor">Why Salon-Quality?</h2>
+          <h4 className="text-lg font-semibold text-[#7a3b44]">Why Salon-Quality?</h4>
           <p>
             Pro formulas are concentrated and targeted, so you use less and see better results—especially
             for <em>highlights, balayage,</em> or <em>keratin</em>. They help maintain tone, reduce damage,
             and keep hair shiny between visits.
           </p>
 
-          <h2 className="text-xl font-semibold text-purplecolor">Client Favorites</h2>
+          <h4 className="text-lg font-semibold text-[#7a3b44]">Client Favorites</h4>
           <p>
             Our most-requested picks include <strong>Argan Oil</strong> for dry hair,{" "}
             <strong>colour-safe shampoo and conditioner</strong> to help colour last longer, and{" "}
@@ -122,7 +122,7 @@ export default function Product() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl p-4 border border-purplecolor/10 shadow overflow-hidden"
+                className="bg-white rounded-2xl p-4 border border-[#7a3b44]/10 shadow overflow-hidden"
               >
                 <div className="w-full h-48 bg-gray-200 animate-pulse rounded-xl mb-4" />
                 <div className="h-4 w-2/3 bg-gray-200 animate-pulse rounded mb-2" />
@@ -168,16 +168,16 @@ export default function Product() {
                     />
                   </div>
 
-                  <h2 className="text-lg font-semibold text-purplecolor line-clamp-2">
+                  <h3 className="text-lg font-theseason text-[#7a3b44] line-clamp-2">
                     {product.name}
-                  </h2>
+                  </h3>
 
                   <p className="text-sm text-gray-600 mt-1 line-clamp-3">
                     {product.description}
                   </p>
 
                   <div className="mt-3 flex items-center justify-between">
-                    <p className="text-lg font-bold">
+                    <p className="text-lg font-bold text-[#7a3b44]">
                       {typeof product.price === "number" ? `$${product.price}` : ""}
                     </p>
                   </div>

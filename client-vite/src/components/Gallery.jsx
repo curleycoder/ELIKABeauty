@@ -204,7 +204,7 @@ export default function Gallery() {
   };
 
   return (
-    <section id="gallery-page" className="text-center px-4 py-24">
+    <section id="gallery-page" className="text-center px-4 py-20">
       <div className="text-center">
         <h1 className="text-3xl font-theseason text-[#7a3b44] mb-2">Gallery</h1>
         <p className="text-sm text-gray-600 mb-6">
@@ -213,13 +213,13 @@ export default function Gallery() {
       </div>
 
       {/* Category Filters */}
-      <div className="flex flex-wrap justify-center gap-2 mb-6">
+      <div className="flex flex-wrap justify-center gap-2 mb-3">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => pickCategory(cat)}
             className={[
-              "px-4 py-2 rounded-full border text-sm transition",
+              "px-4 py-1 rounded-lg border text-sm transition",
               cat === category
                 ? "bg-[#7a3b44] text-white border-[#7a3b44]"
                 : "bg-white/70 text-gray-700 border-pink-100 hover:bg-white",

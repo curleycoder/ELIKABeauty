@@ -72,7 +72,7 @@ useEffect(() => {
         "fixed top-0 left-0 right-0 z-50 transition ",
         scrolled
           ? "bg-[#F8F7F1] text-[#7a3b44]"
-          : "bg-[#F8F7F1]  text-[#7a3b44]",
+          : "bg-[#F8F7F1]  text-[#7a3b44] shadow-sm",
       ].join(" ")}
     >
       <nav className="font-theseason h-14 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">

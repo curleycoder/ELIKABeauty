@@ -44,7 +44,7 @@ export default function Home() {
       </section> */}
 
       {/* MAIN CONTENT */}
-      <section className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 space-y-12 sm:space-y-20">
+      <section className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-8 py-5 sm:py-1 space-y-12 sm:space-y-6">
         <AboutMe />
         <GoogleReview />
         {/* <Gallery /> */}
@@ -55,13 +55,13 @@ export default function Home() {
       <section className="mt-10 sm:mt-16">
         <Instagram />
       </section>
-            <section className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 space-y-12 sm:space-y-20">
+            <section className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-8 space-y-12 sm:space-y-20">
 
       <FAQ />
       </section>
 
       {/* FINAL CTA */}
-      <section className="bg-[#7a3b44] py-12 sm:py-16 mt-10">
+      <section className="bg-[#7a3b44] py-8 sm:py-8 mt-6">
         <div className="max-w-3xl mx-auto text-center px-4">
           <h2 className="text-2xl sm:text-3xl font-theseason text-[#F8F7F1]">
             Ready to Book Your Appointment?
