@@ -1,7 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import articles from "../data/articles";
-
+import  articles from "../data/articles";
 const SITE_NAME = "Elika Beauty";
 const SITE_ORIGIN = "https://elikabeauty.ca";
 
@@ -38,16 +37,18 @@ export default function ArticlePage() {
     ? article.image
     : `${SITE_ORIGIN}${article.image?.startsWith("/") ? "" : "/"}${article.image}`;
 
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: article.title,
-    description: pageDescription,
-    image: [pageImage],
-    mainEntityOfPage: pageUrl,
-    author: { "@type": "Organization", name: SITE_NAME },
-    publisher: { "@type": "Organization", name: SITE_NAME },
-  };
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: article.title,
+  description: pageDescription,
+  image: [pageImage],
+  mainEntityOfPage: pageUrl,
+  dateModified: article.updatedAt,
+  author: { "@type": "Organization", name: SITE_NAME },
+  publisher: { "@type": "Organization", name: SITE_NAME },
+};
+
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",

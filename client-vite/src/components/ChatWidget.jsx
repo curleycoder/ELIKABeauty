@@ -97,7 +97,7 @@ export default function ChatWidget() {
         {/* Iframe (exists ONLY when open) */}
         <iframe
           title="Beauty Shohre Chat"
-          src="https://client-sand-kappa.vercel.app/?biz=beautyshohre&embed=1"
+          src="https://client-sand-kappa.vercel.app/?biz=elikabeauty&embed=1"
           className="w-full h-[calc(100%-3rem)] border-0"
         />
       </div>

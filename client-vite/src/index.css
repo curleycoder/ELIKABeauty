@@ -16,8 +16,8 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 @font-face {
-  font-family: "BrownSugar";
-  src: url("/fonts/BrownSugar.ttf") format("truetype");
+  font-family: "TheSeason";
+  src: url("/fonts/theseason.otf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -29,8 +29,8 @@ body {
   font-family: "Lato", sans-serif;
 }
 
-.font-brownsugar {
-  font-family: "BrownSugar", cursive;
+.font-theseason {
+  font-family: "TheSeason", cursive;
 }
 
 .animate-fadeIn {

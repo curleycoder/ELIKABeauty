@@ -181,7 +181,7 @@ export default function GoogleReview() {
   return (
     <section className="bg-white px-3 py-4 sm:p-6 rounded-xl max-w-6xl mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-3 sm:mb-6">
+        <h2 className="text-2xl font-theseason sm:text-3xl text-[#7a3b44] mb-3 sm:mb-6">
     What Clients Say About Us
 </h2>
       </div>

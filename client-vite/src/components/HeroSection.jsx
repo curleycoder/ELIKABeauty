@@ -1,64 +1,87 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+const HERO_SLIDES = [
+  { src: "/assets/hair-hero.webp", alt: "Elika Beauty Salon" },
+  { src: "/assets/nail-hero.webp", alt: "Elika Hair Color" },
+  { src: "/assets/wash-hero.webp", alt: "Elika Hair Wash" },
+  { src: "/assets/cut-hero.jpg", alt: "Elika haircut" },
+];
 
 export default function HeroSection() {
   const navigate = useNavigate();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
-    <section className="relative isolate min-h-[70vh] sm:min-h-screen overflow-hidden flex items-center">
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <picture>
-          <source
-            type="image/webp"
-            srcSet="/assets/booking-800.webp 800w, /assets/booking-1200.webp 1200w, /assets/booking-1600.webp 1600w"
-            sizes="(max-width: 768px) 100vw, 90vw"
-          />
+    <section className="relative min-h-[70vh] sm:min-h-[90vh] overflow-hidden bg-[#ffe3d6]">
+      {/* IMAGE LAYER */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {HERO_SLIDES.map((slide, i) => (
           <img
-            src="/assets/booking-1200.webp"
-            alt="Elika Beauty salon"
-            className="h-full w-full object-cover"
-            width={1600}
-            height={900}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            draggable="false"
+            key={slide.src}
+            src={slide.src}
+            alt={slide.alt}
+            className={[
+              "absolute inset-0 h-full w-full object-cover transition-opacity duration-1000",
+              i === index ? "opacity-30" : "opacity-0",
+            ].join(" ")}
+            loading={i === 0 ? "eager" : "lazy"}
           />
-        </picture>
-        <div className="absolute inset-0 bg-black/10" />
+        ))}
       </div>
 
-      {/* Foreground content: mobile bottom-center, desktop right */}
-      <div
-        className={[
-          "relative pointer-events-auto w-[92%] max-w-xl rounded-2xl bg-black/20 backdrop-blur-sm px-4 py-5 sm:px-6 sm:py-8 md:px-10 text-center",
-          // mobile: bottom-center
-          "absolute left-1/2 -translate-x-1/2 top-24",
-          // desktop+: normal flow on the right
-          "sm:static sm:translate-x-0 sm:ml-auto sm:mr-12 lg:mr-14",
-        ].join(" ")}
-      >
-        <h2 className="font-display text-white text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">
-          Book Your Appointment
-        </h2>
+      {/* CONTENT */}
+      <div className="relative z-10 flex min-h-[70vh] sm:min-h-[80vh] items-center justify-center px-4 pt-20 text-center">
+        {/* pt-20 = space for fixed navbar */}
+        <div className="rounded-3xl mt-48">
+          <h1 className="
+            font-theseason
+            text-6xl
+            sm:text-7xl
+            md:text-8xl
+            lg:text-9xl
+            xl:text-[10rem]
+            2xl:text-[12rem]
+            tracking-wide
+            text-[#7a3b44]
+            drop-shadow-[0_2px_18px_rgba(0,0,0,0.3)]
+          ">
+            ELIKA
+          </h1>
 
-        <p className="text-white/95 text-sm sm:text-base mb-1">
-          Address: 102–3790 Canada Way, Burnaby, BC
-        </p>
-        <p className="text-white/95 text-sm sm:text-base mb-1">
-          Phone: (778) 513-9006
-        </p>
-        <p className="text-white/95 text-sm sm:text-base mb-5">
-          Choose your service and book online today.
-        </p>
+          <p
+            className="
+              mt-2
+              text-xs
+              sm:text-sm
+              md:text-base
+              lg:text-lg
+              xl:text-xl
+              2xl:text-2xl
+              tracking-[0.35em]
+              sm:tracking-[0.90em]
+              xl:tracking-[0.6em]
+              uppercase
+              text-[#7a3b44]/90
+            "
+          >
+            Beauty Salon
+          </p>
 
-        <button
-          type="button"
-          onClick={() => navigate("/booking")}
-          className="rounded-full bg-[#ceaa5b] px-8 py-4 font-bold text-[#200027] transition hover:bg-[#55203d] hover:text-white"
-        >
-          BOOK NOW
-        </button>
+          <button
+            onClick={() => navigate("/booking")}
+            className="mt-8 rounded-md bg-[#FE8269] px-7 py-3 text-sm font-semibold text-white transition hover:brightness-95"
+          >
+            BOOK AN APPOINTMENT
+          </button>
+        </div>
       </div>
     </section>
   );

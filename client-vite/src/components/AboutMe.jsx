@@ -8,7 +8,7 @@ export default function AboutMe() {
       className="bg-white text-gray-800 px-4 sm:px-6 md:px-16 py-10 max-w-5xl mx-auto"
     >
       <div className="text-center">
-        <h2 className="text-2xl sm:text-3xl text-[#55203d] mb-8">
+        <h2 className="text-2xl sm:text-3xl font-theseason text-[#7a3b44] mb-8">
             About ELIKA BEAUTY
 
         </h2>

@@ -5,26 +5,28 @@ import GoogleReview from "../components/GoogleReview";
 import Gallery from "../components/Gallery";
 import FAQ from "../components/FAQ";
 import Instagram from "../components/Instagram";
+import IntroSection from "../components/Intro";
 
 export default function Home() {
   return (
     <>
       {/* HERO */}
       <HeroSection />
+      <IntroSection />
 
       {/* SEO INTRO */}
-      <section className="bg-[#200027] sm:px-6 lg:px-12 pt-6 pb-10 sm:pt-10">
+      {/* <section className="bg-[#200027] sm:px-6 lg:px-12 pt-6 pb-10 sm:pt-10">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs sm:text-sm tracking-widest uppercase text-[#ceaa5b]">
             Burnaby • Serving Metro Vancouver
-          </p>
+          </p> */}
 
           {/* Location + trust bridge */}
-          <p className="mt-2 text-sm text-[#ceaa5b]">
+          {/* <p className="mt-2 text-sm text-[#ceaa5b]">
             3790 Canada Way #102, Burnaby • Formerly Tangles Hair Design
           </p>
 
-          <h1 className="mt-3 text-2xl sm:text-4xl font-display font-brownsugar text-[#ceaa5b] leading-tight">
+          <h1 className="mt-3 text-2xl sm:text-4xl font-display font-theseason text-[#ceaa5b] leading-tight">
             <span className="font-sans">
               ELIKA BEAUTY
             </span>
@@ -39,7 +41,7 @@ export default function Home() {
             delivered with experience and care.
           </p>
         </div>
-      </section>
+      </section> */}
 
       {/* MAIN CONTENT */}
       <main className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 space-y-12 sm:space-y-20">

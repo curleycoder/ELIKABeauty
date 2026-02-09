@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { FaPlus, FaCheck } from "react-icons/fa";
 
-const TABS = ["Hair", "Face", "Men", "Add-ons"];
+const TABS = ["Hair", "Face", "Men", "Add ons"];
 
 const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle }) {
   return (
@@ -61,7 +61,7 @@ export default function BookingForm({ onSelectionChange }) {
   const [conflictWarning, setConflictWarning] = useState(false);
   const [services, setServices] = useState([]);
 
-  const baseURL = import.meta.env.VITE_API_URL || "https://api.beautyshohrestudio.ca";
+  const baseURL = import.meta.env.VITE_API_URL || "https://api.elikabeauty.ca";
 
   // Fetch services once
   useEffect(() => {
@@ -121,11 +121,11 @@ export default function BookingForm({ onSelectionChange }) {
   }, [activeTab]);
 
   return (
-    <div className="bg-white/60 backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto">
+    <div className="bg-white backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto">
       {/* Header */}
       <div className="p-6 sm:p-8 pb-4 border-b border-purplecolor/10">
         <div className="text-center">
-          <h2 className="text-xl sm:text-2xl font-display font-bold text-[#55203d]">
+          <h2 className="text-xl sm:text-2xl font-theseason font-bold text-[#7a3b44]">
             Services
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -134,16 +134,16 @@ export default function BookingForm({ onSelectionChange }) {
         </div>
 
         {/* Tabs */}
-        <div className="mt-4 flex font-display font-bold flex-wrap gap-2 justify-center">
+        <div className="mt-4 flex font-theseason font-bold flex-wrap gap-2 justify-center">
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={[
-                "px-4 py-2 rounded-full font-semibold text-sm transition-all",
+                "px-4 py-2 rounded-full font-bold text-sm transition-all",
                 activeTab === tab
-                  ? "bg-purplecolor text-white shadow-md scale-[1.02]"
-                  : "bg-white text-purplecolor border border-purplecolor/20 hover:bg-purplecolor/5",
+                  ? "bg-[#7a3b44] text-white shadow-md scale-[1.02]"
+                  : "bg-white text-[#7a3b44] border border-purplecolor/20 hover:bg-purplecolor/5",
               ].join(" ")}
             >
               {tab}

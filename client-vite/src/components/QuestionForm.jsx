@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
 const baseURL =
-  import.meta.env.VITE_API_URL || "https://api.beautyshohrestudio.ca";
+  import.meta.env.VITE_API_URL || "https://api.elikabeauty.ca";
 
 export default function QuestionsForm({
   selection,

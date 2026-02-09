@@ -27,8 +27,8 @@ assertRouter("emailRoutes", emailRoutes);
 assertRouter("serviceRoutes", serviceRoutes);
 
 const allowedOrigins = new Set([
-  "https://beautyshohrestudio.ca",
-  "https://www.beautyshohrestudio.ca",
+  "https://elikabeauty.ca",
+  "https://www.elikabeauty.ca",
   "http://localhost:3000",
 ]);
 

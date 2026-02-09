@@ -97,7 +97,7 @@ export default function Booking() {
   const progressPct = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="w-full min-h-screen relative font-bodonimoda bg-[#fff8fa]">
+    <div className="w-full min-h-screen relative font-bodonimoda bg-[#F8F7F1]">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
@@ -111,14 +111,14 @@ export default function Booking() {
       />
 
       {/* ✅ Sticky stepper header (Apple vibe) */}
-      <div className="sticky top-0 z-30 bg-[#fff8fa]/90 backdrop-blur border-b border-[#55203d]/10">
+      <div className="sticky top-0 z-30 bg-[#F8F7F1]/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={goBack}
               disabled={step === 0}
               className={`text-sm font-semibold font-display ${
-                step === 0 ? "opacity-30 cursor-not-allowed" : "text-[#55203d]"
+                step === 0 ? "opacity-30 cursor-not-allowed" : "text-[#7a3b44]"
               }`}
             >
               Back
@@ -128,9 +128,9 @@ export default function Booking() {
               <div className="text-xs text-gray-500">
                 Step {step + 1} of {STEPS.length}
               </div>
-              <h1 className="text-lg sm:text-xl font-display font-bold text-[#55203d]">
+              <h2 className="text-lg sm:text-xl font-display font-bold text-[#7a3b44]">
                 {STEPS[step].title}
-              </h1>
+              </h2>
             </div>
 
             <button
@@ -141,7 +141,7 @@ export default function Booking() {
                 setSelection({ selected: [], total: 0 });
                 setShowInfo(false);
               }}
-              className="text-sm font-semibold font-display text-[#55203d]/70 hover:text-[#55203d]"
+              className="text-sm font-semibold font-display text-[#55203d]/70 hover:text-[#7a3b44]"
             >
               Reset
             </button>
@@ -149,7 +149,7 @@ export default function Booking() {
 
           <div className="mt-3 h-1.5 bg-black/5 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#55203d] transition-all duration-300"
+              className="h-full bg-[#7a3b44] transition-all duration-300"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -160,19 +160,19 @@ export default function Booking() {
       <div className="relative z-10 px-4 sm:px-6 py-8 max-w-6xl mx-auto">
         {/* Header (kept, but not huge) */}
         <header className="mb-6 text-center">
-          <h2 className="text-2xl sm:text-3xl text-[#55203d] font-display font-bold">
-            <span className="border-t border-b border-gray-300 py-2 px-4 sm:px-6">
-              Book Your Hair Appointment
+          <h1 className="text-2xl sm:text-3xl text-[#7a3b44] font-theseason font-bold">
+            <span className=" py-2 px-4 sm:px-6">
+              Book Your Appointment
             </span>
-          </h2>
+          </h1>
           <p className="text-gray-600 text-sm mt-2">
-            3939 Hastings Street #105, Burnaby • 30+ years experience
+            3790 Canada Way #102, Burnaby
           </p>
 
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
               onClick={() => setShowInfo((s) => !s)}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-[#55203d]/30 text-[#55203d] text-sm font-semibold font-display shadow hover:bg-[#55203d]/5"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-[#55203d]/30 text-[#7a3b44] text-sm font-semibold font-display shadow hover:bg-[#55203d]/5"
               aria-expanded={showInfo}
               aria-controls="booking-info"
             >
@@ -183,32 +183,41 @@ export default function Booking() {
 
         {/* Optional info */}
         <section
-          id="booking-info"
-          className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 ${
-            showInfo
-              ? "p-5 sm:p-7 mb-6 opacity-100 max-h-[2000px]"
-              : "p-0 mb-2 opacity-0 max-h-0 overflow-hidden"
-          }`}
-          aria-hidden={!showInfo}
-        >
-          <p>
-            We’re excited to welcome you to <strong>Beauty Shohre Studio</strong>{" "}
-            in <strong>3939 Hastings Street #105, Burnaby</strong>. Whether you’re
-            booking{" "}
-            <em>
-              highlights, balayage, a keratin treatment, or a precision haircut
-            </em>
-            , our goal is healthy, beautiful hair that fits your lifestyle.
-          </p>
-          <h2 className="text-xl font-semibold text-[#55203d] mt-4">
-            How Online Booking Works
-          </h2>
-          <p className="mt-1">
-            1) <strong>Select your service(s)</strong>. 2) We estimate the{" "}
-            <strong>time needed</strong>. 3) Pick a <strong>date & time</strong>.
-            4) Add a few details. You’ll receive instant confirmation.
-          </p>
-        </section>
+  id="booking-info"
+  className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 ${
+    showInfo
+      ? "p-5 sm:p-7 mb-6 opacity-100 max-h-[2000px]"
+      : "p-0 mb-2 opacity-0 max-h-0 overflow-hidden"
+  }`}
+  aria-hidden={!showInfo}
+>
+  <p>
+    We’re excited to welcome you to{" "}
+    <strong className="font-theseason text-[#7a3b44]">
+      ELIKA BEAUTY
+    </strong>{" "}
+    at <strong className=" text-[#7a3b44]">3790 Canada Way #102, Burnaby</strong>.  
+    We offer a full range of professional beauty services, including{" "}
+    <em>
+      hair color, highlights, balayage, precision haircuts, keratin treatments,
+      brow shaping, and select aesthetic services
+    </em>
+    —all focused on quality, comfort, and results that fit your lifestyle.
+  </p>
+
+  <h2 className="text-xl font-semibold text-[#7a3b44] mt-4">
+    How Online Booking Works
+  </h2>
+
+  <p className="mt-1">
+    1) <strong>Select your service(s)</strong>.  
+    2) We calculate the <strong>required time</strong>.  
+    3) Choose a <strong>date & time</strong>.  
+    4) Add your details and confirm.  
+    You’ll receive instant confirmation once your booking is complete.
+  </p>
+</section>
+
 
         {/* Main row */}
         <div className="flex flex-col lg:flex-row gap-8">
@@ -244,11 +253,14 @@ export default function Booking() {
 
           {/* RIGHT: Summary (desktop only, sticky) */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-28">
-            <h4 className="font-bold text-xl font-display text-[#55203d] mb-1">
-              Beauty Shohre Studio
+            <h4 className="font-bold text-xl font-theseason text-[#7a3b44] mb-1">
+              ELIKA BEAUTY
             </h4>
+            <p className="text-sm text-gray-500">
+              3790 Canada Way #102, Burnaby
+            </p>
             <p className="text-sm text-gray-500 mb-4">
-              3939 Hastings Street #105, Burnaby V5C 2H8
+              V5G 1G4
             </p>
 
             <p className="text-med font-bold mb-2">Selected Services:</p>
@@ -266,19 +278,19 @@ export default function Booking() {
               <span>Time on Service</span>
               <span>{durationStats.avg} min</span>
             </div>
-            <div className="flex justify-between text-sm text-gray-500 mt-1">
+            {/* <div className="flex justify-between text-sm text-gray-500 mt-1">
               <span>Buffer</span>
               <span>{bufferMinutes} min</span>
-            </div>
+            </div> */}
 
             <hr className="my-4 border-pink-100" />
 
-            <div className="text-lg font-semibold text-[#55203d]">
+            <div className="text-lg font-semibold text-[#7a3b44]">
               <div className="flex font-display justify-between mb-1">
                 <span>Total</span>
                 <span>{selection.total > 0 ? `+$${selection.total}` : `$0`}</span>
               </div>
-              <p className="text-sm italic text-[#55203d] mt-2 leading-tight">
+              <p className="text-sm italic text-[#7a3b44] mt-2 leading-tight">
                 * Final pricing depends on hair length, volume, and thickness.
               </p>
             </div>
@@ -290,7 +302,7 @@ export default function Booking() {
       <div className="sm:hidden sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-sm font-bold text-[#55203d]">
+            <div className="text-sm font-theseason font-bold text-[#7a3b44]">
               {selection.selected.length} service(s) • ${selection.total}
             </div>
             <div className="text-xs text-gray-500">
@@ -308,7 +320,7 @@ export default function Booking() {
             }}
             className={`px-5 py-2.5 rounded-full font-bold text-white transition whitespace-nowrap ${
               !canContinue || loading
-                ? "bg-[#55203d]/25 cursor-not-allowed"
+                ? "bg-[#7a3b44]/25 cursor-not-allowed"
                 : "bg-[#55203d] hover:brightness-110"
             }`}
           >
@@ -321,7 +333,7 @@ export default function Booking() {
       {showFinalPopup && bookingData && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-md space-y-4">
-            <h3 className="text-xl font-display font-semibold text-[#55203d]">
+            <h3 className="text-xl font-display font-semibold text-[#7a3b44]">
               Booking Confirmed ✅
             </h3>
 
@@ -343,7 +355,7 @@ export default function Booking() {
             <p className="text-sm font-display text-gray-600">
               You will receive a confirmation email shortly.
               <br />
-              For changes, contact <strong>Shohre</strong> at{" "}
+              For changes, contact <strong>Amina</strong> at{" "}
               <strong>778-513-9006</strong>.
             </p>
 
@@ -356,7 +368,7 @@ export default function Booking() {
                 setStep(0);
                 setShowInfo(false);
               }}
-              className="mt-2 px-5 py-2 font-display bg-[#55203d] text-white rounded-lg shadow hover:brightness-110"
+              className="mt-2 px-5 py-2 font-display bg-[#7a3b44] text-white rounded-lg shadow hover:brightness-110"
             >
               Close
             </button>
