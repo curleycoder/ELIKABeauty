@@ -10,8 +10,8 @@ import {
   parse,
 } from "date-fns";
 
-const OPEN_HOUR = 11;   // 11 AM
-const CLOSE_HOUR = 19;  // 7 PM
+const OPEN_HOUR = 10;   // 11 AM
+const CLOSE_HOUR = 19;  // 6 PM
 const SLOT_STEP_MINUTES = 15;
 
 function generateNext30Days(startDate = new Date()) {
