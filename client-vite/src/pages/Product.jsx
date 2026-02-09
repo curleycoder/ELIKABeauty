@@ -3,7 +3,7 @@ import axios from "axios";
 
 const SITE_NAME = "Elika Beauty";
 const SITE_ORIGIN = "https://elikabeauty.ca";
-const CONTACT_EMAIL = "beautyshohrestudio@gmail.com"; // change to your Elika email when ready
+const CONTACT_EMAIL = "amina@elikabeauty.com";
 
 export default function Product() {
   const [products, setProducts] = useState([]);

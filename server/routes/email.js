@@ -76,7 +76,7 @@ router.post("/send-confirmation", async (req, res) => {
     // Send to owner(s)
     await transporter.sendMail({
       from: `"Beauty Shohre Booking Notification" <${process.env.SMTP_USER}>`,
-      to: [process.env.SMTP_USER, "shohrehelkaei@gmail.com"],
+      to: [process.env.SMTP_USER, "amina@elikabeauty.com"],
       subject: `📅 New Booking — ${name} (${format(safeDate, "MMM d")} ${time})`,
       html: ownerHtml,
       replyTo: email, // ✅ so you can hit "Reply" and it goes to the client
