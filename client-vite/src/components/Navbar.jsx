@@ -104,7 +104,7 @@ useEffect(() => {
       </nav>
 
       {menuOpen && (
-        <div className="sm:hidden bg-white/60 px-4 pb-4 text-[#7a3b44]">
+        <div className="sm:hidden bg-[#F8F7F1] px-4 pb-4 text-[#7a3b44]">
           {navItems.map((item) => (
             <button
               key={item.name}
