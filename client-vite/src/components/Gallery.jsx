@@ -204,9 +204,9 @@ export default function Gallery() {
   };
 
   return (
-    <section id="gallery-page" className="text-center px-4 py-10">
+    <section id="gallery-page" className="text-center px-4 py-24">
       <div className="text-center">
-        <h1 className="text-3xl text-[#55203d] mb-2">Gallery</h1>
+        <h1 className="text-3xl font-theseason text-[#7a3b44] mb-2">Gallery</h1>
         <p className="text-sm text-gray-600 mb-6">
           Browse by service. Click any thumbnail to pause autoplay.
         </p>
@@ -221,7 +221,7 @@ export default function Gallery() {
             className={[
               "px-4 py-2 rounded-full border text-sm transition",
               cat === category
-                ? "bg-[#55203d] text-white border-[#55203d]"
+                ? "bg-[#7a3b44] text-white border-[#7a3b44]"
                 : "bg-white/70 text-gray-700 border-pink-100 hover:bg-white",
             ].join(" ")}
             type="button"
@@ -306,7 +306,7 @@ export default function Gallery() {
               onClick={() => selectIndex(idx)}
               className={[
                 "h-20 w-20 object-cover rounded cursor-pointer border-2",
-                currentIndex === idx ? "border-[#55203d]" : "border-transparent",
+                currentIndex === idx ? "border-[#7a3b44]" : "border-transparent",
               ].join(" ")}
               loading="lazy"
               decoding="async"

@@ -97,7 +97,7 @@ export default function Booking() {
   const progressPct = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="w-full min-h-screen relative font-bodonimoda bg-[#F8F7F1]">
+    <div className="w-full min-h-screen relative font-sans bg-[#F8F7F1]">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"

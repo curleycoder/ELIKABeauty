@@ -47,7 +47,7 @@ export default function Home() {
       <main className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 space-y-12 sm:space-y-20">
         <AboutMe />
         <GoogleReview />
-        <Gallery />
+        {/* <Gallery /> */}
         <FAQ />
       </main>
 

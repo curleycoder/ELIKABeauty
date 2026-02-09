@@ -45,12 +45,13 @@ useEffect(() => {
     Booking: "/booking",
     Articles: "/articles",
     Products: "/product",
+    Gallery: "/gallery",
   };
 
   const navItems = [
     { name: "Home" },
     { name: "Booking" },
-    { name: "Gallery", scroll: "gallery-section" },
+    { name: "Gallery" },
     { name: "Articles" },
     { name: "Products" },
     { name: "About Me", scroll: "about-section" },
