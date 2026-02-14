@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
-const baseURL =
-  import.meta.env.VITE_API_URL || "https://api.elikabeauty.ca";
+const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+if (!baseURL) {
+  console.error("Missing VITE_API_URL");
+}
+
 
 export default function QuestionsForm({
   selection,
@@ -77,6 +80,9 @@ export default function QuestionsForm({
     if (loading) return; // ✅ guard against double submits
     setLoading(true);
 
+      let emailOk = true; // ✅ ADD THIS
+
+
     try {
       // Hard validation
       if (!bookingTime?.date || !bookingTime?.time) {
@@ -108,28 +114,28 @@ export default function QuestionsForm({
 
       // 2) Send confirmation email (NON-BLOCKING)
       const ADMIN_EMAIL =
-  import.meta.env.VITE_ADMIN_EMAIL || "amina@elikabeauty.ca";
+      import.meta.env.VITE_ADMIN_EMAIL || "amina@elikabeauty.ca";
 
-const emailPayload = {
-  // customer info
-  name: form.name.trim(),
-  email: form.email.trim(),
-  phone: form.phone.trim(),
-  referredBy: form.referredBy.trim(),
+      const emailPayload = {
+        // customer info
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        referredBy: form.referredBy.trim(),
 
-  // booking info
-  services: selection.selected.map((s) => s.name),
-  date: bookingTime.date,
-  time: bookingTime.time,
+        // booking info
+        services: selection.selected.map((s) => s.name),
+        date: bookingTime.date,
+        time: bookingTime.time,
 
-  // FIX: duration should come from selected services, not selection.duration
-  duration: selection.selected.reduce((sum, s) => sum + (s?.duration || 0), 0),
+        // FIX: duration should come from selected services, not selection.duration
+        duration: selection.selected.reduce((sum, s) => sum + (s?.duration || 0), 0),
 
-  note: (form.note || "").trim(),
+        note: (form.note || "").trim(),
 
-  // NEW: tell backend where to send the shop notification
-  adminEmail: ADMIN_EMAIL,
-};
+        // NEW: tell backend where to send the shop notification
+        adminEmail: ADMIN_EMAIL,
+      };
 
 
       try {
@@ -177,10 +183,16 @@ const emailPayload = {
         );
       }
     } catch (error) {
-      console.error("❌ Error submitting booking:", error);
-      alert(
-        `❌ ${error.message || "Failed to complete booking. Please try again."}`
-      );
+  console.error("❌ Error submitting booking:", error);
+
+  if (String(error.message).includes("no longer available")) {
+    alert("That time just got booked. Please choose another time.");
+    // optional: send them back to step 1
+    // (do this in parent by passing a callback if you want)
+  } else {
+    alert(`❌ ${error.message || "Failed. Try again."}`);
+  }
+
     } finally {
       setLoading(false);
     }
