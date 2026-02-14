@@ -33,7 +33,7 @@ export default function HeroSection() {
             alt={slide.alt}
             className={[
               "absolute inset-0 h-full w-full object-cover transition-opacity duration-1000",
-              i === index ? "opacity-30" : "opacity-0",
+              i === index ? "opacity-45" : "opacity-0",
             ].join(" ")}
             loading={i === 0 ? "eager" : "lazy"}
           />
@@ -53,7 +53,7 @@ export default function HeroSection() {
             xl:text-[10rem]
             2xl:text-[12rem]
             tracking-wide
-            text-[#7a3b44]
+            text-[#572a31]
             drop-shadow-[0_2px_18px_rgba(0,0,0,0.3)]
           ">
             ELIKA
@@ -62,7 +62,7 @@ export default function HeroSection() {
           <p
             className="
               mt-2
-              text-xs
+              text-sm
               sm:text-sm
               md:text-base
               lg:text-lg
@@ -72,7 +72,7 @@ export default function HeroSection() {
               sm:tracking-[0.90em]
               xl:tracking-[0.6em]
               uppercase
-              text-[#7a3b44]/90
+              text-[#572a31]
             "
           >
             Beauty Salon
@@ -80,7 +80,7 @@ export default function HeroSection() {
 
           <button
             onClick={() => navigate("/booking")}
-            className="mt-8 rounded-md bg-[#FE8269] px-7 py-3 text-sm font-semibold text-white transition hover:brightness-95"
+            className="mt-8 rounded-md bg-[#7a3b44] hover:bg-[#FF9B87] px-7 py-3 text-sm font-semibold text-[#faeddd] hover:text-[#572a31] transition"
           >
             BOOK AN APPOINTMENT
           </button>

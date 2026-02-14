@@ -8,7 +8,7 @@ export default function AboutMe() {
       className="bg-white text-gray-800 px-4 sm:px-6 md:px-16 py-10 max-w-5xl mx-auto"
     >
       <div className="text-center">
-        <h2 className="text-2xl sm:text-3xl font-theseason text-[#7a3b44] mb-8">
+        <h2 className="text-2xl sm:text-3xl font-theseason text-[#572a31] mb-8">
           About ELIKA BEAUTY
         </h2>
       </div>
@@ -22,9 +22,9 @@ export default function AboutMe() {
 
         <div className="text-gray-800 leading-relaxed">
           <p className="mb-4">
-  I’m <strong className="text-[#7a3b44]">Amina</strong>, the new owner of{" "}
-  <strong className="font-theseason text-[#7a3b44]">ELIKA Beauty</strong>, formerly{" "}
-  <strong className="text-[#7a3b44]">Tangles Hair Design</strong>, located in Burnaby. 
+  I’m <strong>Amina</strong>, the new owner of{" "}
+  <strong className="font-theseason">ELIKA Beauty</strong>, formerly{" "}
+  <strong >Tangles Hair Design</strong>, located in Burnaby. 
   With <strong>30 years of professional experience</strong> — including{" "}
   <strong>24 years in Iran</strong> and <strong>8 years in Canada</strong> — I bring
   a deep, hands-on understanding of hair and beauty across different styles, hair

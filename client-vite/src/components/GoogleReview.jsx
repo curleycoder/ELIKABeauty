@@ -181,14 +181,14 @@ export default function GoogleReview() {
   return (
     <section className="bg-white px-3 py-4 sm:p-6 rounded-xl max-w-6xl mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-theseason sm:text-3xl text-[#7a3b44] mb-3 sm:mb-6">
-    What Clients Say About Us
-</h2>
+        <h2 className="text-2xl font-theseason sm:text-3xl text-[#572a31] mb-1 sm:mb-3">
+          What Clients Say About Us
+        </h2>
       </div>
 
       <div className="mt-3 sm:mt-6 relative">
         {loading ? (
-          <p className="text-center text-gray-500 mt-6">Loading reviews...</p>
+          <p className="text-center text-[#572a31]-500 mt-6">Loading reviews...</p>
         ) : reviews.length === 0 ? (
           <p className="text-center text-gray-500 mt-6">No reviews found.</p>
         ) : (
