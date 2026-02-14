@@ -25,10 +25,9 @@ function generateNext30Days(startDate = new Date()) {
   }));
 }
 
-// ✅ Correct slot logic: show start times whose END <= closing
+// Show start times where (start + totalBlockedMinutes) <= closing
 function generateTimeSlots(totalBlockedMinutes, openHour = OPEN_HOUR, closeHour = CLOSE_HOUR) {
   const slots = [];
-
   if (!Number.isFinite(totalBlockedMinutes) || totalBlockedMinutes <= 0) return slots;
 
   const base = new Date();
@@ -36,7 +35,6 @@ function generateTimeSlots(totalBlockedMinutes, openHour = OPEN_HOUR, closeHour 
   const closingTime = setHours(setMinutes(base, 0), closeHour);
 
   let time = openingTime;
-
   while (addMinutes(time, totalBlockedMinutes) <= closingTime) {
     slots.push(format(time, "h:mm a"));
     time = addMinutes(time, SLOT_STEP_MINUTES);
@@ -45,13 +43,17 @@ function generateTimeSlots(totalBlockedMinutes, openHour = OPEN_HOUR, closeHour 
   return slots;
 }
 
-// ✅ Block check uses backend start/end (best)
-function isBlocked(date, time, bookedSlots) {
+// ✅ Proper overlap check (matches backend logic)
+function isBlocked(date, time12h, bookedSlots, totalBlockedMinutes) {
   const slotStart = parse(
-    `${format(date, "yyyy-MM-dd")} ${time}`,
+    `${format(date, "yyyy-MM-dd")} ${time12h}`,
     "yyyy-MM-dd h:mm a",
     new Date()
   );
+
+  if (isNaN(slotStart.getTime())) return true;
+
+  const slotEnd = addMinutes(slotStart, totalBlockedMinutes);
 
   return bookedSlots.some((b) => {
     const bookedStart = new Date(b.start);
@@ -59,8 +61,8 @@ function isBlocked(date, time, bookedSlots) {
 
     if (isNaN(bookedStart.getTime()) || isNaN(bookedEnd.getTime())) return false;
 
-    // overlap rule: slotStart in [bookedStart, bookedEnd)
-    return slotStart >= bookedStart && slotStart < bookedEnd;
+    // overlap: slotStart < bookedEnd && slotEnd > bookedStart
+    return slotStart < bookedEnd && slotEnd > bookedStart;
   });
 }
 
@@ -78,12 +80,14 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
   const today = new Date();
   const monthDates = generateNext30Days(today);
 
-  // ✅ duration here MUST be totalBlockedMinutes (service + buffer)
-  const timeSlots = generateTimeSlots(duration);
+  // duration MUST be totalBlockedMinutes (service + buffer)
+  const totalBlockedMinutes = Number(duration) || 0;
+  const timeSlots = generateTimeSlots(totalBlockedMinutes);
 
   useEffect(() => {
     const fetchBookedTimes = async () => {
       if (!selectedDate) return;
+
       try {
         const res = await fetch(
           `${baseURL}/api/bookings/booked?date=${format(selectedDate, "yyyy-MM-dd")}`
@@ -114,7 +118,10 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
         </h2>
       </div>
 
-      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 sm:px-8 pb-6">
+      <div
+        ref={scrollRef}
+        className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 sm:px-8 pb-6"
+      >
         {/* Calendar */}
         <div className="py-2">
           {Object.entries(
@@ -133,8 +140,12 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
               <div className="grid font-display grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
                 {days.map((d) => {
                   const isToday = d.full === format(today, "yyyy-MM-dd");
-                  const isSelected = selectedDate?.toDateString() === d.date.toDateString();
-                  const isDisabled = isBefore(d.date, new Date(new Date().setHours(0, 0, 0, 0)));
+                  const isSelected =
+                    selectedDate?.toDateString() === d.date.toDateString();
+                  const isDisabled = isBefore(
+                    d.date,
+                    new Date(new Date().setHours(0, 0, 0, 0))
+                  );
 
                   return (
                     <button
@@ -156,8 +167,12 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
                       } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     >
                       <div className="flex flex-col items-center">
-                        <span className="text-[10px] sm:text-xs font-medium">{format(d.date, "EEE")}</span>
-                        <span className="text-sm sm:text-base font-semibold">{d.number}</span>
+                        <span className="text-[10px] sm:text-xs font-medium">
+                          {format(d.date, "EEE")}
+                        </span>
+                        <span className="text-sm sm:text-base font-semibold">
+                          {d.number}
+                        </span>
                       </div>
                     </button>
                   );
@@ -170,21 +185,29 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
         {/* Times */}
         {selectedDate && (
           <div ref={timeRef} className="pt-2">
-            <p className="text-xl text-center text-[#572a31] font-theseason mb-3 mt-2">Select a time:</p>
+            <p className="text-xl text-center text-[#572a31] font-theseason mb-3 mt-2">
+              Select a time:
+            </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {timeSlots.map((time) => {
                 const isToday =
-                  format(selectedDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
+                  format(selectedDate, "yyyy-MM-dd") ===
+                  format(new Date(), "yyyy-MM-dd");
 
-                const slotDateTime = parse(
+                const slotStart = parse(
                   `${format(selectedDate, "yyyy-MM-dd")} ${time}`,
                   "yyyy-MM-dd h:mm a",
                   new Date()
                 );
 
-                const isPast = isToday && isBefore(slotDateTime, new Date());
-                const blocked = isBlocked(selectedDate, time, bookedSlots);
+                const isPast = isToday && isBefore(slotStart, new Date());
+                const blocked = isBlocked(
+                  selectedDate,
+                  time,
+                  bookedSlots,
+                  totalBlockedMinutes
+                );
 
                 if (isPast || blocked) return null;
 
@@ -213,16 +236,25 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
       {showConfirm && selectedDate && selectedTime && (
         <div className="fixed inset-0 rounded-3xl bg-[#572a31]/60 flex items-center justify-center px-4 sm:px-8 z-50">
           <div className="bg-white rounded-2xl p-5 sm:p-8 w-[90%] max-w-md shadow-xl text-center space-y-4">
-            <h3 className="text-lg font-display text-[#572a31] font-semibold">Confirm Your Selection</h3>
+            <h3 className="text-lg font-display text-[#572a31] font-semibold">
+              Confirm Your Selection
+            </h3>
             <p className="text-sm text-gray-700">
-              You selected <span className="font-medium text-[#572a31]">{format(selectedDate, "PPP")}</span>{" "}
-              at <span className="font-medium text-[#572a31]">{selectedTime}</span>.
+              You selected{" "}
+              <span className="font-medium text-[#572a31]">
+                {format(selectedDate, "PPP")}
+              </span>{" "}
+              at{" "}
+              <span className="font-medium text-[#572a31]">{selectedTime}</span>.
             </p>
 
             <div className="flex justify-center font-display font-bold gap-4 mt-4">
               <button
                 onClick={() => {
-                  onSelect({ date: format(selectedDate, "yyyy-MM-dd"), time: selectedTime });
+                  onSelect({
+                    date: format(selectedDate, "yyyy-MM-dd"),
+                    time: selectedTime,
+                  });
                   setShowConfirm(false);
                 }}
                 className="px-4 py-2 bg-[#572a31] text-white rounded-2xl shadow"
