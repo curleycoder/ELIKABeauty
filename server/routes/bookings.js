@@ -21,7 +21,61 @@ const SHOP_TZ = "America/Vancouver";
 const CLOSE_HOUR = 19;
 const OPEN_HOUR = 10;
 
-// --- helpers unchanged (to24h, normalizeDateYYYYMMDD, etc.) --- //
+function to24h(time12h) {
+  const m = String(time12h).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m) return null;
+
+  let hh = parseInt(m[1], 10);
+  const mm = m[2];
+  const ap = m[3].toUpperCase();
+
+  if (ap === "AM") hh = hh === 12 ? 0 : hh;
+  if (ap === "PM") hh = hh === 12 ? 12 : hh + 12;
+
+  return `${String(hh).padStart(2, "0")}:${mm}`;
+}
+
+// Accept Date | ISO | YYYY-MM-DD → YYYY-MM-DD
+function normalizeDateYYYYMMDD(dateInput) {
+  if (!dateInput) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateInput)) return dateInput;
+
+  const d = new Date(dateInput);
+  if (isNaN(d.getTime())) return null;
+
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
+}
+
+// accepts "HH:MM" OR "3:00 PM"
+function normalizeTimeToHHMM(input) {
+  const s = String(input || "").trim();
+
+  // 24h "HH:MM"
+  if (/^\d{1,2}:\d{2}$/.test(s)) {
+    const [h, m] = s.split(":");
+    const hh = parseInt(h, 10);
+    const mm = parseInt(m, 10);
+    if (hh >= 0 && hh <= 23 && mm >= 0 && mm <= 59) {
+      return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+    }
+  }
+
+  // 12h
+  return to24h(s);
+}
+
+function minutesToMs(mins) {
+  return mins * 60000;
+}
+
+// Vancouver local time → UTC Date
+function vancouverLocalToUtcDate(dateStrYYYYMMDD, hhmm24) {
+  const local = `${dateStrYYYYMMDD} ${hhmm24}:00`;
+  return zonedTimeToUtc(local, SHOP_TZ);
+}
+
 
 /* ---------------- CREATE BOOKING ---------------- */
 router.post("/", async (req, res) => {
@@ -41,7 +95,11 @@ router.post("/", async (req, res) => {
     }
 
     // Validate services
-    const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
+if (!services.every((id) => mongoose.Types.ObjectId.isValid(id))) {
+  return res.status(400).json({ error: "Invalid service id format." });
+}
+
+const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
     const servicesData = await Service.find({ _id: { $in: serviceIds } });
 
     if (servicesData.length !== serviceIds.length) {
