@@ -1,10 +1,10 @@
 export default function IntroSection() {
   return (
     // grey canvas like the screenshot
-    <section className="bg-[#faeddd] px-4 sm:px-6 lg:px-20 py-12 sm:py-20">
+    <section className="bg-[#F8F7F1] px-4 sm:px-6 lg:px-20 py-12 sm:py-20">
       <div className="mx-auto max-w-6xl">
         {/* outer card + thin border */}
-        <div className="bg-[#f7f8f1] border border-[#572a31]">
+        <div className="bg-[#F8F7F1] border border-[#572a31]">
           {/* inner purple border */}
           <div className="m-3 border border-[#572a31]">
             {/* padding inside the bordered area */}

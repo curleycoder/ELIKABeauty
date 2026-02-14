@@ -51,7 +51,7 @@ export default function Instagram() {
   }, []);
 
   return (
-    <section className="bg-white pt-10 rounded-lg mb-0">
+    <section className=" pt-10 rounded-lg mb-0">
       <div className="text-center">
         <h2 className="text-3xl font-theseason text-[#572a31] pt-2">
             Follow Us On Instagram

@@ -10,8 +10,8 @@ import {
   parse,
 } from "date-fns";
 
-const OPEN_HOUR = 10;   // 11 AM
-const CLOSE_HOUR = 19;  // 6 PM
+const OPEN_HOUR = 10;
+const CLOSE_HOUR = 19;
 const SLOT_STEP_MINUTES = 15;
 
 function generateNext30Days(startDate = new Date()) {
@@ -109,7 +109,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
   return (
     <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-20 sm:mt-28 flex flex-col max-h-[80dvh]">
       <div className="p-6 sm:p-8 pb-3">
-        <h2 className="text-xl font-bold font-display text-purplecolor tracking-wide text-center">
+        <h2 className="text-xl font-bold font-theseason text-[#572a31] tracking-wide text-center">
           Choose a Date
         </h2>
       </div>
@@ -126,7 +126,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
             }, {})
           ).map(([month, days]) => (
             <div key={month} className="mb-6">
-              <h4 className="text-left text-md sm:text-lg font-bold text-purplecolor mb-2 mt-4">
+              <h4 className="text-left text-md sm:text-lg font-bold text-[#572a31] mb-2 mt-4">
                 {month}
               </h4>
 
@@ -151,8 +151,8 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
                         isSelected
                           ? "bg-purplecolor text-white shadow-md scale-105"
                           : isToday
-                          ? "border-purplecolor text-purplecolor"
-                          : "border-purplecolor/20 text-purplecolor/70 hover:border-purplecolor hover:bg-purplecolor/10"
+                          ? "border-purplecolor text-[#572a31]"
+                          : "border-purplecolor/20 text-[#572a31]/70 hover:border-[#572a31] hover:bg-[#572a31]/10"
                       } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     >
                       <div className="flex flex-col items-center">
@@ -170,7 +170,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
         {/* Times */}
         {selectedDate && (
           <div ref={timeRef} className="pt-2">
-            <p className="text-center text-purplecolor font-display font-semibold mb-3 mt-2">Select a time:</p>
+            <p className="text-center text-[#572a31] font-display font-semibold mb-3 mt-2">Select a time:</p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {timeSlots.map((time) => {
@@ -197,8 +197,8 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
                     }}
                     className={`w-full py-2 rounded-full border text-sm font-semibold transition duration-200 ${
                       selectedTime === time
-                        ? "bg-purplecolor/80 text-white border-transparent scale-105 shadow-lg"
-                        : "bg-white text-purplecolor border-purplecolor/30 hover:bg-purplecolor hover:text-white hover:translate-y-[-2px]"
+                        ? "bg-[#572a31]/80 text-white border-transparent scale-105 shadow-lg"
+                        : "bg-white text-[#572a31] border-[#572a31]/30 hover:bg-[#572a31] hover:text-white hover:translate-y-[-2px]"
                     }`}
                   >
                     {time}
@@ -211,12 +211,12 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
       </div>
 
       {showConfirm && selectedDate && selectedTime && (
-        <div className="fixed inset-0 rounded-3xl bg-purplecolor/60 flex items-center justify-center px-4 sm:px-8 z-50">
+        <div className="fixed inset-0 rounded-3xl bg-[#572a31]/60 flex items-center justify-center px-4 sm:px-8 z-50">
           <div className="bg-white rounded-2xl p-5 sm:p-8 w-[90%] max-w-md shadow-xl text-center space-y-4">
-            <h3 className="text-lg font-display text-purplecolor font-semibold">Confirm Your Selection</h3>
+            <h3 className="text-lg font-display text-[#572a31] font-semibold">Confirm Your Selection</h3>
             <p className="text-sm text-gray-700">
-              You selected <span className="font-medium text-purplecolor">{format(selectedDate, "PPP")}</span>{" "}
-              at <span className="font-medium text-purplecolor">{selectedTime}</span>.
+              You selected <span className="font-medium text-[#572a31]">{format(selectedDate, "PPP")}</span>{" "}
+              at <span className="font-medium text-[#572a31]">{selectedTime}</span>.
             </p>
 
             <div className="flex justify-center font-display font-bold gap-4 mt-4">
@@ -225,13 +225,13 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
                   onSelect({ date: format(selectedDate, "yyyy-MM-dd"), time: selectedTime });
                   setShowConfirm(false);
                 }}
-                className="px-4 py-2 bg-purplecolor text-white rounded-2xl shadow"
+                className="px-4 py-2 bg-[#572a31] text-white rounded-2xl shadow"
               >
                 Yes
               </button>
               <button
                 onClick={() => setShowConfirm(false)}
-                className="px-4 py-2 border border-purplecolor text-purplecolor rounded-2xl"
+                className="px-4 py-2 border border-[#572a31] text-[#572a31] rounded-2xl"
               >
                 No
               </button>
