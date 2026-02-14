@@ -58,14 +58,14 @@ export default function FAQ() {
                 <h3 className="text-base sm:text-lg font-semibold text-[#55203d]">
                   {faq.question}
                 </h3>
-                <span
-                  className={`mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 text-[#55203d] transition ${
-                    isOpen ? "rotate-45" : ""
-                  }`}
-                  aria-hidden="true"
-                >
-                  +
-                </span>
+                  <span
+                    className={`mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-gray-300 text-[#55203d] transition ${
+                      isOpen ? "rotate-45" : ""
+                    } text-lg leading-none font-semibold`}
+                    aria-hidden="true"
+                  >
+                    +
+                  </span>
               </div>
 
               {isOpen && (
