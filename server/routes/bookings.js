@@ -164,3 +164,4 @@ router.post("/", async (req, res) => {
     return res.status(500).json({ error: "Booking failed. Please try again." });
   }
 });
+module.exports = router;
