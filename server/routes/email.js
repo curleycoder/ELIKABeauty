@@ -69,7 +69,7 @@ router.post("/send-confirmation", async (req, res) => {
 
     // Send to client
     await transporter.sendMail({
-      from: `"ELIKA Beauty" <${process.env.SMTP_USER}>`,
+      from: `"ELIKA Beauty" <${process.env.BUSINESS_EMAIL}>`,
       to: email,
       subject: "Your ELIKA Beauty Booking Confirmation",
       html: clientHtml,

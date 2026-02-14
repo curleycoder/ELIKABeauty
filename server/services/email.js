@@ -17,10 +17,11 @@ const transporter = nodemailer.createTransport({
   host: "smtp.ionos.com",
   port: 587,
   secure: false,
-  auth: {
-    user: process.env.BUSINESS_EMAIL,
-    pass: process.env.BUSINESS_EMAIL_PASSWORD,
-  },
+auth: {
+  user: BUSINESS_EMAIL,
+  pass: BUSINESS_EMAIL_APP_PASSWORD,
+},
+
 });
 
 
