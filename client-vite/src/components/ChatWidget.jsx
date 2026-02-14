@@ -28,7 +28,7 @@ export default function ChatWidget() {
       >
         <img
           src="/sherry1.jpg"
-          alt="Beauty Shohre Assistant"
+          alt="ELIKA Beauty Assistant"
           className="h-16 w-16 rounded-full object-cover"
           draggable="false"
         />
@@ -68,14 +68,14 @@ export default function ChatWidget() {
             <div className="h-7 w-7 rounded-full bg-pink-200/70 overflow-hidden">
               <img
                 src="/sherry1.jpg"
-                alt="Beauty Shohre Studio"
+                alt="ELIKA Beauty"
                 className="h-7 w-7 object-cover"
                 draggable="false"
               />
             </div>
             <div className="leading-tight">
               <div className="text-sm font-display font-semibold text-[#55203d]">
-                Beauty Shohre Studio
+                ELIKA Beauty
               </div>
               <div className="text-[11px] text-[#55203d]/70">
                 Quick answers • Booking help
@@ -96,7 +96,7 @@ export default function ChatWidget() {
 
         {/* Iframe (exists ONLY when open) */}
         <iframe
-          title="Beauty Shohre Chat"
+          title="ELIKA Beauty Chat"
           src="https://client-sand-kappa.vercel.app/?biz=elikabeauty&embed=1"
           className="w-full h-[calc(100%-3rem)] border-0"
         />

@@ -1,1 +1,1 @@
-# beauty-shohre-studio
+# elika-beauty-salon

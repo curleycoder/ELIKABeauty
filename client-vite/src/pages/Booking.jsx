@@ -39,7 +39,7 @@ export default function Booking() {
 
   useEffect(() => {
     document.title =
-      "Book Your Hair Appointment | Beauty Shohre Studio, North Burnaby";
+      "Book Your Hair Appointment | ELIKA Beauty, North Burnaby";
 
     const meta =
       document.querySelector('meta[name="description"]') ||
@@ -52,7 +52,7 @@ export default function Booking() {
 
     meta.setAttribute(
       "content",
-      "Book your hair appointment at Beauty Shohre Studio in North Burnaby. Highlights, balayage, keratin, haircuts near Brentwood. Easy online scheduling and clear policies."
+      "Book your hair appointment at ELIKA Beauty Salon. Highlights, balayage, keratin, haircuts near Brentwood. Easy online scheduling and clear policies."
     );
   }, []);
 

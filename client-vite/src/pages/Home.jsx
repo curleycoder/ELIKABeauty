@@ -61,7 +61,7 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="bg-[#7a3b44] py-8 sm:py-8 mt-6">
+      <section className="bg-[#572a31] py-8 sm:py-8 mt-6">
         <div className="max-w-3xl mx-auto text-center px-4">
           <h2 className="text-2xl sm:text-3xl font-theseason text-[#F8F7F1]">
             Ready to Book Your Appointment?
@@ -82,14 +82,14 @@ export default function Home() {
 
             <a
               href="/booking"
-              className="inline-block rounded-lg px-8 py-4 bg-[#FE8269] text-[#F8F7F1] hover:opacity-90 transition"
+              className="inline-block rounded-lg px-6 py-4 bg-[#FE8269] text-[#F8F7F1] hover:opacity-90 transition"
             >
               Book Appointment
             </a>
 
             <a
-              href="tel:+17785139006"
-              className="inline-block rounded-lg px-8 py-4 bg-[#F8F7F1] text-[#7a3b44] border border-gray-200 hover:bg-[#ceaa5b]-50 transition"
+              href="tel:+16044383727"
+              className="inline-block rounded-lg px-6 py-4 bg-[#F8F7F1] text-[#572a31] border border-gray-200 hover:bg-[#ceaa5b]-50 transition"
             >
               Call Now
             </a>

@@ -107,19 +107,30 @@ export default function QuestionsForm({
       await assertOk(dbRes, "BOOKING");
 
       // 2) Send confirmation email (NON-BLOCKING)
-      let emailOk = true;
+      const ADMIN_EMAIL =
+  import.meta.env.VITE_ADMIN_EMAIL || "amina@elikabeauty.ca";
 
-      const emailPayload = {
-        name: form.name.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        referredBy: form.referredBy.trim(),
-        services: selection.selected.map((s) => s.name),
-        date: bookingTime.date,
-        time: bookingTime.time,
-        duration: selection.duration ?? null,
-        note: (form.note || "").trim(),
-      };
+const emailPayload = {
+  // customer info
+  name: form.name.trim(),
+  email: form.email.trim(),
+  phone: form.phone.trim(),
+  referredBy: form.referredBy.trim(),
+
+  // booking info
+  services: selection.selected.map((s) => s.name),
+  date: bookingTime.date,
+  time: bookingTime.time,
+
+  // FIX: duration should come from selected services, not selection.duration
+  duration: selection.selected.reduce((sum, s) => sum + (s?.duration || 0), 0),
+
+  note: (form.note || "").trim(),
+
+  // NEW: tell backend where to send the shop notification
+  adminEmail: ADMIN_EMAIL,
+};
+
 
       try {
         const emailRes = await fetch(`${baseURL}/api/email/send-confirmation`, {
@@ -129,15 +140,23 @@ export default function QuestionsForm({
         });
 
         if (!emailRes.ok) {
-          emailOk = false;
-          const body = await readResponseBody(emailRes);
-          console.error("❌ EMAIL FAILED (non-blocking)", {
-            url: emailRes.url,
-            status: emailRes.status,
-            statusText: emailRes.statusText,
-            body,
-          });
-        }
+  emailOk = false;
+  const body = await readResponseBody(emailRes);
+
+  console.error("❌ EMAIL FAILED (non-blocking)", {
+    url: emailRes.url,
+    status: emailRes.status,
+    statusText: emailRes.statusText,
+    body,
+  });
+
+  // This makes debugging fast (you’ll see 404 vs CORS vs 500)
+  alert(
+    `Booking saved, but email failed (${emailRes.status}). Check console Network tab.\n` +
+      (typeof body === "string" ? body.slice(0, 200) : JSON.stringify(body).slice(0, 200))
+  );
+}
+
       } catch (err) {
         emailOk = false;
         console.error("❌ EMAIL FAILED (network, non-blocking)", err);
