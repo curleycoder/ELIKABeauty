@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-const ADMIN_KEY_STORAGE = "beautyshohre_admin_key";
+const ADMIN_KEY_STORAGE = "elikabeauty_admin_key";
 const API_BASE = "https://api.elikabeauty.ca/api/admin/bookings";
 
 const SHOP_TZ = "America/Vancouver";

@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
-import ChatWidget from "./components/ChatWidget.jsx";
+// import ChatWidget from "./components/ChatWidget.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 
 import Home from "./pages/Home.jsx";
@@ -22,12 +22,12 @@ export default function App() {
   const { pathname } = useLocation();
 
   // ✅ hide chat widget on booking flow (add more paths if needed)
-  const hideChatWidget = pathname.startsWith("/booking");
+  // const hideChatWidget = pathname.startsWith("/booking");
 
   return (
     <>
       <Navbar />
-      {!hideChatWidget && <ChatWidget />}
+      {/* {!hideChatWidget && <ChatWidget />} */}
       <ScrollToTop />
 
       <Routes>

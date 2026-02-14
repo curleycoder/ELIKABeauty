@@ -294,6 +294,34 @@ export default function Booking() {
                 * Final pricing depends on hair length, volume, and thickness.
               </p>
             </div>
+            {/* Desktop CTA */}
+<div className="mt-6">
+  <button
+    disabled={!canContinue || loading}
+    onClick={() => {
+      if (step < 2) return goNext();
+      setSubmitTick((t) => t + 1);
+    }}
+    className={`w-full px-5 py-3 rounded-full font-bold text-white transition ${
+      !canContinue || loading
+        ? "bg-[#7a3b44]/25 cursor-not-allowed"
+        : "bg-[#55203d] hover:brightness-110"
+    }`}
+  >
+    {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
+  </button>
+
+  {step > 0 && (
+    <button
+      type="button"
+      onClick={goBack}
+      className="w-full mt-3 px-5 py-3 rounded-full font-semibold border border-[#55203d]/20 text-[#55203d] hover:bg-[#55203d]/5"
+    >
+      Back
+    </button>
+  )}
+</div>
+
           </div>
         </div>
       </div>
