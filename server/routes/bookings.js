@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const tz = require("date-fns-tz");
 const zonedTimeToUtc = tz.zonedTimeToUtc || tz.fromZonedTime;
+const { sendBookingEmails, sendCancellationEmail } = require("../services/email");
 
 if (!zonedTimeToUtc) {
   throw new Error("date-fns-tz: zonedTimeToUtc/fromZonedTime not available");
@@ -179,8 +180,33 @@ router.post("/", async (req, res) => {
     });
 
     await booking.save();
+    const axios = require("axios");
+
 
     // Calendar (non-blocking)
+    // Email confirmation (non-blocking)
+try {
+  const servicesText = servicesData.map(s => s.name);
+  const dateStrForEmail = dateStr; // "YYYY-MM-DD"
+  const timeForEmail = hhmm; // "HH:MM"
+
+  const emailEndpoint = `${process.env.BASE_URL}/api/email/send-confirmation`;
+
+  await axios.post(emailEndpoint, {
+    name,
+    email,
+    phone,
+    services: servicesText,
+    date: dateStrForEmail,
+    time: timeForEmail,
+    note,
+  });
+
+  console.log("✅ Confirmation emails triggered");
+} catch (err) {
+  console.error("🔥 Confirmation email trigger failed:", err?.response?.data || err?.message || err);
+}
+
     try {
       const eventId = await createBookingEvent({
         name,
@@ -197,6 +223,30 @@ router.post("/", async (req, res) => {
       console.error("🔥 Calendar insert failed:");
       console.error(err?.response?.data || err?.message || err);
     }
+// Email (non-blocking)
+try {
+  const startDate = start ? new Date(start) : null;
+
+  const prettyDate = startDate.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
+  const prettyTime = startDate.toLocaleTimeString("en-US", {
+    timeZone: "America/Vancouver",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  const servicesText = servicesData.map((s) => s.name).join(", ");
+
+  await sendBookingEmails({
+    booking,
+    servicesText,
+    prettyDate,
+    prettyTime,
+  });
+
+  console.log("✅ Booking emails sent");
+} catch (err) {
+  console.error("🔥 Booking email failed:", err?.stack || err);
+}
 
 
     return res.status(201).json(booking);

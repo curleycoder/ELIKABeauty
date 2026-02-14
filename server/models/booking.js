@@ -5,6 +5,11 @@ const bookingSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
+  status: { type: String, enum: ["active", "cancelled"], default: "active" },
+cancelledAt: { type: Date },
+bufferMinutes: { type: Number, default: 0 },
+referredBy: { type: String },
+
 
   // Services
   services: [

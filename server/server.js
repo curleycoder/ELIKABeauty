@@ -55,7 +55,7 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 
 // Health check
-app.get("/", (req, res) => res.send("✅ Beauty Shohre API is running"));
+app.get("/", (req, res) => res.send("✅ ELIKA Beauty API is running"));
 
 // Public routes
 app.use("/api/bookings", bookingRoutes);

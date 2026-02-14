@@ -7,9 +7,11 @@ const { format, parseISO } = require("date-fns");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
+  user: process.env.BUSINESS_EMAIL,
+  pass: process.env.BUSINESS_EMAIL_APP_PASSWORD,
+},
+from: `"ELIKA Beauty" <${process.env.BUSINESS_EMAIL}>`,
+
 });
 
 router.post("/send-confirmation", async (req, res) => {
@@ -36,17 +38,17 @@ router.post("/send-confirmation", async (req, res) => {
 
   const clientHtml = `
     <p>Dear <strong>${name}</strong>,</p>
-    <p>Your booking has been confirmed with Beauty Shohre Studio:</p>
+    <p>Your booking has been confirmed with ELIKA Beauty:</p>
     <ul>
       <li><strong>Date:</strong> ${format(safeDate, "PPP")}</li>
       <li><strong>Time:</strong> ${time}</li>
       <li><strong>Services:</strong> ${servicesText}</li>
     </ul>
     <p>You will receive a reminder before your appointment.</p>
-    <p>If you need to cancel or reschedule, contact Shohre at <strong>778-513-9006</strong>.</p>
-    <p>— Beauty Shohre Studio</p>
+    <p>If you need to cancel or reschedule, contact Amina at <strong>778-513-9006</strong>.</p>
+    <p>— ELIKA Beauty</p>
     <div style="text-align:center; margin-top:30px;">
-      <img src="https://i.imgur.com/h0iPt1G.png" alt="Beauty Shohre Logo" style="max-width:150px;" />
+      <img src="https://imgur.com/VEipq5P" alt="Elika Beauty Logo" style="max-width:150px;" />
     </div>
   `;
 
@@ -67,16 +69,16 @@ router.post("/send-confirmation", async (req, res) => {
 
     // Send to client
     await transporter.sendMail({
-      from: `"Beauty Shohre Studio" <${process.env.SMTP_USER}>`,
+      from: `"ELIKA Beauty" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: "Your Beauty Shohre Booking Confirmation",
+      subject: "Your ELIKA Beauty Booking Confirmation",
       html: clientHtml,
     });
 
     // Send to owner(s)
     await transporter.sendMail({
-      from: `"Beauty Shohre Booking Notification" <${process.env.SMTP_USER}>`,
-      to: [process.env.SMTP_USER, "amina@elikabeauty.com"],
+      from: `"ELIKA Beauty Booking Notification" <${process.env.SMTP_USER}>`,
+      to: [process.env.ADMIN_EMAIL || "amina@elikabeauty.ca"],
       subject: `📅 New Booking — ${name} (${format(safeDate, "MMM d")} ${time})`,
       html: ownerHtml,
       replyTo: email, // ✅ so you can hit "Reply" and it goes to the client
