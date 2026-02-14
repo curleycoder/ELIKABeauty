@@ -20,7 +20,7 @@ export default function IntroSection() {
                 </h2>
 
                 {/* RIGHT — your SEO content */}
-                <div className="text-[#7a3b44]">
+                <div className="text-[#572a31]">
                   <p className="text-xs sm:text-sm tracking-widest uppercase">
                     Burnaby • Serving Metro Vancouver
                   </p>

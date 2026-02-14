@@ -75,12 +75,12 @@ useEffect(() => {
           : "bg-[#faeddd]  text-[#572a31] shadow-sm",
       ].join(" ")}
     >
-      <nav className="font-theseason h-14 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
+<nav className="font-theseason h-14 px-4 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
         <div
           className="cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <Logo size="sm" color={"#7a3b44"} />
+          <Logo size="sm" color={"#572a31"} />
         </div>
 
 
@@ -104,12 +104,12 @@ useEffect(() => {
       </nav>
 
       {menuOpen && (
-        <div className="sm:hidden bg-[#faeddd] px-4 pb-4 text-[#7a3b44]">
+        <div className="sm:hidden bg-[#faeddd] px-4 pb-4 text-[#572a31]">
           {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className="block w-full text-left py-2 border-b border-[#7a3b44]/30 hover:text-black transition"
+              className="block w-full text-left py-2 border-b border-[#572a31]/30 hover:text-black transition"
             >
               {item.name}
             </button>

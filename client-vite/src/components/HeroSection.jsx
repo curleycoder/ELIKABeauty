@@ -2,10 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const HERO_SLIDES = [
-  { src: "/assets/hair-hero.webp", alt: "Elika Beauty Salon" },
-  { src: "/assets/highlight-hero.jpg", alt: "Elika highlight" },
-  { src: "/assets/color-hero.jpg", alt: "Elika color" },
-  { src: "/assets/cut-hero.jpg", alt: "Elika haircut" },
+  { src: "/assets/colour-hero.jpg", alt: "Elika highlight" },
+  { src: "/assets/micro-hero.jpg", alt: "Elika microblading" },
+  { src: "/assets/hair-cut.jpg", alt: "Elika haircut" },
   { src: "/assets/treading-hero.jpg", alt: "Elika treading" },
   { src: "/assets/balayage-hero.jpg", alt: "Elika balayage" },
   { src: "/assets/light-hero.jpg", alt: "Elika balayage" },
@@ -32,9 +31,10 @@ export default function HeroSection() {
             src={slide.src}
             alt={slide.alt}
             className={[
-              "absolute inset-0 h-full w-full object-cover transition-opacity duration-1000",
-              i === index ? "opacity-45" : "opacity-0",
-            ].join(" ")}
+  "absolute inset-0 h-full w-full object-cover object-top sm:object-center transition-opacity duration-600",
+  i === index ? "opacity-45" : "opacity-0",
+].join(" ")}
+
             loading={i === 0 ? "eager" : "lazy"}
           />
         ))}
