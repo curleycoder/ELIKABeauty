@@ -227,4 +227,26 @@ const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
 }
 
 });
+/* ---------------- GET BOOKED SLOTS ---------------- */
+// GET /api/bookings/booked?date=YYYY-MM-DD
+router.get("/booked", async (req, res) => {
+  try {
+    const dateStr = normalizeDateYYYYMMDD(req.query.date);
+    if (!dateStr) return res.status(400).json({ error: "date is required" });
+
+    const dayStartUtc = vancouverLocalToUtcDate(dateStr, "00:00");
+    const nextDayUtc = new Date(dayStartUtc.getTime() + 24 * 60 * 60 * 1000);
+
+    const bookings = await Booking.find({
+      status: { $ne: "cancelled" },
+      start: { $gte: dayStartUtc, $lt: nextDayUtc },
+    }).select("start end");
+
+    return res.json(bookings);
+  } catch (err) {
+    console.error("❌ /api/bookings/booked failed:", err);
+    return res.status(500).json({ error: "Internal error" });
+  }
+});
+
 module.exports = router;
