@@ -191,7 +191,7 @@ const emailPayload = {
       ref={formRef}
       onSubmit={handleSubmit}
       // ❌ removed overflow-y-auto (nested scroll killer)
-      className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl text-purplecolor w-full max-w-2xl mx-auto"
+      className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl text-[#572a31] w-full max-w-2xl mx-auto"
     >
       <h2 className="text-2xl font-display font-bold mb-2">Your Details</h2>
 
@@ -206,7 +206,7 @@ const emailPayload = {
           required
           autoComplete="name"
           placeholder="Full name"
-          className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
+          className="w-full border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31]"
         />
       </div>
 
@@ -223,7 +223,7 @@ const emailPayload = {
           autoComplete="email"
           inputMode="email"
           placeholder="you@example.com"
-          className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
+          className="w-full border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31]"
         />
       </div>
 
@@ -240,7 +240,7 @@ const emailPayload = {
           autoComplete="tel"
           inputMode="tel"
           placeholder="e.g. 604-555-1234"
-          className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
+          className="w-full border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31]"
         />
       </div>
 
@@ -258,7 +258,7 @@ const emailPayload = {
           placeholder="Full name of the person who referred you"
           value={form.referredBy}
           onChange={handleChange}
-          className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
+          className="w-full border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31]"
         />
       </div>
 
@@ -271,7 +271,7 @@ const emailPayload = {
           value={form.note}
           onChange={handleChange}
           rows={3}
-          className="w-full border border-purplecolor/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purplecolor"
+          className="w-full border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31]"
         />
       </div>
 
@@ -282,8 +282,8 @@ const emailPayload = {
         disabled={loading}
         className={`mt-6 w-full py-3 font-display rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
           loading
-            ? "bg-purplecolor/60 cursor-wait text-white"
-            : "bg-purplecolor text-white hover:brightness-110"
+            ? "bg-[#572a31]/60 cursor-wait text-white"
+            : "bg-[#572a31] text-white hover:brightness-110"
         }`}
       >
         {loading ? (

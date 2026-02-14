@@ -109,7 +109,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
   return (
     <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-20 sm:mt-28 flex flex-col max-h-[80dvh]">
       <div className="p-6 sm:p-8 pb-3">
-        <h2 className="text-xl font-bold font-theseason text-[#572a31] tracking-wide text-center">
+        <h2 className="text-xl font-theseason text-[#572a31] tracking-wide text-center">
           Choose a Date
         </h2>
       </div>
@@ -170,7 +170,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
         {/* Times */}
         {selectedDate && (
           <div ref={timeRef} className="pt-2">
-            <p className="text-center text-[#572a31] font-display font-semibold mb-3 mt-2">Select a time:</p>
+            <p className="text-xl text-center text-[#572a31] font-theseason mb-3 mt-2">Select a time:</p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {timeSlots.map((time) => {
