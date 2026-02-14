@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
-import DateTimePicker from "../components/DatePicker";
+// import DateTimePicker from "../components/DatePicker";
+import SimpleDateTimePicker from "../components/SimpleDateTimePicker";
+
 import { format, parseISO } from "date-fns";
 
 const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
@@ -229,12 +231,16 @@ export default function Booking() {
               />
             )}
 
-            {step === 1 && (
+            {/* {step === 1 && (
               <DateTimePicker
                 duration={totalBlockedMinutes}
                 onSelect={(value) => setBookingTime(value)}
               />
-            )}
+            )} */}
+            {step === 1 && (
+  <SimpleDateTimePicker onSelect={(value) => setBookingTime(value)} />
+)}
+
 
             {step === 2 && (
               <QuestionsForm
@@ -373,7 +379,10 @@ export default function Booking() {
 
             <p className="text-sm text-gray-700">
               <strong>Services:</strong>{" "}
-              {bookingData.services.map((s) => s.name).join(", ")}
+              {Array.isArray(bookingData.services)
+  ? bookingData.services.map((s) => s?.name).filter(Boolean).join(", ")
+  : ""}
+
               <br />
               <strong>Date:</strong> {format(parseISO(bookingData.date), "PPP")}
               <br />
