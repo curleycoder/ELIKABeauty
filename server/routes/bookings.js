@@ -160,8 +160,13 @@ router.post("/", async (req, res) => {
 
     return res.status(201).json(booking);
   } catch (err) {
-    console.error("❌ Booking failed:", err);
-    return res.status(500).json({ error: "Booking failed. Please try again." });
-  }
+  console.error("❌ Booking failed FULL ERROR:", err);
+
+  return res.status(500).json({
+    error: err?.message,
+    name: err?.name,
+  });
+}
+
 });
 module.exports = router;
