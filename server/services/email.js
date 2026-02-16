@@ -71,6 +71,9 @@ If you need to reschedule, reply to this email.
 
   console.log("✅ Resend client email result:", JSON.stringify(r1, null, 2));
 
+  const adminUrl = `https://elikabeauty.ca/admin-bookings-secret?id=${booking?._id}`;
+
+
   // 2) admin(s)
   const ownerText = `NEW BOOKING
 
@@ -80,7 +83,11 @@ Time: ${prettyTime}
 Services: ${servicesText}
 Phone: ${booking?.phone || "—"}
 Email: ${clientTo}
-Note: ${booking?.note || "—"}`;
+Note: ${booking?.note || "—"}
+
+View & manage:
+${adminUrl}
+`;
 
   const ownerHtml = `
     <div style="font-family:Arial,sans-serif; line-height:1.5">
@@ -95,6 +102,20 @@ Note: ${booking?.note || "—"}`;
           booking?.note ? String(booking.note).replace(/\n/g, "<br/>") : "—"
         }</li>
       </ul>
+      <p style="margin-top:20px;">
+      <a href="${adminUrl}
+         style="
+           display:inline-block;
+           padding:10px 18px;
+           background-color:#55203d;
+           color:#ffffff;
+           text-decoration:none;
+           border-radius:4px;
+           font-weight:bold;
+         ">
+        View & Manage Booking
+      </a>
+    </p>
     </div>
   `;
 
@@ -144,7 +165,13 @@ If you'd like to reschedule, reply to this email or book again on elikabeauty.ca
         <li><strong>Time:</strong> ${prettyTime}</li>
         <li><strong>Services:</strong> ${servicesText}</li>
       </ul>
-      <p>If you'd like to reschedule, reply to this email or book again on <strong>elikabeauty.ca</strong>.</p>
+      <p>
+        If you'd like to reschedule, reply to this email or 
+        <a href="https://elikabeauty.ca/booking" 
+          style="color:#55203d; text-decoration:underline; font-weight:bold;">
+          click here to book your appointment
+        </a>.
+      </p>
       <p>— ELIKA Beauty</p>
     </div>
   `;
@@ -162,6 +189,9 @@ If you'd like to reschedule, reply to this email or book again on elikabeauty.ca
   console.log("✅ Resend client cancellation result:", JSON.stringify(r1, null, 2));
 
   // ADMIN(S)
+
+  const adminUrl = `https://elikabeauty.ca/admin-bookings-secret?id=${booking?._id}`;
+
   const ownerSubject = `❌ Cancelled — ${safeName} (${prettyDate} ${prettyTime})`;
 
   const ownerText = `BOOKING CANCELLED
@@ -173,7 +203,11 @@ Services: ${servicesText}
 Phone: ${booking?.phone || "—"}
 Email: ${clientTo}
 CancelledAt: ${booking?.cancelledAt ? new Date(booking.cancelledAt).toISOString() : "—"}
-ID: ${booking?._id || "—"}`;
+ID: ${booking?._id || "—"}
+
+View & manage:
+${adminUrl}
+`;
 
   const ownerHtml = `
     <div style="font-family:Arial,sans-serif; line-height:1.5">
@@ -190,6 +224,20 @@ ID: ${booking?._id || "—"}`;
         }</li>
         <li><strong>ID:</strong> ${booking?._id || "—"}</li>
       </ul>
+      <p style="margin-top:20px;">
+      <a href="${adminUrl}"
+         style="
+           display:inline-block;
+           padding:10px 18px;
+           background-color:#55203d;
+           color:#ffffff;
+           text-decoration:none;
+           border-radius:4px;
+           font-weight:bold;
+         ">
+        View & Manage Booking
+      </a>
+    </p>
     </div>
   `;
 
