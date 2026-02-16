@@ -1,55 +1,43 @@
+// services/email.js  (Gmail SMTP using SMTP_USER + SMTP_PASS)
 const nodemailer = require("nodemailer");
 
-const BUSINESS_EMAIL = process.env.BUSINESS_EMAIL;
-const BUSINESS_EMAIL_APP_PASSWORD = process.env.BUSINESS_EMAIL_APP_PASSWORD;
+const SMTP_USER = process.env.SMTP_USER;     // yourgmail@gmail.com
+const SMTP_PASS = process.env.SMTP_PASS;     // Gmail App Password (16 chars)
+const BUSINESS_EMAIL = process.env.BUSINESS_EMAIL || SMTP_USER;
 
 // Admin recipients: comma-separated list supported
-const ADMIN_EMAIL_RAW = process.env.ADMIN_EMAIL || "amina@elikabeauty.ca";
+const ADMIN_EMAIL_RAW = process.env.ADMIN_EMAIL || BUSINESS_EMAIL;
 const ADMIN_EMAILS = ADMIN_EMAIL_RAW.split(",").map(s => s.trim()).filter(Boolean);
 
-const EMAIL_ENABLED = Boolean(BUSINESS_EMAIL && BUSINESS_EMAIL_APP_PASSWORD);
-
-if (!EMAIL_ENABLED) {
-  console.warn("⚠️ Email disabled: Missing BUSINESS_EMAIL or BUSINESS_EMAIL_APP_PASSWORD");
+if (!SMTP_USER || !SMTP_PASS) {
+  throw new Error("Missing SMTP_USER or SMTP_PASS");
 }
 
-const transporter = EMAIL_ENABLED
-  ? nodemailer.createTransport({
-      host: "smtp.ionos.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: BUSINESS_EMAIL,
-        pass: BUSINESS_EMAIL_APP_PASSWORD,
-      },
-      connectionTimeout: 20000,
-      greetingTimeout: 20000,
-      socketTimeout: 20000,
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: SMTP_USER,
+    pass: SMTP_PASS,
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000,
+});
 
-      // Turn these ON for debugging, OFF later
-      logger: true,
-      debug: true,
-    })
-  : null;
 
 // Verify once at startup (Render logs)
-if (transporter) {
-  transporter.verify((err) => {
-    if (err) console.error("❌ SMTP verify failed:", err);
-    else console.log("✅ SMTP transporter ready:", BUSINESS_EMAIL);
-  });
-}
+transporter.verify((err) => {
+  if (err) console.error("❌ Gmail SMTP verify failed:", err?.message || err);
+  else console.log("✅ Gmail SMTP transporter ready:", SMTP_USER);
+});
 
 function safeEmail(v) {
   return String(v || "").trim();
 }
 
 async function sendBookingEmails({ booking, servicesText, prettyDate, prettyTime }) {
-  if (!EMAIL_ENABLED) {
-    console.warn("⚠️ sendBookingEmails skipped (email disabled)");
-    return;
-  }
-
   const clientTo = safeEmail(booking?.email);
   if (!clientTo) throw new Error("Missing client email");
 
@@ -100,43 +88,52 @@ Note: ${booking?.note || "—"}`;
       <li><strong>Services:</strong> ${servicesText}</li>
       <li><strong>Phone:</strong> ${booking?.phone || "—"}</li>
       <li><strong>Email:</strong> ${clientTo}</li>
-      <li><strong>Note:</strong> ${booking?.note ? String(booking.note).replace(/\n/g, "<br/>") : "—"}</li>
+      <li><strong>Note:</strong> ${
+        booking?.note ? String(booking.note).replace(/\n/g, "<br/>") : "—"
+      }</li>
     </ul>
   `;
 
-  // 1) Send to client
-  await transporter.sendMail({
-    from: `"ELIKA Beauty" <${BUSINESS_EMAIL}>`,
+  const replyToShop =
+    BUSINESS_EMAIL && BUSINESS_EMAIL !== SMTP_USER ? BUSINESS_EMAIL : undefined;
+
+  const clientMail = {
+    from: `"ELIKA Beauty" <${SMTP_USER}>`,
     to: clientTo,
     subject: clientSubject,
     text: clientText,
     html: clientHtml,
-  });
+    ...(replyToShop ? { replyTo: replyToShop } : {}),
+  };
 
-  // 2) Send to owner/admin(s)
-  await transporter.sendMail({
-    from: `"ELIKA Beauty Bookings" <${BUSINESS_EMAIL}>`,
+  const adminMail = {
+    from: `"ELIKA Beauty Bookings" <${SMTP_USER}>`,
     to: ADMIN_EMAILS,
     subject: ownerSubject,
     text: ownerText,
     html: ownerHtml,
-    replyTo: clientTo,
-  });
+    replyTo: clientTo, // reply goes directly to client
+  };
+
+  const r1 = await transporter.sendMail(clientMail);
+  console.log("✅ Client email sent:", r1.messageId);
+
+  const r2 = await transporter.sendMail(adminMail);
+  console.log("✅ Admin email sent:", r2.messageId);
+
+  return { clientMessageId: r1.messageId, adminMessageId: r2.messageId };
 }
 
-async function sendCancellationEmail({ email, to, name, date, time }) {
-  if (!EMAIL_ENABLED) {
-    console.warn("⚠️ sendCancellationEmail skipped (email disabled)");
-    return;
-  }
 
+async function sendCancellationEmail({ email, to, name, date, time }) {
   const recipient = safeEmail(email || to);
   if (!recipient) throw new Error("No recipient email provided");
 
   const safeName = String(name || "Client").trim();
+  const replyToShop = BUSINESS_EMAIL && BUSINESS_EMAIL !== SMTP_USER ? BUSINESS_EMAIL : undefined;
 
   return transporter.sendMail({
-    from: `"ELIKA Beauty" <${BUSINESS_EMAIL}>`,
+    from: `"ELIKA Beauty" <${SMTP_USER}>`,
     to: recipient,
     subject: "Your Appointment Has Been Cancelled",
     text: `Hi ${safeName},
@@ -146,6 +143,7 @@ Your appointment scheduled for ${date} at ${time} has been cancelled.
 If you'd like to reschedule, reply to this email.
 
 — ELIKA Beauty`,
+    ...(replyToShop ? { replyTo: replyToShop } : {}),
   });
 }
 
