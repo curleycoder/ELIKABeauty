@@ -5,7 +5,7 @@ import DateTimePicker from "../components/DatePicker";
 import { format, parseISO } from "date-fns";
 
 const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
-const DEFAULT_BUFFER_MINUTES = 15;
+const DEFAULT_BUFFER_MINUTES = 10;
 
 function getDurationStats(selected) {
   const durations = selected.map((s) => s?.duration || 60);
