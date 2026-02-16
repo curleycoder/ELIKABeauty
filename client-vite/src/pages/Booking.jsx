@@ -235,11 +235,10 @@ export default function Booking() {
 
             {step === 1 && (
               <DateTimePicker
-  duration={totalBlockedMinutes}
-  refreshKey={availabilityTick}
-  onSelect={(value) => setBookingTime(value)}
-/>
-
+                duration={totalBlockedMinutes}
+                refreshKey={availabilityTick}
+                onSelect={(value) => setBookingTime(value)}
+              />
 
             )}
 

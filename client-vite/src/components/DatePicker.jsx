@@ -11,46 +11,6 @@ import {
 
 const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
-useEffect(() => {
-  const fetchBookedTimes = async () => {
-    if (!selectedDate) return;
-
-    if (isPastDay(selectedDate) || isShopClosed(selectedDate)) {
-      setBookedSlots([]);
-      return;
-    }
-
-    setLoadingSlots(true);
-    try {
-      const ymd = format(selectedDate, "yyyy-MM-dd");
-      const url = `${baseURL}/api/bookings/booked?date=${ymd}`;
-      const res = await fetch(url);
-
-      // ✅ handle 404/500 that returns HTML
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("❌ booked slots fetch failed", {
-          url,
-          status: res.status,
-          bodyPreview: text.slice(0, 200),
-        });
-        setBookedSlots([]);
-        return;
-      }
-
-      const data = await res.json();
-      setBookedSlots(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("❌ Failed to fetch booked slots:", err);
-      setBookedSlots([]);
-    } finally {
-      setLoadingSlots(false);
-    }
-  };
-
-  fetchBookedTimes();
-}, [selectedDate, refreshKey]);
-
 function generateNext30Days(startDate = new Date()) {
   return eachDayOfInterval({
     start: startDate,
@@ -62,7 +22,7 @@ function generateNext30Days(startDate = new Date()) {
   }));
 }
 
-export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0  }) {
+export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0 }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -102,41 +62,46 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
     };
   }, [selectedDate]);
 
-  // Fetch booked times when selectedDate changes
+  // ✅ Fetch booked times when selectedDate changes OR refreshKey increments
   useEffect(() => {
-  const fetchBookedTimes = async () => {
-    if (!selectedDate) return;
+    const fetchBookedTimes = async () => {
+      if (!selectedDate) return;
 
-    if (isPastDay(selectedDate) || isShopClosed(selectedDate)) {
-      setBookedSlots([]);
-      return;
-    }
-
-    setLoadingSlots(true);
-    try {
-      const ymd = format(selectedDate, "yyyy-MM-dd");
-      const res = await fetch(`${baseURL}/api/bookings/booked?date=${ymd}`);
-
-      if (!res.ok) {
-        const txt = await res.text();
-        console.error("Booked slots fetch failed:", res.status, txt.slice(0, 200));
+      if (isPastDay(selectedDate) || isShopClosed(selectedDate)) {
         setBookedSlots([]);
         return;
       }
 
-      const data = await res.json();
-      setBookedSlots(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Failed to fetch booked slots:", err);
-      setBookedSlots([]);
-    } finally {
-      setLoadingSlots(false);
-    }
-  };
+      setLoadingSlots(true);
+      try {
+        const ymd = format(selectedDate, "yyyy-MM-dd");
+        const url = `${baseURL}/api/bookings/booked?date=${ymd}`;
+        const res = await fetch(url);
 
-  fetchBookedTimes();
-}, [selectedDate, refreshKey]); // ✅ important
+        // ✅ important: handle HTML/404 so JSON parse doesn't crash
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("❌ booked slots fetch failed", {
+            url,
+            status: res.status,
+            bodyPreview: text.slice(0, 200),
+          });
+          setBookedSlots([]);
+          return;
+        }
 
+        const data = await res.json();
+        setBookedSlots(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("❌ Failed to fetch booked slots:", err);
+        setBookedSlots([]);
+      } finally {
+        setLoadingSlots(false);
+      }
+    };
+
+    fetchBookedTimes();
+  }, [selectedDate, refreshKey]);
 
   const scrollToTime = () => {
     if (!scrollRef.current || !timeRef.current) return;
@@ -241,42 +206,34 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
             )}
 
             {!dayUnavailable && (
-              <>
-                {!loadingSlots && timeSlots.length === 0 && (
-                  <div className="text-center text-sm rounded-2xl border bg-[#572a31]/5 text-[#572a31] px-4 py-3 mb-3">
-                    No available start times for this service length. Please choose another day or remove a service.
-                  </div>
-                )}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                {timeSlots.map((t) => {
+                  const pastTime = isPastTimeToday(selectedDate, t);
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-                  {timeSlots.map((t) => {
-                    const pastTime = isPastTimeToday(selectedDate, t);
+                  const blocked = isOverlappingBookedSlot({
+                    dateObj: selectedDate,
+                    time12h: t,
+                    bookedSlots,
+                    totalBlockedMinutes,
+                  });
 
-                    const blocked = isOverlappingBookedSlot({
-                      dateObj: selectedDate,
-                      time12h: t,
-                      bookedSlots,
-                      totalBlockedMinutes,
-                    });
+                  if (pastTime || blocked) return null;
 
-                    if (pastTime || blocked) return null;
-
-                    return (
-                      <button
-                        key={t}
-                        onClick={() => onPickTime(t)}
-                        className={`w-full py-2 rounded-full border text-sm font-semibold transition duration-200 ${
-                          selectedTime === t
-                            ? "bg-[#572a31]/80 text-white border-transparent scale-105 shadow-lg"
-                            : "bg-white text-[#572a31] border-[#572a31]/30 hover:bg-[#572a31] hover:text-white hover:translate-y-[-2px]"
-                        }`}
-                      >
-                        {t}
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
+                  return (
+                    <button
+                      key={t}
+                      onClick={() => onPickTime(t)}
+                      className={`w-full py-2 rounded-full border text-sm font-semibold transition duration-200 ${
+                        selectedTime === t
+                          ? "bg-[#572a31]/80 text-white border-transparent scale-105 shadow-lg"
+                          : "bg-white text-[#572a31] border-[#572a31]/30 hover:bg-[#572a31] hover:text-white hover:translate-y-[-2px]"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
+              </div>
             )}
           </div>
         )}
