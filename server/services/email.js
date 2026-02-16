@@ -26,6 +26,9 @@ async function sendBookingEmails({ booking, servicesText, prettyDate, prettyTime
 
   const safeName = String(booking?.name || "Client").trim();
 
+  const from = `ELIKA Beauty <${EMAIL_FROM}>`;
+  const replyToShop = EMAIL_REPLY_TO;
+
   const clientSubject = "Your ELIKA Beauty Booking Confirmation";
   const ownerSubject = `📅 New Booking — ${safeName} (${prettyDate} ${prettyTime})`;
 
@@ -42,17 +45,33 @@ If you need to reschedule, reply to this email.
 — ELIKA Beauty`;
 
   const clientHtml = `
-    <p>Hi <strong>${safeName}</strong>,</p>
-    <p>Your booking has been confirmed with <strong>ELIKA Beauty</strong>:</p>
-    <ul>
-      <li><strong>Date:</strong> ${prettyDate}</li>
-      <li><strong>Time:</strong> ${prettyTime}</li>
-      <li><strong>Services:</strong> ${servicesText}</li>
-    </ul>
-    <p>If you need to reschedule, reply to this email.</p>
-    <p>— ELIKA Beauty</p>
+    <div style="font-family:Arial,sans-serif; line-height:1.5">
+      <p>Hi <strong>${safeName}</strong>,</p>
+      <p>Your booking has been confirmed with <strong>ELIKA Beauty</strong>:</p>
+      <ul>
+        <li><strong>Date:</strong> ${prettyDate}</li>
+        <li><strong>Time:</strong> ${prettyTime}</li>
+        <li><strong>Services:</strong> ${servicesText}</li>
+      </ul>
+      <p>If you need to reschedule, reply to this email.</p>
+      <p>— ELIKA Beauty</p>
+    </div>
   `;
 
+  // 1) client
+  const r1 = await resend.emails.send({
+    from,
+    to: clientTo,
+    subject: clientSubject,
+    text: clientText,
+    html: clientHtml,
+    replyTo: replyToShop,
+    reply_to: replyToShop,
+  });
+
+  console.log("✅ Resend client email result:", JSON.stringify(r1, null, 2));
+
+  // 2) admin(s)
   const ownerText = `NEW BOOKING
 
 Name: ${safeName}
@@ -64,41 +83,34 @@ Email: ${clientTo}
 Note: ${booking?.note || "—"}`;
 
   const ownerHtml = `
-    <p><strong>${safeName}</strong> just booked:</p>
-    <ul>
-      <li><strong>Date:</strong> ${prettyDate}</li>
-      <li><strong>Time:</strong> ${prettyTime}</li>
-      <li><strong>Services:</strong> ${servicesText}</li>
-      <li><strong>Phone:</strong> ${booking?.phone || "—"}</li>
-      <li><strong>Email:</strong> ${clientTo}</li>
-      <li><strong>Note:</strong> ${
-        booking?.note ? String(booking.note).replace(/\n/g, "<br/>") : "—"
-      }</li>
-    </ul>
+    <div style="font-family:Arial,sans-serif; line-height:1.5">
+      <p><strong>${safeName}</strong> just booked:</p>
+      <ul>
+        <li><strong>Date:</strong> ${prettyDate}</li>
+        <li><strong>Time:</strong> ${prettyTime}</li>
+        <li><strong>Services:</strong> ${servicesText}</li>
+        <li><strong>Phone:</strong> ${booking?.phone || "—"}</li>
+        <li><strong>Email:</strong> ${clientTo}</li>
+        <li><strong>Note:</strong> ${
+          booking?.note ? String(booking.note).replace(/\n/g, "<br/>") : "—"
+        }</li>
+      </ul>
+    </div>
   `;
 
-  // 1) client email
-  const r1 = await resend.emails.send({
-    from: `ELIKA Beauty <${EMAIL_FROM}>`,
-    to: clientTo,
-    subject: clientSubject,
-    text: clientText,
-    html: clientHtml,
-    reply_to: EMAIL_REPLY_TO,
-  });
-  console.log("✅ Resend client email:", r1?.data?.id || r1);
-
-  // 2) admin email(s)
   const r2 = await resend.emails.send({
     from: `ELIKA Beauty Bookings <${EMAIL_FROM}>`,
     to: ADMIN_EMAILS,
     subject: ownerSubject,
     text: ownerText,
     html: ownerHtml,
-    reply_to: clientTo, // reply goes to client
+    replyTo: clientTo,
+    reply_to: clientTo,
   });
-  console.log("✅ Resend admin email:", r2?.data?.id || r2);
+
+  console.log("✅ Resend admin email result:", JSON.stringify(r2, null, 2));
 }
+
 
 async function sendCancellationEmail({ email, to, name, date, time }) {
   const recipient = safeEmail(email || to);
