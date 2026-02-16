@@ -2,10 +2,15 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const tz = require("date-fns-tz");
-const zonedTimeToUtc = tz.zonedTimeToUtc || tz.fromZonedTime;
 
+const zonedTimeToUtc = tz.zonedTimeToUtc || tz.fromZonedTime;
 if (!zonedTimeToUtc) {
   throw new Error("date-fns-tz: zonedTimeToUtc/fromZonedTime not available");
+}
+
+const utcToZonedTime = tz.utcToZonedTime || tz.toZonedTime;
+if (!utcToZonedTime) {
+  throw new Error("date-fns-tz: utcToZonedTime/toZonedTime not available");
 }
 
 const Booking = require("../models/booking");
@@ -28,26 +33,6 @@ const CLOSED_WEEKDAYS = new Set([0, 1]); // Sun, Mon
 const OPEN_MONDAYS = new Set([
   // "2026-02-16",
 ]);
-
-function isShopClosedDate(dateStrYYYYMMDD) {
-  // Use midday to avoid edge DST issues
-  const middayUtc = vancouverLocalToUtcDate(dateStrYYYYMMDD, "12:00");
-  const vancouverDate = utcToZonedTime(middayUtc, SHOP_TZ);
-  const dow = vancouverDate.getDay(); // 0=Sun, 1=Mon, ...
-
-  // Allow specific Mondays
-  if (dow === 1 && OPEN_MONDAYS.has(dateStrYYYYMMDD)) return false;
-
-  return CLOSED_WEEKDAYS.has(dow);
-}
-
-
-const utcToZonedTime = tz.utcToZonedTime || tz.toZonedTime;
-if (!utcToZonedTime) {
-  throw new Error("date-fns-tz: utcToZonedTime/toZonedTime not available");
-}
-
-
 
 function to24h(time12h) {
   const m = String(time12h).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
@@ -104,6 +89,17 @@ function vancouverLocalToUtcDate(dateStrYYYYMMDD, hhmm24) {
   return zonedTimeToUtc(local, SHOP_TZ);
 }
 
+function isShopClosedDate(dateStrYYYYMMDD) {
+  // Use midday to avoid edge DST issues
+  const middayUtc = vancouverLocalToUtcDate(dateStrYYYYMMDD, "12:00");
+  const vancouverDate = utcToZonedTime(middayUtc, SHOP_TZ);
+  const dow = vancouverDate.getDay(); // 0=Sun, 1=Mon, ...
+
+  // Allow specific Mondays
+  if (dow === 1 && OPEN_MONDAYS.has(dateStrYYYYMMDD)) return false;
+
+  return CLOSED_WEEKDAYS.has(dow);
+}
 
 /* ---------------- CREATE BOOKING ---------------- */
 router.post("/", async (req, res) => {
@@ -116,10 +112,10 @@ router.post("/", async (req, res) => {
 
     const dateStr = normalizeDateYYYYMMDD(date);
     if (!dateStr) return res.status(400).json({ error: "Invalid date." });
-    if (isShopClosedDate(dateStr)) {
-  return res.status(400).json({ error: "We are closed on Sundays and Mondays." });
-}
 
+    if (isShopClosedDate(dateStr)) {
+      return res.status(400).json({ error: "We are closed on Sundays and Mondays." });
+    }
 
     const hhmm = normalizeTimeToHHMM(time);
     if (!hhmm) {
@@ -127,11 +123,11 @@ router.post("/", async (req, res) => {
     }
 
     // Validate services
-if (!services.every((id) => mongoose.Types.ObjectId.isValid(id))) {
-  return res.status(400).json({ error: "Invalid service id format." });
-}
+    if (!services.every((id) => mongoose.Types.ObjectId.isValid(id))) {
+      return res.status(400).json({ error: "Invalid service id format." });
+    }
 
-const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
+    const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
     const servicesData = await Service.find({ _id: { $in: serviceIds } });
 
     if (servicesData.length !== serviceIds.length) {
@@ -221,7 +217,7 @@ const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
       }
     })();
 
-    // Email (non-blocking) — SINGLE source of truth
+    // Email (non-blocking)
     (async () => {
       try {
         const startDate = new Date(start);
@@ -235,6 +231,12 @@ const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
 
         const servicesText = servicesData.map((s) => s.name).join(", ");
 
+        console.log("📧 About to send emails", {
+          BUSINESS_EMAIL: process.env.BUSINESS_EMAIL,
+          ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+          toClient: booking.email,
+        });
+
         await sendBookingEmails({
           booking,
           servicesText,
@@ -244,40 +246,18 @@ const serviceIds = services.map((id) => new mongoose.Types.ObjectId(id));
 
         console.log("✅ Booking emails sent");
       } catch (err) {
-        console.error("🔥 Booking email failed:", err?.stack || err);
+        console.error("🔥 Booking email failed FULL:", err);
       }
     })();
 
     return res.status(201).json(booking);
   } catch (err) {
-  console.error("❌ Booking failed FULL ERROR:", err);
+    console.error("❌ Booking failed FULL ERROR:", err);
 
-  return res.status(500).json({
-    error: err?.message,
-    name: err?.name,
-  });
-}
-
-});
-/* ---------------- GET BOOKED SLOTS ---------------- */
-// GET /api/bookings/booked?date=YYYY-MM-DD
-router.get("/booked", async (req, res) => {
-  try {
-    const dateStr = normalizeDateYYYYMMDD(req.query.date);
-    if (!dateStr) return res.status(400).json({ error: "date is required" });
-
-    const dayStartUtc = vancouverLocalToUtcDate(dateStr, "00:00");
-    const nextDayUtc = new Date(dayStartUtc.getTime() + 24 * 60 * 60 * 1000);
-
-    const bookings = await Booking.find({
-      status: { $ne: "cancelled" },
-      start: { $gte: dayStartUtc, $lt: nextDayUtc },
-    }).select("start end");
-
-    return res.json(bookings);
-  } catch (err) {
-    console.error("❌ /api/bookings/booked failed:", err);
-    return res.status(500).json({ error: "Internal error" });
+    return res.status(500).json({
+      error: err?.message,
+      name: err?.name,
+    });
   }
 });
 
