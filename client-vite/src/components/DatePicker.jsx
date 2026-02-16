@@ -62,6 +62,12 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
     };
   }, [selectedDate]);
 
+  // ✅ When refreshKey changes (booking succeeded), clear old selection/confirm
+  useEffect(() => {
+    setSelectedTime(null);
+    setShowConfirm(false);
+  }, [refreshKey]);
+
   // ✅ Fetch booked times when selectedDate changes OR refreshKey increments
   useEffect(() => {
     const fetchBookedTimes = async () => {
@@ -76,9 +82,9 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
       try {
         const ymd = format(selectedDate, "yyyy-MM-dd");
         const url = `${baseURL}/api/bookings/booked?date=${ymd}`;
-        const res = await fetch(url);
+        const res = await fetch(url, { cache: "no-store" });
 
-        // ✅ important: handle HTML/404 so JSON parse doesn't crash
+        // ✅ handle HTML/404 so JSON parse doesn't crash
         if (!res.ok) {
           const text = await res.text();
           console.error("❌ booked slots fetch failed", {
@@ -132,10 +138,7 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
         </h2>
       </div>
 
-      <div
-        ref={scrollRef}
-        className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 sm:px-8 pb-6"
-      >
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 sm:px-8 pb-6">
         {/* Calendar */}
         <div className="py-2">
           {groupedByMonth.map(([month, days]) => (
@@ -147,8 +150,7 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
               <div className="grid font-display grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
                 {days.map((d) => {
                   const isToday = d.full === todayYMD;
-                  const isSelected =
-                    selectedDate?.toDateString() === d.date.toDateString();
+                  const isSelected = selectedDate?.toDateString() === d.date.toDateString();
 
                   const closedDay = isShopClosed(d.date);
                   const pastDay = isPastDay(d.date);

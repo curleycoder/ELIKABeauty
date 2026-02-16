@@ -1,11 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { ClipLoader } from "react-spinners";
 
 const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
-if (!baseURL) {
-  console.error("Missing VITE_API_URL");
-}
-
+if (!baseURL) console.error("Missing VITE_API_URL");
 
 export default function QuestionsForm({
   selection,
@@ -14,9 +11,13 @@ export default function QuestionsForm({
   onSubmit,
   setLoading,
   loading,
-  submitSignal, // ✅ NEW: stepper Confirm triggers this
+  submitSignal,
 }) {
   const formRef = useRef(null);
+
+  // hard lock against double submits (across all triggers)
+  const submittingRef = useRef(false);
+  const lastSignalRef = useRef(0);
 
   const [form, setForm] = useState({
     name: "",
@@ -30,16 +31,21 @@ export default function QuestionsForm({
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // ✅ Stepper Confirm -> triggers native form submission
+  const triggerSubmit = useCallback(() => {
+    if (loading) return;
+    if (submittingRef.current) return;
+    formRef.current?.requestSubmit?.();
+  }, [loading]);
+
+  // Stepper Confirm -> triggers native form submission ONCE per tick
   useEffect(() => {
     if (!submitSignal) return;
-    if (loading) return;
+    if (submitSignal === lastSignalRef.current) return;
 
-    // Native HTML validation + submit event
-    formRef.current?.requestSubmit?.();
-  }, [submitSignal, loading]);
+    lastSignalRef.current = submitSignal;
+    triggerSubmit();
+  }, [submitSignal, triggerSubmit]);
 
-  // Reads server error responses safely (json OR text)
   const readResponseBody = async (res) => {
     const contentType = res.headers.get("content-type") || "";
     if (contentType.includes("application/json")) {
@@ -56,11 +62,10 @@ export default function QuestionsForm({
     }
   };
 
-  // Throws a useful error with status + body
   const assertOk = async (res, label) => {
     if (res.ok) return;
-    const body = await readResponseBody(res);
 
+    const body = await readResponseBody(res);
     console.error(`❌ ${label} FAILED`, {
       url: res.url,
       status: res.status,
@@ -78,7 +83,12 @@ export default function QuestionsForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (loading) return;
+
+    // absolute block
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+
+    // use ONE source of truth for UI disabling
     setLoading(true);
 
     try {
@@ -100,15 +110,17 @@ export default function QuestionsForm({
         note: (form.note || "").trim(),
       };
 
-      const dbRes = await fetch(`${baseURL}/api/bookings`, {
+      const res = await fetch(`${baseURL}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingPayload),
       });
 
-      await assertOk(dbRes, "BOOKING");
+      await assertOk(res, "BOOKING");
 
-      // Booking saved (backend will send emails)
+      // Optional: read saved booking (useful for debugging)
+      // const saved = await res.json();
+
       onSubmit({
         ...form,
         services: selection.selected,
@@ -119,23 +131,23 @@ export default function QuestionsForm({
     } catch (error) {
       console.error("❌ Error submitting booking:", error);
 
-      if (String(error.message).includes("no longer available")) {
+      const msg = String(error?.message || "");
+      if (msg.toLowerCase().includes("no longer available")) {
         alert("That time just got booked. Please choose another time.");
-        onTimeConflict?.(); // ✅ ADD THIS
+        onTimeConflict?.();
       } else {
-        alert(`❌ ${error.message || "Failed. Try again."}`);
+        alert(`❌ ${msg || "Failed. Try again."}`);
       }
     } finally {
       setLoading(false);
+      submittingRef.current = false;
     }
-
   };
 
   return (
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      // ❌ removed overflow-y-auto (nested scroll killer)
       className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl text-[#572a31] w-full max-w-2xl mx-auto"
     >
       <h2 className="text-2xl font-display font-bold mb-2">Your Details</h2>
@@ -220,10 +232,10 @@ export default function QuestionsForm({
         />
       </div>
 
-      {/* Optional: keep this button for accessibility / keyboard users.
-          The stepper Confirm will also submit via requestSubmit(). */}
+      {/* Keep as button; all submits go through requestSubmit() */}
       <button
-        type="submit"
+        type="button"
+        onClick={triggerSubmit}
         disabled={loading}
         className={`mt-6 w-full py-3 font-display rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
           loading

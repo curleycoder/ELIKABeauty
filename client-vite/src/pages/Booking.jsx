@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
-// import SimpleDateTimePicker from "../components/SimpleDateTimePicker";
-
 import { format, parseISO } from "date-fns";
 
 const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
@@ -24,10 +22,7 @@ const STEPS = [
 
 export default function Booking() {
   const [selection, setSelection] = useState({ selected: [], total: 0 });
-
-  // ✅ Stepper (replaces showDateTime/showQuestions)
   const [step, setStep] = useState(0);
-
   const [bookingTime, setBookingTime] = useState(null);
 
   const [showFinalPopup, setShowFinalPopup] = useState(false);
@@ -36,14 +31,17 @@ export default function Booking() {
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
 
-  // Used to trigger QuestionsForm submission from the bottom CTA (no ref hacks)
+  // signals
   const [submitTick, setSubmitTick] = useState(0);
+
+  // availability refresh (fetch new booked slots)
   const [availabilityTick, setAvailabilityTick] = useState(0);
 
+  // HARD reset DateTimePicker internal UI state
+  const [pickerKey, setPickerKey] = useState(0);
 
   useEffect(() => {
-    document.title =
-      "Book Your Hair Appointment | ELIKA Beauty, North Burnaby";
+    document.title = "Book Your Hair Appointment | ELIKA Beauty, North Burnaby";
 
     const meta =
       document.querySelector('meta[name="description"]') ||
@@ -87,18 +85,30 @@ export default function Booking() {
   const goBack = () => setStep((s) => Math.max(0, s - 1));
   const goNext = () => setStep((s) => Math.min(STEPS.length - 1, s + 1));
 
-  // If they change services after picking a time, time might no longer fit -> reset
+  // If services change after picking time => reset time AND reset DateTimePicker UI
   useEffect(() => {
-  setBookingTime(null);
-}, [selection.selected]);
+    setBookingTime(null);
+    setAvailabilityTick((t) => t + 1);
+    setPickerKey((k) => k + 1);
+  }, [selection.selected]);
 
-
-  // Scroll to top on step change (feels premium)
+  // Scroll to top on step change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
   const progressPct = ((step + 1) / STEPS.length) * 100;
+
+  const hardResetAll = () => {
+    setStep(0);
+    setBookingTime(null);
+    setSelection({ selected: [], total: 0 });
+    setShowInfo(false);
+    setShowFinalPopup(false);
+    setBookingData(null);
+    setAvailabilityTick((t) => t + 1);
+    setPickerKey((k) => k + 1);
+  };
 
   return (
     <div className="w-full min-h-screen relative font-sans bg-[#F8F7F1]">
@@ -114,7 +124,7 @@ export default function Booking() {
         aria-hidden="true"
       />
 
-      {/* ✅ Sticky stepper header (Apple vibe) */}
+      {/* Sticky stepper header */}
       <div className="sticky top-0 z-30 bg-[#F8F7F1]/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
@@ -138,13 +148,7 @@ export default function Booking() {
             </div>
 
             <button
-              onClick={() => {
-                // reset everything
-                setStep(0);
-                setBookingTime(null);
-                setSelection({ selected: [], total: 0 });
-                setShowInfo(false);
-              }}
+              onClick={hardResetAll}
               className="text-sm font-semibold font-display text-[#55203d]/70 hover:text-[#7a3b44]"
             >
               Reset
@@ -162,16 +166,11 @@ export default function Booking() {
 
       {/* Foreground */}
       <div className="relative z-10 px-4 sm:px-6 py-8 max-w-6xl mx-auto">
-        {/* Header (kept, but not huge) */}
         <header className="mb-6 text-center">
           <h1 className="text-2xl sm:text-3xl text-[#7a3b44] font-theseason font-bold">
-            <span className=" py-2 px-4 sm:px-6">
-              Book Your Appointment
-            </span>
+            <span className="py-2 px-4 sm:px-6">Book Your Appointment</span>
           </h1>
-          <p className="text-gray-600 text-sm mt-2">
-            3790 Canada Way #102, Burnaby
-          </p>
+          <p className="text-gray-600 text-sm mt-2">3790 Canada Way #102, Burnaby</p>
 
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
@@ -185,61 +184,33 @@ export default function Booking() {
           </div>
         </header>
 
-        {/* Optional info */}
         <section
-  id="booking-info"
-  className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 ${
-    showInfo
-      ? "p-5 sm:p-7 mb-6 opacity-100 max-h-[2000px]"
-      : "p-0 mb-2 opacity-0 max-h-0 overflow-hidden"
-  }`}
-  aria-hidden={!showInfo}
->
-  <p>
-    We’re excited to welcome you to{" "}
-    <strong className="font-theseason text-[#7a3b44]">
-      ELIKA BEAUTY
-    </strong>{" "}
-    at <strong className=" text-[#7a3b44]">3790 Canada Way #102, Burnaby</strong>.  
-    We offer a full range of professional beauty services, including{" "}
-    <em>
-      hair color, highlights, balayage, precision haircuts, keratin treatments,
-      brow shaping, and select aesthetic services
-    </em>
-    —all focused on quality, comfort, and results that fit your lifestyle.
-  </p>
+          id="booking-info"
+          className={`bg-white/70 rounded-2xl shadow-sm border border-pink-100 text-gray-700 leading-relaxed transition-all duration-300 ${
+            showInfo
+              ? "p-5 sm:p-7 mb-6 opacity-100 max-h-[2000px]"
+              : "p-0 mb-2 opacity-0 max-h-0 overflow-hidden"
+          }`}
+          aria-hidden={!showInfo}
+        >
+          <p>
+            We’re excited to welcome you to{" "}
+            <strong className="font-theseason text-[#7a3b44]">ELIKA BEAUTY</strong>{" "}
+            at <strong className="text-[#7a3b44]">3790 Canada Way #102, Burnaby</strong>.
+          </p>
+        </section>
 
-  <h2 className="text-xl font-semibold text-[#7a3b44] mt-4">
-    How Online Booking Works
-  </h2>
-
-  <p className="mt-1">
-    1) <strong>Select your service(s)</strong>.  
-    2) We calculate the <strong>required time</strong>.  
-    3) Choose a <strong>date & time</strong>.  
-    4) Add your details and confirm.  
-    You’ll receive instant confirmation once your booking is complete.
-  </p>
-</section>
-
-
-        {/* Main row */}
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* LEFT: step content (NO internal scroll!) */}
           <div className="flex-1">
-            {step === 0 && (
-              <BookingForm
-                onSelectionChange={setSelection}
-              />
-            )}
+            {step === 0 && <BookingForm onSelectionChange={setSelection} />}
 
             {step === 1 && (
               <DateTimePicker
+                key={pickerKey}
                 duration={totalBlockedMinutes}
                 refreshKey={availabilityTick}
                 onSelect={(value) => setBookingTime(value)}
               />
-
             )}
 
             {step === 2 && (
@@ -250,34 +221,29 @@ export default function Booking() {
                   setBookingData(formData);
                   setShowFinalPopup(true);
 
-                  // refresh availability after success too
+                  // refresh + reset picker UI after success
                   setAvailabilityTick((t) => t + 1);
+                  setPickerKey((k) => k + 1);
                 }}
                 onTimeConflict={() => {
-                  // send back to time step + refresh so the taken slot disappears
+                  // go back, clear chosen time, and hard reset picker UI
                   setStep(1);
                   setBookingTime(null);
                   setAvailabilityTick((t) => t + 1);
+                  setPickerKey((k) => k + 1);
                 }}
                 setLoading={setLoading}
                 loading={loading}
                 submitSignal={submitTick}
               />
             )}
-
           </div>
 
-          {/* RIGHT: Summary (desktop only, sticky) */}
+          {/* RIGHT summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-28">
             <h4 className="font-bold text-xl font-theseason text-[#7a3b44] mb-1">
               ELIKA BEAUTY
             </h4>
-            <p className="text-sm text-gray-500">
-              3790 Canada Way #102, Burnaby
-            </p>
-            <p className="text-sm text-gray-500 mb-4">
-              V5G 1G4
-            </p>
 
             <p className="text-med font-bold mb-2">Selected Services:</p>
             {selection.selected.length === 0 ? (
@@ -294,10 +260,6 @@ export default function Booking() {
               <span>Time on Service</span>
               <span>{durationStats.avg} min</span>
             </div>
-            {/* <div className="flex justify-between text-sm text-gray-500 mt-1">
-              <span>Buffer</span>
-              <span>{bufferMinutes} min</span>
-            </div> */}
 
             <hr className="my-4 border-pink-100" />
 
@@ -306,47 +268,43 @@ export default function Booking() {
                 <span>Total</span>
                 <span>{selection.total > 0 ? `+$${selection.total}` : `$0`}</span>
               </div>
-              <p className="text-sm italic text-[#7a3b44] mt-2 leading-tight">
-                * Final pricing depends on hair length, volume, and thickness.
-              </p>
             </div>
-            {/* Desktop CTA */}
-<div className="mt-6">
-  <button
-    disabled={!canContinue || loading}
-    onClick={() => {
-      if (step < 2) return goNext();
-      setSubmitTick((t) => t + 1);
-    }}
-    className={`w-full px-5 py-3 rounded-full font-bold text-white transition ${
-      !canContinue || loading
-        ? "bg-[#7a3b44]/25 cursor-not-allowed"
-        : "bg-[#55203d] hover:brightness-110"
-    }`}
-  >
-    {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
-  </button>
 
-  {step > 0 && (
-    <button
-      type="button"
-      onClick={goBack}
-      className="w-full mt-3 px-5 py-3 rounded-full font-semibold border border-[#55203d]/20 text-[#55203d] hover:bg-[#55203d]/5"
-    >
-      Back
-    </button>
-  )}
-</div>
+            <div className="mt-6">
+              <button
+                disabled={!canContinue || loading}
+                onClick={() => {
+                  if (step < 2) return goNext();
+                  setSubmitTick((t) => t + 1);
+                }}
+                className={`w-full px-5 py-3 rounded-full font-bold text-white transition ${
+                  !canContinue || loading
+                    ? "bg-[#7a3b44]/25 cursor-not-allowed"
+                    : "bg-[#55203d] hover:brightness-110"
+                }`}
+              >
+                {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
+              </button>
 
+              {step > 0 && (
+                <button
+                  type="button"
+                  onClick={goBack}
+                  className="w-full mt-3 px-5 py-3 rounded-full font-semibold border border-[#55203d]/20 text-[#55203d] hover:bg-[#55203d]/5"
+                >
+                  Back
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ✅ Sticky bottom action bar (ONE CTA) */}
+      {/* Mobile bottom bar */}
       <div className="sm:hidden sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-sm font-theseason font-bold text-[#7a3b44]">
+            <div className="text-sm font-display font-bold text-[#7a3b44]">
               {selection.selected.length} service(s) • ${selection.total}
             </div>
             <div className="text-xs text-gray-500">
@@ -359,7 +317,6 @@ export default function Booking() {
             disabled={!canContinue || loading}
             onClick={() => {
               if (step < 2) return goNext();
-              // step === 2 => submit QuestionsForm
               setSubmitTick((t) => t + 1);
             }}
             className={`px-5 py-2.5 rounded-full font-bold text-white transition whitespace-nowrap ${
@@ -373,7 +330,7 @@ export default function Booking() {
         </div>
       </div>
 
-      {/* FINAL POPUP */}
+      {/* Final popup */}
       {showFinalPopup && bookingData && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-md space-y-4">
@@ -390,31 +347,16 @@ export default function Booking() {
             <p className="text-sm text-gray-700">
               <strong>Services:</strong>{" "}
               {Array.isArray(bookingData.services)
-  ? bookingData.services.map((s) => s?.name).filter(Boolean).join(", ")
-  : ""}
-
+                ? bookingData.services.map((s) => s?.name).filter(Boolean).join(", ")
+                : ""}
               <br />
               <strong>Date:</strong> {format(parseISO(bookingData.date), "PPP")}
               <br />
               <strong>Time:</strong> {bookingData.time}
             </p>
 
-            <p className="text-sm font-display text-gray-600">
-              You will receive a confirmation email shortly.
-              <br />
-              For changes, contact <strong>Amina</strong> at{" "}
-              <strong>778-513-9006</strong>.
-            </p>
-
             <button
-              onClick={() => {
-                setShowFinalPopup(false);
-                setBookingData(null);
-                setBookingTime(null);
-                setSelection({ selected: [], total: 0 });
-                setStep(0);
-                setShowInfo(false);
-              }}
+              onClick={hardResetAll}
               className="mt-2 px-5 py-2 font-display bg-[#7a3b44] text-white rounded-lg shadow hover:brightness-110"
             >
               Close
