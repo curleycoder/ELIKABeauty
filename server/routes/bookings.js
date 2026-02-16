@@ -7,7 +7,8 @@ const Booking = require("../models/booking");
 const Service = require("../models/service");
 
 const { createBookingEvent } = require("../services/calendar");
-const { sendBookingEmails } = require("../services/email");
+const { sendBookingEmails, sendCancellationEmails } = require("../services/email");
+
 
 /* ---------------- Timezone helpers (date-fns-tz v1/v2 compatible) ---------------- */
 const zonedTimeToUtc = tz.zonedTimeToUtc || tz.fromZonedTime;
@@ -286,11 +287,11 @@ router.get("/", requireAdmin, async (req, res) => {
     return res.status(500).json({ error: "Internal error" });
   }
 });
-
 /* ---------------- ADMIN: CANCEL BOOKING ---------------- */
 router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid booking id" });
     }
@@ -298,13 +299,49 @@ router.delete("/:id", requireAdmin, async (req, res) => {
     const booking = await Booking.findById(id);
     if (!booking) return res.status(404).json({ error: "Booking not found" });
 
-    if (booking.status === "cancelled") return res.json({ ok: true, booking });
+    if (booking.status === "cancelled") {
+      return res.json({ ok: true, booking });
+    }
 
+    // Mark cancelled
     booking.status = "cancelled";
     booking.cancelledAt = new Date();
     await booking.save();
 
-    return res.json({ ok: true, booking });
+    // Respond fast (don’t block admin UI)
+    res.json({ ok: true, booking });
+
+    // Side-effects in background
+    (async () => {
+      try {
+        const populated = await Booking.findById(booking._id).populate("services", "name duration");
+        if (!populated) return;
+
+        const startDate = new Date(populated.start);
+
+        const prettyDate = startDate.toLocaleDateString("en-CA", { timeZone: SHOP_TZ });
+        const prettyTime = startDate.toLocaleTimeString("en-US", {
+          timeZone: SHOP_TZ,
+          hour: "numeric",
+          minute: "2-digit",
+        });
+
+        const servicesText =
+          (populated.services || [])
+            .map((s) => s?.name)
+            .filter(Boolean)
+            .join(", ") || "—";
+
+        const { sendCancellationEmails } = require("../services/email");
+        await sendCancellationEmails({ booking: populated, servicesText, prettyDate, prettyTime });
+
+        console.log("✅ Cancellation emails sent");
+      } catch (err) {
+        console.error("🔥 Cancellation email failed:", err);
+      }
+    })();
+
+    return; // ✅ important: stop here
   } catch (err) {
     console.error("❌ Admin cancel failed:", err);
     return res.status(500).json({ error: "Internal error" });

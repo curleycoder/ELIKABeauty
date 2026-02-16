@@ -112,28 +112,99 @@ Note: ${booking?.note || "—"}`;
 }
 
 
-async function sendCancellationEmail({ email, to, name, date, time }) {
-  const recipient = safeEmail(email || to);
-  if (!recipient) throw new Error("No recipient email provided");
+async function sendCancellationEmails({ booking, servicesText, prettyDate, prettyTime }) {
+  const clientTo = safeEmail(booking?.email);
+  if (!clientTo) throw new Error("Missing client email");
 
-  const safeName = String(name || "Client").trim();
+  const safeName = String(booking?.name || "Client").trim();
+  const from = `ELIKA Beauty <${EMAIL_FROM}>`;
+  const replyToShop = EMAIL_REPLY_TO;
 
-  const r = await resend.emails.send({
-    from: `ELIKA Beauty <${EMAIL_FROM}>`,
-    to: recipient,
-    subject: "Your Appointment Has Been Cancelled",
-    text: `Hi ${safeName},
+  // CLIENT
+  const clientSubject = "Your ELIKA Beauty appointment has been cancelled";
 
-Your appointment scheduled for ${date} at ${time} has been cancelled.
+  const clientText = `Hi ${safeName},
 
-If you'd like to reschedule, reply to this email.
+Your appointment has been cancelled.
 
-— ELIKA Beauty`,
-    reply_to: EMAIL_REPLY_TO,
+Date: ${prettyDate}
+Time: ${prettyTime}
+Services: ${servicesText}
+
+If you'd like to reschedule, reply to this email or book again on elikabeauty.ca.
+
+— ELIKA Beauty`;
+
+  const clientHtml = `
+    <div style="font-family:Arial,sans-serif; line-height:1.5">
+      <p>Hi <strong>${safeName}</strong>,</p>
+      <p>Your appointment has been <strong>cancelled</strong>.</p>
+      <ul>
+        <li><strong>Date:</strong> ${prettyDate}</li>
+        <li><strong>Time:</strong> ${prettyTime}</li>
+        <li><strong>Services:</strong> ${servicesText}</li>
+      </ul>
+      <p>If you'd like to reschedule, reply to this email or book again on <strong>elikabeauty.ca</strong>.</p>
+      <p>— ELIKA Beauty</p>
+    </div>
+  `;
+
+  const r1 = await resend.emails.send({
+    from,
+    to: clientTo,
+    subject: clientSubject,
+    text: clientText,
+    html: clientHtml,
+    replyTo: replyToShop,
+    reply_to: replyToShop,
   });
 
-  console.log("✅ Resend cancellation email:", r?.data?.id || r);
-  return r;
+  console.log("✅ Resend client cancellation result:", JSON.stringify(r1, null, 2));
+
+  // ADMIN(S)
+  const ownerSubject = `❌ Cancelled — ${safeName} (${prettyDate} ${prettyTime})`;
+
+  const ownerText = `BOOKING CANCELLED
+
+Name: ${safeName}
+Date: ${prettyDate}
+Time: ${prettyTime}
+Services: ${servicesText}
+Phone: ${booking?.phone || "—"}
+Email: ${clientTo}
+CancelledAt: ${booking?.cancelledAt ? new Date(booking.cancelledAt).toISOString() : "—"}
+ID: ${booking?._id || "—"}`;
+
+  const ownerHtml = `
+    <div style="font-family:Arial,sans-serif; line-height:1.5">
+      <p><strong>BOOKING CANCELLED</strong></p>
+      <ul>
+        <li><strong>Name:</strong> ${safeName}</li>
+        <li><strong>Date:</strong> ${prettyDate}</li>
+        <li><strong>Time:</strong> ${prettyTime}</li>
+        <li><strong>Services:</strong> ${servicesText}</li>
+        <li><strong>Phone:</strong> ${booking?.phone || "—"}</li>
+        <li><strong>Email:</strong> ${clientTo}</li>
+        <li><strong>Cancelled At:</strong> ${
+          booking?.cancelledAt ? new Date(booking.cancelledAt).toLocaleString("en-CA") : "—"
+        }</li>
+        <li><strong>ID:</strong> ${booking?._id || "—"}</li>
+      </ul>
+    </div>
+  `;
+
+  const r2 = await resend.emails.send({
+    from: `ELIKA Beauty Bookings <${EMAIL_FROM}>`,
+    to: ADMIN_EMAILS,
+    subject: ownerSubject,
+    text: ownerText,
+    html: ownerHtml,
+    replyTo: clientTo,
+    reply_to: clientTo,
+  });
+
+  console.log("✅ Resend admin cancellation result:", JSON.stringify(r2, null, 2));
 }
 
-module.exports = { sendBookingEmails, sendCancellationEmail };
+
+module.exports = { sendBookingEmails, sendCancellationEmails };
