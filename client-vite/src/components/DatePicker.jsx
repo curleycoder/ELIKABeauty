@@ -9,7 +9,47 @@ import {
   isPastTimeToday,
 } from "../lib/bookingSchedule";
 
-const baseURL = import.meta.env.VITE_API_URL || "";
+const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
+useEffect(() => {
+  const fetchBookedTimes = async () => {
+    if (!selectedDate) return;
+
+    if (isPastDay(selectedDate) || isShopClosed(selectedDate)) {
+      setBookedSlots([]);
+      return;
+    }
+
+    setLoadingSlots(true);
+    try {
+      const ymd = format(selectedDate, "yyyy-MM-dd");
+      const url = `${baseURL}/api/bookings/booked?date=${ymd}`;
+      const res = await fetch(url);
+
+      // ✅ handle 404/500 that returns HTML
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("❌ booked slots fetch failed", {
+          url,
+          status: res.status,
+          bodyPreview: text.slice(0, 200),
+        });
+        setBookedSlots([]);
+        return;
+      }
+
+      const data = await res.json();
+      setBookedSlots(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("❌ Failed to fetch booked slots:", err);
+      setBookedSlots([]);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
+
+  fetchBookedTimes();
+}, [selectedDate, refreshKey]);
 
 function generateNext30Days(startDate = new Date()) {
   return eachDayOfInterval({
@@ -76,6 +116,14 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
     try {
       const ymd = format(selectedDate, "yyyy-MM-dd");
       const res = await fetch(`${baseURL}/api/bookings/booked?date=${ymd}`);
+
+      if (!res.ok) {
+        const txt = await res.text();
+        console.error("Booked slots fetch failed:", res.status, txt.slice(0, 200));
+        setBookedSlots([]);
+        return;
+      }
+
       const data = await res.json();
       setBookedSlots(Array.isArray(data) ? data : []);
     } catch (err) {
