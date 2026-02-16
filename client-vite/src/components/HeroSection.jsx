@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 const HERO_SLIDES = [
   { src: "/assets/colour-hero.jpg", alt: "Elika highlight" },
-  { src: "/assets/micro-hero.jpg", alt: "Elika microblading" },
   { src: "/assets/hair-cut.jpg", alt: "Elika haircut" },
   { src: "/assets/treading-hero.jpg", alt: "Elika treading" },
   { src: "/assets/balayage-hero.jpg", alt: "Elika balayage" },
@@ -13,6 +12,14 @@ const HERO_SLIDES = [
 export default function HeroSection() {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+  HERO_SLIDES.forEach(({ src }) => {
+    const img = new Image();
+    img.src = src;
+  });
+}, []);
+
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -35,7 +42,10 @@ export default function HeroSection() {
   i === index ? "opacity-45" : "opacity-0",
 ].join(" ")}
 
-            loading={i === 0 ? "eager" : "lazy"}
+            loading="eager"
+            fetchpriority={i === 0 ? "high" : "low"}
+            decoding="async"
+
           />
         ))}
       </div>

@@ -11,13 +11,20 @@
   />
   <link rel="canonical" href="https://elikabeauty.ca/" />
 
+  <!-- ✅ Preload hero images (starts downloading before React runs) -->
+  <link rel="preload" as="image" href="/assets/colour-hero.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="/assets/hair-cut.jpg">
+  <link rel="preload" as="image" href="/assets/treading-hero.jpg">
+  <link rel="preload" as="image" href="/assets/balayage-hero.jpg">
+  <link rel="preload" as="image" href="/assets/light-hero.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
 </head>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>
