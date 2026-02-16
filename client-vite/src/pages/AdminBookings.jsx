@@ -220,9 +220,9 @@ export default function AdminBookings() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6 pt-20">
       <div className="flex items-center justify-between gap-3 mb-4">
-        <h2 className="text-2xl font-bold font-display text-[#55203d]">Admin – Bookings</h2>
+        <h2 className="text-2xl font-bold font-theseason text-[#55203d]">Admin – Bookings</h2>
         <div className="flex gap-2">
           <button onClick={fetchBookings} className="px-3 py-2 rounded bg-[#55203d] text-white">
             Refresh
