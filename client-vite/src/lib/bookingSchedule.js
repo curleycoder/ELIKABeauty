@@ -1,6 +1,6 @@
 // src/lib/bookingSchedule.js
 import { addMinutes, format, parse } from "date-fns";
-import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 
 export const SHOP_TZ = "America/Vancouver";
 
@@ -22,27 +22,28 @@ function ymd(dateObj) {
 
 /**
  * Convert a Vancouver-local wall-clock (YYYY-MM-DD + h:mm a) into a UTC Date.
- * This makes comparisons correct regardless of user device timezone.
  */
 function vancouverSlotToUtcDate(dateObj, time12h) {
   const dateStr = ymd(dateObj);
   const local = parse(`${dateStr} ${time12h}`, "yyyy-MM-dd h:mm a", new Date());
   if (isNaN(local.getTime())) return null;
 
-  // Convert the wall-clock components to a Vancouver-zoned instant (UTC Date)
+  // Convert wall-clock to Vancouver-zoned instant (UTC Date)
   const wallClock = format(local, "yyyy-MM-dd HH:mm:ss");
-  return zonedTimeToUtc(wallClock, SHOP_TZ);
+  return fromZonedTime(wallClock, SHOP_TZ);
 }
 
 export function isShopClosed(dateObj) {
   const dateStr = ymd(dateObj);
 
-  // Determine weekday *in Vancouver*, not user device timezone
-  const noonUtc = zonedTimeToUtc(`${dateStr} 12:00:00`, SHOP_TZ);
-  const vanNoon = utcToZonedTime(noonUtc, SHOP_TZ);
+  // Determine weekday in Vancouver (use noon to avoid DST edge)
+  const noonUtc = fromZonedTime(`${dateStr} 12:00:00`, SHOP_TZ);
+  const vanNoon = toZonedTime(noonUtc, SHOP_TZ);
   const dow = vanNoon.getDay();
 
+  // Allow specific Mondays
   if (dow === 1 && OPEN_MONDAYS.has(dateStr)) return false;
+
   return CLOSED_WEEKDAYS.has(dow);
 }
 
@@ -63,19 +64,19 @@ export function generateTimeSlots({
   const dateStr = ymd(baseDate);
 
   // Build Vancouver opening/closing instants (UTC Dates)
-  const openingUtc = zonedTimeToUtc(
+  const openingUtc = fromZonedTime(
     `${dateStr} ${String(openHour).padStart(2, "0")}:00:00`,
     SHOP_TZ
   );
-  const closingUtc = zonedTimeToUtc(
+  const closingUtc = fromZonedTime(
     `${dateStr} ${String(closeHour).padStart(2, "0")}:00:00`,
     SHOP_TZ
   );
 
   let tUtc = openingUtc;
+
   while (addMinutes(tUtc, totalBlockedMinutes) <= closingUtc) {
-    // Convert to Vancouver local for display text
-    const tVan = utcToZonedTime(tUtc, SHOP_TZ);
+    const tVan = toZonedTime(tUtc, SHOP_TZ);
     slots.push(format(tVan, "h:mm a"));
     tUtc = addMinutes(tUtc, stepMinutes);
   }
@@ -107,7 +108,6 @@ export function isOverlappingBookedSlot({
 }
 
 export function isPastDay(dateObj) {
-  // Compare based on local calendar day; good enough for UI selection gating
   const today0 = new Date();
   today0.setHours(0, 0, 0, 0);
   return dateObj < today0;
