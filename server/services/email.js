@@ -89,7 +89,7 @@ View & manage:
 ${adminUrl}
 `;
 
-  const ownerHtml = `
+    const ownerHtml = `
     <div style="font-family:Arial,sans-serif; line-height:1.5">
       <p><strong>${safeName}</strong> just booked:</p>
       <ul>
@@ -102,22 +102,24 @@ ${adminUrl}
           booking?.note ? String(booking.note).replace(/\n/g, "<br/>") : "—"
         }</li>
       </ul>
+
       <p style="margin-top:20px;">
-      <a href="${adminUrl}
-         style="
-           display:inline-block;
-           padding:10px 18px;
-           background-color:#55203d;
-           color:#ffffff;
-           text-decoration:none;
-           border-radius:4px;
-           font-weight:bold;
-         ">
-        View & Manage Booking
-      </a>
-    </p>
+        <a href="${adminUrl}"
+          style="
+            display:inline-block;
+            padding:10px 18px;
+            background-color:#55203d;
+            color:#ffffff;
+            text-decoration:none;
+            border-radius:4px;
+            font-weight:bold;
+          ">
+          View & Manage Booking
+        </a>
+      </p>
     </div>
   `;
+
 
   const r2 = await resend.emails.send({
     from: `ELIKA Beauty Bookings <${EMAIL_FROM}>`,

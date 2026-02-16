@@ -18,7 +18,7 @@ const utcToZonedTime = tz.utcToZonedTime || tz.toZonedTime;
 if (!utcToZonedTime) throw new Error("date-fns-tz: utcToZonedTime/toZonedTime not available");
 
 /* ---------------- Config ---------------- */
-const BUFFER_MINUTES = 15;
+const BUFFER_MINUTES = 10;
 const SHOP_TZ = "America/Vancouver";
 const CLOSE_HOUR = 19;
 const OPEN_HOUR = 10;

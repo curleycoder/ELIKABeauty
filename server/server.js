@@ -54,15 +54,19 @@ app.use("/api/admin/bookings", bookingRoutes);
 // Static gallery
 app.use("/gallery", express.static(path.join(__dirname, "public", "gallery")));
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => {
+async function start() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB connected");
+
+    const PORT = Number(process.env.PORT) || 3000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`✅ Server running on port ${PORT}`);
+    });
+  } catch (err) {
     console.error("❌ MongoDB connection error:", err);
     process.exit(1);
-  });
+  }
+}
 
-const PORT = Number(process.env.PORT) || 3000;
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+start();
