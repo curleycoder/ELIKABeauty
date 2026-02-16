@@ -8,7 +8,7 @@ const path = require("path");
 const bookingRoutes = require("./routes/bookings");
 const galleryRoutes = require("./routes/gallery");
 const googleRoutes = require("./routes/googleReview");
-const emailRoutes = require("./routes/email");
+// const emailRoutes = require("./routes/email");
 const serviceRoutes = require("./routes/services");
 
 function assertRouter(name, r) {
@@ -62,7 +62,7 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/google", googleRoutes);
-app.use("/api/email", emailRoutes);
+// app.use("/api/email", emailRoutes);
 
 // Admin route (same router, different base path)
 // IMPORTANT: your frontend admin page must call /api/admin/bookings

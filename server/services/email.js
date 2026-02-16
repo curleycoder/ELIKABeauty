@@ -16,13 +16,15 @@ const ADMIN_EMAILS = ADMIN_EMAIL_RAW.split(",").map(s => s.trim()).filter(Boolea
 
 const transporter = nodemailer.createTransport({
   host: "smtp.ionos.com",
-  port: 587,
-  secure: false,
-auth: {
-  user: BUSINESS_EMAIL,
-  pass: BUSINESS_EMAIL_APP_PASSWORD,
-},
-
+  port: 465,
+  secure: true, // ✅ IMPORTANT for 465
+  auth: {
+    user: BUSINESS_EMAIL,
+    pass: BUSINESS_EMAIL_APP_PASSWORD,
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000,
 });
 
 
