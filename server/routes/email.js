@@ -3,16 +3,16 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const { format, parseISO } = require("date-fns");
 
-// Create transporter ONCE (not on every request)
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.ionos.com",
+  port: 587,
+  secure: false,
   auth: {
-  user: process.env.BUSINESS_EMAIL,
-  pass: process.env.BUSINESS_EMAIL_APP_PASSWORD,
-},
-from: `"ELIKA Beauty" <${process.env.BUSINESS_EMAIL}>`,
-
+    user: process.env.BUSINESS_EMAIL,
+    pass: process.env.BUSINESS_EMAIL_APP_PASSWORD,
+  },
 });
+
 
 router.post("/send-confirmation", async (req, res) => {
   const { name, email, phone, services, date, time, note } = req.body;

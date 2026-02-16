@@ -21,6 +21,34 @@ const SHOP_TZ = "America/Vancouver";
 const CLOSE_HOUR = 19;
 const OPEN_HOUR = 10;
 
+const CLOSED_WEEKDAYS = new Set([0, 1]); // Sun, Mon
+
+// Mondays that are OPEN even though Mondays are normally closed.
+// Use YYYY-MM-DD strings.
+const OPEN_MONDAYS = new Set([
+  // "2026-02-16",
+]);
+
+function isShopClosedDate(dateStrYYYYMMDD) {
+  // Use midday to avoid edge DST issues
+  const middayUtc = vancouverLocalToUtcDate(dateStrYYYYMMDD, "12:00");
+  const vancouverDate = utcToZonedTime(middayUtc, SHOP_TZ);
+  const dow = vancouverDate.getDay(); // 0=Sun, 1=Mon, ...
+
+  // Allow specific Mondays
+  if (dow === 1 && OPEN_MONDAYS.has(dateStrYYYYMMDD)) return false;
+
+  return CLOSED_WEEKDAYS.has(dow);
+}
+
+
+const utcToZonedTime = tz.utcToZonedTime || tz.toZonedTime;
+if (!utcToZonedTime) {
+  throw new Error("date-fns-tz: utcToZonedTime/toZonedTime not available");
+}
+
+
+
 function to24h(time12h) {
   const m = String(time12h).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
   if (!m) return null;
@@ -88,6 +116,10 @@ router.post("/", async (req, res) => {
 
     const dateStr = normalizeDateYYYYMMDD(date);
     if (!dateStr) return res.status(400).json({ error: "Invalid date." });
+    if (isShopClosedDate(dateStr)) {
+  return res.status(400).json({ error: "We are closed on Sundays and Mondays." });
+}
+
 
     const hhmm = normalizeTimeToHHMM(time);
     if (!hhmm) {

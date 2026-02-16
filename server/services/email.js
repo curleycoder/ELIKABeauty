@@ -1,17 +1,18 @@
 const nodemailer = require("nodemailer");
 
-const BUSINESS_EMAIL = process.env.BUSINESS_EMAIL || process.env.SMTP_USER;
-const BUSINESS_EMAIL_APP_PASSWORD =
-  process.env.BUSINESS_EMAIL_APP_PASSWORD || process.env.SMTP_PASS;
+const BUSINESS_EMAIL = process.env.BUSINESS_EMAIL;
+const BUSINESS_EMAIL_APP_PASSWORD = process.env.BUSINESS_EMAIL_APP_PASSWORD;
+
+if (!BUSINESS_EMAIL || !BUSINESS_EMAIL_APP_PASSWORD) {
+  throw new Error("Missing BUSINESS_EMAIL or BUSINESS_EMAIL_APP_PASSWORD");
+}
+
 
 // Admin recipients: comma-separated list supported
 // Example: ADMIN_EMAIL="amina@elikabeauty.ca,assistant@elikabeauty.ca"
 const ADMIN_EMAIL_RAW = process.env.ADMIN_EMAIL || "amina@elikabeauty.ca";
 const ADMIN_EMAILS = ADMIN_EMAIL_RAW.split(",").map(s => s.trim()).filter(Boolean);
 
-if (!BUSINESS_EMAIL || !BUSINESS_EMAIL_APP_PASSWORD) {
-  console.warn("⚠️ Missing BUSINESS_EMAIL/BUSINESS_EMAIL_APP_PASSWORD (or SMTP_USER/SMTP_PASS)");
-}
 
 const transporter = nodemailer.createTransport({
   host: "smtp.ionos.com",
