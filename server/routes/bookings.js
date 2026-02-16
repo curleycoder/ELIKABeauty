@@ -3,18 +3,20 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const tz = require("date-fns-tz");
 
-const zonedTimeToUtc = tz.zonedTimeToUtc || tz.fromZonedTime;
-if (!zonedTimeToUtc) throw new Error("date-fns-tz: zonedTimeToUtc/fromZonedTime not available");
-
-const utcToZonedTime = tz.utcToZonedTime || tz.toZonedTime;
-if (!utcToZonedTime) throw new Error("date-fns-tz: utcToZonedTime/toZonedTime not available");
-
 const Booking = require("../models/booking");
 const Service = require("../models/service");
 
 const { createBookingEvent } = require("../services/calendar");
 const { sendBookingEmails } = require("../services/email");
 
+/* ---------------- Timezone helpers (date-fns-tz v1/v2 compatible) ---------------- */
+const zonedTimeToUtc = tz.zonedTimeToUtc || tz.fromZonedTime;
+if (!zonedTimeToUtc) throw new Error("date-fns-tz: zonedTimeToUtc/fromZonedTime not available");
+
+const utcToZonedTime = tz.utcToZonedTime || tz.toZonedTime;
+if (!utcToZonedTime) throw new Error("date-fns-tz: utcToZonedTime/toZonedTime not available");
+
+/* ---------------- Config ---------------- */
 const BUFFER_MINUTES = 15;
 const SHOP_TZ = "America/Vancouver";
 const CLOSE_HOUR = 19;
@@ -24,6 +26,24 @@ const CLOSED_WEEKDAYS = new Set([0, 1]); // Sun, Mon
 const OPEN_MONDAYS = new Set([
   // "2026-02-16",
 ]);
+
+/* ---------------- Admin auth ---------------- */
+function requireAdmin(req, res, next) {
+  const key = String(req.headers["x-admin-key"] || "").trim();
+
+  if (!process.env.ADMIN_KEY) {
+    return res.status(500).json({ error: "Server missing ADMIN_KEY" });
+  }
+  if (!key || key !== process.env.ADMIN_KEY) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
+}
+
+/* ---------------- Utilities ---------------- */
+function looksLikeEmail(x) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(x || "").trim());
+}
 
 function to24h(time12h) {
   const m = String(time12h).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
@@ -46,12 +66,15 @@ function normalizeDateYYYYMMDD(dateInput) {
   const d = new Date(dateInput);
   if (isNaN(d.getTime())) return null;
 
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
 }
 
 function normalizeTimeToHHMM(input) {
   const s = String(input || "").trim();
 
+  // 24h HH:MM
   if (/^\d{1,2}:\d{2}$/.test(s)) {
     const [h, m] = s.split(":");
     const hh = parseInt(h, 10);
@@ -60,11 +83,13 @@ function normalizeTimeToHHMM(input) {
       return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
     }
   }
+
+  // 12h 3:00 PM
   return to24h(s);
 }
 
 function minutesToMs(mins) {
-  return mins * 60000;
+  return mins * 60 * 1000;
 }
 
 function vancouverLocalToUtcDate(dateStrYYYYMMDD, hhmm24) {
@@ -80,23 +105,24 @@ function isShopClosedDate(dateStrYYYYMMDD) {
   return CLOSED_WEEKDAYS.has(dow);
 }
 
-function looksLikeEmail(x) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(x || "").trim());
-}
+/* ========================================================================== */
+/*                               PUBLIC ROUTES                                */
+/* ========================================================================== */
 
 /* ---------------- CREATE BOOKING ---------------- */
 router.post("/", async (req, res) => {
   try {
     const { services, name, email, phone, referredBy, date, time, note } = req.body;
 
-    // ✅ Hard validation
+    // Hard validation
     if (!name || !email || !phone || !date || !time) {
-      return res.status(400).json({ error: "Missing required fields (name, email, phone, date, time)." });
+      return res
+        .status(400)
+        .json({ error: "Missing required fields (name, email, phone, date, time)." });
     }
     if (!looksLikeEmail(email)) {
       return res.status(400).json({ error: "Invalid email address." });
     }
-
     if (!Array.isArray(services) || services.length === 0) {
       return res.status(400).json({ error: "Please select at least one service." });
     }
@@ -123,6 +149,7 @@ router.post("/", async (req, res) => {
 
     const serviceDuration = servicesData.reduce((sum, s) => sum + (s.duration || 0), 0);
 
+    // Buffer rules
     const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
     const bufferMinutes = servicesData.some((s) => !NO_BUFFER_SERVICE_NAMES.has(String(s.name || "").trim()))
       ? BUFFER_MINUTES
@@ -185,7 +212,7 @@ router.post("/", async (req, res) => {
       }
     })();
 
-    // Email (non-blocking) ✅ sends to client + admin inside sendBookingEmails
+    // Email (non-blocking)
     (async () => {
       try {
         const startDate = new Date(start);
@@ -234,6 +261,52 @@ router.get("/booked", async (req, res) => {
     return res.json(bookings);
   } catch (err) {
     console.error("❌ /api/bookings/booked failed:", err);
+    return res.status(500).json({ error: "Internal error" });
+  }
+});
+
+/* ========================================================================== */
+/*                                ADMIN ROUTES                                */
+/* Mounted at: /api/admin/bookings (same router)                              */
+/* So admin endpoints are:                                                    */
+/*  - GET    /api/admin/bookings                                              */
+/*  - DELETE /api/admin/bookings/:id                                          */
+/* ========================================================================== */
+
+/* ---------------- ADMIN: LIST BOOKINGS ---------------- */
+router.get("/", requireAdmin, async (req, res) => {
+  try {
+    const list = await Booking.find({})
+      .sort({ start: 1 })
+      .populate("services", "name duration");
+
+    return res.json(list);
+  } catch (err) {
+    console.error("❌ Admin GET bookings failed:", err);
+    return res.status(500).json({ error: "Internal error" });
+  }
+});
+
+/* ---------------- ADMIN: CANCEL BOOKING ---------------- */
+router.delete("/:id", requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid booking id" });
+    }
+
+    const booking = await Booking.findById(id);
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    if (booking.status === "cancelled") return res.json({ ok: true, booking });
+
+    booking.status = "cancelled";
+    booking.cancelledAt = new Date();
+    await booking.save();
+
+    return res.json({ ok: true, booking });
+  } catch (err) {
+    console.error("❌ Admin cancel failed:", err);
     return res.status(500).json({ error: "Internal error" });
   }
 });
