@@ -10,6 +10,7 @@ if (!baseURL) {
 export default function QuestionsForm({
   selection,
   bookingTime,
+  onTimeConflict,
   onSubmit,
   setLoading,
   loading,
@@ -120,12 +121,14 @@ export default function QuestionsForm({
 
       if (String(error.message).includes("no longer available")) {
         alert("That time just got booked. Please choose another time.");
+        onTimeConflict?.(); // ✅ ADD THIS
       } else {
         alert(`❌ ${error.message || "Failed. Try again."}`);
       }
     } finally {
       setLoading(false);
     }
+
   };
 
   return (

@@ -22,7 +22,7 @@ function generateNext30Days(startDate = new Date()) {
   }));
 }
 
-export default function DateTimePicker({ onSelect, duration = 30 }) {
+export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0  }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -64,33 +64,31 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
 
   // Fetch booked times when selectedDate changes
   useEffect(() => {
-    const fetchBookedTimes = async () => {
-      if (!selectedDate) return;
+  const fetchBookedTimes = async () => {
+    if (!selectedDate) return;
 
-      // Always clear loading if we exit early
-      if (selectedDayStatus?.past || selectedDayStatus?.closed) {
-        setBookedSlots([]);
-        setLoadingSlots(false);
-        return;
-      }
+    if (isPastDay(selectedDate) || isShopClosed(selectedDate)) {
+      setBookedSlots([]);
+      return;
+    }
 
-      setLoadingSlots(true);
-      try {
-        const res = await fetch(
-          `${baseURL}/api/bookings/booked?date=${selectedDayStatus.ymd}`
-        );
-        const data = await res.json();
-        setBookedSlots(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to fetch booked slots:", err);
-        setBookedSlots([]);
-      } finally {
-        setLoadingSlots(false);
-      }
-    };
+    setLoadingSlots(true);
+    try {
+      const ymd = format(selectedDate, "yyyy-MM-dd");
+      const res = await fetch(`${baseURL}/api/bookings/booked?date=${ymd}`);
+      const data = await res.json();
+      setBookedSlots(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to fetch booked slots:", err);
+      setBookedSlots([]);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
 
-    fetchBookedTimes();
-  }, [selectedDate, selectedDayStatus, baseURL]);
+  fetchBookedTimes();
+}, [selectedDate, refreshKey]); // ✅ important
+
 
   const scrollToTime = () => {
     if (!scrollRef.current || !timeRef.current) return;

@@ -38,6 +38,8 @@ export default function Booking() {
 
   // Used to trigger QuestionsForm submission from the bottom CTA (no ref hacks)
   const [submitTick, setSubmitTick] = useState(0);
+  const [availabilityTick, setAvailabilityTick] = useState(0);
+
 
   useEffect(() => {
     document.title =
@@ -234,10 +236,12 @@ export default function Booking() {
             {step === 1 && (
               <DateTimePicker
                 duration={totalBlockedMinutes}
-                onSelect={setBookingTime}
-
+                onSelect={(value) => setBookingTime(value)}
+                refreshKey={availabilityTick}   // ✅ add this
               />
+
             )}
+
             {step === 2 && (
               <QuestionsForm
                 selection={selection}
@@ -245,12 +249,22 @@ export default function Booking() {
                 onSubmit={(formData) => {
                   setBookingData(formData);
                   setShowFinalPopup(true);
+
+                  // refresh availability after success too
+                  setAvailabilityTick((t) => t + 1);
+                }}
+                onTimeConflict={() => {
+                  // send back to time step + refresh so the taken slot disappears
+                  setStep(1);
+                  setBookingTime(null);
+                  setAvailabilityTick((t) => t + 1);
                 }}
                 setLoading={setLoading}
                 loading={loading}
-                submitSignal={submitTick} // ✅ add this prop in QuestionsForm
+                submitSignal={submitTick}
               />
             )}
+
           </div>
 
           {/* RIGHT: Summary (desktop only, sticky) */}
