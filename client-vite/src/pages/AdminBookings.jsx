@@ -24,6 +24,21 @@ async function parseError(res) {
   }
 }
 
+// ✅ NEW: read ?id=... for deep-link highlight
+function getQueryId() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    return id && id.trim() ? id.trim() : "";
+  } catch {
+    return "";
+  }
+}
+
+function normStatus(s) {
+  return String(s || "").trim().toLowerCase();
+}
+
 // get best sortable time for booking
 function getStartMs(b) {
   if (b?.start) {
@@ -101,6 +116,9 @@ export default function AdminBookings() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
+  // ✅ NEW: highlight id from deep link
+  const [highlightId, setHighlightId] = useState(() => getQueryId());
+
   const fetchBookings = async () => {
     setLoading(true);
     setErrorMsg("");
@@ -122,6 +140,33 @@ export default function AdminBookings() {
       if (!Array.isArray(data)) throw new Error("Invalid data (expected array).");
 
       setBookings(data);
+
+      // ✅ NEW: deep-link handling (tab + scroll + highlight)
+      const deepId = getQueryId();
+      if (deepId) {
+        const found = data.find((b) => b?._id === deepId);
+        if (found) {
+          const st = normStatus(found?.status);
+          if (st === "cancelled" || st === "canceled") {
+            setTab("cancelled");
+          } else {
+            const ms = getStartMs(found);
+            const todayStart = startOfTodayMsVancouver();
+            setTab(ms < todayStart ? "done" : "upcoming");
+          }
+
+          setHighlightId(deepId);
+
+          // scroll after render
+          setTimeout(() => {
+            const el = document.getElementById(`booking-${deepId}`);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 200);
+
+          // remove highlight after a few seconds
+          setTimeout(() => setHighlightId(""), 6000);
+        }
+      }
     } catch (err) {
       console.error("❌ Failed to load bookings:", err);
       setBookings([]);
@@ -189,8 +234,7 @@ export default function AdminBookings() {
       .filter((x) => x.b?.status === "cancelled")
       .sort((a, b) => b.ms - a.ms); // newest cancelled first
 
-    const selected =
-      tab === "upcoming" ? upcoming : tab === "done" ? done : cancelled;
+    const selected = tab === "upcoming" ? upcoming : tab === "done" ? done : cancelled;
 
     return {
       grouped: groupByDate(selected),
@@ -256,12 +300,16 @@ export default function AdminBookings() {
               <div className="space-y-3">
                 {day.list.map(({ b }) => {
                   const isCancelled = b?.status === "cancelled";
+                  const isHighlighted = highlightId && b?._id === highlightId;
+
                   return (
                     <div
+                      id={`booking-${b._id}`} // ✅ NEW: anchor for scroll
                       key={b._id}
                       className={[
-                        "p-3 rounded border",
+                        "p-3 rounded border transition",
                         isCancelled ? "bg-red-50" : "bg-white",
+                        isHighlighted ? "ring-2 ring-[#55203d] shadow-lg" : "",
                       ].join(" ")}
                     >
                       <div className="flex justify-between items-start gap-3">

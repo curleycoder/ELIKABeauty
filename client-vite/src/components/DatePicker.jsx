@@ -192,7 +192,7 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
         {selectedDate && (
           <div ref={timeRef} className="pt-2">
             <p className="text-xl text-center text-[#572a31] font-theseason mb-3 mt-2">
-              Select a time:
+              Select a time
             </p>
 
             {loadingSlots && (
