@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  format,
-  isBefore,
-  addMinutes,
-  setHours,
-  setMinutes,
-  eachDayOfInterval,
-  addDays,
-  parse,
-} from "date-fns";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { format, eachDayOfInterval, addDays } from "date-fns";
 
-const OPEN_HOUR = 10;
-const CLOSE_HOUR = 19;
-const SLOT_STEP_MINUTES = 15;
+import {
+  isShopClosed,
+  generateTimeSlots,
+  isOverlappingBookedSlot,
+  isPastDay,
+  isPastTimeToday,
+} from "../lib/bookingSchedule";
+
+const baseURL = import.meta.env.VITE_API_URL || "";
 
 function generateNext30Days(startDate = new Date()) {
   return eachDayOfInterval({
@@ -25,83 +22,75 @@ function generateNext30Days(startDate = new Date()) {
   }));
 }
 
-// Show start times where (start + totalBlockedMinutes) <= closing
-function generateTimeSlots(totalBlockedMinutes, openHour = OPEN_HOUR, closeHour = CLOSE_HOUR) {
-  const slots = [];
-  if (!Number.isFinite(totalBlockedMinutes) || totalBlockedMinutes <= 0) return slots;
-
-  const base = new Date();
-  const openingTime = setHours(setMinutes(base, 0), openHour);
-  const closingTime = setHours(setMinutes(base, 0), closeHour);
-
-  let time = openingTime;
-  while (addMinutes(time, totalBlockedMinutes) <= closingTime) {
-    slots.push(format(time, "h:mm a"));
-    time = addMinutes(time, SLOT_STEP_MINUTES);
-  }
-
-  return slots;
-}
-
-// ✅ Proper overlap check (matches backend logic)
-function isBlocked(date, time12h, bookedSlots, totalBlockedMinutes) {
-  const slotStart = parse(
-    `${format(date, "yyyy-MM-dd")} ${time12h}`,
-    "yyyy-MM-dd h:mm a",
-    new Date()
-  );
-
-  if (isNaN(slotStart.getTime())) return true;
-
-  const slotEnd = addMinutes(slotStart, totalBlockedMinutes);
-
-  return bookedSlots.some((b) => {
-    const bookedStart = new Date(b.start);
-    const bookedEnd = new Date(b.end);
-
-    if (isNaN(bookedStart.getTime()) || isNaN(bookedEnd.getTime())) return false;
-
-    // overlap: slotStart < bookedEnd && slotEnd > bookedStart
-    return slotStart < bookedEnd && slotEnd > bookedStart;
-  });
-}
-
-const baseURL = import.meta.env.VITE_API_URL || "";
-
 export default function DateTimePicker({ onSelect, duration = 30 }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   const scrollRef = useRef(null);
   const timeRef = useRef(null);
 
-  const today = new Date();
-  const monthDates = generateNext30Days(today);
+  const todayYMD = useMemo(() => format(new Date(), "yyyy-MM-dd"), []);
+  const monthDates = useMemo(() => generateNext30Days(new Date()), []);
 
-  // duration MUST be totalBlockedMinutes (service + buffer)
   const totalBlockedMinutes = Number(duration) || 0;
-  const timeSlots = generateTimeSlots(totalBlockedMinutes);
 
+  const timeSlots = useMemo(
+    () => generateTimeSlots({ totalBlockedMinutes }),
+    [totalBlockedMinutes]
+  );
+
+  const groupedByMonth = useMemo(() => {
+    return Object.entries(
+      monthDates.reduce((groups, day) => {
+        const month = format(day.date, "MMMM yyyy");
+        if (!groups[month]) groups[month] = [];
+        groups[month].push(day);
+        return groups;
+      }, {})
+    );
+  }, [monthDates]);
+
+  const selectedDayStatus = useMemo(() => {
+    if (!selectedDate) return null;
+    return {
+      past: isPastDay(selectedDate),
+      closed: isShopClosed(selectedDate),
+      ymd: format(selectedDate, "yyyy-MM-dd"),
+    };
+  }, [selectedDate]);
+
+  // Fetch booked times when selectedDate changes
   useEffect(() => {
     const fetchBookedTimes = async () => {
       if (!selectedDate) return;
 
+      // Always clear loading if we exit early
+      if (selectedDayStatus?.past || selectedDayStatus?.closed) {
+        setBookedSlots([]);
+        setLoadingSlots(false);
+        return;
+      }
+
+      setLoadingSlots(true);
       try {
         const res = await fetch(
-          `${baseURL}/api/bookings/booked?date=${format(selectedDate, "yyyy-MM-dd")}`
+          `${baseURL}/api/bookings/booked?date=${selectedDayStatus.ymd}`
         );
         const data = await res.json();
         setBookedSlots(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to fetch booked slots:", err);
         setBookedSlots([]);
+      } finally {
+        setLoadingSlots(false);
       }
     };
 
     fetchBookedTimes();
-  }, [selectedDate]);
+  }, [selectedDate, selectedDayStatus, baseURL]);
 
   const scrollToTime = () => {
     if (!scrollRef.current || !timeRef.current) return;
@@ -109,6 +98,20 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
     const targetTop = timeRef.current.offsetTop - container.offsetTop - 12;
     container.scrollTo({ top: targetTop, behavior: "smooth" });
   };
+
+  const onPickDate = (d) => {
+    setSelectedDate(d);
+    setSelectedTime(null);
+    setShowConfirm(false);
+    setTimeout(scrollToTime, 150);
+  };
+
+  const onPickTime = (t) => {
+    setSelectedTime(t);
+    setShowConfirm(true);
+  };
+
+  const dayUnavailable = Boolean(selectedDayStatus?.past || selectedDayStatus?.closed);
 
   return (
     <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-20 sm:mt-28 flex flex-col max-h-[80dvh]">
@@ -124,14 +127,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
       >
         {/* Calendar */}
         <div className="py-2">
-          {Object.entries(
-            monthDates.reduce((groups, day) => {
-              const month = format(day.date, "MMMM yyyy");
-              if (!groups[month]) groups[month] = [];
-              groups[month].push(day);
-              return groups;
-            }, {})
-          ).map(([month, days]) => (
+          {groupedByMonth.map(([month, days]) => (
             <div key={month} className="mb-6">
               <h4 className="text-left text-md sm:text-lg font-bold text-[#572a31] mb-2 mt-4">
                 {month}
@@ -139,23 +135,20 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
 
               <div className="grid font-display grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
                 {days.map((d) => {
-                  const isToday = d.full === format(today, "yyyy-MM-dd");
+                  const isToday = d.full === todayYMD;
                   const isSelected =
                     selectedDate?.toDateString() === d.date.toDateString();
-                  const isDisabled = isBefore(
-                    d.date,
-                    new Date(new Date().setHours(0, 0, 0, 0))
-                  );
+
+                  const closedDay = isShopClosed(d.date);
+                  const pastDay = isPastDay(d.date);
+                  const isDisabled = pastDay || closedDay;
 
                   return (
                     <button
                       key={d.full}
                       onClick={() => {
                         if (isDisabled) return;
-                        setSelectedDate(d.date);
-                        setSelectedTime(null);
-                        setShowConfirm(false);
-                        setTimeout(scrollToTime, 150);
+                        onPickDate(d.date);
                       }}
                       disabled={isDisabled}
                       className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full border font-semibold text-sm transition ${
@@ -168,7 +161,7 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
                     >
                       <div className="flex flex-col items-center">
                         <span className="text-[10px] sm:text-xs font-medium">
-                          {format(d.date, "EEE")}
+                          {closedDay ? "Closed" : format(d.date, "EEE")}
                         </span>
                         <span className="text-sm sm:text-base font-semibold">
                           {d.number}
@@ -189,50 +182,61 @@ export default function DateTimePicker({ onSelect, duration = 30 }) {
               Select a time:
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-              {timeSlots.map((time) => {
-                const isToday =
-                  format(selectedDate, "yyyy-MM-dd") ===
-                  format(new Date(), "yyyy-MM-dd");
+            {loadingSlots && (
+              <p className="text-center text-sm text-gray-500 mb-3">
+                Loading availability...
+              </p>
+            )}
 
-                const slotStart = parse(
-                  `${format(selectedDate, "yyyy-MM-dd")} ${time}`,
-                  "yyyy-MM-dd h:mm a",
-                  new Date()
-                );
+            {dayUnavailable && (
+              <div className="text-center text-sm rounded-2xl border bg-[#572a31]/5 text-[#572a31] px-4 py-3">
+                This day is not available.
+              </div>
+            )}
 
-                const isPast = isToday && isBefore(slotStart, new Date());
-                const blocked = isBlocked(
-                  selectedDate,
-                  time,
-                  bookedSlots,
-                  totalBlockedMinutes
-                );
+            {!dayUnavailable && (
+              <>
+                {!loadingSlots && timeSlots.length === 0 && (
+                  <div className="text-center text-sm rounded-2xl border bg-[#572a31]/5 text-[#572a31] px-4 py-3 mb-3">
+                    No available start times for this service length. Please choose another day or remove a service.
+                  </div>
+                )}
 
-                if (isPast || blocked) return null;
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                  {timeSlots.map((t) => {
+                    const pastTime = isPastTimeToday(selectedDate, t);
 
-                return (
-                  <button
-                    key={time}
-                    onClick={() => {
-                      setSelectedTime(time);
-                      setShowConfirm(true);
-                    }}
-                    className={`w-full py-2 rounded-full border text-sm font-semibold transition duration-200 ${
-                      selectedTime === time
-                        ? "bg-[#572a31]/80 text-white border-transparent scale-105 shadow-lg"
-                        : "bg-white text-[#572a31] border-[#572a31]/30 hover:bg-[#572a31] hover:text-white hover:translate-y-[-2px]"
-                    }`}
-                  >
-                    {time}
-                  </button>
-                );
-              })}
-            </div>
+                    const blocked = isOverlappingBookedSlot({
+                      dateObj: selectedDate,
+                      time12h: t,
+                      bookedSlots,
+                      totalBlockedMinutes,
+                    });
+
+                    if (pastTime || blocked) return null;
+
+                    return (
+                      <button
+                        key={t}
+                        onClick={() => onPickTime(t)}
+                        className={`w-full py-2 rounded-full border text-sm font-semibold transition duration-200 ${
+                          selectedTime === t
+                            ? "bg-[#572a31]/80 text-white border-transparent scale-105 shadow-lg"
+                            : "bg-white text-[#572a31] border-[#572a31]/30 hover:bg-[#572a31] hover:text-white hover:translate-y-[-2px]"
+                        }`}
+                      >
+                        {t}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
 
+      {/* Confirm */}
       {showConfirm && selectedDate && selectedTime && (
         <div className="fixed inset-0 rounded-3xl bg-[#572a31]/60 flex items-center justify-center px-4 sm:px-8 z-50">
           <div className="bg-white rounded-2xl p-5 sm:p-8 w-[90%] max-w-md shadow-xl text-center space-y-4">

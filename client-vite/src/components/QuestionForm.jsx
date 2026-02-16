@@ -77,14 +77,10 @@ export default function QuestionsForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (loading) return; // ✅ guard against double submits
+    if (loading) return;
     setLoading(true);
 
-      let emailOk = true; // ✅ ADD THIS
-
-
     try {
-      // Hard validation
       if (!bookingTime?.date || !bookingTime?.time) {
         throw new Error("Please select a date and time.");
       }
@@ -92,7 +88,6 @@ export default function QuestionsForm({
         throw new Error("Please select at least one service.");
       }
 
-      // 1) Save booking to MongoDB
       const bookingPayload = {
         name: form.name.trim(),
         email: form.email.trim(),
@@ -112,63 +107,7 @@ export default function QuestionsForm({
 
       await assertOk(dbRes, "BOOKING");
 
-      // 2) Send confirmation email (NON-BLOCKING)
-      const ADMIN_EMAIL =
-      import.meta.env.VITE_ADMIN_EMAIL || "amina@elikabeauty.ca";
-
-      const emailPayload = {
-        // customer info
-        name: form.name.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        referredBy: form.referredBy.trim(),
-
-        // booking info
-        services: selection.selected.map((s) => s.name),
-        date: bookingTime.date,
-        time: bookingTime.time,
-
-        // FIX: duration should come from selected services, not selection.duration
-        duration: selection.selected.reduce((sum, s) => sum + (s?.duration || 0), 0),
-
-        note: (form.note || "").trim(),
-
-        // NEW: tell backend where to send the shop notification
-        adminEmail: ADMIN_EMAIL,
-      };
-
-
-      try {
-        const emailRes = await fetch(`${baseURL}/api/email/send-confirmation`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(emailPayload),
-        });
-
-        if (!emailRes.ok) {
-  emailOk = false;
-  const body = await readResponseBody(emailRes);
-
-  console.error("❌ EMAIL FAILED (non-blocking)", {
-    url: emailRes.url,
-    status: emailRes.status,
-    statusText: emailRes.statusText,
-    body,
-  });
-
-  // This makes debugging fast (you’ll see 404 vs CORS vs 500)
-  alert(
-    `Booking saved, but email failed (${emailRes.status}). Check console Network tab.\n` +
-      (typeof body === "string" ? body.slice(0, 200) : JSON.stringify(body).slice(0, 200))
-  );
-}
-
-      } catch (err) {
-        emailOk = false;
-        console.error("❌ EMAIL FAILED (network, non-blocking)", err);
-      }
-
-      // 3) Notify parent of success (ALWAYS if booking saved)
+      // Booking saved (backend will send emails)
       onSubmit({
         ...form,
         services: selection.selected,
@@ -176,23 +115,14 @@ export default function QuestionsForm({
         date: bookingTime.date,
         time: bookingTime.time,
       });
-
-      if (!emailOk) {
-        alert(
-          "✅ Booking confirmed. ⚠️ Email didn’t send right now. If you don’t receive it, we’ll still have your appointment saved."
-        );
-      }
     } catch (error) {
-  console.error("❌ Error submitting booking:", error);
+      console.error("❌ Error submitting booking:", error);
 
-  if (String(error.message).includes("no longer available")) {
-    alert("That time just got booked. Please choose another time.");
-    // optional: send them back to step 1
-    // (do this in parent by passing a callback if you want)
-  } else {
-    alert(`❌ ${error.message || "Failed. Try again."}`);
-  }
-
+      if (String(error.message).includes("no longer available")) {
+        alert("That time just got booked. Please choose another time.");
+      } else {
+        alert(`❌ ${error.message || "Failed. Try again."}`);
+      }
     } finally {
       setLoading(false);
     }

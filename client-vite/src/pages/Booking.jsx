@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
-// import DateTimePicker from "../components/DatePicker";
-import SimpleDateTimePicker from "../components/SimpleDateTimePicker";
+import DateTimePicker from "../components/DatePicker";
+// import SimpleDateTimePicker from "../components/SimpleDateTimePicker";
 
 import { format, parseISO } from "date-fns";
 
@@ -87,9 +87,9 @@ export default function Booking() {
 
   // If they change services after picking a time, time might no longer fit -> reset
   useEffect(() => {
-    if (step > 0) setBookingTime(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selection.selected]);
+  setBookingTime(null);
+}, [selection.selected]);
+
 
   // Scroll to top on step change (feels premium)
   useEffect(() => {
@@ -231,17 +231,13 @@ export default function Booking() {
               />
             )}
 
-            {/* {step === 1 && (
+            {step === 1 && (
               <DateTimePicker
                 duration={totalBlockedMinutes}
-                onSelect={(value) => setBookingTime(value)}
+                onSelect={setBookingTime}
+
               />
-            )} */}
-            {step === 1 && (
-  <SimpleDateTimePicker onSelect={(value) => setBookingTime(value)} />
-)}
-
-
+            )}
             {step === 2 && (
               <QuestionsForm
                 selection={selection}
