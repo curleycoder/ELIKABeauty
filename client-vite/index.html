@@ -1,30 +1,42 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Elika Beauty | Hair Salon in Burnaby (Metro Vancouver)</title>
-  <meta
-    name="description"
-    content="Elika Beauty is a hair salon in Burnaby (102–3790 Canada Way) specializing in balayage, highlights, hair colour, and keratin treatments. Book online."
-  />
-  <link rel="canonical" href="https://elikabeauty.ca/" />
+    <title>Elika Beauty | Hair Salon in Burnaby (Metro Vancouver)</title>
+    <meta
+      name="description"
+      content="Elika Beauty is a hair salon in Burnaby (102–3790 Canada Way) specializing in balayage, highlights, hair colour, and keratin treatments. Book online."
+    />
+    <link rel="canonical" href="https://elikabeauty.ca/" />
 
-  <!-- ✅ Preload hero images (starts downloading before React runs) -->
-  <link rel="preload" as="image" href="/assets/colour-hero.jpg" fetchpriority="high">
-  <link rel="preload" as="image" href="/assets/hair-cut.jpg">
-  <link rel="preload" as="image" href="/assets/treading-hero.jpg">
-  <link rel="preload" as="image" href="/assets/balayage-hero.jpg">
-  <link rel="preload" as="image" href="/assets/light-hero.jpg">
+    <!-- Preload hero images -->
+    <link rel="preload" as="image" href="/assets/colour-hero.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/hair-cut.jpg" />
+    <link rel="preload" as="image" href="/assets/treading-hero.jpg" />
+    <link rel="preload" as="image" href="/assets/balayage-hero.jpg" />
+    <link rel="preload" as="image" href="/assets/light-hero.jpg" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+      rel="stylesheet"
+    />
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8TFEJL919T"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-8TFEJL919T");
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
