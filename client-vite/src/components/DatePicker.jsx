@@ -131,7 +131,7 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
   const dayUnavailable = Boolean(selectedDayStatus?.past || selectedDayStatus?.closed);
 
   return (
-    <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-16 sm:mt-20 flex flex-col max-h-[80dvh]">
+    <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto mt-12 sm:mt-16 flex flex-col max-h-[80dvh]">
       <div className="p-6 sm:p-8 pb-3">
         <h2 className="text-xl font-theseason text-[#572a31] tracking-wide text-center">
           Choose a Date
