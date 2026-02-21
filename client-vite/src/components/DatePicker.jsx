@@ -132,7 +132,7 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
 
   return (
     <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto flex flex-col max-h-[80dvh]">
-      <div className="p-6 sm:p-8 pb-3">
+      <div className="p-2 sm:p-4 pb-2">
         <h2 className="text-xl font-theseason text-[#572a31] tracking-wide text-center">
           Choose a Date
         </h2>
@@ -166,10 +166,10 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
                       disabled={isDisabled}
                       className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full border font-semibold text-sm transition ${
                         isSelected
-                          ? "bg-purplecolor text-white shadow-md scale-105"
+                          ? "bg-[#572a31] text-white shadow-md scale-105"
                           : isToday
-                          ? "border-purplecolor text-[#572a31]"
-                          : "border-purplecolor/20 text-[#572a31]/70 hover:border-[#572a31] hover:bg-[#572a31]/10"
+                          ? "border-[#572a31] text-[#572a31]"
+                          : "border-[#572a31]/20 text-[#572a31]/70 hover:border-[#572a31] hover:bg-[#572a31]/10"
                       } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     >
                       <div className="flex flex-col items-center">
