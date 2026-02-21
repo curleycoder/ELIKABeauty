@@ -24,15 +24,11 @@ const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle })
               {s.fromPrice && (
                 <span className="text-xs text-gray-400 ml-0.5 align-top">+</span>
               )}
-              <span className="text-xs text-gray-400 ml-2">
-                • {s.duration || 0} min
-              </span>
+              <span className="text-xs text-gray-400 ml-2">• {s.duration || 0} min</span>
             </div>
 
             {!!s.description && (
-              <p className="mt-1 text-gray-500 leading-snug line-clamp-2">
-                {s.description}
-              </p>
+              <p className="mt-1 text-gray-500 leading-snug line-clamp-2">{s.description}</p>
             )}
           </div>
         </div>
@@ -59,31 +55,55 @@ export default function BookingForm({ onSelectionChange }) {
   const [selected, setSelected] = useState([]);
   const [activeTab, setActiveTab] = useState("Hair");
   const [conflictWarning, setConflictWarning] = useState(false);
+
   const [services, setServices] = useState([]);
+
+  // ✅ NEW: proper fetch state (prevents “No services” glitch during slow loads)
+  const [status, setStatus] = useState("loading"); // loading | success | error
+  const [errorMsg, setErrorMsg] = useState("");
 
   const baseURL = import.meta.env.VITE_API_URL || "https://api.elikabeauty.ca";
 
-  // Fetch services once
+  // ✅ FIXED: abort-safe + retry fetch
   useEffect(() => {
-    let cancelled = false;
+    const ctrl = new AbortController();
 
     (async () => {
-      try {
-        const res = await fetch(`${baseURL}/api/services`);
-        const data = await res.json();
-        if (!cancelled) setServices(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Error fetching services:", err);
-        if (!cancelled) setServices([]);
+      setStatus("loading");
+      setErrorMsg("");
+
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const res = await fetch(`${baseURL}/api/services`, {
+            signal: ctrl.signal,
+            cache: "no-store",
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+          const data = await res.json();
+
+          if (!ctrl.signal.aborted) {
+            setServices(Array.isArray(data) ? data : []);
+            setStatus("success");
+          }
+          return;
+        } catch (err) {
+          if (ctrl.signal.aborted) return;
+          const delay = Math.min(300 * 2 ** (attempt - 1), 1200);
+          await new Promise((r) => setTimeout(r, delay));
+        }
+      }
+
+      if (!ctrl.signal.aborted) {
+        setServices([]);
+        setStatus("error");
+        setErrorMsg("Services are loading slower than usual. Please try again.");
       }
     })();
 
-    return () => {
-      cancelled = true;
-    };
+    return () => ctrl.abort();
   }, [baseURL]);
 
-  // FAST selection checks
   const selectedIds = useMemo(() => new Set(selected.map((s) => s._id)), [selected]);
 
   const filteredServices = useMemo(() => {
@@ -101,12 +121,10 @@ export default function BookingForm({ onSelectionChange }) {
     });
   }, []);
 
-  // Notify parent
   useEffect(() => {
     onSelectionChange?.({ selected, total });
   }, [selected, total, onSelectionChange]);
 
-  // Conflict warning
   useEffect(() => {
     const hasKeratin = selected.some((s) => s.name === "Keratin");
     const conflicting = ["Highlight", "Balayage", "Hair Color"];
@@ -114,7 +132,6 @@ export default function BookingForm({ onSelectionChange }) {
     setConflictWarning(hasKeratin && hasConflict);
   }, [selected]);
 
-  // When switching tabs, scroll to top so it feels instant + clean
   const listTopRef = useRef(null);
   useEffect(() => {
     listTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -160,7 +177,6 @@ export default function BookingForm({ onSelectionChange }) {
           </div>
         )}
 
-        {/* Compact selected “chips” row (optional, premium, no sheet) */}
         {selected.length > 0 && (
           <div className="mt-4 rounded-2xl border border-purplecolor/10 bg-white/70 p-3">
             <div className="flex items-center justify-between gap-3">
@@ -198,14 +214,26 @@ export default function BookingForm({ onSelectionChange }) {
         )}
       </div>
 
-      {/* Body (NO internal scroll) */}
+      {/* Body */}
       <div className="px-6 sm:px-8 py-5">
         <div ref={listTopRef} />
 
-        {filteredServices.length === 0 ? (
-          <div className="text-center text-gray-500 py-10">
-            No services in this category.
+        {/* ✅ FIXED: loading/error/empty are distinct */}
+        {status === "loading" ? (
+          <div className="text-center text-gray-500 py-10">Loading services…</div>
+        ) : status === "error" ? (
+          <div className="text-center text-gray-500 py-10 space-y-3">
+            <div>{errorMsg || "Failed to load services."}</div>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 rounded-full bg-[#7a3b44] text-white font-bold"
+            >
+              Retry
+            </button>
           </div>
+        ) : filteredServices.length === 0 ? (
+          <div className="text-center text-gray-500 py-10">No services in this category.</div>
         ) : (
           <div className="space-y-3">
             {filteredServices.map((s) => (
