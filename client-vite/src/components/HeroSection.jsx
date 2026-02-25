@@ -90,7 +90,7 @@ export default function HeroSection() {
 
           <button
             onClick={() => navigate("/booking")}
-            className="mt-8 rounded-md bg-[#FE8269] hover:bg-[#572a31] px-7 py-3 text-sm font-semibold text-[#faeddd] hover:text-[#faeddd] transition"
+            className="mt-8 rounded-md bg-[#440008] hover:bg-[#572a31] px-7 py-3 text-sm font-semibold text-[#ffe3d6] hover:text-[#faeddd] transition"
           >
             BOOK AN APPOINTMENT
           </button>

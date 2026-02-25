@@ -40,22 +40,24 @@ useEffect(() => {
     setMenuOpen(false);
   };
 
-  const routeMap = {
-    Home: "/",
-    Booking: "/booking",
-    Articles: "/articles",
-    Products: "/product",
-    Gallery: "/gallery",
-  };
+const routeMap = {
+  Home: "/",
+  Services: "/services",
+  Booking: "/booking",
+  Gallery: "/gallery",
+  Articles: "/articles",
+  // "Products (In-Salon)": "/product",
+};
 
-  const navItems = [
-    { name: "Home" },
-    { name: "Booking" },
-    { name: "Gallery" },
-    { name: "Articles" },
-    { name: "Products" },
-    { name: "About Me", scroll: "about-section" },
-  ];
+const navItems = [
+  { name: "Home" },
+  { name: "Services" },
+  { name: "Booking" },
+  { name: "Gallery" },
+  { name: "Articles" },
+  // { name: "Products (In-Salon)" },
+  { name: "About Me", scroll: "about-section" },
+];
 
   const handleNavClick = (item) => {
     if (item.scroll) return goToSection(item.scroll);
@@ -71,8 +73,8 @@ useEffect(() => {
       className={[
         "fixed top-0 left-0 right-0 z-50 transition ",
         scrolled
-          ? "bg-[#F8F7F1] text-[#572a31]"
-          : "bg-[#F8F7F1]  text-[#572a31] shadow-sm",
+          ? "bg-[#F8F7F1] text-[#2A0005]"
+          : "bg-[#F8F7F1]  text-[#2A0005] shadow-sm",
       ].join(" ")}
     >
 <nav className="font-theseason h-14 px-4 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
@@ -80,7 +82,7 @@ useEffect(() => {
           className="cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <Logo size="sm" color={"#572a31"} />
+          <Logo size="sm" />
         </div>
 
 

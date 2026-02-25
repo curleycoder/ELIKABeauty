@@ -3,7 +3,6 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
-// import ChatWidget from "./components/ChatWidget.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 
 import Home from "./pages/Home.jsx";
@@ -15,19 +14,23 @@ import Gallery from "./components/Gallery.jsx";
 import AboutMe from "./components/AboutMe.jsx";
 import AdminBookings from "./pages/AdminBookings.jsx";
 import Instagram from "./components/Instagram.jsx";
+import Services from "./pages/Services.jsx";
+
+import Balayage from "./pages/BalayageBurnaby.jsx";
+import Highlight from "./pages/HighlightsBurnaby.jsx";
+import Keratin from "./pages/KeratinTreatmentBurnaby.jsx";
+import MensHaircut from "./pages/MensHaircutBurnaby.jsx";
+import Perm from "./pages/PermBurnaby.jsx";
+import WomensHaircut from "./pages/WomensHaircutBurnaby.jsx";
 
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export default function App() {
   const { pathname } = useLocation();
 
-  // ✅ hide chat widget on booking flow (add more paths if needed)
-  // const hideChatWidget = pathname.startsWith("/booking");
-
   return (
     <>
       <Navbar />
-      {/* {!hideChatWidget && <ChatWidget />} */}
       <ScrollToTop />
 
       <Routes>
@@ -40,6 +43,17 @@ export default function App() {
         <Route path="/aboutme" element={<AboutMe />} />
         <Route path="/admin-bookings-secret" element={<AdminBookings />} />
         <Route path="/instagram" element={<Instagram />} />
+
+        {/* SERVICES HUB */}
+        <Route path="/services" element={<Services />} />
+
+        {/* SERVICE PAGES */}
+        <Route path="/balayage-burnaby" element={<Balayage />} />
+        <Route path="/highlights-burnaby" element={<Highlight />} />
+        <Route path="/keratin-treatment-burnaby" element={<Keratin />} />
+        <Route path="/perm-burnaby" element={<Perm />} />
+        <Route path="/womens-haircut-burnaby" element={<WomensHaircut />} />
+        <Route path="/mens-haircut-burnaby" element={<MensHaircut />} />
       </Routes>
 
       <SpeedInsights />

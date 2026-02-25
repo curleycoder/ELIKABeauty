@@ -6,6 +6,7 @@ import Gallery from "../components/Gallery";
 import FAQ from "../components/FAQ";
 import Instagram from "../components/Instagram";
 import IntroSection from "../components/Intro";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -45,6 +46,72 @@ export default function Home() {
 
       {/* MAIN CONTENT */}
       <section className=" w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-8 py-5 sm:py-1 space-y-12 sm:space-y-6">
+        <section className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-8 py-4">
+  <div className="flex items-end justify-between gap-4">
+    <div>
+      <h2 className="text-2xl sm:text-3xl font-theseason text-[#572a31]">
+        Popular Services
+      </h2>
+      <p className="text-[#572a31]/70 mt-1">
+        Choose a service to see details, pricing guidance, and examples.
+      </p>
+    </div>
+
+    <a href="/services" className="underline text-[#572a31]">
+      View all services
+    </a>
+  </div>
+
+  <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <a href="/balayage-burnaby" className="rounded-2xl border p-5 hover:shadow-sm transition">
+      <div className="font-semibold text-[#572a31]">Balayage</div>
+      <div className="mt-2 text-sm text-[#572a31]/70">
+        Soft blended color with low-maintenance grow-out.
+      </div>
+      <div className="mt-4 underline text-sm text-[#572a31]">View details</div>
+    </a>
+
+    <a href="/highlights-burnaby" className="rounded-2xl border p-5 hover:shadow-sm transition">
+      <div className="font-semibold text-[#572a31]">Highlights</div>
+      <div className="mt-2 text-sm text-[#572a31]/70">
+        Dimensional brightness with custom toning.
+      </div>
+      <div className="mt-4 underline text-sm text-[#572a31]">View details</div>
+    </a>
+
+    <a href="/keratin-treatment-burnaby" className="rounded-2xl border p-5 hover:shadow-sm transition">
+      <div className="font-semibold text-[#572a31]">Keratin Treatment</div>
+      <div className="mt-2 text-sm text-[#572a31]/70">
+        Smoother hair, less frizz, easier styling.
+      </div>
+      <div className="mt-4 underline text-sm text-[#572a31]">View details</div>
+    </a>
+
+    <a href="/perm-burnaby" className="rounded-2xl border p-5 hover:shadow-sm transition">
+      <div className="font-semibold text-[#572a31]">Perm</div>
+      <div className="mt-2 text-sm text-[#572a31]/70">
+        Curls or waves tailored to your hair type.
+      </div>
+      <div className="mt-4 underline text-sm text-[#572a31]">View details</div>
+    </a>
+
+    <a href="/womens-haircut-burnaby" className="rounded-2xl border p-5 hover:shadow-sm transition">
+      <div className="font-semibold text-[#572a31]">Women’s Haircut</div>
+      <div className="mt-2 text-sm text-[#572a31]/70">
+        Shape, layers, and styling for your lifestyle.
+      </div>
+      <div className="mt-4 underline text-sm text-[#572a31]">View details</div>
+    </a>
+
+    <a href="/mens-haircut-burnaby" className="rounded-2xl border p-5 hover:shadow-sm transition">
+      <div className="font-semibold text-[#572a31]">Men’s Haircut</div>
+      <div className="mt-2 text-sm text-[#572a31]/70">
+        Clean cuts with sharp detail and easy maintenance.
+      </div>
+      <div className="mt-4 underline text-sm text-[#572a31]">View details</div>
+    </a>
+  </div>
+</section>
         <AboutMe />
         <GoogleReview />
         {/* <Gallery /> */}
@@ -61,13 +128,13 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="bg-[#572a31] py-8 sm:py-8 mt-6">
+      <section className="bg-[#E7A45D] py-8 sm:py-8 mt-6">
         <div className="max-w-3xl mx-auto text-center px-4">
-          <h2 className="text-2xl sm:text-3xl font-theseason text-[#F8F7F1]">
+          <h2 className="text-2xl sm:text-3xl font-theseason text-[#440008]">
             Ready to Book Your Appointment?
           </h2>
 
-          <p className="mt-3 text-[#F8F7F1]/80">
+          <p className="mt-3 text-[#440008]/80">
             Book online, or contact us if you’re not sure which service to choose.
           </p>
 
@@ -82,7 +149,7 @@ export default function Home() {
 
             <a
               href="/booking"
-              className="inline-block rounded-lg px-6 py-4 bg-[#FE8269] text-[#F8F7F1] hover:opacity-90 transition"
+              className="inline-block rounded-lg px-6 py-4 bg-[#440008] text-[#F8F7F1] hover:opacity-90 transition"
             >
               Book Appointment
             </a>

@@ -1,11 +1,12 @@
+import { Link } from "react-router-dom";
+
 export default function IntroSection() {
   return (
-    // grey canvas like the screenshot
     <section className="bg-[#F8F7F1] px-4 sm:px-6 lg:px-20 py-12 sm:py-20">
       <div className="mx-auto max-w-6xl">
         {/* outer card + thin border */}
         <div className="bg-[#F8F7F1] border border-[#572a31]">
-          {/* inner purple border */}
+          {/* inner border */}
           <div className="m-3 border border-[#572a31]">
             {/* padding inside the bordered area */}
             <div className="px-8 py-4 sm:px-8 sm:py-8">
@@ -44,11 +45,47 @@ export default function IntroSection() {
                   </p>
                 </div>
               </div>
+
+<div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-4">
+
+  <Link
+    to="/booking"
+    className="
+      group relative text-center
+      rounded-xl px-8 py-3
+      bg-[#572a31] text-white
+      tracking-wide
+      transition-all duration-300
+      shadow-[0_6px_18px_rgba(87,42,49,0.25)]
+      hover:shadow-[0_10px_28px_rgba(87,42,49,0.35)]
+      hover:-translate-y-[1px]
+    "
+  >
+    Book Appointment
+  </Link>
+
+  <a
+    href="tel:+16044383727"
+    className="
+      text-center rounded-xl px-8 py-3
+      bg-transparent
+      text-[#572a31]
+      border border-[#572a31]/30
+      tracking-wide
+      transition-all duration-300
+      hover:border-[#572a31]
+      hover:bg-[#572a31]/5
+    "
+  >
+    Call (604) 438-3727
+  </a>
+
+</div>
+              {/* ✅ END CTA ROW */}
             </div>
           </div>
         </div>
 
-        {/* optional: extra breathing room below like Canva */}
         <div className="h-8" />
       </div>
     </section>
