@@ -10,6 +10,9 @@ export default {
     "/perm-burnaby",
     "/womens-haircut-burnaby",
     "/mens-haircut-burnaby",
+      "/hair-salon-burnaby",
+  "/hair-color-burnaby",
+  "/contact",
 
     // Existing pages:
     "/gallery",

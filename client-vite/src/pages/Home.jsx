@@ -14,6 +14,16 @@ export default function Home() {
       {/* HERO */}
       <HeroSection />
       <IntroSection />
+      <p className="mt-4 text-sm text-[#572a31]/80">
+  Looking for a trusted{" "}
+  <Link to="/hair-salon-burnaby" className="underline">
+    hair salon in Burnaby
+  </Link>{" "}
+  specializing in modern colour techniques? Explore our{" "}
+  <Link to="/hair-color-burnaby" className="underline">
+    professional hair color services
+  </Link>.
+</p>
 
       {/* SEO INTRO */}
       {/* <section className="bg-[#200027] sm:px-6 lg:px-12 pt-6 pb-10 sm:pt-10">
@@ -149,41 +159,65 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="bg-[#E7A45D] py-8 sm:py-8 mt-6">
-        <div className="max-w-3xl mx-auto text-center px-4">
-          <h2 className="text-2xl sm:text-3xl font-theseason text-[#440008]">
-            Ready to Book Your Appointment?
-          </h2>
+<section className="mt-10 ">
+  <div className="">
+    <div className="rounded-2xl border border-[#572a31]/15 bg-[#E7A45D]/50 p-6 sm:p-10 text-center">
+      <h2 className="text-2xl sm:text-3xl font-theseason text-[#440008]">
+        Ready to Book Your Appointment?
+      </h2>
 
-          <p className="mt-3 text-[#440008]/80">
-            Book online, or contact us if you’re not sure which service to choose.
-          </p>
+      <p className="mt-3 text-[#440008]/80 max-w-2xl mx-auto">
+        Book online, or contact us if you’re not sure which service to choose.
+      </p>
 
-          {/* New client matching (high-conversion) */}
-          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-            {/* <a
-              href="/match"
-              className="inline-block rounded-xl px-8 py-4 border border-[#F8F7F1] text-[#F8F7F1] hover:bg-[#7a3b44]/10 transition"
-            >
-              New Client? Get Matched
-            </a> */}
+      {/* CTA BUTTONS (Luxury) */}
+      <div className="mt-7 flex flex-col sm:flex-row gap-4 justify-center">
+        <Link
+          to="/booking"
+          className="
+            rounded-full px-8 py-3
+            bg-[#440008] text-[#F8F7F1]
+            shadow-[0_10px_25px_rgba(68,0,8,0.18)]
+            hover:shadow-[0_14px_30px_rgba(68,0,8,0.25)]
+            hover:-translate-y-[1px]
+            transition-all duration-300
+          "
+        >
+          Book Appointment
+        </Link>
 
-            <a
-              href="/booking"
-              className="inline-block rounded-lg px-6 py-4 bg-[#440008] text-[#F8F7F1] hover:opacity-90 transition"
-            >
-              Book Appointment
-            </a>
+        <a
+          href="tel:+16044383727"
+          className="
+            rounded-full px-8 py-3
+            bg-[#F8F7F1] text-[#572a31]
+            border border-[#572a31]/25
+            hover:border-[#572a31]/45
+            hover:bg-white
+            transition-all duration-300
+          "
+        >
+          Call Now
+        </a>
+      </div>
 
-            <a
-              href="tel:+16044383727"
-              className="inline-block rounded-lg px-6 py-4 bg-[#F8F7F1] text-[#572a31] border border-gray-200 hover:bg-[#ceaa5b]-50 transition"
-            >
-              Call Now
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* SEO LINKS (clean row) */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-[#440008]/80">
+        <Link className="underline hover:opacity-80 transition" to="/hair-salon-burnaby">
+          Hair Salon Burnaby
+        </Link>
+        <span className="text-[#440008]/40">•</span>
+        <Link className="underline hover:opacity-80 transition" to="/hair-color-burnaby">
+          Hair Color Burnaby
+        </Link>
+        <span className="text-[#440008]/40">•</span>
+        <Link className="underline hover:opacity-80 transition" to="/contact">
+          Contact
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>
     </>
   );
 }

@@ -305,6 +305,19 @@ export default function Services() {
 
         <div className="text-gray-500">{PARKING_NOTE}</div>
       </div>
+      <div className="mt-10 text-sm text-gray-700">
+  <p>
+    Searching for a{" "}
+    <Link to="/hair-salon-burnaby" className="underline">
+      full service hair salon in Burnaby
+    </Link>{" "}
+    or professional{" "}
+    <Link to="/hair-color-burnaby" className="underline">
+      hair color in Burnaby
+    </Link>?  
+    Elika Beauty offers customized services for every hair type.
+  </p>
+</div>
     </div>
 
     {/* RIGHT SIDE BUTTONS */}
