@@ -6,7 +6,7 @@ mongoose.connect(process.env.MONGO_URI);
 
 const services = [
   { name: "Balayage", price: 220, fromPrice: true, duration: 240, category: "Hair", description: "Natural hand-painted highlights. *(Extra charge for base colour if needed.)" },
-  { name: "Hair Cut", price: 45, duration: 45, fromPrice: true, category: "Hair", description: "Professional haircut tailored to you." },
+  { name: "Women’s Haircut", price: 45, duration: 45, fromPrice: true, category: "Hair", description: "Professional haircut tailored to you." },
   { name: "Keratin", price: 250, duration: 240,fromPrice: true, category: "Hair", description: "Smooth and straighten frizzy hair." },
   { name: "Highlight", price: 200, duration: 210, fromPrice: true, category: "Hair", description: "Lighter strands to add dimension.  *(Extra charge for base colour if needed.)" },
   { name: "Root Colour", price: 80, duration: 90, category: "Hair", description: "Touch up your hair roots." },

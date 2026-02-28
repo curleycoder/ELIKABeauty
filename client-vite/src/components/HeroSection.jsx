@@ -2,11 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const HERO_SLIDES = [
+    { src: "/assets/salon.JPG", alt: "Elika salon" },
   { src: "/assets/colour-hero.jpg", alt: "Elika highlight" },
   { src: "/assets/hair-cut.jpg", alt: "Elika haircut" },
   { src: "/assets/treading-hero.jpg", alt: "Elika treading" },
   { src: "/assets/balayage-hero.jpg", alt: "Elika balayage" },
   { src: "/assets/light-hero.jpg", alt: "Elika balayage" },
+  { src: "/assets/salonn.JPG", alt: "Elika salon" },
 ];
 
 export default function HeroSection() {

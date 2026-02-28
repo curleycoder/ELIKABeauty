@@ -1,12 +1,1 @@
-node_modules/
-
-*.log
-
-.env
-
-.DS_Store
-dist/
-# Ignore build output
-coverage/
-# Ignore test coverage reports
-mynote.md
+node_modules
