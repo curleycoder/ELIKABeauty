@@ -3,6 +3,7 @@ import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
 import { format, parseISO } from "date-fns";
+import { trackBookingConfirmed } from "../utils/analytics";
 
 const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
 const DEFAULT_BUFFER_MINUTES = 10;
@@ -30,6 +31,7 @@ export default function Booking() {
 
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [conversionSent, setConversionSent] = useState(false);
 
   // signals
   const [submitTick, setSubmitTick] = useState(0);
@@ -57,6 +59,13 @@ export default function Booking() {
       "Book your hair appointment at ELIKA Beauty Salon. Highlights, balayage, keratin, haircuts near Brentwood. Easy online scheduling and clear policies."
     );
   }, []);
+
+  useEffect(() => {
+    if (showFinalPopup && bookingData && !conversionSent) {
+      trackBookingConfirmed();
+      setConversionSent(true);
+    }
+  }, [showFinalPopup, bookingData, conversionSent]);
 
   const durationStats = useMemo(
     () => getDurationStats(selection.selected),
@@ -100,15 +109,16 @@ export default function Booking() {
   const progressPct = ((step + 1) / STEPS.length) * 100;
 
   const hardResetAll = () => {
-    setStep(0);
-    setBookingTime(null);
-    setSelection({ selected: [], total: 0 });
-    setShowInfo(false);
-    setShowFinalPopup(false);
-    setBookingData(null);
-    setAvailabilityTick((t) => t + 1);
-    setPickerKey((k) => k + 1);
-  };
+  setStep(0);
+  setBookingTime(null);
+  setSelection({ selected: [], total: 0 });
+  setShowInfo(false);
+  setShowFinalPopup(false);
+  setBookingData(null);
+  setConversionSent(false);
+  setAvailabilityTick((t) => t + 1);
+  setPickerKey((k) => k + 1);
+};
 
   return (
     <div className="w-full min-h-screen relative font-sans bg-[#F8F7F1]">
