@@ -63,14 +63,14 @@ const services = [
     name: "Hair Wash",
     price: 10,
     duration: 15,
-    category: "Add-ons",
+    category: "Add ons",
     description: "Quick wash and cleanse.",
   },
   {
     name: "Hair Wash + Style",
     price: 45,
     duration: 45,
-    category: "Add-ons",
+    category: "Add ons",
     description: "Wash and blow-dry styling.",
   },
   {
@@ -78,7 +78,7 @@ const services = [
     price: 70,
     duration: 30,
     fromPrice: true,
-    category: "Add-ons",
+    category: "Add ons",
     description:
       "Add a base colour to enhance your highlight or balayage. Great for full coverage or colour correction.",
   },
