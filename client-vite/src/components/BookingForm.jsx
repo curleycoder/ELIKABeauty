@@ -22,9 +22,9 @@ const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle })
             <div className="font-semibold text-gray-800">
               ${s.price}
               {s.fromPrice && (
-                <span className="text-xs text-gray-400 ml-0.5 align-top">+</span>
+                <span className="text-sm text-gray-600 ml-0.5 align-top">+</span>
               )}
-              <span className="text-xs text-gray-400 ml-2">• {s.duration || 0} min</span>
+              <span className="text-xs text-gray-600 ml-2">• {s.duration || 0} min</span>
             </div>
 
             {!!s.description && (
