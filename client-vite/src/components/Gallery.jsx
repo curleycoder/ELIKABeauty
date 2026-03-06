@@ -1,321 +1,493 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { useSearchParams, Link } from "react-router-dom";
 
-const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(
-  /\/$/,
-  ""
-);
+const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
+const SITE_NAME = "Elika Beauty";
+const SITE_ORIGIN = "https://elikabeauty.ca";
 
 function joinURL(base, path) {
   if (!path) return "";
   return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-function normalizeCategory(img) {
-  // Support a few possible API shapes
+function normalizeCategory(item) {
   const raw =
-    img?.category ||
-    img?.service ||
-    img?.type ||
-    img?.tag ||
-    img?.tags?.[0] ||
+    item?.category ||
+    item?.service ||
+    item?.type ||
+    item?.tag ||
+    item?.tags?.[0] ||
     "Other";
 
   return String(raw).trim() || "Other";
 }
 
+function normalizeTitle(item, fallbackCategory, index) {
+  return (
+    item?.title ||
+    item?.name ||
+    item?.caption ||
+    `${fallbackCategory} Result ${index + 1}`
+  );
+}
+
+function normalizeAlt(item, title, category) {
+  return (
+    item?.alt ||
+    item?.seoAlt ||
+    `${title} - ${category} result at Elika Beauty in Burnaby`
+  );
+}
+
+function normalizeGalleryItems(data) {
+  const rawItems = Array.isArray(data) ? data : Array.isArray(data?.images) ? data.images : [];
+
+  return rawItems.map((item, index) => {
+    const category = normalizeCategory(item);
+    const title = normalizeTitle(item, category, index);
+
+    const beforeImage =
+      item?.beforeImage ||
+      item?.before ||
+      item?.images?.before ||
+      item?.beforeUrl ||
+      "";
+
+    const afterImage =
+      item?.afterImage ||
+      item?.after ||
+      item?.image ||
+      item?.full ||
+      item?.preview ||
+      item?.images?.after ||
+      item?.afterUrl ||
+      item?.thumb ||
+      "";
+
+    const singleImage =
+      item?.image ||
+      item?.full ||
+      item?.preview ||
+      item?.thumb ||
+      afterImage ||
+      "";
+
+    return {
+      ...item,
+      _cat: category,
+      _title: title,
+      _alt: normalizeAlt(item, title, category),
+      _before: beforeImage ? joinURL(baseURL, beforeImage) : "",
+      _after: afterImage ? joinURL(baseURL, afterImage) : "",
+      _single: singleImage ? joinURL(baseURL, singleImage) : "",
+      _id: item?._id || item?.id || `${category}-${index}`,
+    };
+  });
+}
+
+function GalleryCard({ item, onOpen }) {
+  const hasBeforeAfter = !!item._before && !!item._after;
+  const displayImage = hasBeforeAfter ? item._after : item._single;
+
+  return (
+    <article className="group overflow-hidden rounded-[28px] border border-[#572a31]/12 bg-white shadow-sm hover:shadow-xl transition-all duration-300">
+      <button
+        type="button"
+        onClick={() => onOpen(item)}
+        className="block w-full text-left"
+      >
+        <div className="relative">
+          {hasBeforeAfter ? (
+            <div className="grid grid-cols-2">
+              <div className="relative h-64 sm:h-72 overflow-hidden border-r border-white/20">
+                <img
+                  src={item._before}
+                  alt={`Before - ${item._alt}`}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#572a31]">
+                  Before
+                </div>
+              </div>
+
+              <div className="relative h-64 sm:h-72 overflow-hidden">
+                <img
+                  src={item._after}
+                  alt={`After - ${item._alt}`}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute right-3 top-3 rounded-full bg-[#572a31]/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+                  After
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="relative h-64 sm:h-72 overflow-hidden">
+              <img
+                src={displayImage}
+                alt={item._alt}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#572a31]">
+                Result
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="p-5">
+          <div className="text-[11px] uppercase tracking-[0.18em] text-[#572a31]/55">
+            {item._cat}
+          </div>
+
+          <h3 className="mt-2 text-xl font-theseason text-[#3D0007]">
+            {item._title}
+          </h3>
+
+          {item?.description && (
+            <p className="mt-2 text-sm leading-6 text-[#572a31]/75">
+              {item.description}
+            </p>
+          )}
+
+          <div className="mt-4 inline-flex items-center text-sm font-medium text-[#572a31] underline underline-offset-4">
+            View larger
+          </div>
+        </div>
+      </button>
+    </article>
+  );
+}
+
+function GalleryLightbox({ item, onClose }) {
+  if (!item) return null;
+
+  const hasBeforeAfter = !!item._before && !!item._after;
+
+  return (
+    <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center px-4 py-6">
+      <div className="relative w-full max-w-6xl rounded-[28px] bg-white shadow-2xl overflow-hidden">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 z-20 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#572a31] shadow"
+        >
+          Close
+        </button>
+
+        <div className="p-6 sm:p-8">
+          <div className="text-xs uppercase tracking-[0.18em] text-[#572a31]/60">
+            {item._cat}
+          </div>
+          <h3 className="mt-2 text-2xl sm:text-3xl font-theseason text-[#3D0007]">
+            {item._title}
+          </h3>
+
+          {item?.description && (
+            <p className="mt-3 max-w-3xl text-sm sm:text-base leading-7 text-gray-700">
+              {item.description}
+            </p>
+          )}
+
+          <div className="mt-6">
+            {hasBeforeAfter ? (
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="overflow-hidden rounded-[22px] border">
+                  <div className="px-4 py-3 text-sm font-semibold text-[#572a31] border-b bg-[#F8F7F1]">
+                    Before
+                  </div>
+                  <img
+                    src={item._before}
+                    alt={`Before - ${item._alt}`}
+                    className="w-full h-[320px] sm:h-[460px] object-cover"
+                  />
+                </div>
+
+                <div className="overflow-hidden rounded-[22px] border">
+                  <div className="px-4 py-3 text-sm font-semibold text-[#572a31] border-b bg-[#F8F7F1]">
+                    After
+                  </div>
+                  <img
+                    src={item._after}
+                    alt={`After - ${item._alt}`}
+                    className="w-full h-[320px] sm:h-[460px] object-cover"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="overflow-hidden rounded-[22px] border">
+                <img
+                  src={item._single}
+                  alt={item._alt}
+                  className="w-full h-[320px] sm:h-[520px] object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Gallery() {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const initialCategory = searchParams.get("cat") || "All";
 
   const [allImages, setAllImages] = useState([]);
   const [category, setCategory] = useState(initialCategory);
+  const [status, setStatus] = useState("loading");
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [selectedImage, setSelectedImage] = useState("");
-  const timerRef = useRef(null);
-
-  // Fetch once
   useEffect(() => {
     let mounted = true;
 
-    fetch(`${baseURL}/api/gallery`)
-      .then((r) => r.json())
-      .then((data) => {
+    async function loadGallery() {
+      try {
+        setStatus("loading");
+        const res = await fetch(`${baseURL}/api/gallery`, { cache: "no-store" });
+        const data = await res.json();
+
         if (!mounted) return;
 
-        const imgs = Array.isArray(data)
-          ? data
-          : Array.isArray(data.images)
-          ? data.images
-          : [];
-
-        if (!imgs.length) return;
-
-        // Ensure each item has a normalized category for filtering
-        const normalized = imgs.map((img) => ({
-          ...img,
-          _cat: normalizeCategory(img),
-        }));
-
+        const normalized = normalizeGalleryItems(data);
         setAllImages(normalized);
-      })
-      .catch((err) => console.log("Failed to load gallery images:", err));
+        setStatus("success");
+      } catch (err) {
+        if (!mounted) return;
+        console.error("Failed to load gallery images:", err);
+        setStatus("error");
+      }
+    }
+
+    loadGallery();
 
     return () => {
       mounted = false;
     };
   }, []);
 
-  // Categories list (derived)
   const categories = useMemo(() => {
     const set = new Set(allImages.map((img) => img._cat));
     return ["All", ...Array.from(set).sort((a, b) => a.localeCompare(b))];
   }, [allImages]);
 
-  // Filtered images
-  const images = useMemo(() => {
+  const filteredImages = useMemo(() => {
     if (category === "All") return allImages;
     return allImages.filter((img) => img._cat === category);
   }, [allImages, category]);
 
-  // When category changes: reset selection to first item
-  useEffect(() => {
-    if (!images.length) {
-      setSelectedImage("");
-      setCurrentIndex(0);
-      return;
-    }
-    setCurrentIndex(0);
-    const first = images[0];
-    setSelectedImage(joinURL(baseURL, first.preview || first.full || first.thumb));
-  }, [images]);
+  const featuredImage = filteredImages[0]?._after || filteredImages[0]?._single || "/images/gallery/gallery-hero.jpg";
 
-  // Helper: select an index (within filtered list)
-  const selectIndex = useCallback(
-    (idx, { stopAuto = true } = {}) => {
-      if (!images.length) return;
+  const pageTitle =
+    category === "All"
+      ? `Before and After Gallery in Burnaby | ${SITE_NAME}`
+      : `${category} Before and After Gallery in Burnaby | ${SITE_NAME}`;
 
-      const safe = ((idx % images.length) + images.length) % images.length;
-      const item = images[safe];
+  const pageDescription =
+    category === "All"
+      ? "Explore before and after beauty results at Elika Beauty in Burnaby. Browse hair color, balayage, highlights, keratin, microblading, threading, and more."
+      : `Explore ${category.toLowerCase()} before and after results at Elika Beauty in Burnaby. Browse real client work and service results.`;
 
-      setCurrentIndex(safe);
-      setSelectedImage(joinURL(baseURL, item.preview || item.full || item.thumb));
+  const pageUrl =
+    category === "All"
+      ? `${SITE_ORIGIN}/gallery`
+      : `${SITE_ORIGIN}/gallery?cat=${encodeURIComponent(category)}`;
 
-      if (stopAuto) setIsAutoPlaying(false);
-    },
-    [images]
-  );
-
-  const handleNext = useCallback(() => {
-    selectIndex(currentIndex + 1);
-  }, [currentIndex, selectIndex]);
-
-  const handlePrev = useCallback(() => {
-    selectIndex(currentIndex - 1);
-  }, [currentIndex, selectIndex]);
-
-  // Derived prev/next URLs (based on filtered list)
-  const prevUrl = useMemo(() => {
-    if (!images.length) return "";
-    const i = (currentIndex - 1 + images.length) % images.length;
-    const item = images[i];
-    return joinURL(baseURL, item.preview || item.full || item.thumb);
-  }, [images, currentIndex]);
-
-  const nextUrl = useMemo(() => {
-    if (!images.length) return "";
-    const i = (currentIndex + 1) % images.length;
-    const item = images[i];
-    return joinURL(baseURL, item.preview || item.full || item.thumb);
-  }, [images, currentIndex]);
-
-  // Prefetch next preview
-  useEffect(() => {
-    if (!nextUrl) return;
-    const img = new Image();
-    img.decoding = "async";
-    img.src = nextUrl;
-  }, [nextUrl]);
-
-  // Single timer + pause on hidden tab (uses filtered list)
-  useEffect(() => {
-    if (!isAutoPlaying || !images.length) return;
-
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    const delay = prefersReduced ? 6000 : 3000;
-
-    const tick = () => {
-      setCurrentIndex((i) => {
-        const next = (i + 1) % images.length;
-        const item = images[next];
-        setSelectedImage(joinURL(baseURL, item.preview || item.full || item.thumb));
-        return next;
-      });
-    };
-
-    timerRef.current = window.setInterval(tick, delay);
-
-    const onVisibility = () => {
-      if (document.hidden && timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      } else if (!document.hidden && !timerRef.current && isAutoPlaying) {
-        timerRef.current = window.setInterval(tick, delay);
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisibility);
-
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      if (timerRef.current) clearInterval(timerRef.current);
-      timerRef.current = null;
-    };
-  }, [isAutoPlaying, images]);
-
-  // Keyboard nav (stable)
-  useEffect(() => {
-    const onKey = (e) => {
-      const tag = document.activeElement?.tagName?.toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select") return;
-
-      if (e.key === "ArrowRight") handleNext();
-      if (e.key === "ArrowLeft") handlePrev();
-      if (e.code === "Space") {
-        e.preventDefault();
-        setIsAutoPlaying((p) => !p);
-      }
-    };
-
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [handleNext, handlePrev]);
-
-  // Category click (also updates URL like /gallery?cat=Hair)
-  const pickCategory = (cat) => {
-    setCategory(cat);
-    setSearchParams(cat === "All" ? {} : { cat });
-    setIsAutoPlaying(false);
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
   };
 
+  const pickCategory = useCallback(
+    (cat) => {
+      setCategory(cat);
+      setSearchParams(cat === "All" ? {} : { cat });
+      setSelectedItem(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [setSearchParams]
+  );
+
   return (
-    <section id="gallery-page" className="text-center px-4 py-20">
-      <div className="text-center">
-        <h1 className="text-3xl font-theseason text-[#7a3b44] mb-2">Gallery</h1>
-        <p className="text-sm text-gray-600 mb-6">
-          Browse by service. Click any thumbnail to pause autoplay.
-        </p>
-      </div>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={pageUrl} />
 
-      {/* Category Filters */}
-      <div className="flex flex-wrap justify-center gap-2 mb-3">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => pickCategory(cat)}
-            className={[
-              "px-4 py-1 rounded-lg border text-sm transition",
-              cat === category
-                ? "bg-[#7a3b44] text-white border-[#7a3b44]"
-                : "bg-white/70 text-gray-700 border-pink-100 hover:bg-white",
-            ].join(" ")}
-            type="button"
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:site_name" content={SITE_NAME} />
 
-      {/* Stage */}
-      <div
-        className="relative flex justify-center items-center mb-6 h-[340px] sm:h-[500px] select-none"
-        onMouseEnter={() => setIsAutoPlaying(false)}
-        onTouchStart={() => setIsAutoPlaying(false)}
-      >
-        <button
-          onClick={handlePrev}
-          className="absolute left-2 bg-white/70 rounded-full p-2 hover:bg-white shadow z-20"
-          aria-label="Previous"
-          type="button"
-        >
-          ◀
-        </button>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
 
-        {/* Side previews (hide on mobile) */}
-        {prevUrl && (
-          <img
-            src={prevUrl}
-            alt=""
-            className="hidden sm:block absolute left-14 h-[300px] w-auto object-contain opacity-30 blur-sm"
-            loading="lazy"
-            decoding="async"
-          />
-        )}
+        {featuredImage && <meta property="og:image" content={featuredImage} />}
 
-        {/* Main image */}
-        {selectedImage ? (
-          <img
-            src={selectedImage}
-            alt={`Elika Beauty ${category} gallery image`}
-            className="h-full w-auto max-w-full object-contain rounded-xl shadow-lg z-10"
-            width={1200}
-            height={800}
-            loading="eager"
-            decoding="async"
-          />
-        ) : (
-          <div className="h-full w-full max-w-3xl rounded-xl border border-pink-100 bg-white/70 flex items-center justify-center text-gray-500">
-            No images found in “{category}”
-          </div>
-        )}
+        <script type="application/ld+json">
+          {JSON.stringify(itemListJsonLd)}
+        </script>
+      </Helmet>
 
-        {nextUrl && (
-          <img
-            src={nextUrl}
-            alt=""
-            className="hidden sm:block absolute right-14 h-[300px] w-auto object-contain opacity-30 blur-sm"
-            loading="lazy"
-            decoding="async"
-          />
-        )}
+      <section className="relative w-full overflow-hidden">
+        <img
+          src={featuredImage}
+          alt="Elika Beauty gallery hero"
+          className="h-[300px] sm:h-[420px] lg:h-[520px] w-full object-cover"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/75 via-[#2e1118]/25 to-transparent" />
 
-        <button
-          onClick={handleNext}
-          className="absolute right-2 bg-white/70 rounded-full p-2 hover:bg-white shadow z-20"
-          aria-label="Next"
-          type="button"
-        >
-          ▶
-        </button>
-      </div>
+        <div className="absolute inset-x-0 bottom-0 max-w-6xl mx-auto px-4 sm:px-6 pb-10">
+          <p className="text-xs uppercase tracking-[0.18em] text-white/80">
+            Elika Beauty • Burnaby
+          </p>
 
-      {/* Thumbnails */}
-      <div className="flex overflow-x-auto space-x-3 px-4 scrollbar-hide justify-center">
-        {images.map((img, idx) => {
-          const url = joinURL(baseURL, img.thumb || img.preview || img.full);
-          return (
-            <img
-              key={`${img._cat}-${idx}`}
-              src={url}
-              alt={`${img._cat} thumbnail ${idx + 1}`}
-              onClick={() => selectIndex(idx)}
+          <h1 className="mt-3 max-w-3xl text-3xl sm:text-4xl lg:text-5xl font-theseason font-bold text-white">
+            Before & After Gallery
+          </h1>
+
+          <p className="mt-4 max-w-2xl text-sm sm:text-base leading-7 text-white/90">
+            Browse real service results by category. Explore before and after transformations,
+            or single result photos where before images are not available.
+          </p>
+        </div>
+      </section>
+
+      <section id="gallery-page" className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <div className="flex flex-wrap gap-3">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => pickCategory(cat)}
+              type="button"
               className={[
-                "h-20 w-20 object-cover rounded cursor-pointer border-2",
-                currentIndex === idx ? "border-[#7a3b44]" : "border-transparent",
+                "rounded-full px-4 py-2 text-sm transition border",
+                cat === category
+                  ? "bg-[#572a31] text-white border-[#572a31]"
+                  : "bg-white text-[#572a31] border-[#572a31]/15 hover:border-[#572a31]/35",
               ].join(" ")}
-              loading="lazy"
-              decoding="async"
-              width={80}
-              height={80}
-            />
-          );
-        })}
-      </div>
-    </section>
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8">
+          {status === "loading" && (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="overflow-hidden rounded-[28px] border border-[#572a31]/10 bg-white animate-pulse"
+                >
+                  <div className="h-64 bg-[#f3ece7]" />
+                  <div className="p-5">
+                    <div className="h-3 w-20 bg-[#f3ece7] rounded" />
+                    <div className="mt-3 h-6 w-2/3 bg-[#f3ece7] rounded" />
+                    <div className="mt-3 h-4 w-full bg-[#f3ece7] rounded" />
+                    <div className="mt-2 h-4 w-4/5 bg-[#f3ece7] rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {status === "error" && (
+            <div className="rounded-[28px] border border-red-200 bg-red-50 p-6 text-red-700">
+              Gallery images could not be loaded right now.
+            </div>
+          )}
+
+          {status === "success" && filteredImages.length === 0 && (
+            <div className="rounded-[28px] border border-[#572a31]/10 bg-[#F8F7F1] p-8 text-center">
+              <h2 className="text-2xl font-theseason text-[#3D0007]">
+                No images found
+              </h2>
+              <p className="mt-3 text-gray-600">
+                There are no gallery items in this category yet.
+              </p>
+            </div>
+          )}
+
+          {status === "success" && filteredImages.length > 0 && (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredImages.map((item) => (
+                <GalleryCard
+                  key={item._id}
+                  item={item}
+                  onOpen={setSelectedItem}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <section className="mt-16 rounded-[28px] border border-[#572a31]/12 bg-[#F8F7F1] p-6 sm:p-8">
+          <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007]">
+            Looking for a specific service?
+          </h2>
+
+          <p className="mt-3 max-w-3xl text-gray-700 leading-7">
+            Explore more details, pricing guidance, and booking information on our service pages.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              to="/services"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              All Services
+            </Link>
+            <Link
+              to="/balayage-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Balayage
+            </Link>
+            <Link
+              to="/highlights-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Highlights
+            </Link>
+            <Link
+              to="/keratin-treatment-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Keratin
+            </Link>
+            <Link
+              to="/microblading-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Microblading
+            </Link>
+            <Link
+              to="/booking"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Book Appointment
+            </Link>
+          </div>
+        </section>
+      </section>
+
+      <GalleryLightbox item={selectedItem} onClose={() => setSelectedItem(null)} />
+    </>
   );
 }
