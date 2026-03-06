@@ -1,5 +1,5 @@
 const express = require("express");
-const GalleryItem = require("../models/galleryItem");
+const GalleryItem = require("../models/gallery");
 
 const router = express.Router();
 
