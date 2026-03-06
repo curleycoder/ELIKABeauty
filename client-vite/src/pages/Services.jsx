@@ -69,12 +69,6 @@ const services = [
     desc: "Semi-permanent brow enhancement for fuller, more defined eyebrows.",
     price: "Contact for pricing",
   },
-  {
-    title: "Threading",
-    path: "/threading-burnaby",
-    desc: "Precise facial hair removal for brows and facial shaping.",
-    price: "Contact for pricing",
-  },
 ];
 
 export default function Services() {

@@ -25,6 +25,7 @@ import WomensHaircut from "./pages/WomensHaircutBurnaby.jsx";
 import HairSalonBurnaby from "./pages/HairSalonBurnaby";
 import HairColorBurnaby from "./pages/HairColorBurnaby";
 import Contact from "./pages/Contact";
+import MicrobladingBurnaby from "./pages/MicrobladingBurnaby";
 
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -60,6 +61,7 @@ export default function App() {
         <Route path="/hair-salon-burnaby" element={<HairSalonBurnaby />} />
         <Route path="/hair-color-burnaby" element={<HairColorBurnaby />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/microblading-burnaby" element={<MicrobladingBurnaby />} />
       </Routes>
 
       <SpeedInsights />
