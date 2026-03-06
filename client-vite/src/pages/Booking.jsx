@@ -279,6 +279,10 @@ export default function Booking() {
                 <span>{selection.total > 0 ? `+$${selection.total}` : `$0`}</span>
               </div>
             </div>
+              <p className="mt-2 text-xs leading-2 text-red-600">
+                * Prices shown are starting costs. Final price may vary based on hair length,
+                thickness, and the work required.
+              </p>
 
             <div className="mt-6">
               <button
