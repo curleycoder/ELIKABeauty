@@ -20,7 +20,7 @@ const services = [
     path: "/hair-color-burnaby",
     image: "/images/services/hair-color/hair-color-hero.jpg",
     desc: "Customized hair color services including balayage, highlights, root color, and color refresh.",
-    price: "Consultation / Varies",
+    price: "From $120",
   },
   {
     title: "Highlights",
@@ -85,14 +85,14 @@ const services = [
   path: "/relaxation-body-massage-burnaby",
   image: "/images/services/massage/massage-hero.jpg",
   desc: "Spa-style massage focused on relaxation, comfort, and stress relief.",
-  price: "Contact for pricing",
+  price: "$90",
 },
 {
   title: "Facial Treatment",
   path: "/facial-treatment-burnaby",
   image: "/images/services/facial/facial-hero.jpg",
   desc: "Deep cleansing facial with steam, mask, and hydrating skincare.",
-  price: "Contact for pricing",
+  price: "$85",
 }
 ];
 

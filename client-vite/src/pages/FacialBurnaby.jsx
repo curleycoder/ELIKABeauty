@@ -7,7 +7,7 @@ export default function FacialCareBurnaby() {
       slug="facial-care-burnaby"
       title="Facial Treatment in Burnaby"
       intro="Relaxing facial care at Elika Beauty in Burnaby designed to cleanse, refresh, and hydrate the skin. Our facial treatments include deep cleansing, steam, mask application, and skin-nourishing care to help your skin feel clean, smooth, and refreshed."
-      priceText="Contact for pricing"
+      priceText="$85"
       durationText="~45–60 minutes"
       extraNote="Treatment steps may vary depending on skin type and products used."
 

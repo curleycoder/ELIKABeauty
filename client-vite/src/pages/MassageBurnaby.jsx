@@ -7,7 +7,7 @@ export default function RelaxationMassageBurnaby() {
       slug="relaxation-body-massage-burnaby"
       title="Relaxation / Body Massage in Burnaby"
       intro="Looking for relaxation or body massage in Burnaby? Elika Beauty offers spa-style massage focused on stress relief, relaxation, and overall comfort. This service is designed to help you unwind, release tension, and enjoy a calmer body and mind."
-      priceText="Contact for pricing"
+      priceText="$90"
       durationText="~60 minutes"
       extraNote="Appointment length and pricing may vary depending on the session type and duration you choose."
       benefits={[
