@@ -290,7 +290,7 @@ const hardResetAll = () => {
                   onChange={(e) => setPriceAccepted(e.target.checked)}
                   className="mt-[2px]"
                 />
-                I understand that services marked with a "+" indicate starting prices. Final cost may vary depending on hair length, thickness, and service complexity.
+                I understand that services marked with a "+" indicate starting prices. Final cost may vary depending on hair length, thickness, and service complexity. All prices shown are before tax.
               </label>
             )}
             <div className="mt-6">
@@ -361,7 +361,7 @@ const hardResetAll = () => {
                   onChange={(e) => setPriceAccepted(e.target.checked)}
                   className="mt-[2px]"
                 />
-                I understand that services marked with a "+" indicate starting prices. Final cost may vary depending on hair length, thickness, and service complexity.
+                I understand that services marked with a "+" indicate starting prices. Final cost may vary depending on hair length, thickness, and service complexity. All prices shown are before tax.
               </label>
             )}
           </div>
