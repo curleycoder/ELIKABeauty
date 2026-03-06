@@ -106,12 +106,12 @@ const navItems = [
       </nav>
 
       {menuOpen && (
-        <div className="sm:hidden bg-[#fcfaf8] px-4 pb-4 text-[#3D0007]">
+        <div className="sm:hidden bg-[#fcfaf8] px-4 pb-4 font-theseason text-[#440008]">
           {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className="block w-full text-left py-2 border-b border-[#572a31]/20 hover:text-black transition"
+              className="block w-full text-left py-2 border-b border-[#572a31]/20 last:border-b-0 hover:text-black transition"
             >
               {item.name}
             </button>
