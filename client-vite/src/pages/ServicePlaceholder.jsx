@@ -154,7 +154,7 @@ export default function ServicePlaceholder({
   };
 
   return (
-    <div className="min-h-screen bg-white pb-14 text-gray-800 sm:pb-16 pt-14">
+    <div className="min-h-screen bg-white pb-14 pt-14 text-gray-800 sm:pb-16">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -186,90 +186,85 @@ export default function ServicePlaceholder({
           <img
             src={heroImage.src}
             alt={heroImage.alt || title}
-            className="h-[260px] w-full object-cover sm:h-[360px] lg:h-[520px]"
+            className="h-[260px] w-full object-cover object-[center_30%] sm:h-[360px] sm:object-center lg:h-[520px]"
             loading="eager"
           />
         ) : (
           <div className="h-[260px] w-full bg-[#d8c6b5] sm:h-[360px] lg:h-[520px]" />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2e1118]/45 via-[#2e1118]/50 to-transparent" />
 
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 sm:px-6 sm:pb-10">
-          <Link
-            to="/services"
-            className="inline-block text-sm text-white/85 underline underline-offset-4 transition hover:text-white"
-          >
-            ← Back to services
-          </Link>
-
-          <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-white/80 sm:mt-5 sm:text-xs">
+        <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4   sm:bottom-0 sm:px-6 sm:pb-10">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
             Elika Beauty • Burnaby
           </p>
 
-          <h1 className="mt-2 max-w-3xl text-2xl font-theseason font-bold leading-tight text-white sm:mt-3 sm:text-4xl lg:text-5xl">
+          <h1 className="mt-2 pb-16 max-w-3xl text-2xl font-theseason font-bold leading-tight text-white sm:mt-3 sm:text-4xl lg:text-5xl">
             {title}
           </h1>
 
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/90 sm:mt-4 sm:text-base sm:leading-7">
+          <p className="mt-2 max-w-2xl text-[13px] leading-5 text-white/90 line-clamp-2 sm:mt-4 sm:line-clamp-none sm:text-base sm:leading-7">
             {intro ||
               `${title} at Elika Beauty in Burnaby. View pricing details, timing, and booking information.`}
           </p>
 
-          <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
+          <div className="mt-4 flex flex-row gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
             <Link
               to="/booking"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-medium text-[#572a31] transition hover:bg-[#F8F7F1] sm:px-6"
+              className="inline-flex min-h-[38px] items-center justify-center rounded-xl bg-[#572a31] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:min-h-[46px] sm:px-6 sm:py-3"
             >
-              Book Appointment
+              Book
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
+              className="inline-flex min-h-[38px] items-center justify-center rounded-xl border border-white/40 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 sm:min-h-[46px] sm:px-6 sm:py-3"
             >
-              Call {PHONE_DISPLAY}
+              Call
             </a>
 
             <a
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
+              className="inline-flex min-h-[38px] items-center justify-center rounded-xl border border-white/40 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 sm:min-h-[46px] sm:px-6 sm:py-3"
             >
-              Get Directions
+              Address
             </a>
           </div>
         </div>
       </section>
 
-      <main className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12">
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6">
-            <div className="text-sm text-gray-500">Starting price</div>
-            <div className="mt-2 text-xl font-semibold text-[#3D0007] sm:text-2xl">
+      <main className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-12">
+        <div className="mb-6 sm:mb-8">
+          <Link
+            to="/services"
+            className="inline-block text-sm text-[#572a31] underline underline-offset-4 transition hover:text-[#3D0007]"
+          >
+            ← Back to services
+          </Link>
+        </div>
+
+        <section className="grid grid-cols-2 gap-3 lg:grid-cols-1">
+          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
+            <div className="text-xs sm:text-sm text-gray-500">Starting price</div>
+            <div className="mt-1 text-lg font-semibold text-[#3D0007] sm:mt-2 sm:text-2xl">
               {priceText || "Contact us"}
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6">
-            <div className="text-sm text-gray-500">Appointment time</div>
-            <div className="mt-2 text-xl font-semibold text-[#3D0007] sm:text-2xl">
+          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
+            <div className="text-xs sm:text-sm text-gray-500">Appointment time</div>
+            <div className="mt-1 text-lg font-semibold text-[#3D0007] sm:mt-2 sm:text-2xl">
               {durationText || "Varies"}
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6 sm:col-span-2 lg:col-span-1">
-            <div className="text-sm text-gray-500">Location</div>
-            <div className="mt-2 text-base font-semibold text-[#3D0007] sm:text-lg">
-              {LOCATION_NOTE}
-            </div>
-            <div className="mt-1 text-sm text-gray-600">Burnaby, BC</div>
-          </div>
         </section>
 
         {galleryImages.length > 0 && (
-          <section className="mt-14 sm:mt-16">
+          <section className="mt-8 sm:mt-16">
             <div className="max-w-3xl">
               <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
                 Gallery
@@ -305,7 +300,7 @@ export default function ServicePlaceholder({
               What to expect
             </h2>
 
-            <p className="mt-3 text-sm leading-6 text-gray-700 sm:text-base sm:leading-7">
+            <p className="mt-2 text-sm leading-5 text-gray-700 sm:text-base sm:leading-5">
               Every appointment starts with understanding your goals, service
               history, and the final result you want. We focus on clean
               execution, a polished finish, and guidance that helps you maintain
