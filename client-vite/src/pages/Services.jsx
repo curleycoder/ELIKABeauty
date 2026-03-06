@@ -80,20 +80,20 @@ const services = [
     desc: "Precise eyebrow shaping and facial hair removal.",
     price: "From $15",
   },
-{
-  title: "Relaxation, Body Massage",
-  path: "/relaxation-body-massage-burnaby",
-  image: "/images/services/massage/massage-hero.jpg",
-  desc: "Spa-style massage focused on relaxation, comfort, and stress relief.",
-  price: "$90",
-},
-{
-  title: "Facial Treatment",
-  path: "/facial-treatment-burnaby",
-  image: "/images/services/facial/facial-hero.jpg",
-  desc: "Deep cleansing facial with steam, mask, and hydrating skincare.",
-  price: "$85",
-}
+  {
+    title: "Relaxation, Body Massage",
+    path: "/relaxation-body-massage-burnaby",
+    image: "/images/services/massage/massage-hero.jpg",
+    desc: "Spa-style massage focused on relaxation, comfort, and stress relief.",
+    price: "$90",
+  },
+  {
+    title: "Facial Treatment",
+    path: "/facial-treatment-burnaby",
+    image: "/images/services/facial/facial-hero.jpg",
+    desc: "Deep cleansing facial with steam, mask, and hydrating skincare.",
+    price: "$85",
+  },
 ];
 
 export default function Services() {
@@ -164,7 +164,7 @@ export default function Services() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 pb-16">
+    <div className="min-h-screen bg-white pb-14 text-gray-800 sm:pb-16 pt-14">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -195,36 +195,33 @@ export default function Services() {
         <img
           src="/images/services/services-hero.jpg"
           alt="Beauty services at Elika Beauty in Burnaby"
-          className="h-[320px] sm:h-[420px] lg:h-[520px] w-full object-cover"
+          className="h-[260px] w-full object-cover sm:h-[360px] lg:h-[520px]"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/75 via-[#2e1118]/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
 
-        <div className="absolute inset-x-0 bottom-0 max-w-6xl mx-auto px-4 sm:px-6 pb-10">
-          <p className="text-xs uppercase tracking-[0.18em] text-white/80">
+<div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4 sm:bottom-0 sm:px-6 sm:pb-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
             Elika Beauty • Burnaby
           </p>
 
-          <h1 className="mt-3 max-w-3xl text-3xl sm:text-4xl lg:text-5xl font-theseason font-bold text-white">
+          <h1 className=" max-w-3xl text-2xl pb-8 font-theseason font-bold leading-tight text-white sm:mt-3 sm:text-4xl lg:text-5xl">
             Beauty Services in Burnaby
           </h1>
 
-          <p className="mt-4 max-w-2xl text-sm sm:text-base leading-7 text-white/90">
-            Explore hair color, highlights, balayage, keratin treatments, perms,
-            haircuts, microblading, and threading at Elika Beauty.
-          </p>
+          
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-row gap-1 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-3">
             <Link
               to="/booking"
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-white text-[#572a31] hover:bg-[#F8F7F1] transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#572a31] px-2 py-1 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:px-2"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 border border-white/40 text-white hover:bg-white/10 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-2 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
             >
               Call {PHONE_DISPLAY}
             </a>
@@ -233,33 +230,37 @@ export default function Services() {
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 border border-white/40 text-white hover:bg-white/10 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-2 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
             >
-              Get Directions
+              Address
             </a>
           </div>
+          <p className="pt-2 max-w-2xl text-sm leading-5 text-white/90 sm:mt-4 sm:text-base sm:leading-7">
+            Explore hair color, highlights, balayage, keratin treatments, perms,
+            haircuts, microblading, threading, massage, and facial treatments at Elika Beauty.
+          </p>
         </div>
       </section>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+      <main className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12">
         <section>
           <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007] font-semibold">
+            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
               Choose a service
             </h2>
-            <p className="mt-2 text-gray-600 leading-7">
+            <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">
               Browse service pages for pricing guidance, photos, and booking information.
             </p>
           </div>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-5 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => (
               <Link
                 key={s.path}
                 to={s.path}
-                className="group overflow-hidden rounded-[28px] border border-[#572a31]/15 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                <div className="relative h-72 overflow-hidden">
+                <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                   <img
                     src={s.image}
                     alt={s.title}
@@ -268,24 +269,24 @@ export default function Services() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/20 to-transparent" />
 
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="text-2xl font-theseason text-white">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                    <h3 className="text-xl font-theseason leading-tight text-white sm:text-2xl">
                       {s.title}
                     </h3>
                   </div>
                 </div>
 
-                <div className="p-5">
+                <div className="flex min-h-[168px] flex-col p-4 sm:min-h-[180px] sm:p-5">
                   <p className="text-sm leading-6 text-[#572a31]/80">
                     {s.desc}
                   </p>
 
-                  <div className="mt-4 flex items-center justify-between gap-3">
+                  <div className="mt-4 flex items-start justify-between gap-3">
                     <p className="text-sm font-semibold text-[#3D0007]">
                       {s.price}
                     </p>
 
-                    <span className="text-sm font-medium text-[#572a31] underline underline-offset-4">
+                    <span className="shrink-0 text-sm font-medium text-[#572a31] underline underline-offset-4">
                       View details
                     </span>
                   </div>
@@ -306,89 +307,89 @@ export default function Services() {
           </p>
         </section>
 
-        <section className="mt-16 rounded-[28px] bg-[#F8F7F1] p-6 sm:p-8">
+        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
           <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007] font-semibold">
+            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
               Not sure what to book?
             </h2>
 
-            <p className="mt-3 text-gray-700 leading-7">
+            <p className="mt-3 text-sm leading-6 text-gray-700 sm:text-base sm:leading-7">
               The right service depends on your goals, maintenance level, and current hair or brow condition.
               If you are unsure, book the closest match or contact us for guidance.
             </p>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2.5 sm:mt-6 sm:gap-3">
             <Link
               to="/hair-color-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
             >
               Hair Color
             </Link>
             <Link
               to="/balayage-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
             >
               Balayage
             </Link>
             <Link
               to="/highlights-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
             >
               Highlights
             </Link>
             <Link
               to="/keratin-treatment-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
             >
               Keratin
             </Link>
             <Link
               to="/microblading-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
             >
               Microblading
             </Link>
             <Link
               to="/threading-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
             >
               Threading
             </Link>
           </div>
         </section>
 
-        <section className="mt-16">
-          <h2 className="text-2xl font-theseason text-[#3D0007] font-semibold">
+        <section className="mt-14 sm:mt-16">
+          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
             FAQ
           </h2>
 
           <div className="mt-5 space-y-4">
-            <details className="rounded-2xl border p-5 bg-white">
-              <summary className="font-semibold cursor-pointer">
+            <details className="rounded-2xl border bg-white p-4 sm:p-5">
+              <summary className="cursor-pointer pr-6 font-semibold leading-6">
                 Highlights vs balayage — what’s the difference?
               </summary>
-              <p className="mt-2 text-gray-700 leading-7">
+              <p className="mt-2 text-sm leading-6 text-gray-700 sm:text-base sm:leading-7">
                 Highlights are more structured and can create brighter contrast.
                 Balayage is hand-painted for a softer, blended grow-out.
               </p>
             </details>
 
-            <details className="rounded-2xl border p-5 bg-white">
-              <summary className="font-semibold cursor-pointer">
+            <details className="rounded-2xl border bg-white p-4 sm:p-5">
+              <summary className="cursor-pointer pr-6 font-semibold leading-6">
                 Do you offer consultations?
               </summary>
-              <p className="mt-2 text-gray-700 leading-7">
+              <p className="mt-2 text-sm leading-6 text-gray-700 sm:text-base sm:leading-7">
                 Yes. If you are not sure what to book or want a major change,
                 a consultation is recommended before the appointment.
               </p>
             </details>
 
-            <details className="rounded-2xl border p-5 bg-white">
-              <summary className="font-semibold cursor-pointer">
+            <details className="rounded-2xl border bg-white p-4 sm:p-5">
+              <summary className="cursor-pointer pr-6 font-semibold leading-6">
                 Do prices vary?
               </summary>
-              <p className="mt-2 text-gray-700 leading-7">
+              <p className="mt-2 text-sm leading-6 text-gray-700 sm:text-base sm:leading-7">
                 Yes. Prices are starting points and may vary based on service
                 complexity, hair length, thickness, previous work, and the final look you want.
               </p>
@@ -396,26 +397,26 @@ export default function Services() {
           </div>
         </section>
 
-        <section className="mt-16 rounded-[28px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-6 sm:p-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-theseason text-[#440008]">
+        <section className="mt-14 rounded-[24px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
+          <h2 className="text-2xl font-theseason text-[#440008] sm:text-3xl">
             Ready to book?
           </h2>
 
-          <p className="mt-3 max-w-2xl mx-auto text-[#440008]/80 leading-7">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#440008]/80 sm:text-base sm:leading-7">
             Book online, or contact us if you want help choosing the right service.
           </p>
 
-          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               to="/booking"
-              className="rounded-full px-8 py-3 bg-[#440008] text-[#F8F7F1] hover:opacity-90 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90 sm:px-8"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="rounded-full px-8 py-3 bg-white text-[#572a31] border border-[#572a31]/25 hover:border-[#572a31]/45 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#572a31]/25 bg-white px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45 sm:px-8"
             >
               Call {PHONE_DISPLAY}
             </a>

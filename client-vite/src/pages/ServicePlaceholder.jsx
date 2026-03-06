@@ -154,7 +154,7 @@ export default function ServicePlaceholder({
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 pb-16">
+    <div className="min-h-screen bg-white pb-14 text-gray-800 sm:pb-16 pt-14">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -186,47 +186,47 @@ export default function ServicePlaceholder({
           <img
             src={heroImage.src}
             alt={heroImage.alt || title}
-            className="h-[320px] sm:h-[420px] lg:h-[520px] w-full object-cover"
+            className="h-[260px] w-full object-cover sm:h-[360px] lg:h-[520px]"
             loading="eager"
           />
         ) : (
-          <div className="h-[320px] sm:h-[420px] lg:h-[520px] w-full bg-[#d8c6b5]" />
+          <div className="h-[260px] w-full bg-[#d8c6b5] sm:h-[360px] lg:h-[520px]" />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/75 via-[#2e1118]/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
 
-        <div className="absolute inset-x-0 bottom-0 max-w-6xl mx-auto px-4 sm:px-6 pb-10">
+        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 sm:px-6 sm:pb-10">
           <Link
             to="/services"
-            className="inline-block text-sm text-white/85 underline underline-offset-4 hover:text-white transition"
+            className="inline-block text-sm text-white/85 underline underline-offset-4 transition hover:text-white"
           >
             ← Back to services
           </Link>
 
-          <p className="mt-5 text-xs uppercase tracking-[0.18em] text-white/80">
+          <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-white/80 sm:mt-5 sm:text-xs">
             Elika Beauty • Burnaby
           </p>
 
-          <h1 className="mt-3 max-w-3xl text-3xl sm:text-4xl lg:text-5xl font-theseason font-bold text-white">
+          <h1 className="mt-2 max-w-3xl text-2xl font-theseason font-bold leading-tight text-white sm:mt-3 sm:text-4xl lg:text-5xl">
             {title}
           </h1>
 
-          <p className="mt-4 max-w-2xl text-sm sm:text-base leading-7 text-white/90">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/90 sm:mt-4 sm:text-base sm:leading-7">
             {intro ||
               `${title} at Elika Beauty in Burnaby. View pricing details, timing, and booking information.`}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
             <Link
               to="/booking"
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-white text-[#572a31] hover:bg-[#F8F7F1] transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-medium text-[#572a31] transition hover:bg-[#F8F7F1] sm:px-6"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 border border-white/40 text-white hover:bg-white/10 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
             >
               Call {PHONE_DISPLAY}
             </a>
@@ -235,7 +235,7 @@ export default function ServicePlaceholder({
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 border border-white/40 text-white hover:bg-white/10 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
             >
               Get Directions
             </a>
@@ -243,62 +243,69 @@ export default function ServicePlaceholder({
         </div>
       </section>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
-        <section className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
+      <main className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12">
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6">
             <div className="text-sm text-gray-500">Starting price</div>
-            <div className="mt-2 text-xl font-semibold text-[#3D0007]">
+            <div className="mt-2 text-xl font-semibold text-[#3D0007] sm:text-2xl">
               {priceText || "Contact us"}
             </div>
           </div>
 
-          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
+          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6">
             <div className="text-sm text-gray-500">Appointment time</div>
-            <div className="mt-2 text-xl font-semibold text-[#3D0007]">
+            <div className="mt-2 text-xl font-semibold text-[#3D0007] sm:text-2xl">
               {durationText || "Varies"}
             </div>
           </div>
 
-          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
+          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6 sm:col-span-2 lg:col-span-1">
             <div className="text-sm text-gray-500">Location</div>
-            <div className="mt-2 text-base font-semibold text-[#3D0007]">
+            <div className="mt-2 text-base font-semibold text-[#3D0007] sm:text-lg">
               {LOCATION_NOTE}
             </div>
-            <div className="text-sm text-gray-600">Burnaby, BC</div>
+            <div className="mt-1 text-sm text-gray-600">Burnaby, BC</div>
           </div>
         </section>
 
         {galleryImages.length > 0 && (
-          <section className="mt-12">
-            <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007] font-semibold">
-              Gallery
-            </h2>
+          <section className="mt-14 sm:mt-16">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+                Gallery
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">
+                Examples of this service and finished results at Elika Beauty.
+              </p>
+            </div>
 
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {galleryImages.map((image, index) => (
                 <div
                   key={index}
-                  className="overflow-hidden rounded-[28px] border border-[#572a31]/15 bg-white shadow-sm"
+                  className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
-                  <img
-                    src={image.src}
-                    alt={image.alt || `${title} at Elika Beauty`}
-                    className="h-72 w-full object-cover"
-                    loading="lazy"
-                  />
+                  <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
+                    <img
+                      src={image.src}
+                      alt={image.alt || `${title} at Elika Beauty`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        <section className="mt-16 rounded-[28px] bg-[#F8F7F1] p-6 sm:p-8">
+        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
           <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007] font-semibold">
+            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
               What to expect
             </h2>
 
-            <p className="mt-3 text-gray-700 leading-7">
+            <p className="mt-3 text-sm leading-6 text-gray-700 sm:text-base sm:leading-7">
               Every appointment starts with understanding your goals, service
               history, and the final result you want. We focus on clean
               execution, a polished finish, and guidance that helps you maintain
@@ -306,11 +313,11 @@ export default function ServicePlaceholder({
             </p>
           </div>
 
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2">
             {finalBenefits.map((item, index) => (
               <li
                 key={index}
-                className="rounded-xl border border-[#572a31]/10 bg-white px-4 py-3 text-gray-700"
+                className="rounded-xl border border-[#572a31]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base"
               >
                 {item}
               </li>
@@ -318,40 +325,45 @@ export default function ServicePlaceholder({
           </ul>
 
           {extraNote && (
-            <div className="mt-6 rounded-xl border border-[#572a31]/10 bg-white p-4 text-sm text-gray-700">
+            <div className="mt-5 rounded-xl border border-[#572a31]/10 bg-white p-4 text-sm leading-6 text-gray-700 sm:mt-6">
               {extraNote}
             </div>
           )}
         </section>
 
-        <section className="mt-16">
-          <h2 className="text-2xl font-theseason text-[#3D0007] font-semibold">
+        <section className="mt-14 sm:mt-16">
+          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
             FAQ
           </h2>
 
           <div className="mt-5 space-y-4">
             {finalFaq.map((item, index) => (
-              <details key={index} className="rounded-2xl border p-5 bg-white">
-                <summary className="font-semibold cursor-pointer">
+              <details
+                key={index}
+                className="rounded-2xl border bg-white p-4 sm:p-5"
+              >
+                <summary className="cursor-pointer pr-6 font-semibold leading-6">
                   {item.q}
                 </summary>
-                <p className="mt-2 text-gray-700 leading-7">{item.a}</p>
+                <p className="mt-2 text-sm leading-6 text-gray-700 sm:text-base sm:leading-7">
+                  {item.a}
+                </p>
               </details>
             ))}
           </div>
         </section>
 
-        <section className="mt-16 rounded-[28px] bg-[#F8F7F1] p-6 sm:p-8">
-          <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007] font-semibold">
+        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
             Related services
           </h2>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2.5 sm:mt-6 sm:gap-3">
             {finalRelatedServices.map((service) => (
               <Link
                 key={service.to}
                 to={service.to}
-                className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
+                className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
               >
                 {service.label}
               </Link>
@@ -359,26 +371,26 @@ export default function ServicePlaceholder({
           </div>
         </section>
 
-        <section className="mt-16 rounded-[28px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-6 sm:p-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-theseason text-[#440008]">
+        <section className="mt-14 rounded-[24px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
+          <h2 className="text-2xl font-theseason text-[#440008] sm:text-3xl">
             Ready to book?
           </h2>
 
-          <p className="mt-3 max-w-2xl mx-auto text-[#440008]/80 leading-7">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#440008]/80 sm:text-base sm:leading-7">
             Book online, or contact us if you want help choosing the right service.
           </p>
 
-          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               to="/booking"
-              className="rounded-full px-8 py-3 bg-[#440008] text-[#F8F7F1] hover:opacity-90 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90 sm:px-8"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="rounded-full px-8 py-3 bg-white text-[#572a31] border border-[#572a31]/25 hover:border-[#572a31]/45 transition"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#572a31]/25 bg-white px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45 sm:px-8"
             >
               Call {PHONE_DISPLAY}
             </a>
