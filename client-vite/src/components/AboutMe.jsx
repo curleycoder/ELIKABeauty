@@ -24,7 +24,7 @@ export default function AboutMe() {
 
           <div className="mt-5 flex w-full sm:w-60 flex-col gap-3">
             <Link
-              to="/hair-color-burnaby"
+              to="/services"
               className="
                 group inline-flex items-center justify-center gap-2
                 rounded-2xl px-5 py-3
@@ -35,7 +35,7 @@ export default function AboutMe() {
                 transition-all duration-300
               "
             >
-              <span>Explore Hair Color</span>
+              <span>Explore Salon Services</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
