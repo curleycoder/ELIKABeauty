@@ -303,7 +303,7 @@ const hardResetAll = () => {
                 className={`w-full px-5 py-3 rounded-full font-bold text-white transition ${
                   !canContinue || loading || (selection.selected.length > 0 && !priceAccepted)
                     ? "bg-[#7a3b44]/25 cursor-not-allowed"
-                    : "bg-[#55203d] hover:brightness-110"
+                    : "bg-[#7a3b44] hover:brightness-110"
                 }`}
               >
                 {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
