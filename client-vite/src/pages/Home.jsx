@@ -8,57 +8,6 @@ import IntroSection from "../components/Intro";
 import { Link } from "react-router-dom";
 
 
-const featuredServices = [
-  {
-    title: "Hair Color",
-    to: "/hair-color-burnaby",
-    image: "/images/services/hair-color/hair-color-hero.jpg",
-    desc: "Explore balayage, highlights, root touch-ups, and customized color services.",
-  },
-  {
-    title: "Balayage",
-    to: "/balayage-burnaby",
-    image: "/images/services/balayage/balayage-hero.jpg",
-    desc: "Soft blended color with low-maintenance grow-out.",
-  },
-  {
-    title: "Highlights",
-    to: "/highlights-burnaby",
-    image: "/images/services/highlights/highlights-hero.jpg",
-    desc: "Dimensional brightness with custom toning.",
-  },
-  {
-    title: "Keratin Treatment",
-    to: "/keratin-treatment-burnaby",
-    image: "/images/services/keratin/keratin-hero.jpg",
-    desc: "Smoother hair, less frizz, easier styling.",
-  },
-  {
-    title: "Perm",
-    to: "/perm-burnaby",
-    image: "/images/services/perm/perm-hero.jpg",
-    desc: "Curls or waves tailored to your hair type.",
-  },
-  {
-    title: "Women’s Haircut",
-    to: "/womens-haircut-burnaby",
-    image: "/images/services/haircutwoman/haircut-hero.jpg",
-    desc: "Shape, layers, and styling for your lifestyle.",
-  },
-  {
-    title: "Men’s Haircut",
-    to: "/mens-haircut-burnaby",
-    image: "/images/services/haircutmen/haircut-hero.jpg",
-    desc: "Clean cuts with sharp detail and easy maintenance.",
-  },
-    {
-    title: "Microblading",
-    to: "/microblading-burnaby",
-    image: "/images/services/microblading/microblading-hero.webp",
-    desc: "PhiBrows microblading eyebrow service at Elika Beauty in Burnaby",
-  },
-];
-
 
 export default function Home() {
   return (
@@ -66,75 +15,6 @@ export default function Home() {
       {/* HERO */}
       <HeroSection />
       <IntroSection />
-
-
-<section className="mt-14 w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-8">
-  <div className="max-w-6xl mx-auto">
-    <div className="text-center">
-      <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-[#572a31]/60">
-        Elika Beauty Services
-      </p>
-
-      <h2 className="mt-3 text-3xl sm:text-4xl font-theseason text-[#572a31]">
-        Explore Our Services
-      </h2>
-
-      <p className="mt-3 text-[#572a31]/80 max-w-2xl mx-auto leading-7">
-        Discover color, texture, cuts, and beauty services designed around your
-        goals, style, and maintenance level.
-      </p>
-
-      <div className="mt-4">
-        <Link
-          to="/services"
-          className="text-sm underline underline-offset-4 text-[#572a31] hover:opacity-80 transition"
-        >
-          View all services
-        </Link>
-      </div>
-    </div>
-
-    <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {featuredServices.map((service) => (
-        <Link
-          key={service.to}
-          to={service.to}
-          className="group overflow-hidden rounded-[28px] border border-[#572a31]/15 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-        >
-          <div className="relative h-72 overflow-hidden">
-            <img
-              src={service.image}
-              alt={service.title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/20 to-transparent" />
-
-            <div className="absolute bottom-0 left-0 right-0 p-5">
-              <div className="inline-flex rounded-full bg-white/85 px-3 py-1 text-xs uppercase tracking-[0.15em] text-[#572a31] backdrop-blur-sm">
-                View Service
-              </div>
-
-              <h3 className="mt-3 text-2xl font-theseason text-white">
-                {service.title}
-              </h3>
-            </div>
-          </div>
-
-          <div className="p-5">
-            <p className="text-sm leading-6 text-[#572a31]/80">
-              {service.desc}
-            </p>
-
-            <div className="mt-4 inline-flex items-center text-sm font-medium text-[#572a31] underline underline-offset-4">
-              View details
-            </div>
-          </div>
-        </Link>
-      ))}
-    </div>
-  </div>
-</section>
 
         <AboutMe />
         <GoogleReview />
