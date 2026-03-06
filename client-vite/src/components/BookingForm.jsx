@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { FaPlus, FaCheck } from "react-icons/fa";
 
-const TABS = ["Hair", "Face", "Men", "Add ons"];
+const TABS = ["Hair", "Face", "Men", "spa", "Add ons"];
 
 const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle }) {
   return (
