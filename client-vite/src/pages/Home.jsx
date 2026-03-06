@@ -2,7 +2,6 @@ import React from "react";
 import HeroSection from "../components/HeroSection";
 import AboutMe from "../components/AboutMe";
 import GoogleReview from "../components/GoogleReview";
-import Gallery from "../components/Gallery";
 import FAQ from "../components/FAQ";
 import Instagram from "../components/Instagram";
 import IntroSection from "../components/Intro";
@@ -53,10 +52,10 @@ const featuredServices = [
     desc: "Clean cuts with sharp detail and easy maintenance.",
   },
     {
-    title: "Men’s Haircut",
-    to: "/mens-haircut-burnaby",
-    image: "/images/services/haircutmen/haircut-hero.jpg",
-    desc: "Clean cuts with sharp detail and easy maintenance.",
+    title: "Microblading",
+    to: "/microblading-burnaby",
+    image: "/images/services/microblading/microblading-hero.webp",
+    desc: "PhiBrows microblading eyebrow service at Elika Beauty in Burnaby",
   },
 ];
 
