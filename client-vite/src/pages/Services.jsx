@@ -214,25 +214,25 @@ export default function Services() {
           <div className="mt-6 flex flex-row gap-1 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-3">
             <Link
               to="/booking"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#572a31] px-2 py-1 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:px-2"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#572a31] px-3 py-1 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:px-2"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-2 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-3 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
             >
-              Call {PHONE_DISPLAY}
+              {PHONE_DISPLAY}
             </a>
 
             <a
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-2 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-3 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
             >
-              Address
+              Direction
             </a>
           </div>
           <p className="pt-2 max-w-2xl text-sm leading-5 text-white/90 sm:mt-4 sm:text-base sm:leading-7">
