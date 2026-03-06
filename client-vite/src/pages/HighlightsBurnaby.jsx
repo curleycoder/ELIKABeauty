@@ -44,7 +44,7 @@ export default function HighlightsBurnaby() {
       }}
       galleryImages={[
         {
-          src: "/images/services/highlights/highlights-1.JPG",
+          src: "/images/services/highlights/highlights-1.jpg",
           alt: "Dimensional highlights result at Elika Beauty",
         },
         {
@@ -52,7 +52,7 @@ export default function HighlightsBurnaby() {
           alt: "Bright blonde highlights in Burnaby",
         },
         {
-          src: "/images/services/highlights/highlights-3.jpg",
+          src: "/images/services/highlights/highlights-3.JPG",
           alt: "Professional highlights hair color by Elika Beauty",
         },
       ]}

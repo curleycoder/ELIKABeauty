@@ -25,8 +25,9 @@ export default function ServicePlaceholder({
   extraNote,
   benefits = [],
   faq = [],
-    heroImage,
+  heroImage,
   galleryImages = [],
+  relatedServices = [],
 }) {
   const pageTitle = `${title} | Elika Beauty Burnaby`;
   const pageDescription =
@@ -47,22 +48,36 @@ export default function ServicePlaceholder({
     {
       q: `How much does ${title.toLowerCase()} cost?`,
       a: priceText
-        ? `${title} starts at ${priceText}. Final price may vary depending on hair length, density, previous color, and the amount of work needed.`
-        : `Pricing depends on hair length, thickness, and the work involved. Contact Elika Beauty for a personalized estimate.`,
+        ? `${title} starts at ${priceText}. Final price may vary depending on service details and the amount of work needed.`
+        : `Pricing depends on the work involved. Contact Elika Beauty for a personalized estimate.`,
     },
     {
       q: `How long does ${title.toLowerCase()} take?`,
       a: durationText
-        ? `This service usually takes around ${durationText}. Timing can vary depending on your hair and your final goal.`
-        : `Timing depends on your hair type, length, and desired result.`,
+        ? `This service usually takes around ${durationText}. Timing can vary depending on your needs and final goal.`
+        : `Timing depends on the service and the result you want.`,
     },
     {
-      q: `Do I need a consultation before booking?`,
+      q: "Do I need a consultation before booking?",
       a: "If you are unsure which service to choose or want a major change, a consultation is strongly recommended.",
     },
   ];
 
   const finalFaq = faq.length ? faq : defaultFaq;
+
+  const defaultRelatedServices = [
+    { to: "/services", label: "All Services" },
+    { to: "/hair-color-burnaby", label: "Hair Color" },
+    { to: "/highlights-burnaby", label: "Highlights" },
+    { to: "/balayage-burnaby", label: "Balayage" },
+    { to: "/keratin-treatment-burnaby", label: "Keratin Treatment" },
+    { to: "/womens-haircut-burnaby", label: "Women’s Haircut" },
+    { to: "/mens-haircut-burnaby", label: "Men’s Haircut" },
+  ];
+
+  const finalRelatedServices = relatedServices.length
+    ? relatedServices
+    : defaultRelatedServices;
 
   const serviceJsonLd = {
     "@context": "https://schema.org",
@@ -140,7 +155,7 @@ export default function ServicePlaceholder({
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 pt-12 px-4 sm:px-6 pb-16">
+    <div className="min-h-screen bg-white text-gray-800 pb-16">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -167,7 +182,20 @@ export default function ServicePlaceholder({
         </script>
       </Helmet>
 
-      <main className="mt-10 max-w-4xl mx-auto">
+      {heroImage && (
+        <section className="w-full">
+          <div className="overflow-hidden">
+            <img
+              src={heroImage.src}
+              alt={heroImage.alt || title}
+              className="h-[280px] sm:h-[380px] lg:h-[460px] w-full object-cover"
+              loading="eager"
+            />
+          </div>
+        </section>
+      )}
+
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
         <nav aria-label="Breadcrumb" className="mb-6">
           <Link
             to="/services"
@@ -177,31 +205,19 @@ export default function ServicePlaceholder({
           </Link>
         </nav>
 
-        <section className="rounded-3xl border border-[#572a31]/10 bg-[#fcfaf8] p-6 sm:p-8 shadow-sm">
+        <section className="max-w-3xl">
           <p className="text-xs uppercase tracking-[0.18em] text-[#7b5b65]">
             Elika Beauty • Burnaby
           </p>
 
-          <h1 className="mt-3 text-3xl sm:text-4xl font-theseason font-bold text-[#3D0007]">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-theseason font-bold text-[#3D0007]">
             {title}
           </h1>
 
-          <p className="mt-4 text-base sm:text-lg leading-7 text-gray-700 max-w-3xl">
+          <p className="mt-4 text-base sm:text-lg leading-7 text-gray-700">
             {intro ||
-              `${title} at Elika Beauty in Burnaby. We’re updating this page with full details, but you can already view starting price information, contact the salon, and book your appointment online.`}
+              `${title} at Elika Beauty in Burnaby. View pricing details, timing, and book your appointment online.`}
           </p>
-                  {heroImage && (
-          <section className="mt-8">
-            <div className="overflow-hidden rounded-3xl border bg-white shadow-sm">
-              <img
-                src={heroImage.src}
-                alt={heroImage.alt || title}
-                className="h-[260px] sm:h-[380px] w-full object-cover"
-                loading="eager"
-              />
-            </div>
-          </section>
-        )}
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -229,36 +245,31 @@ export default function ServicePlaceholder({
           </div>
         </section>
 
-        <section className="mt-8 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border p-5 bg-white shadow-sm">
+        <section className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
             <div className="text-sm text-gray-500">Starting price</div>
             <div className="mt-2 text-xl font-semibold text-[#3D0007]">
               {priceText || "Contact us"}
             </div>
           </div>
 
-          <div className="rounded-2xl border p-5 bg-white shadow-sm">
+          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
             <div className="text-sm text-gray-500">Appointment time</div>
             <div className="mt-2 text-xl font-semibold text-[#3D0007]">
               {durationText || "Varies"}
             </div>
           </div>
 
-          <div className="rounded-2xl border p-5 bg-white shadow-sm">
+          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
             <div className="text-sm text-gray-500">Location</div>
             <div className="mt-2 text-base font-semibold text-[#3D0007]">
-              Burnaby, BC
+              {LOCATION_NOTE}
             </div>
-            <div className="text-sm text-gray-600">{LOCATION_NOTE}</div>
+            <div className="text-sm text-gray-600">Burnaby, BC</div>
           </div>
         </section>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
-          <div className="rounded-2xl border p-6 bg-white shadow-sm">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
-              What to expect
-            </h2>
-                    {galleryImages.length > 0 && (
+        {galleryImages.length > 0 && (
           <section className="mt-10">
             <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
               Gallery
@@ -268,12 +279,12 @@ export default function ServicePlaceholder({
               {galleryImages.map((image, index) => (
                 <div
                   key={index}
-                  className="overflow-hidden rounded-2xl border bg-white shadow-sm"
+                  className="overflow-hidden rounded-2xl border bg-white"
                 >
                   <img
                     src={image.src}
                     alt={image.alt || `${title} at Elika Beauty`}
-                    className="h-64 w-full object-cover"
+                    className="h-72 w-full object-cover"
                     loading="lazy"
                   />
                 </div>
@@ -282,10 +293,17 @@ export default function ServicePlaceholder({
           </section>
         )}
 
+        <section className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+          <div className="rounded-2xl border p-6 bg-white">
+            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+              What to expect
+            </h2>
+
             <p className="mt-4 text-gray-700 leading-7">
-              Every service starts with understanding your hair, your goals, and
-              the result you want. We focus on a polished finish, practical
-              maintenance advice, and a result that fits your lifestyle.
+              Every appointment starts with understanding your goals, service
+              history, and the final result you want. We focus on clean
+              execution, a polished finish, and guidance that helps you maintain
+              your result.
             </p>
 
             <ul className="mt-5 space-y-3 text-gray-700">
@@ -304,15 +322,18 @@ export default function ServicePlaceholder({
             )}
           </div>
 
-          <aside className="rounded-2xl border p-6 bg-white shadow-sm">
+          <aside className="rounded-2xl border p-6 bg-[#fcfaf8]">
             <h2 className="text-xl font-semibold text-[#3D0007]">
               Visit Elika Beauty
             </h2>
 
-            <div className="mt-4 space-y-3 text-sm text-gray-700">
+            <div className="mt-4 space-y-4 text-sm text-gray-700">
               <div>
                 <div className="font-semibold text-gray-900">Phone</div>
-                <a href={`tel:${PHONE_TEL}`} className="underline underline-offset-4">
+                <a
+                  href={`tel:${PHONE_TEL}`}
+                  className="underline underline-offset-4"
+                >
                   {PHONE_DISPLAY}
                 </a>
               </div>
@@ -334,26 +355,10 @@ export default function ServicePlaceholder({
                 <p>{PARKING_NOTE}</p>
               </div>
             </div>
-
-            <div className="mt-6 flex flex-col gap-3">
-              <Link
-                to="/booking"
-                className="text-center rounded-xl px-5 py-3 bg-[#572a31] text-white hover:opacity-90 transition"
-              >
-                Book Online
-              </Link>
-
-              <Link
-                to="/services"
-                className="text-center rounded-xl px-5 py-3 border border-[#572a31]/20 text-[#572a31] hover:border-[#572a31] transition"
-              >
-                View All Services
-              </Link>
-            </div>
           </aside>
         </section>
 
-        <section className="mt-10 rounded-2xl border p-6 bg-white shadow-sm">
+        <section className="mt-10 rounded-2xl border p-6 bg-white">
           <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
             Frequently asked questions
           </h2>
@@ -370,30 +375,21 @@ export default function ServicePlaceholder({
           </div>
         </section>
 
-        <section className="mt-10 rounded-2xl border border-gray-200 bg-[#F8F7F1] p-6 shadow-sm">
+        <section className="mt-10 rounded-2xl border border-gray-200 bg-[#F8F7F1] p-6">
           <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
             Related services
           </h2>
 
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
-            <Link to="/highlights-burnaby" className="underline underline-offset-4">
-              Highlights
-            </Link>
-            <Link to="/balayage-burnaby" className="underline underline-offset-4">
-              Balayage
-            </Link>
-            <Link
-              to="/keratin-treatment-burnaby"
-              className="underline underline-offset-4"
-            >
-              Keratin Treatment
-            </Link>
-            <Link to="/womens-haircut-burnaby" className="underline underline-offset-4">
-              Women’s Haircut
-            </Link>
-            <Link to="/mens-haircut-burnaby" className="underline underline-offset-4">
-              Men’s Haircut
-            </Link>
+            {finalRelatedServices.map((service) => (
+              <Link
+                key={service.to}
+                to={service.to}
+                className="rounded-full border border-[#572a31]/15 px-4 py-2 text-[#572a31] hover:border-[#572a31]/35 transition"
+              >
+                {service.label}
+              </Link>
+            ))}
           </div>
         </section>
       </main>

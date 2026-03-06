@@ -10,15 +10,21 @@ const PHONE_DISPLAY = "(604) 438-3727";
 
 const ADDRESS_LINE = "3790 Canada Way #102, Burnaby, BC V5G 1G4";
 const LOCATION_NOTE = "Edward Jones Plaza";
-const PARKING_NOTE = "Plaza parking available. Pay parking on street.";
+const PARKING_NOTE = "Plaza parking available • Pay parking on street";
 
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=" +
-  encodeURIComponent("3790 Canada Way #102, Burnaby, BC V5G 1G4 Elika Beauty");
+  encodeURIComponent(`${ADDRESS_LINE} Elika Beauty`);
 
 const BASE_COLOR_FROM = 70;
 
 const services = [
+  {
+    title: "Hair Color",
+    path: "/hair-color-burnaby",
+    desc: "Customized hair color services including balayage, highlights, root color, and color refresh.",
+    price: "Consultation / Varies",
+  },
   {
     title: "Highlights",
     path: "/highlights-burnaby",
@@ -55,14 +61,26 @@ const services = [
     title: "Men’s Haircut",
     path: "/mens-haircut-burnaby",
     desc: "Clean haircut with optional wash add-on.",
-    price: "$25 (Wash + Cut $35)",
+    price: "$25 • Wash + Cut $35",
+  },
+  {
+    title: "Microblading",
+    path: "/microblading-burnaby",
+    desc: "Semi-permanent brow enhancement for fuller, more defined eyebrows.",
+    price: "Contact for pricing",
+  },
+  {
+    title: "Threading",
+    path: "/threading-burnaby",
+    desc: "Precise facial hair removal for brows and facial shaping.",
+    price: "Contact for pricing",
   },
 ];
 
 export default function Services() {
-  const pageTitle = `Hair Services in Burnaby | ${SITE_NAME}`;
+  const pageTitle = `Beauty Services in Burnaby | ${SITE_NAME}`;
   const pageDescription =
-    "Elika Beauty offers hair services in Burnaby including highlights, balayage, keratin treatments, perms, and haircuts for men and women. View starting prices and book online.";
+    "Elika Beauty offers beauty services in Burnaby including hair color, highlights, balayage, keratin treatments, perms, haircuts, microblading, and threading. View services and book online.";
   const pageUrl = `${SITE_ORIGIN}/services`;
 
   const breadcrumbJsonLd = {
@@ -112,7 +130,7 @@ export default function Services() {
         name: "Do you offer consultations?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. If you are not sure what to book or you want a major change, a consultation is recommended so the service and timing can be planned properly.",
+          text: "Yes. If you are not sure what to book or want a major change, a consultation is recommended so the service and timing can be planned properly.",
         },
       },
       {
@@ -120,14 +138,14 @@ export default function Services() {
         name: "Do prices vary?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Prices are starting points and may vary based on hair length, thickness, previous color, and the amount of work needed.",
+          text: "Yes. Prices are starting points and may vary based on service complexity, hair length, thickness, previous color, and the work needed.",
         },
       },
     ],
   };
 
   return (
-    <div className="bg-white min-h-screen text-gray-800 pt-12 px-4 sm:px-6 pb-16">
+    <div className="min-h-screen bg-white text-gray-800 pb-16">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -154,33 +172,44 @@ export default function Services() {
         </script>
       </Helmet>
 
-      <main className="mt-10 max-w-6xl mx-auto">
-        <section className="rounded-3xl border border-[#572a31]/10 bg-[#fcfaf8] p-6 sm:p-8 shadow-sm">
+      <section className="w-full">
+        <div className="overflow-hidden">
+          <img
+            src="/images/services/services-hero.jpg"
+            alt="Beauty services at Elika Beauty in Burnaby"
+            className="h-[280px] sm:h-[380px] lg:h-[460px] w-full object-cover"
+            loading="eager"
+          />
+        </div>
+      </section>
+
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
+        <section className="max-w-3xl">
           <p className="text-xs uppercase tracking-[0.18em] text-[#7b5b65]">
-            Elika Beauty • Burnaby, BC
+            Elika Beauty • Burnaby
           </p>
 
-          <h1 className="mt-3 text-3xl sm:text-4xl font-theseason text-[#3D0007] font-bold">
-            Hair Services in Burnaby
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-theseason font-bold text-[#3D0007]">
+            Beauty Services in Burnaby
           </h1>
 
-          <p className="mt-4 max-w-3xl text-base sm:text-lg leading-7 text-gray-700">
-            Explore highlights, balayage, keratin treatments, perms, and
-            haircuts for men and women at Elika Beauty. Prices below are starting
-            points. Book online or call for help choosing the right service.
+          <p className="mt-4 text-base sm:text-lg leading-7 text-gray-700">
+            Explore hair color, highlights, balayage, keratin treatments, perms,
+            haircuts, microblading, and threading at Elika Beauty. Browse each
+            service page for details, pricing guidance, and booking information.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               to="/booking"
-              className="px-6 py-3 rounded-xl bg-[#572a31] text-[#F8F7F1] hover:opacity-90 transition"
+              className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-[#572a31] text-[#F8F7F1] hover:opacity-90 transition"
             >
-              Book Now
+              Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="px-6 py-3 rounded-xl border border-[#572a31]/30 text-[#572a31] hover:border-[#572a31] transition"
+              className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-white text-[#572a31] border border-[#572a31]/20 hover:border-[#572a31] transition"
             >
               Call {PHONE_DISPLAY}
             </a>
@@ -189,15 +218,15 @@ export default function Services() {
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="px-6 py-3 rounded-xl border border-[#572a31]/30 text-[#572a31] hover:border-[#572a31] transition"
+              className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-white text-[#572a31] border border-[#572a31]/20 hover:border-[#572a31] transition"
             >
               Get Directions
             </a>
           </div>
         </section>
 
-        <section className="mt-8 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border p-5 bg-white shadow-sm">
+        <section className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
             <div className="text-sm text-gray-500">Phone</div>
             <a
               href={`tel:${PHONE_TEL}`}
@@ -207,7 +236,7 @@ export default function Services() {
             </a>
           </div>
 
-          <div className="rounded-2xl border p-5 bg-white shadow-sm">
+          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
             <div className="text-sm text-gray-500">Address</div>
             <a
               href={MAPS_URL}
@@ -220,7 +249,7 @@ export default function Services() {
             <div className="text-sm text-gray-600">{LOCATION_NOTE}</div>
           </div>
 
-          <div className="rounded-2xl border p-5 bg-white shadow-sm">
+          <div className="rounded-2xl border p-5 bg-[#fcfaf8]">
             <div className="text-sm text-gray-500">Parking</div>
             <div className="mt-2 text-base font-semibold text-[#3D0007]">
               Easy access
@@ -229,23 +258,21 @@ export default function Services() {
           </div>
         </section>
 
-        <section className="mt-12">
-          <div className="flex items-end justify-between gap-4 flex-wrap">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007] font-semibold">
-                Choose a service
-              </h2>
-              <p className="mt-2 text-gray-600">
-                Click into each service page for more details and booking help.
-              </p>
-            </div>
+        <section className="mt-10">
+          <div className="max-w-3xl">
+            <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007] font-semibold">
+              Choose a service
+            </h2>
+            <p className="mt-2 text-gray-600">
+              Click into each page for more details, photos, and booking help.
+            </p>
           </div>
 
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => (
               <article
                 key={s.path}
-                className="rounded-2xl border p-5 bg-white shadow-sm hover:shadow-md transition-shadow"
+                className="rounded-2xl border p-5 bg-white hover:shadow-sm transition"
               >
                 <h3 className="text-xl font-theseason text-[#3D0007] font-semibold">
                   <Link to={s.path} className="hover:underline underline-offset-4">
@@ -282,73 +309,150 @@ export default function Services() {
           </div>
 
           <p className="mt-5 text-sm leading-6 text-gray-600">
-            Prices are starting points and may vary based on hair length,
-            thickness, previous color, and overall service complexity. For major
-            changes or corrections, a consultation is recommended.
+            Prices are starting points where listed and may vary based on hair
+            length, thickness, previous work, and overall service complexity.
+            For major changes or corrective work, a consultation is recommended.
           </p>
         </section>
 
-        <section className="mt-12 rounded-2xl border p-6 bg-white shadow-sm">
-          <h2 className="text-2xl font-theseason text-[#3D0007] font-semibold">
-            Not sure what to book?
-          </h2>
+        <section className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+          <div className="rounded-2xl border p-6 bg-white">
+            <h2 className="text-2xl font-theseason text-[#3D0007] font-semibold">
+              Not sure what to book?
+            </h2>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            <div className="rounded-xl bg-[#F8F7F1] p-4 border border-[#572a31]/10">
-              <h3 className="font-semibold text-[#3D0007]">Color services</h3>
-              <ul className="mt-3 space-y-2 text-gray-700">
-                <li>
-                  New to color?{" "}
-                  <Link className="underline" to="/highlights-burnaby">
-                    Highlights
-                  </Link>
-                </li>
-                <li>
-                  Want softer grow-out?{" "}
-                  <Link className="underline" to="/balayage-burnaby">
-                    Balayage
-                  </Link>
-                </li>
-                <li>
-                  Need smoother hair?{" "}
-                  <Link className="underline" to="/keratin-treatment-burnaby">
-                    Keratin Treatment
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <p className="mt-4 text-gray-700 leading-7">
+              The right service depends on your goals, maintenance level, hair
+              history, and the result you want. If you are unsure, start with
+              the closest match and use a consultation to confirm the best plan.
+            </p>
 
-            <div className="rounded-xl bg-[#F8F7F1] p-4 border border-[#572a31]/10">
-              <h3 className="font-semibold text-[#3D0007]">Texture and cuts</h3>
-              <ul className="mt-3 space-y-2 text-gray-700">
-                <li>
-                  Want curls or waves?{" "}
-                  <Link className="underline" to="/perm-burnaby">
-                    Perm
-                  </Link>
-                </li>
-                <li>
-                  Need a refresh?{" "}
-                  <Link className="underline" to="/womens-haircut-burnaby">
-                    Women’s Haircut
-                  </Link>{" "}
-                  /{" "}
-                  <Link className="underline" to="/mens-haircut-burnaby">
-                    Men’s Haircut
-                  </Link>
-                </li>
-              </ul>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <div className="rounded-xl bg-[#F8F7F1] p-4 border border-[#572a31]/10">
+                <h3 className="font-semibold text-[#3D0007]">Hair and color</h3>
+                <ul className="mt-3 space-y-2 text-gray-700">
+                  <li>
+                    Want full color guidance?{" "}
+                    <Link className="underline" to="/hair-color-burnaby">
+                      Hair Color
+                    </Link>
+                  </li>
+                  <li>
+                    Want softer grow-out?{" "}
+                    <Link className="underline" to="/balayage-burnaby">
+                      Balayage
+                    </Link>
+                  </li>
+                  <li>
+                    Want brighter contrast?{" "}
+                    <Link className="underline" to="/highlights-burnaby">
+                      Highlights
+                    </Link>
+                  </li>
+                  <li>
+                    Need smoother hair?{" "}
+                    <Link className="underline" to="/keratin-treatment-burnaby">
+                      Keratin Treatment
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="rounded-xl bg-[#F8F7F1] p-4 border border-[#572a31]/10">
+                <h3 className="font-semibold text-[#3D0007]">Cuts and beauty</h3>
+                <ul className="mt-3 space-y-2 text-gray-700">
+                  <li>
+                    Want curls or waves?{" "}
+                    <Link className="underline" to="/perm-burnaby">
+                      Perm
+                    </Link>
+                  </li>
+                  <li>
+                    Need a haircut?{" "}
+                    <Link className="underline" to="/womens-haircut-burnaby">
+                      Women’s Haircut
+                    </Link>{" "}
+                    /{" "}
+                    <Link className="underline" to="/mens-haircut-burnaby">
+                      Men’s Haircut
+                    </Link>
+                  </li>
+                  <li>
+                    Want fuller brows?{" "}
+                    <Link className="underline" to="/microblading-burnaby">
+                      Microblading
+                    </Link>
+                  </li>
+                  <li>
+                    Need clean shaping?{" "}
+                    <Link className="underline" to="/threading-burnaby">
+                      Threading
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
+
+          <aside className="rounded-2xl border p-6 bg-[#fcfaf8]">
+            <h2 className="text-xl font-semibold text-[#3D0007]">
+              Visit Elika Beauty
+            </h2>
+
+            <div className="mt-4 space-y-4 text-sm text-gray-700">
+              <div>
+                <div className="font-semibold text-gray-900">Phone</div>
+                <a
+                  href={`tel:${PHONE_TEL}`}
+                  className="underline underline-offset-4"
+                >
+                  {PHONE_DISPLAY}
+                </a>
+              </div>
+
+              <div>
+                <div className="font-semibold text-gray-900">Address</div>
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-4"
+                >
+                  {ADDRESS_LINE}
+                </a>
+              </div>
+
+              <div>
+                <div className="font-semibold text-gray-900">Parking</div>
+                <p>{PARKING_NOTE}</p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-col gap-3">
+              <Link
+                to="/booking"
+                className="text-center rounded-xl px-5 py-3 bg-[#572a31] text-white hover:opacity-90 transition"
+              >
+                Book Online
+              </Link>
+
+              <Link
+                to="/hair-salon-burnaby"
+                className="text-center rounded-xl px-5 py-3 border border-[#572a31]/20 text-[#572a31] hover:border-[#572a31] transition"
+              >
+                View Salon Page
+              </Link>
+            </div>
+          </aside>
         </section>
 
-        <section className="mt-12">
-          <h2 className="text-2xl text-[#3D0007] font-theseason font-semibold">
+        <section className="mt-10">
+          <h2 className="text-2xl font-theseason text-[#3D0007] font-semibold">
             FAQ
           </h2>
 
           <div className="mt-5 space-y-4">
-            <details className="rounded-xl border p-4 bg-white shadow-sm">
+            <details className="rounded-xl border p-4 bg-white">
               <summary className="font-semibold cursor-pointer">
                 Highlights vs balayage — what’s the difference?
               </summary>
@@ -359,18 +463,18 @@ export default function Services() {
               </p>
             </details>
 
-            <details className="rounded-xl border p-4 bg-white shadow-sm">
+            <details className="rounded-xl border p-4 bg-white">
               <summary className="font-semibold cursor-pointer">
                 Why do some color services have add-ons like base color?
               </summary>
               <p className="mt-2 text-gray-700 leading-7">
-                Some looks may require a base color for full coverage, tone
-                balancing, or correction. If needed, this will be explained during
-                the consultation. Base color starts at ${BASE_COLOR_FROM}.
+                Some looks may require a base color for coverage, tone
+                balancing, or correction. If needed, this will be explained
+                during the consultation. Base color starts at ${BASE_COLOR_FROM}.
               </p>
             </details>
 
-            <details className="rounded-xl border p-4 bg-white shadow-sm">
+            <details className="rounded-xl border p-4 bg-white">
               <summary className="font-semibold cursor-pointer">
                 Do you offer consultations?
               </summary>
@@ -381,58 +485,55 @@ export default function Services() {
               </p>
             </details>
 
-            <details className="rounded-xl border p-4 bg-white shadow-sm">
+            <details className="rounded-xl border p-4 bg-white">
               <summary className="font-semibold cursor-pointer">
                 How long do appointments take?
               </summary>
               <p className="mt-2 text-gray-700 leading-7">
-                Timing depends on your hair length, thickness, and goals. Color
-                services usually take longer because they may include consultation,
-                application, processing, toning, and finishing.
+                Timing depends on the service, your hair, and the final result
+                you want. Some services need more time because they include
+                consultation, processing, toning, shaping, or finishing.
               </p>
             </details>
           </div>
         </section>
 
-        <section className="mt-12 rounded-2xl border border-gray-200 bg-[#F8F7F1] p-6 shadow-sm">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div>
-              <h2 className="text-xl font-semibold text-[#572a31]">
-                Looking for a hair salon in Burnaby?
-              </h2>
+        <section className="mt-10 rounded-2xl border border-gray-200 bg-[#F8F7F1] p-6">
+          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+            Explore related pages
+          </h2>
 
-              <p className="mt-3 text-sm leading-6 text-gray-700 max-w-2xl">
-                Elika Beauty offers personalized hair services in Burnaby,
-                including color, texture, and haircut services for different hair
-                types and goals.
-              </p>
-
-              <div className="mt-4 text-sm text-gray-700">
-                <Link to="/hair-salon-burnaby" className="underline">
-                  Full service hair salon in Burnaby
-                </Link>{" "}
-                •{" "}
-                <Link to="/hair-color-burnaby" className="underline">
-                  Hair color in Burnaby
-                </Link>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-              <Link
-                to="/booking"
-                className="text-center px-6 py-3 rounded-xl bg-[#572a31] text-white hover:bg-[#6d3640] transition-all duration-200 shadow-sm"
-              >
-                Book Appointment
-              </Link>
-
-              <a
-                href={`tel:${PHONE_TEL}`}
-                className="text-center px-6 py-3 rounded-xl border border-[#572a31]/40 text-[#572a31] hover:bg-[#572a31]/5 transition-all duration-200"
-              >
-                Call Now
-              </a>
-            </div>
+          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <Link
+              to="/hair-salon-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Hair Salon in Burnaby
+            </Link>
+            <Link
+              to="/hair-color-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Hair Color in Burnaby
+            </Link>
+            <Link
+              to="/balayage-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Balayage
+            </Link>
+            <Link
+              to="/highlights-burnaby"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Highlights
+            </Link>
+            <Link
+              to="/booking"
+              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-[#572a31] hover:border-[#572a31]/35 transition"
+            >
+              Book Appointment
+            </Link>
           </div>
         </section>
       </main>

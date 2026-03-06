@@ -58,8 +58,8 @@ export default function App() {
         <Route path="/womens-haircut-burnaby" element={<WomensHaircut />} />
         <Route path="/mens-haircut-burnaby" element={<MensHaircut />} />
         <Route path="/hair-salon-burnaby" element={<HairSalonBurnaby />} />
-<Route path="/hair-color-burnaby" element={<HairColorBurnaby />} />
-<Route path="/contact" element={<Contact />} />
+        <Route path="/hair-color-burnaby" element={<HairColorBurnaby />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
 
       <SpeedInsights />
