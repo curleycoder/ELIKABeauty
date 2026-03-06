@@ -73,8 +73,8 @@ const navItems = [
       className={[
         "fixed top-0 left-0 right-0 z-50 transition ",
         scrolled
-          ? "bg-[#F8F7F1] text-[#2A0005]"
-          : "bg-[#F8F7F1]  text-[#2A0005] shadow-sm",
+          ? "bg-[#fcfaf8] text-[#3D0007]"
+          : "bg-[#fcfaf8]  text-[#3D0007] shadow-sm",
       ].join(" ")}
     >
 <nav className="font-theseason h-14 px-4 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
@@ -106,7 +106,7 @@ const navItems = [
       </nav>
 
       {menuOpen && (
-        <div className="sm:hidden bg-[#F8F7F1] px-4 pb-4 text-[#572a31]">
+        <div className="sm:hidden bg-[#F8F7F1] px-4 pb-4 text-[#3D0007]">
           {navItems.map((item) => (
             <button
               key={item.name}

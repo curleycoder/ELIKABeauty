@@ -22,9 +22,9 @@ export default function AboutMe() {
 
         <div className="text-gray-800 leading-relaxed">
           <p className="mb-4">
-  I’m <strong>Amina</strong>, the new owner of{" "}
+  I’m <strong>Amina</strong>, the owner of{" "}
   <strong className="font-theseason">ELIKA Beauty</strong>, formerly{" "}
-  <strong >Tangles Hair Design</strong>, located in Burnaby. 
+  Tangles Hair Design, located in Burnaby. 
   With <strong>30 years of professional experience</strong> — including{" "}
   <strong>24 years in Iran</strong> and <strong>8 years in Canada</strong> — I bring
   a deep, hands-on understanding of hair and beauty across different styles, hair
