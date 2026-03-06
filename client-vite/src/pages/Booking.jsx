@@ -32,6 +32,7 @@ export default function Booking() {
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [conversionSent, setConversionSent] = useState(false);
+  const [priceAccepted, setPriceAccepted] = useState(false);
 
   // signals
   const [submitTick, setSubmitTick] = useState(0);
@@ -95,11 +96,12 @@ export default function Booking() {
   const goNext = () => setStep((s) => Math.min(STEPS.length - 1, s + 1));
 
   // If services change after picking time => reset time AND reset DateTimePicker UI
-  useEffect(() => {
-    setBookingTime(null);
-    setAvailabilityTick((t) => t + 1);
-    setPickerKey((k) => k + 1);
-  }, [selection.selected]);
+useEffect(() => {
+  setBookingTime(null);
+  setAvailabilityTick((t) => t + 1);
+  setPickerKey((k) => k + 1);
+  setPriceAccepted(false);
+}, [selection.selected]);
 
   // Scroll to top on step change
   useEffect(() => {
@@ -108,7 +110,7 @@ export default function Booking() {
 
   const progressPct = ((step + 1) / STEPS.length) * 100;
 
-  const hardResetAll = () => {
+const hardResetAll = () => {
   setStep(0);
   setBookingTime(null);
   setSelection({ selected: [], total: 0 });
@@ -116,6 +118,7 @@ export default function Booking() {
   setShowFinalPopup(false);
   setBookingData(null);
   setConversionSent(false);
+  setPriceAccepted(false);
   setAvailabilityTick((t) => t + 1);
   setPickerKey((k) => k + 1);
 };
@@ -279,20 +282,27 @@ export default function Booking() {
                 <span>{selection.total > 0 ? `+$${selection.total}` : `$0`}</span>
               </div>
             </div>
-              <p className="mt-2 text-xs leading-2 text-red-600">
-                * Prices shown are starting costs. Final price may vary based on hair length,
-                thickness, and the work required.
-              </p>
-
+            {selection.selected.length > 0 && (
+              <label className="flex items-start gap-2 mt-4 text-xs text-gray-600 leading-5">
+                <input
+                  type="checkbox"
+                  checked={priceAccepted}
+                  onChange={(e) => setPriceAccepted(e.target.checked)}
+                  className="mt-[2px]"
+                />
+                I understand that the prices shown are starting prices and the final cost
+                may vary depending on hair length, thickness, and service complexity.
+              </label>
+            )}
             <div className="mt-6">
               <button
-                disabled={!canContinue || loading}
+                disabled={!canContinue || loading || (selection.selected.length > 0 && !priceAccepted)}
                 onClick={() => {
                   if (step < 2) return goNext();
                   setSubmitTick((t) => t + 1);
                 }}
                 className={`w-full px-5 py-3 rounded-full font-bold text-white transition ${
-                  !canContinue || loading
+                  !canContinue || loading || (selection.selected.length > 0 && !priceAccepted)
                     ? "bg-[#7a3b44]/25 cursor-not-allowed"
                     : "bg-[#55203d] hover:brightness-110"
                 }`}
@@ -314,35 +324,50 @@ export default function Booking() {
         </div>
       </div>
 
-      {/* Mobile bottom bar */}
-      <div className="sm:hidden sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <div className="text-sm font-display font-bold text-[#7a3b44]">
-              {selection.selected.length} service(s) • ${selection.total}
-            </div>
-            <div className="text-xs text-gray-500">
-              Est. {totalBlockedMinutes} min
-              {bookingTime ? " • time selected" : ""}
-            </div>
-          </div>
+        {/* Mobile bottom bar */}
+        <div className="sm:hidden sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="text-sm font-display font-bold text-[#7a3b44]">
+                  {selection.selected.length} service(s) • ${selection.total}
+                </div>
+                <div className="text-xs text-gray-500">
+                  Est. {totalBlockedMinutes} min
+                  {bookingTime ? " • time selected" : ""}
+                </div>
+              </div>
 
-          <button
-            disabled={!canContinue || loading}
-            onClick={() => {
-              if (step < 2) return goNext();
-              setSubmitTick((t) => t + 1);
-            }}
-            className={`px-5 py-2.5 rounded-full font-bold text-white transition whitespace-nowrap ${
-              !canContinue || loading
-                ? "bg-[#7a3b44]/25 cursor-not-allowed"
-                : "bg-[#55203d] hover:brightness-110"
-            }`}
-          >
-            {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
-          </button>
+              <button
+                disabled={!canContinue || loading || (selection.selected.length > 0 && !priceAccepted)}
+                onClick={() => {
+                  if (step < 2) return goNext();
+                  setSubmitTick((t) => t + 1);
+                }}
+                className={`px-5 py-2.5 rounded-full font-bold text-white transition whitespace-nowrap ${
+                  !canContinue || loading || (selection.selected.length > 0 && !priceAccepted)
+                    ? "bg-[#7a3b44]/25 cursor-not-allowed"
+                    : "bg-[#55203d] hover:brightness-110"
+                }`}
+              >
+                {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
+              </button>
+            </div>
+
+            {selection.selected.length > 0 && (
+              <label className="flex items-start gap-2 mt-3 text-[11px] text-gray-600 leading-5">
+                <input
+                  type="checkbox"
+                  checked={priceAccepted}
+                  onChange={(e) => setPriceAccepted(e.target.checked)}
+                  className="mt-[2px]"
+                />
+                I understand that the prices shown are starting prices and the final cost
+                may vary depending on hair length, thickness, and service complexity.
+              </label>
+            )}
+          </div>
         </div>
-      </div>
 
       {/* Final popup */}
       {showFinalPopup && bookingData && (
