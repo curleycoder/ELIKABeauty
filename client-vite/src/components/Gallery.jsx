@@ -2,11 +2,19 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams, Link } from "react-router-dom";
 
-const GALLERY_HERO = "/images/gallery-hero.webp";
+// const GALLERY_HERO = "/images/gallery-hero.webp";
 
 const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 const SITE_NAME = "Elika Beauty";
 const SITE_ORIGIN = "https://elikabeauty.ca";
+
+const PHONE_TEL = "+16040000000";
+const PHONE_DISPLAY = "(604) 000-0000";
+
+const MAPS_URL =
+  "https://maps.google.com/?q=Elika+Beauty+Burnaby";
+
+
 
 /* ---------------- helpers ---------------- */
 
@@ -105,9 +113,11 @@ export default function Gallery() {
   useEffect(() => {
     let mounted = true;
 
-    async function loadGallery() {
-      try {
-        const res = await fetch(`${baseURL}/api/gallery`);
+async function loadGallery() {
+  try {
+    setStatus("loading");
+
+    const res = await fetch(`${baseURL}/api/gallery`);
         const data = await res.json();
 
         if (!mounted) return;
@@ -193,7 +203,7 @@ export default function Gallery() {
 
       <section className="relative w-full overflow-hidden">
   <img
-    src={GALLERY_HERO}
+    src={"/images/gallery-hero.webp"}
     alt="Elika Beauty gallery results in Burnaby"
     className="h-[260px] w-full object-cover sm:h-[360px] lg:h-[520px]"
     loading="eager"
