@@ -119,7 +119,9 @@ const isActive = (item) => {
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className="block w-full text-left py-2 border-b border-[#572a31]/20 last:border-b-0 hover:text-black transition"
+              className={`block w-full text-left py-2 border-b border-[#572a31]/20 last:border-b-0 transition ${
+  isActive(item) ? "underline underline-offset-4 text-black" : "hover:text-black"
+}`}
             >
               {item.name}
             </button>
