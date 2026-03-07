@@ -9,8 +9,9 @@ const PHONE_TEL = "+16044383727";
 const PHONE_DISPLAY = "(604) 438-3727";
 
 const MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=" +
-  encodeURIComponent("3790 Canada Way #102, Burnaby, BC V5G 1G4 Elika Beauty");
+  "https://www.google.com/maps/place/ELIKA+BEAUTY+(Tangles+Hair+Design)/";
+
+
 
 const BASE_COLOR_FROM = 70;
 

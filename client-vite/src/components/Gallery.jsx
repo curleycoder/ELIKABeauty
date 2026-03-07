@@ -11,11 +11,8 @@ const SITE_ORIGIN = "https://elikabeauty.ca";
 const PHONE_TEL = "+16044383727";
 const PHONE_DISPLAY = "(604) 438-3727";
 
-const ADDRESS_LINE = "3790 Canada Way #102, Burnaby, BC V5G 1G4";
-
 const MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=" +
-  encodeURIComponent(`${ADDRESS_LINE} Elika Beauty`);
+  "https://www.google.com/maps/place/ELIKA+BEAUTY+(Tangles+Hair+Design)/";
 
 
 
@@ -214,7 +211,7 @@ async function loadGallery() {
 
   <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
 
-  <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4 sm:bottom-0 sm:px-6 sm:pb-4">
+  <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4 sm:bottom-0 sm:px-6 sm:pb-4 pt-14">
     <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
       Elika Beauty • Burnaby
     </p>
@@ -249,9 +246,7 @@ async function loadGallery() {
     </div>
 
     <p className="max-w-2xl pt-2 text-sm leading-5 text-white/90 sm:mt-4 sm:text-base sm:leading-7">
-      Explore real client results at Elika Beauty in Burnaby. Browse balayage,
-      highlights, hair colour, keratin treatments, microblading, threading,
-      massage, and facial services.
+      Explore real client results at Elika Beauty in Burnaby.
     </p>
   </div>
 </section>

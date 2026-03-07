@@ -12,8 +12,9 @@ const LOCATION_NOTE = "Edward Jones Plaza";
 const PARKING_NOTE = "Plaza parking available • Pay parking on street";
 
 const MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=" +
-  encodeURIComponent(`${ADDRESS_LINE} Elika Beauty`);
+  "https://www.google.com/maps/place/ELIKA+BEAUTY+(Tangles+Hair+Design)/";
+
+
 
 export default function HairSalonBurnaby() {
   const pageTitle = `Hair Salon in Burnaby | ${SITE_NAME}`;

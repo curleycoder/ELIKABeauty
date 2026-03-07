@@ -7,13 +7,13 @@ const SITE_ORIGIN = "https://elikabeauty.ca";
 const PHONE_TEL = "+16044383727";
 const PHONE_DISPLAY = "(604) 438-3727";
 
-const ADDRESS_LINE = "3790 Canada Way #102, Burnaby, BC V5G 1G4";
 const LOCATION_NOTE = "Edward Jones Plaza";
 const PARKING_NOTE = "Plaza parking available • Pay parking on street";
 
 const MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=" +
-  encodeURIComponent(`${ADDRESS_LINE} Elika Beauty`);
+  "https://www.google.com/maps/place/ELIKA+BEAUTY+(Tangles+Hair+Design)/";
+
+
 
 export default function HairColorBurnaby() {
   const pageTitle = `Hair Color in Burnaby | Balayage, Highlights, Root Color & More | ${SITE_NAME}`;
