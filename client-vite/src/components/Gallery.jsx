@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams, Link } from "react-router-dom";
 
-const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
+const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 const SITE_NAME = "Elika Beauty";
 const SITE_ORIGIN = "https://elikabeauty.ca";
 
@@ -41,105 +41,46 @@ function normalizeAlt(item, title, category) {
 }
 
 function normalizeGalleryItems(data) {
-  const rawItems = Array.isArray(data) ? data : Array.isArray(data?.images) ? data.images : [];
+  const rawItems = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.images)
+    ? data.images
+    : [];
 
   return rawItems.map((item, index) => {
     const category = normalizeCategory(item);
     const title = normalizeTitle(item, category, index);
-
-    const beforeImage =
-      item?.beforeImage ||
-      item?.before ||
-      item?.images?.before ||
-      item?.beforeUrl ||
-      "";
-
-    const afterImage =
-      item?.afterImage ||
-      item?.after ||
-      item?.image ||
-      item?.full ||
-      item?.preview ||
-      item?.images?.after ||
-      item?.afterUrl ||
-      item?.thumb ||
-      "";
-
-    const singleImage =
-      item?.image ||
-      item?.full ||
-      item?.preview ||
-      item?.thumb ||
-      afterImage ||
-      "";
+    const image = item?.image || item?.full || item?.preview || "";
 
     return {
       ...item,
       _cat: category,
       _title: title,
       _alt: normalizeAlt(item, title, category),
-      _before: beforeImage ? joinURL(baseURL, beforeImage) : "",
-      _after: afterImage ? joinURL(baseURL, afterImage) : "",
-      _single: singleImage ? joinURL(baseURL, singleImage) : "",
-      _id: item?._id || item?.id || `${category}-${index}`,
+      _single: image ? joinURL(baseURL, image) : "",
+      _id: item?.id || item?._id || `${category}-${index}`,
     };
   });
 }
-
 function GalleryCard({ item, onOpen }) {
-  const hasBeforeAfter = !!item._before && !!item._after;
-  const displayImage = hasBeforeAfter ? item._after : item._single;
-
   return (
-    <article className="group overflow-hidden rounded-[28px] border border-[#572a31]/12 bg-white shadow-sm hover:shadow-xl transition-all duration-300">
+    <article className="group overflow-hidden rounded-[28px] border border-[#572a31]/12 bg-white shadow-sm transition-all duration-300 hover:shadow-xl">
       <button
         type="button"
         onClick={() => onOpen(item)}
         className="block w-full text-left"
       >
-        <div className="relative">
-          {hasBeforeAfter ? (
-            <div className="grid grid-cols-2">
-              <div className="relative h-64 sm:h-72 overflow-hidden border-r border-white/20">
-                <img
-                  src={item._before}
-                  alt={`Before - ${item._alt}`}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#572a31]">
-                  Before
-                </div>
-              </div>
-
-              <div className="relative h-64 sm:h-72 overflow-hidden">
-                <img
-                  src={item._after}
-                  alt={`After - ${item._alt}`}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute right-3 top-3 rounded-full bg-[#572a31]/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
-                  After
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="relative h-64 sm:h-72 overflow-hidden">
-              <img
-                src={displayImage}
-                alt={item._alt}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#572a31]">
-                Result
-              </div>
-            </div>
-          )}
+        <div className="relative h-64 overflow-hidden sm:h-72">
+          <img
+            src={item._single}
+            alt={item._alt}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#572a31]">
+            Result
+          </div>
         </div>
 
         <div className="p-5">
@@ -151,12 +92,6 @@ function GalleryCard({ item, onOpen }) {
             {item._title}
           </h3>
 
-          {item?.description && (
-            <p className="mt-2 text-sm leading-6 text-[#572a31]/75">
-              {item.description}
-            </p>
-          )}
-
           <div className="mt-4 inline-flex items-center text-sm font-medium text-[#572a31] underline underline-offset-4">
             View larger
           </div>
@@ -165,15 +100,12 @@ function GalleryCard({ item, onOpen }) {
     </article>
   );
 }
-
 function GalleryLightbox({ item, onClose }) {
   if (!item) return null;
 
-  const hasBeforeAfter = !!item._before && !!item._after;
-
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center px-4 py-6">
-      <div className="relative w-full max-w-6xl rounded-[28px] bg-white shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+      <div className="relative w-full max-w-5xl overflow-hidden rounded-[28px] bg-white shadow-2xl">
         <button
           type="button"
           onClick={onClose}
@@ -186,50 +118,17 @@ function GalleryLightbox({ item, onClose }) {
           <div className="text-xs uppercase tracking-[0.18em] text-[#572a31]/60">
             {item._cat}
           </div>
-          <h3 className="mt-2 text-2xl sm:text-3xl font-theseason text-[#3D0007]">
+
+          <h3 className="mt-2 text-2xl font-theseason text-[#3D0007] sm:text-3xl">
             {item._title}
           </h3>
 
-          {item?.description && (
-            <p className="mt-3 max-w-3xl text-sm sm:text-base leading-7 text-gray-700">
-              {item.description}
-            </p>
-          )}
-
-          <div className="mt-6">
-            {hasBeforeAfter ? (
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="overflow-hidden rounded-[22px] border">
-                  <div className="px-4 py-3 text-sm font-semibold text-[#572a31] border-b bg-[#F8F7F1]">
-                    Before
-                  </div>
-                  <img
-                    src={item._before}
-                    alt={`Before - ${item._alt}`}
-                    className="w-full h-[320px] sm:h-[460px] object-cover"
-                  />
-                </div>
-
-                <div className="overflow-hidden rounded-[22px] border">
-                  <div className="px-4 py-3 text-sm font-semibold text-[#572a31] border-b bg-[#F8F7F1]">
-                    After
-                  </div>
-                  <img
-                    src={item._after}
-                    alt={`After - ${item._alt}`}
-                    className="w-full h-[320px] sm:h-[460px] object-cover"
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="overflow-hidden rounded-[22px] border">
-                <img
-                  src={item._single}
-                  alt={item._alt}
-                  className="w-full h-[320px] sm:h-[520px] object-cover"
-                />
-              </div>
-            )}
+          <div className="mt-6 overflow-hidden rounded-[22px] border">
+            <img
+              src={item._single}
+              alt={item._alt}
+              className="h-[320px] w-full object-cover sm:h-[520px]"
+            />
           </div>
         </div>
       </div>
@@ -284,8 +183,9 @@ export default function Gallery() {
     return allImages.filter((img) => img._cat === category);
   }, [allImages, category]);
 
-  const featuredImage = filteredImages[0]?._after || filteredImages[0]?._single || "/images/gallery/gallery-hero.jpg";
-
+const featuredImage =
+  filteredImages[0]?._single || "/images/gallery/gallery-hero.jpg";
+  
   const pageTitle =
     category === "All"
       ? `Before and After Gallery in Burnaby | ${SITE_NAME}`
