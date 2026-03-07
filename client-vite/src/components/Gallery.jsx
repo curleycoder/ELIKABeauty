@@ -8,11 +8,14 @@ const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 const SITE_NAME = "Elika Beauty";
 const SITE_ORIGIN = "https://elikabeauty.ca";
 
-const PHONE_TEL = "+16040000000";
-const PHONE_DISPLAY = "(604) 000-0000";
+const PHONE_TEL = "+16044383727";
+const PHONE_DISPLAY = "(604) 438-3727";
+
+const ADDRESS_LINE = "3790 Canada Way #102, Burnaby, BC V5G 1G4";
 
 const MAPS_URL =
-  "https://maps.google.com/?q=Elika+Beauty+Burnaby";
+  "https://www.google.com/maps/search/?api=1&query=" +
+  encodeURIComponent(`${ADDRESS_LINE} Elika Beauty`);
 
 
 
