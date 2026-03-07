@@ -7,7 +7,6 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 
 import Home from "./pages/Home.jsx";
 import Booking from "./pages/Booking.jsx";
-import Product from "./pages/Product.jsx";
 import ArticlePage from "./pages/Article.jsx";
 import ArticlesPage from "./pages/ArticlesPage.jsx";
 import Gallery from "./components/Gallery.jsx";
@@ -49,7 +48,6 @@ export default function App() {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/articles" element={<ArticlesPage />} />
         <Route path="/articles/:slug" element={<ArticlePage />} />
-        <Route path="/product" element={<Product />} />
         <Route path="/about" element={<AboutMe />} />
         <Route path="/admin-bookings-secret" element={<AdminBookings />} />
         <Route path="/instagram" element={<Instagram />} />
