@@ -57,6 +57,13 @@ const navItems = [
   { name: "Articles" },
   { name: "About" },
 ];
+const isActive = (item) => {
+  const path = routeMap[item.name];
+  if (!path) return false;
+
+  if (path === "/") return location.pathname === "/";
+  return location.pathname === path || location.pathname.startsWith(path + "/");
+};
 
   const handleNavClick = (item) => {
     if (item.scroll) return goToSection(item.scroll);
@@ -96,7 +103,9 @@ const navItems = [
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className="px-3 py-2 rounded-md hover:underline transition"
+              className={`px-3 py-2 rounded-md transition ${
+  isActive(item) ? "underline underline-offset-4" : "hover:underline"
+}`}
             >
               {item.name}
             </button>
