@@ -27,13 +27,10 @@ export default function Terms() {
       </p>
 
       <p>
-        Elika Beauty is not responsible for damages or losses related to the
+        ELIKA BEAUTY is not responsible for damages or losses related to the
         use of this website.
       </p>
-      
     </div>
     
-
-
   );
 }
