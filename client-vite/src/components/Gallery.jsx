@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams, Link } from "react-router-dom";
+
 const GALLERY_HERO = "/images/gallery-hero.webp";
 
 const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 const SITE_NAME = "Elika Beauty";
 const SITE_ORIGIN = "https://elikabeauty.ca";
+
+/* ---------------- helpers ---------------- */
 
 function joinURL(base, path) {
   if (!path) return "";
@@ -24,23 +27,6 @@ function normalizeCategory(item) {
   return String(raw).trim() || "Other";
 }
 
-function normalizeTitle(item, fallbackCategory, index) {
-  return (
-    item?.title ||
-    item?.name ||
-    item?.caption ||
-    `${fallbackCategory} Result ${index + 1}`
-  );
-}
-
-function normalizeAlt(item, title, category) {
-  return (
-    item?.alt ||
-    item?.seoAlt ||
-    `${title} - ${category} result at Elika Beauty in Burnaby`
-  );
-}
-
 function normalizeGalleryItems(data) {
   const rawItems = Array.isArray(data)
     ? data
@@ -50,92 +36,60 @@ function normalizeGalleryItems(data) {
 
   return rawItems.map((item, index) => {
     const category = normalizeCategory(item);
-    const title = normalizeTitle(item, category, index);
-    const image = item?.image || item?.full || item?.preview || "";
+    const image = item?.image || "";
 
     return {
-      ...item,
       _cat: category,
-      _title: title,
-      _alt: normalizeAlt(item, title, category),
       _single: image ? joinURL(baseURL, image) : "",
-      _id: item?.id || item?._id || `${category}-${index}`,
+      _id: item?.id || `${category}-${index}`,
     };
   });
 }
+
+/* ---------------- gallery card ---------------- */
+
 function GalleryCard({ item, onOpen }) {
   return (
-    <article className="group overflow-hidden rounded-[28px] border border-[#572a31]/12 bg-white shadow-sm transition-all duration-300 hover:shadow-xl">
-      <button
-        type="button"
-        onClick={() => onOpen(item)}
-        className="block w-full text-left"
-      >
-        <div className="relative h-64 overflow-hidden sm:h-72">
+    <article className="overflow-hidden rounded-[26px] bg-white shadow-sm transition hover:shadow-lg">
+      <button onClick={() => onOpen(item)} className="block w-full">
+        <div className="relative aspect-[9/16] overflow-hidden">
           <img
             src={item._single}
-            alt={item._alt}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            alt=""
             loading="lazy"
             decoding="async"
+            className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
           />
-          <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#572a31]">
-            Result
-          </div>
-        </div>
-
-        <div className="p-5">
-          <div className="text-[11px] uppercase tracking-[0.18em] text-[#572a31]/55">
-            {item._cat}
-          </div>
-
-          <h3 className="mt-2 text-xl font-theseason text-[#3D0007]">
-            {item._title}
-          </h3>
-
-          <div className="mt-4 inline-flex items-center text-sm font-medium text-[#572a31] underline underline-offset-4">
-            View larger
-          </div>
         </div>
       </button>
     </article>
   );
 }
+
+/* ---------------- lightbox ---------------- */
+
 function GalleryLightbox({ item, onClose }) {
   if (!item) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
-      <div className="relative w-full max-w-5xl overflow-hidden rounded-[28px] bg-white shadow-2xl">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 z-20 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#572a31] shadow"
-        >
-          Close
-        </button>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 px-4">
+      <button
+        onClick={onClose}
+        className="absolute right-6 top-6 z-20 rounded-full bg-white px-4 py-2 text-sm font-medium"
+      >
+        Close
+      </button>
 
-        <div className="p-6 sm:p-8">
-          <div className="text-xs uppercase tracking-[0.18em] text-[#572a31]/60">
-            {item._cat}
-          </div>
-
-          <h3 className="mt-2 text-2xl font-theseason text-[#3D0007] sm:text-3xl">
-            {item._title}
-          </h3>
-
-          <div className="mt-6 overflow-hidden rounded-[22px] border">
-            <img
-              src={item._single}
-              alt={item._alt}
-              className="h-[320px] w-full object-cover sm:h-[520px]"
-            />
-          </div>
-        </div>
-      </div>
+      <img
+        src={item._single}
+        alt=""
+        className="max-h-[92vh] w-auto object-contain"
+      />
     </div>
   );
 }
+
+/* ---------------- main gallery ---------------- */
 
 export default function Gallery() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -146,13 +100,14 @@ export default function Gallery() {
   const [status, setStatus] = useState("loading");
   const [selectedItem, setSelectedItem] = useState(null);
 
+  /* load gallery */
+
   useEffect(() => {
     let mounted = true;
 
     async function loadGallery() {
       try {
-        setStatus("loading");
-        const res = await fetch(`${baseURL}/api/gallery`, { cache: "no-store" });
+        const res = await fetch(`${baseURL}/api/gallery`);
         const data = await res.json();
 
         if (!mounted) return;
@@ -162,7 +117,6 @@ export default function Gallery() {
         setStatus("success");
       } catch (err) {
         if (!mounted) return;
-        console.error("Failed to load gallery images:", err);
         setStatus("error");
       }
     }
@@ -174,9 +128,11 @@ export default function Gallery() {
     };
   }, []);
 
+  /* categories */
+
   const categories = useMemo(() => {
     const set = new Set(allImages.map((img) => img._cat));
-    return ["All", ...Array.from(set).sort((a, b) => a.localeCompare(b))];
+    return ["All", ...Array.from(set)];
   }, [allImages]);
 
   const filteredImages = useMemo(() => {
@@ -184,207 +140,123 @@ export default function Gallery() {
     return allImages.filter((img) => img._cat === category);
   }, [allImages, category]);
 
+  /* SEO */
 
-const pageTitle =
-  category === "All"
-    ? `Gallery in Burnaby | ${SITE_NAME}`
-    : `${category} Gallery in Burnaby | ${SITE_NAME}`;
+  const pageTitle =
+    category === "All"
+      ? `Gallery | ${SITE_NAME}`
+      : `${category} Gallery | ${SITE_NAME}`;
 
-const pageDescription =
-  category === "All"
-    ? "Explore real beauty and hair service results at Elika Beauty in Burnaby. Browse balayage, highlights, hair colour, keratin, microblading, threading, facial treatments, and more."
-    : `Explore real ${category.toLowerCase()} results at Elika Beauty in Burnaby. Browse client work and service photos in our gallery.`;
+  const pageDescription =
+    "Explore real client results and beauty services at Elika Beauty in Burnaby.";
 
-const pageUrl =
-  category === "All"
-    ? `${SITE_ORIGIN}/gallery`
-    : `${SITE_ORIGIN}/gallery?cat=${encodeURIComponent(category)}`;
+  const pageUrl =
+    category === "All"
+      ? `${SITE_ORIGIN}/gallery`
+      : `${SITE_ORIGIN}/gallery?cat=${encodeURIComponent(category)}`;
 
-const itemListJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  name: pageTitle,
-  description: pageDescription,
-  url: pageUrl,
-};
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+  };
 
-const pickCategory = useCallback(
-  (cat) => {
-    setCategory(cat);
-    setSearchParams(cat === "All" ? {} : { cat });
-    setSelectedItem(null);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  },
-  [setSearchParams]
-);
+  const pickCategory = useCallback(
+    (cat) => {
+      setCategory(cat);
+      setSearchParams(cat === "All" ? {} : { cat });
+      setSelectedItem(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [setSearchParams]
+  );
 
-return (
-  <>
-    <Helmet>
-      <title>{pageTitle}</title>
-      <meta name="description" content={pageDescription} />
-      <link rel="canonical" href={pageUrl} />
+  /* ---------------- render ---------------- */
 
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={pageTitle} />
-      <meta property="og:description" content={pageDescription} />
-      <meta property="og:url" content={pageUrl} />
-      <meta property="og:site_name" content={SITE_NAME} />
+  return (
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={pageUrl} />
 
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={pageTitle} />
-      <meta name="twitter:description" content={pageDescription} />
+        <meta property="og:image" content={`${SITE_ORIGIN}${GALLERY_HERO}`} />
 
-<meta property="og:image" content={`${SITE_ORIGIN}${GALLERY_HERO}`} />
-      <script type="application/ld+json">
-        {JSON.stringify(itemListJsonLd)}
-      </script>
-    </Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(itemListJsonLd)}
+        </script>
+      </Helmet>
 
-    <section className="relative w-full overflow-hidden">
-      <img
-        src={GALLERY_HERO}
-        alt="Elika Beauty gallery hero"
-        className="h-[300px] w-full object-cover sm:h-[420px] lg:h-[520px]"
-        loading="eager"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/75 via-[#2e1118]/25 to-transparent" />
+      {/* hero */}
 
-      <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-10 sm:px-6">
-        <p className="text-xs uppercase tracking-[0.18em] text-white/80">
-          Elika Beauty • Burnaby
-        </p>
+      <section className="relative w-full overflow-hidden">
+        <img
+          src={GALLERY_HERO}
+          alt="Elika Beauty gallery"
+          className="h-[320px] w-full object-cover sm:h-[420px] lg:h-[520px]"
+        />
 
-        <h1 className="mt-3 max-w-3xl text-3xl font-theseason font-bold text-white sm:text-4xl lg:text-5xl">
-          Gallery
-        </h1>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/90 sm:text-base">
-          Browse real client results by category and explore service photos from Elika Beauty.
-        </p>
-      </div>
-    </section>
+        <div className="absolute bottom-10 left-1/2 w-full max-w-6xl -translate-x-1/2 px-6 text-white">
+          <h1 className="text-3xl font-theseason sm:text-4xl lg:text-5xl">
+            Gallery
+          </h1>
 
-      <section id="gallery-page" className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="flex flex-wrap gap-3">
+          <p className="mt-3 max-w-xl text-sm opacity-90 sm:text-base">
+            Explore real client results and beauty services at Elika Beauty.
+          </p>
+        </div>
+      </section>
+
+      {/* gallery */}
+
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        {/* categories */}
+
+        <div className="mb-8 flex flex-wrap gap-3">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => pickCategory(cat)}
-              type="button"
-              className={[
-                "rounded-full px-4 py-2 text-sm transition border",
+              className={`rounded-full border px-4 py-2 text-sm transition ${
                 cat === category
-                  ? "bg-[#572a31] text-white border-[#572a31]"
-                  : "bg-white text-[#572a31] border-[#572a31]/15 hover:border-[#572a31]/35",
-              ].join(" ")}
+                  ? "border-[#572a31] bg-[#572a31] text-white"
+                  : "border-[#572a31]/20 text-[#572a31]"
+              }`}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        <div className="mt-8">
-          {status === "loading" && (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="overflow-hidden rounded-[28px] border border-[#572a31]/10 bg-white animate-pulse"
-                >
-                  <div className="h-64 bg-[#f3ece7]" />
-                  <div className="p-5">
-                    <div className="h-3 w-20 bg-[#f3ece7] rounded" />
-                    <div className="mt-3 h-6 w-2/3 bg-[#f3ece7] rounded" />
-                    <div className="mt-3 h-4 w-full bg-[#f3ece7] rounded" />
-                    <div className="mt-2 h-4 w-4/5 bg-[#f3ece7] rounded" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* grid */}
 
-          {status === "error" && (
-            <div className="rounded-[28px] border border-red-200 bg-red-50 p-6 text-red-700">
-              Gallery images could not be loaded right now.
-            </div>
-          )}
+        {status === "loading" && <p>Loading...</p>}
 
-          {status === "success" && filteredImages.length === 0 && (
-            <div className="rounded-[28px] border border-[#572a31]/10 bg-[#F8F7F1] p-8 text-center">
-              <h2 className="text-2xl font-theseason text-[#3D0007]">
-                No images found
-              </h2>
-              <p className="mt-3 text-gray-600">
-                There are no gallery items in this category yet.
-              </p>
-            </div>
-          )}
+        {status === "error" && <p>Gallery could not load.</p>}
 
-          {status === "success" && filteredImages.length > 0 && (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredImages.map((item) => (
-                <GalleryCard
-                  key={item._id}
-                  item={item}
-                  onOpen={setSelectedItem}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        <section className="mt-16 rounded-[28px] border border-[#572a31]/12 bg-[#F8F7F1] p-6 sm:p-8">
-          <h2 className="text-2xl sm:text-3xl font-theseason text-[#3D0007]">
-            Looking for a specific service?
-          </h2>
-
-          <p className="mt-3 max-w-3xl text-gray-700 leading-7">
-            Explore more details, pricing guidance, and booking information on our service pages.
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              to="/services"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
-            >
-              All Services
-            </Link>
-            <Link
-              to="/balayage-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
-            >
-              Balayage
-            </Link>
-            <Link
-              to="/highlights-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
-            >
-              Highlights
-            </Link>
-            <Link
-              to="/keratin-treatment-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
-            >
-              Keratin
-            </Link>
-            <Link
-              to="/microblading-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
-            >
-              Microblading
-            </Link>
-            <Link
-              to="/booking"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] hover:border-[#572a31]/35 transition"
-            >
-              Book Appointment
-            </Link>
+        {status === "success" && (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {filteredImages.map((item) => (
+              <GalleryCard
+                key={item._id}
+                item={item}
+                onOpen={setSelectedItem}
+              />
+            ))}
           </div>
-        </section>
+        )}
       </section>
 
-      <GalleryLightbox item={selectedItem} onClose={() => setSelectedItem(null)} />
+      {/* lightbox */}
+
+      <GalleryLightbox
+        item={selectedItem}
+        onClose={() => setSelectedItem(null)}
+      />
     </>
   );
 }
