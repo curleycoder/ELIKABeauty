@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 const HERO_SLIDES = [
   { src: "/assets/salon.webp", alt: "Elika salon" },
   { src: "/assets/colour-hero.webp", alt: "Elika highlight" },
-  { src: "/assets/hair-cut.webp", alt: "Elika haircut" },
   { src: "/assets/balayage-hero.webp", alt: "Elika balayage" },
-   { src: "/assets/micro-hero.webp", alt: "Elika Microblading" },
 ];
 
 export default function HeroSection() {
