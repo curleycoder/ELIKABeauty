@@ -55,6 +55,7 @@ const services = [
   {
     name: "Perm",
     price: 120,
+    fromPrice: true,
     duration: 180,
     category: "Hair",
     description: "Add curls or waves to your hair.",
@@ -119,7 +120,7 @@ const services = [
   },
   {
     name: "Facial Treatment",
-    price: 85,
+    price: 80,
     duration: 60,
     category: "Face",
     description: "Deep cleansing facial with steam, mask, and skin-refreshing care.",
@@ -135,21 +136,22 @@ const services = [
   },
   {
     name: "Relaxation / Body Massage",
-    price: 90,
+    price: 80,
     duration: 60,
     category: "Spa",
     description: "Spa-style body massage focused on relaxation and stress relief.",
   },
   {
     name: "Men’s Haircut",
-    price: 25,
+    price: 30,
+    fromPrice: true,
     duration: 30,
     category: "Men",
     description: "Wash available with additional charge.",
   },
   {
     name: "Men’s Haircut + Wash",
-    price: 35,
+    price: 45,
     duration: 45,
     category: "Men",
     description: "Includes wash and haircut.",
