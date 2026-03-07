@@ -46,7 +46,7 @@ const routeMap = {
   Booking: "/booking",
   Gallery: "/gallery",
   Articles: "/articles",
-  // "Products (In-Salon)": "/product",
+  About: "/about",
 };
 
 const navItems = [
@@ -55,8 +55,7 @@ const navItems = [
   { name: "Booking" },
   { name: "Gallery" },
   { name: "Articles" },
-  // { name: "Products (In-Salon)" },
-  { name: "About Me", scroll: "about-section" },
+  { name: "About" },
 ];
 
   const handleNavClick = (item) => {

@@ -5,21 +5,22 @@ const IMAGES = Array.from({ length: 9 }, (_, i) => `/instagram/${i + 1}.jpg`);
 
 export default function InstagramMasonry() {
   return (
-    <section className="py-14 bg-[#faeddd]">
+    <section className="py-5">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-3xl sm:text-4xl font-theseason text-[#572a31]">
+          <h2 className="text-2xl sm:text-4xl font-theseason text-[#572a31]">
             Follow Us on Instagram
           </h2>
-
+        </div>
+        <div className="mt-3 sm:mt-10 text-center">
           <a
             href={IG_URL}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 mt-3 text-sm sm:text-base font-semibold tracking-widest text-[#7a3b44] hover:underline"
+            className="inline-flex items-center gap-2 rounded-md bg-[#440008] hover:bg-[#572a31] px-7 py-3 text-sm sm:text-base font-semibold text-[#faeddd] transition"
           >
-            <FaInstagram className="text-lg" />
+            <FaInstagram className="text-base" />
             @elikabeauty.ca
           </a>
         </div>
@@ -77,17 +78,7 @@ export default function InstagramMasonry() {
         </div>
 
         {/* CTA */}
-        <div className="mt-8 sm:mt-10 text-center">
-          <a
-            href={IG_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-md bg-[#FE8269] hover:bg-[#572a31] px-7 py-3 text-sm sm:text-base font-semibold text-[#faeddd] transition"
-          >
-            <FaInstagram className="text-base" />
-            VIEW MORE ON INSTAGRAM
-          </a>
-        </div>
+        
       </div>
     </section>
   );

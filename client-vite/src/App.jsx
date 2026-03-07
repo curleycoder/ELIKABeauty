@@ -11,7 +11,7 @@ import Product from "./pages/Product.jsx";
 import ArticlePage from "./pages/Article.jsx";
 import ArticlesPage from "./pages/ArticlesPage.jsx";
 import Gallery from "./components/Gallery.jsx";
-import AboutMe from "./components/AboutMe.jsx";
+import AboutMe from "./pages/AboutMe.jsx";
 import AdminBookings from "./pages/AdminBookings.jsx";
 import Instagram from "./components/Instagram.jsx";
 import Services from "./pages/Services.jsx";
@@ -24,13 +24,16 @@ import Perm from "./pages/PermBurnaby.jsx";
 import WomensHaircut from "./pages/WomensHaircutBurnaby.jsx";
 import HairSalonBurnaby from "./pages/HairSalonBurnaby";
 import HairColorBurnaby from "./pages/HairColorBurnaby";
-import Contact from "./pages/Contact";
 import MicrobladingBurnaby from "./pages/MicrobladingBurnaby";
 import ThreadingBurnaby from "./pages/ThreadingBurnaby";
 import RelaxationMassageBurnaby from "./pages/MassageBurnaby";
 import FacialBurnaby from "./pages/FacialBurnaby";
 
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+
 import { SpeedInsights } from "@vercel/speed-insights/react";
+
 
 export default function App() {
   const { pathname } = useLocation();
@@ -47,7 +50,7 @@ export default function App() {
         <Route path="/articles" element={<ArticlesPage />} />
         <Route path="/articles/:slug" element={<ArticlePage />} />
         <Route path="/product" element={<Product />} />
-        <Route path="/aboutme" element={<AboutMe />} />
+        <Route path="/about" element={<AboutMe />} />
         <Route path="/admin-bookings-secret" element={<AdminBookings />} />
         <Route path="/instagram" element={<Instagram />} />
 
@@ -63,14 +66,17 @@ export default function App() {
         <Route path="/mens-haircut-burnaby" element={<MensHaircut />} />
         <Route path="/hair-salon-burnaby" element={<HairSalonBurnaby />} />
         <Route path="/hair-color-burnaby" element={<HairColorBurnaby />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/microblading-burnaby" element={<MicrobladingBurnaby />} />
         <Route path="/threading-burnaby" element={<ThreadingBurnaby />} />
         <Route
-  path="/relaxation-body-massage-burnaby"
-  element={<RelaxationMassageBurnaby />}
-/>
-<Route path="/facial-burnaby" element={<FacialBurnaby />}/>
+          path="/relaxation-body-massage-burnaby"
+          element={<RelaxationMassageBurnaby />}
+        />
+        <Route path="/facial-burnaby" element={<FacialBurnaby />}/>
+
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+        
       </Routes>
 
       <SpeedInsights />
