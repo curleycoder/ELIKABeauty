@@ -192,24 +192,56 @@ export default function Gallery() {
       {/* hero */}
 
       <section className="relative w-full overflow-hidden">
-        <img
-          src={GALLERY_HERO}
-          alt="Elika Beauty gallery"
-          className="h-[320px] w-full object-cover sm:h-[420px] lg:h-[520px]"
-        />
+  <img
+    src={GALLERY_HERO}
+    alt="Elika Beauty gallery results in Burnaby"
+    className="h-[260px] w-full object-cover sm:h-[360px] lg:h-[520px]"
+    loading="eager"
+  />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+  <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
 
-        <div className="absolute bottom-10 left-1/2 w-full max-w-6xl -translate-x-1/2 px-6 text-white">
-          <h1 className="text-3xl font-theseason sm:text-4xl lg:text-5xl">
-            Gallery
-          </h1>
+  <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4 sm:bottom-0 sm:px-6 sm:pb-4">
+    <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
+      Elika Beauty • Burnaby
+    </p>
 
-          <p className="mt-3 max-w-xl text-sm opacity-90 sm:text-base">
-            Explore real client results and beauty services at Elika Beauty.
-          </p>
-        </div>
-      </section>
+    <h1 className="max-w-3xl pb-8 text-2xl font-theseason font-bold leading-tight text-white sm:mt-3 sm:text-4xl lg:text-5xl">
+      Beauty Gallery
+    </h1>
+
+    <div className="mt-6 flex flex-row gap-1 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-3">
+      <Link
+        to="/booking"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#572a31] px-3 py-1 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:px-2"
+      >
+        Book Appointment
+      </Link>
+
+      <a
+        href={`tel:${PHONE_TEL}`}
+        className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-3 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
+      >
+        {PHONE_DISPLAY}
+      </a>
+
+      <a
+        href={MAPS_URL}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/40 px-3 py-1 text-sm font-medium text-white transition hover:bg-white/10 sm:px-6"
+      >
+        Direction
+      </a>
+    </div>
+
+    <p className="max-w-2xl pt-2 text-sm leading-5 text-white/90 sm:mt-4 sm:text-base sm:leading-7">
+      Explore real client results at Elika Beauty in Burnaby. Browse balayage,
+      highlights, hair colour, keratin treatments, microblading, threading,
+      massage, and facial services.
+    </p>
+  </div>
+</section>
 
       {/* gallery */}
 
