@@ -6,9 +6,10 @@ export default function MicrobladingBurnaby() {
     <ServicePlaceholder
       slug="microblading-burnaby"
       title="Microblading in Burnaby"
-      priceText="From $350"
+      priceText="$350 total"
       durationText="~2 hours"
       intro="Professional PhiBrows microblading in Burnaby at Elika Beauty. Achieve fuller, natural-looking eyebrows with precise hair-like strokes designed for your face shape."
+      extraNote="Pricing is completed in 2 sessions: $250 for the first session and $100 for the touch-up session."
 
       heroImage={{
         src: "/images/services/microblading/microblading-hero.webp",
@@ -20,13 +21,17 @@ export default function MicrobladingBurnaby() {
         "Single-use sterile tools for maximum hygiene",
         "Precise hair-like strokes for realistic brow appearance",
         "Customized brow mapping based on your face shape",
-        "Dry healing method — no water required during healing",
+        "Dry healing method during the initial healing period",
       ]}
 
       faq={[
         {
           q: "What is PhiBrows microblading?",
           a: "PhiBrows is a specialized microblading technique that focuses on symmetry, precision, and natural hair-like strokes. It uses measurements based on facial proportions to design the most balanced brow shape.",
+        },
+        {
+          q: "How much does microblading cost?",
+          a: "Microblading is completed in 2 sessions. The first session is $250 and the touch-up session is $100.",
         },
         {
           q: "Are the tools used for microblading sterile?",
@@ -41,7 +46,6 @@ export default function MicrobladingBurnaby() {
           a: "Microblading typically lasts between 12–24 months depending on skin type, lifestyle, and aftercare. Touch-ups may be recommended to maintain color and shape.",
         },
       ]}
-
     />
   );
 }

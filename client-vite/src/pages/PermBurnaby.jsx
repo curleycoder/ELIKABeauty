@@ -7,7 +7,7 @@ export default function PermBurnaby() {
       slug="perm-burnaby"
       title="Perm in Burnaby"
       intro="Looking for a perm in Burnaby? Elika Beauty offers perm services for clients who want curls, waves, texture, or more body. We help choose the right shape and finish based on your hair type, condition, and styling goals."
-      priceText="$120"
+      priceText="From $120"
       durationText="About 3 hours"
       extraNote="Final timing and pricing can vary based on hair length, density, and the type of perm result you want."
       benefits={[

@@ -7,7 +7,7 @@ export default function MensHaircutBurnaby() {
       slug="mens-haircut-burnaby"
       title="Men’s Haircut in Burnaby"
       intro="Looking for a men’s haircut in Burnaby? Elika Beauty offers clean, practical haircuts tailored to your style, hair type, and routine. Whether you want a simple refresh, a sharper shape, or a wash and cut, we focus on a polished result that is easy to maintain."
-      priceText="$25 (Wash + Cut $35)"
+      priceText="$30 (+ Wash $45)"
       durationText="About 30–45 minutes"
       extraNote="Appointment timing may vary depending on hair length, thickness, and the level of reshaping needed."
       benefits={[
