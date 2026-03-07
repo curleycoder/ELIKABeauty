@@ -35,7 +35,7 @@ export default function RelaxationMassageBurnaby() {
         },
       ]}
       heroImage={{
-        src: "/images/services/massage/massage-hero.jpg",
+        src: "/images/services/massage/massage-hero.webp",
         alt: "Relaxation body massage service at Elika Beauty in Burnaby",
       }}
     //   galleryImages={[

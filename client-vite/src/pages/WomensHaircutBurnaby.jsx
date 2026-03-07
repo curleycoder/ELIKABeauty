@@ -34,20 +34,20 @@ export default function WomensHaircutBurnaby() {
         },
       ]}
       heroImage={{
-        src: "/images/services/haircutwoman/haircut-hero.jpg",
+        src: "/images/services/haircutwoman/haircut-hero.webp",
         alt: "Women’s haircut at Elika Beauty in Burnaby",
       }}
       galleryImages={[
         {
-          src: "/images/services/haircutwoman/haircut-1.jpg",
+          src: "/images/services/haircutwoman/haircut-1.webp",
           alt: "Layered women’s haircut result at Elika Beauty",
         },
         {
-          src: "/images/services/haircutwoman/haircut-2.jpg",
+          src: "/images/services/haircutwoman/haircut-2.webp",
           alt: "Styled women’s haircut in Burnaby",
         },
         {
-          src: "/images/services/haircutwoman/haircut-3.jpg",
+          src: "/images/services/haircutwoman/haircut-3.webp",
           alt: "Professional women’s haircut by Elika Beauty",
         },
       ]}

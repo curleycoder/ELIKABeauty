@@ -39,20 +39,20 @@ export default function KeratinTreatmentBurnaby() {
         },
       ]}
       heroImage={{
-        src: "/images/services/keratin/keratin-hero.jpg",
+        src: "/images/services/keratin/keratin-hero.webp",
         alt: "Keratin treatment smoothing service at Elika Beauty in Burnaby",
       }}
       galleryImages={[
         {
-          src: "/images/services/keratin/keratin-1.JPG",
+          src: "/images/services/keratin/keratin-1.webp",
           alt: "Smooth keratin treatment result at Elika Beauty",
         },
         {
-          src: "/images/services/keratin/keratin-2.jpg",
+          src: "/images/services/keratin/keratin-2.webp",
           alt: "Shiny smooth hair after keratin treatment in Burnaby",
         },
         {
-          src: "/images/services/keratin/keratin-3.jpg",
+          src: "/images/services/keratin/keratin-3.webp",
           alt: "Keratin smoothing treatment result by Elika Beauty",
         },
       ]}

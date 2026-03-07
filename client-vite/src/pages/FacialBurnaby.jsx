@@ -39,7 +39,7 @@ export default function FacialCareBurnaby() {
       ]}
 
       heroImage={{
-        src: "/images/services/facial/facial-hero.jpg",
+        src: "/images/services/facial/facial-hero.webp",
         alt: "Facial treatment with steam and mask at Elika Beauty in Burnaby",
       }}
 

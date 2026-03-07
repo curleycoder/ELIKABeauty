@@ -39,20 +39,20 @@ export default function HighlightsBurnaby() {
         },
       ]}
       heroImage={{
-        src: "/images/services/highlights/highlights-hero.jpg",
+        src: "/images/services/highlights/highlights-hero.webp",
         alt: "Highlights service at Elika Beauty in Burnaby",
       }}
       galleryImages={[
         {
-          src: "/images/services/highlights/highlights-1.jpg",
+          src: "/images/services/highlights/highlights-1.webp",
           alt: "Dimensional highlights result at Elika Beauty",
         },
         {
-          src: "/images/services/highlights/highlights-2.jpg",
+          src: "/images/services/highlights/highlights-2.webp",
           alt: "Bright blonde highlights in Burnaby",
         },
         {
-          src: "/images/services/highlights/highlights-3.JPG",
+          src: "/images/services/highlights/highlights-3.webp",
           alt: "Professional highlights hair color by Elika Beauty",
         },
       ]}

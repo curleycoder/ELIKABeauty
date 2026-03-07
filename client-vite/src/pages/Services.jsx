@@ -193,7 +193,7 @@ export default function Services() {
 
       <section className="relative w-full overflow-hidden">
         <img
-          src="/images/services/services-hero.jpg"
+          src="/images/services/services-hero.webp"
           alt="Beauty services at Elika Beauty in Burnaby"
           className="h-[260px] w-full object-cover sm:h-[360px] lg:h-[520px]"
           loading="eager"

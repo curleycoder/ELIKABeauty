@@ -27,7 +27,7 @@ export default function AboutPage() {
 
       <section className="relative w-full overflow-hidden">
         <img
-          src="/images/pages/salon-ext.jpg"
+          src="/images/pages/salon-ext.webp"
           alt="Inside Elika Beauty salon in Burnaby"
           className="h-[220px] w-full object-cover object-center sm:h-[360px] lg:h-[520px]"
           loading="eager"
@@ -84,7 +84,7 @@ export default function AboutPage() {
             <div className="group overflow-hidden rounded-[20px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
               <div className="relative h-44 overflow-hidden sm:h-64 lg:h-72">
                 <img
-                  src="/images/pages/salon-4.JPG"
+                  src="/images/pages/salon-4.webp"
                   alt="Salon interior at Elika Beauty"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -95,7 +95,7 @@ export default function AboutPage() {
             <div className="group overflow-hidden rounded-[20px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
               <div className="relative h-44 overflow-hidden sm:h-64 lg:h-72">
                 <img
-                  src="/images/pages/salon-1.JPG"
+                  src="/images/pages/salon-1.webp"
                   alt="Hair station inside Elika Beauty"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -106,7 +106,7 @@ export default function AboutPage() {
             <div className="group overflow-hidden rounded-[20px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
               <div className="relative h-44 overflow-hidden sm:h-64 lg:h-72">
                 <img
-                  src="/images/pages/salon-2.JPG"
+                  src="/images/pages/salon-2.webp"
                   alt="Beauty area at Elika Beauty in Burnaby"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"

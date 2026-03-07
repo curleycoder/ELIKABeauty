@@ -11,7 +11,7 @@ export default function ThreadingBurnaby() {
       intro="Professional eyebrow threading in Burnaby at Elika Beauty. Threading is a precise hair removal technique that shapes eyebrows cleanly without waxing or chemicals."
 
       heroImage={{
-        src: "/images/services/threading/threading-hero.jpg",
+        src: "/images/services/threading/threading-hero.webp",
         alt: "Eyebrow threading service at Elika Beauty in Burnaby",
       }}
 

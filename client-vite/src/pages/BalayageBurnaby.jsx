@@ -39,20 +39,20 @@ export default function BalayageBurnaby() {
         },
       ]}
       heroImage={{
-        src: "/images/services/balayage/balayage-hero.jpg",
+        src: "/images/services/balayage/balayage-hero.webp",
         alt: "Balayage service at Elika Beauty in Burnaby",
       }}
       galleryImages={[
         {
-          src: "/images/services/balayage/balayage-1.JPG",
+          src: "/images/services/balayage/balayage-1.webp",
           alt: "Soft blended balayage result at Elika Beauty",
         },
         {
-          src: "/images/services/balayage/balayage-2.jpg",
+          src: "/images/services/balayage/balayage-2.webp",
           alt: "Natural-looking balayage hair color in Burnaby",
         },
         {
-          src: "/images/services/balayage/balayage-3.jpg",
+          src: "/images/services/balayage/balayage-3.webp",
           alt: "Professional balayage color by Elika Beauty",
         },
       ]}
