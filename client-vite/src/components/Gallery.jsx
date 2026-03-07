@@ -192,7 +192,7 @@ async function loadGallery() {
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={pageUrl} />
 
-        <meta property="og:image" content={`${SITE_ORIGIN}${GALLERY_HERO}`} />
+        {/* <meta property="og:image" content={`${SITE_ORIGIN}${GALLERY_HERO}`} /> */}
 
         <script type="application/ld+json">
           {JSON.stringify(itemListJsonLd)}
