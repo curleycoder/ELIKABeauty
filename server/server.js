@@ -52,8 +52,12 @@ app.use("/api/google", googleRoutes);
 app.use("/api/admin/bookings", bookingRoutes);
 
 // Static gallery
-app.use("/gallery", express.static(path.join(__dirname, "public", "gallery")));
-
+app.use(
+  "/gallery",
+  express.static(path.join(__dirname, "public/gallery"), {
+    maxAge: "30d",
+  })
+);
 async function start() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
