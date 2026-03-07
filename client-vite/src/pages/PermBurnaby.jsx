@@ -26,20 +26,20 @@ export default function PermBurnaby() {
         },
       ]}
       heroImage={{
-        src: "/images/services/perm/perm-hero.jpg",
+        src: "/images/services/perm/perm-hero.webp",
         alt: "Perm service at Elika Beauty in Burnaby",
       }}
       galleryImages={[
         {
-          src: "/images/services/perm/perm-1.jpg",
+          src: "/images/services/perm/perm-1.webp",
           alt: "Soft curls perm result at Elika Beauty",
         },
         {
-          src: "/images/services/perm/perm-2.jpg",
+          src: "/images/services/perm/perm-2.webp",
           alt: "Voluminous perm hairstyle in Burnaby",
         },
         {
-          src: "/images/services/perm/perm-3.jpg",
+          src: "/images/services/perm/perm-3.webp",
           alt: "Textured perm hair result by Elika Beauty",
         },
       ]}

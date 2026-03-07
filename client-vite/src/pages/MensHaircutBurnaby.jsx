@@ -34,20 +34,20 @@ export default function MensHaircutBurnaby() {
         },
       ]}
       heroImage={{
-        src: "/images/services/haircutmen/haircut-hero.jpg",
+        src: "/images/services/haircutmen/haircut-hero.webp",
         alt: "Men’s haircut at Elika Beauty in Burnaby",
       }}
       galleryImages={[
         {
-          src: "/images/services/haircutmen/haircut-1.jpg",
+          src: "/images/services/haircutmen/haircut-1.webp",
           alt: "Clean men’s haircut result at Elika Beauty",
         },
         {
-          src: "/images/services/haircutmen/haircut-2.jpg",
+          src: "/images/services/haircutmen/haircut-2.webp",
           alt: "Professional men’s haircut in Burnaby",
         },
         {
-          src: "/images/services/haircutmen/haircut-3.jpg",
+          src: "/images/services/haircutmen/haircut-3.webp",
           alt: "Men’s wash and haircut service at Elika Beauty",
         },
       ]}

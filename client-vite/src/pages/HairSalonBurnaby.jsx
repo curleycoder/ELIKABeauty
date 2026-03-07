@@ -112,7 +112,7 @@ export default function HairSalonBurnaby() {
         <section className="mt-8">
           <div className="overflow-hidden rounded-3xl border bg-white shadow-sm">
             <img
-              src="/images/pages/salon-hero.JPG"
+              src="/images/pages/salon-hero.webp"
               alt="Elika Beauty hair salon in Burnaby"
               className="h-[260px] sm:h-[420px] w-full object-cover"
               loading="eager"

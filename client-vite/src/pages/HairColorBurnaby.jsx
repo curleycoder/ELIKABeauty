@@ -162,7 +162,7 @@ export default function HairColorBurnaby() {
 
       <section className="relative w-full overflow-hidden">
         <img
-          src="/images/services/hair-color/hair-color-hero.jpg"
+          src="/images/services/hair-color/hair-color-hero.webp"
           alt="Professional hair color service at Elika Beauty in Burnaby"
           className="h-[260px] w-full object-cover object-[center_30%] sm:h-[360px] sm:object-center lg:h-[520px]"
           loading="eager"
@@ -408,7 +408,7 @@ export default function HairColorBurnaby() {
             <div className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                 <img
-                  src="/images/services/hair-color/hair-color-1.jpg"
+                  src="/images/services/hair-color/hair-color-1.webp"
                   alt="Balayage and hair color result at Elika Beauty"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -419,7 +419,7 @@ export default function HairColorBurnaby() {
             <div className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                 <img
-                  src="/images/services/hair-color/hair-color-2.jpg"
+                  src="/images/services/hair-color/hair-color-2.webp"
                   alt="Highlighted hair color service in Burnaby"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -430,7 +430,7 @@ export default function HairColorBurnaby() {
             <div className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                 <img
-                  src="/images/services/hair-color/hair-color-3.jpg"
+                  src="/images/services/hair-color/hair-color-3.webp"
                   alt="Professional custom hair color by Elika Beauty"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
