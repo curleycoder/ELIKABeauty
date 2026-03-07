@@ -28,7 +28,7 @@ export default function PrivacyPolicy() {
       </p>
 
       <p>
-        If you have questions about this policy, contact Elika Beauty at
+        If you have questions about this policy, contact ELIKA BEAUTY at
         (604) 438-3727.
       </p>
     </div>
