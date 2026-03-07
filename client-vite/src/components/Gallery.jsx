@@ -184,89 +184,88 @@ export default function Gallery() {
   }, [allImages, category]);
 
 const featuredImage =
-  filteredImages[0]?._single || "/images/gallery/gallery-hero.jpg";
-  
-  const pageTitle =
-    category === "All"
-      ? `Before and After Gallery in Burnaby | ${SITE_NAME}`
-      : `${category} Before and After Gallery in Burnaby | ${SITE_NAME}`;
+  filteredImages[0]?._single || "/images/gallery-hero.jpg";
 
-  const pageDescription =
-    category === "All"
-      ? "Explore before and after beauty results at Elika Beauty in Burnaby. Browse hair color, balayage, highlights, keratin, microblading, threading, and more."
-      : `Explore ${category.toLowerCase()} before and after results at Elika Beauty in Burnaby. Browse real client work and service results.`;
+const pageTitle =
+  category === "All"
+    ? `Gallery in Burnaby | ${SITE_NAME}`
+    : `${category} Gallery in Burnaby | ${SITE_NAME}`;
 
-  const pageUrl =
-    category === "All"
-      ? `${SITE_ORIGIN}/gallery`
-      : `${SITE_ORIGIN}/gallery?cat=${encodeURIComponent(category)}`;
+const pageDescription =
+  category === "All"
+    ? "Explore real beauty and hair service results at Elika Beauty in Burnaby. Browse balayage, highlights, hair colour, keratin, microblading, threading, facial treatments, and more."
+    : `Explore real ${category.toLowerCase()} results at Elika Beauty in Burnaby. Browse client work and service photos in our gallery.`;
 
-  const itemListJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: pageTitle,
-    description: pageDescription,
-    url: pageUrl,
-  };
+const pageUrl =
+  category === "All"
+    ? `${SITE_ORIGIN}/gallery`
+    : `${SITE_ORIGIN}/gallery?cat=${encodeURIComponent(category)}`;
 
-  const pickCategory = useCallback(
-    (cat) => {
-      setCategory(cat);
-      setSearchParams(cat === "All" ? {} : { cat });
-      setSelectedItem(null);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-    [setSearchParams]
-  );
+const itemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: pageTitle,
+  description: pageDescription,
+  url: pageUrl,
+};
 
-  return (
-    <>
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={pageUrl} />
+const pickCategory = useCallback(
+  (cat) => {
+    setCategory(cat);
+    setSearchParams(cat === "All" ? {} : { cat });
+    setSelectedItem(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },
+  [setSearchParams]
+);
 
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:site_name" content={SITE_NAME} />
+return (
+  <>
+    <Helmet>
+      <title>{pageTitle}</title>
+      <meta name="description" content={pageDescription} />
+      <link rel="canonical" href={pageUrl} />
 
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={pageDescription} />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDescription} />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:site_name" content={SITE_NAME} />
 
-        {featuredImage && <meta property="og:image" content={featuredImage} />}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={pageTitle} />
+      <meta name="twitter:description" content={pageDescription} />
 
-        <script type="application/ld+json">
-          {JSON.stringify(itemListJsonLd)}
-        </script>
-      </Helmet>
+      {featuredImage && <meta property="og:image" content={featuredImage} />}
 
-      <section className="relative w-full overflow-hidden">
-        <img
-          src={featuredImage}
-          alt="Elika Beauty gallery hero"
-          className="h-[300px] sm:h-[420px] lg:h-[520px] w-full object-cover"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/75 via-[#2e1118]/25 to-transparent" />
+      <script type="application/ld+json">
+        {JSON.stringify(itemListJsonLd)}
+      </script>
+    </Helmet>
 
-        <div className="absolute inset-x-0 bottom-0 max-w-6xl mx-auto px-4 sm:px-6 pb-10">
-          <p className="text-xs uppercase tracking-[0.18em] text-white/80">
-            Elika Beauty • Burnaby
-          </p>
+    <section className="relative w-full overflow-hidden">
+      <img
+        src={featuredImage}
+        alt="Elika Beauty gallery hero"
+        className="h-[300px] w-full object-cover sm:h-[420px] lg:h-[520px]"
+        loading="eager"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/75 via-[#2e1118]/25 to-transparent" />
 
-          <h1 className="mt-3 max-w-3xl text-3xl sm:text-4xl lg:text-5xl font-theseason font-bold text-white">
-            Before & After Gallery
-          </h1>
+      <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-10 sm:px-6">
+        <p className="text-xs uppercase tracking-[0.18em] text-white/80">
+          Elika Beauty • Burnaby
+        </p>
 
-          <p className="mt-4 max-w-2xl text-sm sm:text-base leading-7 text-white/90">
-            Browse real service results by category. Explore before and after transformations,
-            or single result photos where before images are not available.
-          </p>
-        </div>
-      </section>
+        <h1 className="mt-3 max-w-3xl text-3xl font-theseason font-bold text-white sm:text-4xl lg:text-5xl">
+          Gallery
+        </h1>
+
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/90 sm:text-base">
+          Browse real client results by category and explore service photos from Elika Beauty.
+        </p>
+      </div>
+    </section>
 
       <section id="gallery-page" className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex flex-wrap gap-3">
