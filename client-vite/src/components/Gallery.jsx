@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams, Link } from "react-router-dom";
+const GALLERY_HERO = "/images/gallery-hero.webp";
 
 const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 const SITE_NAME = "Elika Beauty";
@@ -183,8 +184,6 @@ export default function Gallery() {
     return allImages.filter((img) => img._cat === category);
   }, [allImages, category]);
 
-const featuredImage =
-  filteredImages[0]?._single || "/images/gallery-hero.jpg";
 
 const pageTitle =
   category === "All"
@@ -236,8 +235,7 @@ return (
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={pageDescription} />
 
-      {featuredImage && <meta property="og:image" content={featuredImage} />}
-
+<meta property="og:image" content={`${SITE_ORIGIN}${GALLERY_HERO}`} />
       <script type="application/ld+json">
         {JSON.stringify(itemListJsonLd)}
       </script>
@@ -245,7 +243,7 @@ return (
 
     <section className="relative w-full overflow-hidden">
       <img
-        src={featuredImage}
+        src={GALLERY_HERO}
         alt="Elika Beauty gallery hero"
         className="h-[300px] w-full object-cover sm:h-[420px] lg:h-[520px]"
         loading="eager"
