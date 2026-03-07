@@ -6,100 +6,69 @@ export default function AboutMe() {
   return (
     <section
       id="about-section"
-      className="text-gray-800 px-4 sm:px-6 md:px-16 py-10 max-w-5xl mx-auto"
+      className="mx-auto max-w-6xl px-4 text-gray-800 sm:px-6 sm:py-10"
     >
-      <div className="text-center">
-        <h2 className="text-2xl sm:text-3xl font-theseason text-[#572a31] mb-8">
-          About ELIKA BEAUTY
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-[#8a6b73] sm:text-xs">
+          Elika Beauty • Burnaby
+        </p>
+
+        <h2 className="mt-2 text-2xl font-theseason text-[#572a31] sm:text-3xl">
+          Meet Amina
         </h2>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-start gap-8">
-        <div className="w-full sm:w-auto flex flex-col items-center sm:items-start">
+      <div className="mt-8 flex flex-col items-center gap-8 sm:flex-row sm:items-start sm:gap-10">
+        <div className="flex flex-col items-center sm:items-start">
           <img
             src={SherryImage}
             alt="Amina, hairstylist and owner of Elika Beauty in Burnaby"
-            className="w-40 h-40 sm:w-60 sm:h-60 rounded-full object-cover shadow-md mx-auto sm:mx-0"
+            className="h-40 w-40 rounded-full object-cover shadow-md sm:h-56 sm:w-56"
           />
 
-          <div className="mt-5 flex w-full sm:w-60 flex-col gap-3">
+          <div className="mt-5 flex w-full max-w-[300px] flex-row gap-3">
             <Link
-              to="/services"
-              className="
-                group inline-flex items-center justify-center gap-2
-                rounded-2xl px-5 py-3
-                bg-[#572a31] text-white
-                shadow-[0_10px_25px_rgba(87,42,49,0.18)]
-                hover:shadow-[0_14px_32px_rgba(87,42,49,0.28)]
-                hover:-translate-y-[1px]
-                transition-all duration-300
-              "
+              to="/booking"
+              className="inline-flex items-center justify-center rounded-xl bg-[#572a31] px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
             >
-              <span>Explore Salon Services</span>
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
+              Book Appointment
             </Link>
 
             <Link
-              to="/hair-salon-burnaby"
-              className="
-                group inline-flex items-center justify-center gap-2
-                rounded-2xl px-5 py-3
-                border border-[#572a31]/20
-                bg-[#F8F7F1] text-[#572a31]
-                hover:border-[#572a31]/40
-                hover:bg-white
-                hover:-translate-y-[1px]
-                transition-all duration-300
-              "
+              to="/services"
+              className="inline-flex items-center justify-center rounded-xl border border-[#572a31]/25 px-5 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]"
             >
-              <span>See Our Salon</span>
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
+              View Services
             </Link>
           </div>
         </div>
 
-        <div className="text-gray-800 leading-relaxed">
-          <p className="mb-4">
-            I’m <strong>Amina</strong>, the owner of{" "}
-            <strong className="font-theseason">ELIKA Beauty</strong>, formerly{" "}
-            Tangles Hair Design, located in Burnaby.
-            With <strong>30 years of professional experience</strong> — including{" "}
-            <strong>24 years in Iran</strong> and <strong>8 years in Canada</strong> —
-            I bring a deep, hands-on understanding of hair and beauty across
-            different styles, hair types, and client needs.
-          </p>
-
-          <p className="mb-4">
-            My focus is hair: healthy color, clean sections, and results that look
-            beautiful in real life, not just the first day. I take time for a proper
-            consultation so you know exactly what to expect — especially for
-            highlights, corrections, and smoothing treatments.
-          </p>
-
-          <p className="mb-4">
-            Elika Beauty is a full-service beauty space. You do not need to visit
-            different places — we offer <strong>hair</strong> plus a professional
-            team for <strong>nails</strong>, <strong>facials</strong>, and{" "}
-            <strong>microblading</strong> — all in one spot.
-          </p>
-
-          <p className="mb-3 font-medium">Signature services at Elika Beauty include:</p>
-
-          <ul className="list-disc list-inside mb-4 space-y-1">
-            <li>Balayage and dimensional highlights</li>
-            <li>Professional hair color and color correction</li>
-            <li>Keratin and smoothing treatments</li>
-            <li>Women’s haircuts, styling, and blowouts</li>
-            <li>Nails, facials, and microblading with our team</li>
-          </ul>
-
+        <div className="max-w-3xl text-sm leading-7 text-gray-700 sm:text-base">
           <p>
-            Clients choose Elika Beauty for a calm, professional environment,
-            detailed work, and a long-term focus on healthy, beautiful results.
+            Hi, I’m <strong>Amina</strong>, the owner of{" "}
+            <strong className="font-theseason text-[#3D0007]">
+              Elika Beauty
+            </strong>{" "}
+            in Burnaby.
+          </p>
+
+          <p className="mt-4">
+            I have more than <strong>30 years of experience</strong> in the hair
+            and beauty industry, including over{" "}
+            <strong>24 years working in Iran</strong> and{" "}
+            <strong>8 years in Canada</strong>.
+          </p>
+
+          <p className="mt-4">
+            Over the years I’ve worked with many different hair types, styles,
+            and techniques. My focus is always the same: helping clients feel
+            confident and happy with their hair.
+          </p>
+
+          <p className="mt-4">
+            At Elika Beauty, I take time to understand what you want and create
+            results that suit your hair, your lifestyle, and your personal
+            style.
           </p>
         </div>
       </div>

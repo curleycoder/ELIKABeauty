@@ -179,7 +179,7 @@ export default function GoogleReview() {
   };
 
   return (
-    <section className="px-3 py-4 sm:p-6 rounded-xl max-w-6xl mx-auto">
+    <section className="px-3 py-8  sm:p-6 rounded-xl max-w-6xl mx-auto">
       <div className="text-center">
         <h2 className="text-2xl font-theseason sm:text-3xl text-[#572a31] mb-1 sm:mb-3">
           What Clients Say About Us
