@@ -195,10 +195,34 @@ const hardResetAll = () => {
           }`}
           aria-hidden={!showInfo}
         >
-          <p>
-            We’re excited to welcome you to{" "}
-            <strong className="font-theseason text-[#7a3b44]">ELIKA BEAUTY</strong>{" "}
-            at <strong className="text-[#7a3b44]">3790 Canada Way #102, Burnaby</strong>.
+          <p className="mb-3">
+            Welcome to <strong className="text-[#7a3b44]">ELIKA BEAUTY</strong>, a professional
+            hair salon located at <strong>3790 Canada Way #102, Burnaby</strong>.
+            We specialize in modern hair services including balayage, highlights,
+            hair coloring, keratin treatments, precision haircuts, and professional styling.
+          </p>
+
+          <p className="mb-3">
+            Our Burnaby salon serves clients from Brentwood, Metrotown, and surrounding
+            areas looking for high-quality hair services in a relaxing environment.
+            You can easily book your appointment online using the calendar above.
+          </p>
+
+          <p className="mb-3">
+            If you don’t see a time that works for you, please{" "}
+            <a
+              href="tel:+16044383727"
+              className="text-[#7a3b44] font-semibold underline"
+            >
+              call us
+            </a>.  
+            We often have flexible availability and may still be able to fit you in.
+          </p>
+
+          <p className="text-sm text-gray-500">
+            Online booking is available for popular services such as balayage,
+            hair highlights, keratin smoothing treatments, and women’s haircuts
+            in Burnaby.
           </p>
         </section>
 
