@@ -14,6 +14,7 @@ import AboutMe from "./pages/AboutMe.jsx";
 import AdminBookings from "./pages/AdminBookings.jsx";
 import Instagram from "./components/Instagram.jsx";
 import Services from "./pages/Services.jsx";
+import BookingConfirmed from "./pages/BookingConfirmed";
 
 import Balayage from "./pages/BalayageBurnaby.jsx";
 import Highlight from "./pages/HighlightsBurnaby.jsx";
@@ -51,6 +52,7 @@ export default function App() {
         <Route path="/about" element={<AboutMe />} />
         <Route path="/admin-bookings-secret" element={<AdminBookings />} />
         <Route path="/instagram" element={<Instagram />} />
+        <Route path="/booking/confirmed" element={<BookingConfirmed />} />
 
         {/* SERVICES HUB */}
         <Route path="/services" element={<Services />} />
