@@ -130,6 +130,19 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
 
   const dayUnavailable = Boolean(selectedDayStatus?.past || selectedDayStatus?.closed);
 
+  const visibleTimeSlots = timeSlots.filter((t) => {
+  const pastTime = isPastTimeToday(selectedDate, t);
+
+  const blocked = isOverlappingBookedSlot({
+    dateObj: selectedDate,
+    time12h: t,
+    bookedSlots,
+    totalBlockedMinutes,
+  });
+
+  return !pastTime && !blocked;
+});
+
   return (
     <div className="bg-white/60 font-display backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto flex flex-col max-h-[80dvh]">
       <div className="p-2 sm:p-4 pb-2">
@@ -208,20 +221,11 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
             )}
 
             {!dayUnavailable && (
+              <>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-                {timeSlots.map((t) => {
-                  const pastTime = isPastTimeToday(selectedDate, t);
-
-                  const blocked = isOverlappingBookedSlot({
-                    dateObj: selectedDate,
-                    time12h: t,
-                    bookedSlots,
-                    totalBlockedMinutes,
-                  });
-
-                  if (pastTime || blocked) return null;
-
-                  return (
+                {visibleTimeSlots.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                  {visibleTimeSlots.map((t) => (
                     <button
                       key={t}
                       onClick={() => onPickTime(t)}
@@ -233,11 +237,31 @@ export default function DateTimePicker({ onSelect, duration = 30, refreshKey = 0
                     >
                       {t}
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-sm rounded-2xl border bg-[#572a31]/5 text-[#572a31] px-4 py-3">
+                  No online times are currently available for this day.
+                </div>
+              )}
               </div>
+                  <div className="mt-5 rounded-2xl border border-[#572a31]/10 bg-[#572a31]/[0.04] px-4 py-3 text-center">
+          <p className="text-sm text-gray-700 leading-relaxed">
+            Don’t see a time that works for you?{" "}
+            <a
+              href="tel:+16044383727"
+              className="font-semibold text-[#7a3b44] underline underline-offset-2"
+            >
+              Call us
+            </a>{" "}
+            — we’ll do our best to fit you in.
+          </p>
+        </div>
+      </>
             )}
           </div>
+
+          
         )}
       </div>
 
