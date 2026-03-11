@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
-import { format, parseISO } from "date-fns";
-import { trackBookingConfirmed } from "../utils/analytics";
+
 
 const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
 const DEFAULT_BUFFER_MINUTES = 10;
@@ -22,16 +22,14 @@ const STEPS = [
 ];
 
 export default function Booking() {
+    const navigate = useNavigate();
+
   const [selection, setSelection] = useState({ selected: [], total: 0 });
   const [step, setStep] = useState(0);
   const [bookingTime, setBookingTime] = useState(null);
 
-  const [showFinalPopup, setShowFinalPopup] = useState(false);
-  const [bookingData, setBookingData] = useState(null);
-
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [conversionSent, setConversionSent] = useState(false);
   const [priceAccepted, setPriceAccepted] = useState(false);
 
   // signals
@@ -61,12 +59,6 @@ export default function Booking() {
     );
   }, []);
 
-  useEffect(() => {
-    if (showFinalPopup && bookingData && !conversionSent) {
-      trackBookingConfirmed();
-      setConversionSent(true);
-    }
-  }, [showFinalPopup, bookingData, conversionSent]);
 
   const durationStats = useMemo(
     () => getDurationStats(selection.selected),
@@ -115,9 +107,6 @@ const hardResetAll = () => {
   setBookingTime(null);
   setSelection({ selected: [], total: 0 });
   setShowInfo(false);
-  setShowFinalPopup(false);
-  setBookingData(null);
-  setConversionSent(false);
   setPriceAccepted(false);
   setAvailabilityTick((t) => t + 1);
   setPickerKey((k) => k + 1);
@@ -230,13 +219,22 @@ const hardResetAll = () => {
               <QuestionsForm
                 selection={selection}
                 bookingTime={bookingTime}
-                onSubmit={(formData) => {
-                  setBookingData(formData);
-                  setShowFinalPopup(true);
-
-                  // refresh + reset picker UI after success
+                onSubmit={({ savedBooking, displayBooking }) => {
                   setAvailabilityTick((t) => t + 1);
                   setPickerKey((k) => k + 1);
+
+                  const bookingId = formData?._id || formData?.bookingId;
+
+                  if (!bookingId) {
+                    alert("Booking saved, but confirmation tracking could not be completed.");
+                    return;
+                  }
+
+                  navigate(`/booking/confirmed?bookingId=${bookingId}`, {
+                    state: {
+                      booking: displayBooking,
+                    },
+                  });
                 }}
                 onTimeConflict={() => {
                   // go back, clear chosen time, and hard reset picker UI
@@ -271,7 +269,7 @@ const hardResetAll = () => {
 
             <div className="flex justify-between text-sm text-gray-500 mt-1">
               <span>Time on Service</span>
-              <span>{durationStats.avg} min</span>
+              <span>{durationStats.total} min</span>
             </div>
 
             <hr className="my-4 border-pink-100" />
@@ -367,40 +365,6 @@ const hardResetAll = () => {
           </div>
         </div>
 
-      {/* Final popup */}
-      {showFinalPopup && bookingData && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] px-4">
-          <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-md space-y-4">
-            <h3 className="text-xl font-display font-semibold text-[#7a3b44]">
-              Booking Confirmed ✅
-            </h3>
-
-            <p className="text-sm text-gray-700">
-              Dear <span className="font-display">{bookingData.name}</span>,
-              <br />
-              your booking has been confirmed.
-            </p>
-
-            <p className="text-sm text-gray-700">
-              <strong>Services:</strong>{" "}
-              {Array.isArray(bookingData.services)
-                ? bookingData.services.map((s) => s?.name).filter(Boolean).join(", ")
-                : ""}
-              <br />
-              <strong>Date:</strong> {format(parseISO(bookingData.date), "PPP")}
-              <br />
-              <strong>Time:</strong> {bookingData.time}
-            </p>
-
-            <button
-              onClick={hardResetAll}
-              className="mt-2 px-5 py-2 font-display bg-[#7a3b44] text-white rounded-lg shadow hover:brightness-110"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

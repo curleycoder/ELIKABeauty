@@ -66,12 +66,17 @@ export default function QuestionsForm({
     if (res.ok) return;
 
     const body = await readResponseBody(res);
-    console.error(`❌ ${label} FAILED`, {
-      url: res.url,
-      status: res.status,
-      statusText: res.statusText,
-      body,
-    });
+
+if (!res.ok) {
+  const msg =
+    (body && typeof body === "object" && (body.error || body.message)) ||
+    (typeof body === "string" && body) ||
+    `BOOKING failed (${res.status})`;
+
+  throw new Error(msg);
+}
+
+const saved = body;
 
     const msg =
       (body && typeof body === "object" && (body.error || body.message)) ||
@@ -111,23 +116,23 @@ export default function QuestionsForm({
       };
 
       const res = await fetch(`${baseURL}/api/bookings`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookingPayload),
-      });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(bookingPayload),
+});
 
-      await assertOk(res, "BOOKING");
+await assertOk(res, "BOOKING");
+const saved = await res.json();
 
-      // Optional: read saved booking (useful for debugging)
-      // const saved = await res.json();
-
-      onSubmit({
-        ...form,
-        services: selection.selected,
-        total: selection.total,
-        date: bookingTime.date,
-        time: bookingTime.time,
-      });
+onSubmit({
+  ...form,
+  _id: saved?._id,
+  bookingId: saved?._id,
+  services: selection.selected,
+  total: selection.total,
+  date: bookingTime.date,
+  time: bookingTime.time,
+});
     } catch (error) {
       console.error("❌ Error submitting booking:", error);
 
