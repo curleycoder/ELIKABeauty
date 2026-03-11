@@ -244,22 +244,7 @@ export default function ServicePlaceholder({
           </Link>
         </div>
 
-        <section className="grid grid-cols-2 gap-3 lg:grid-cols-1">
-          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
-            <div className="text-xs sm:text-sm text-gray-500">Starting price</div>
-            <div className="mt-1 text-lg font-semibold text-[#3D0007] sm:mt-2 sm:text-2xl">
-              {priceText || "Contact us"}
-            </div>
-          </div>
-
-          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
-            <div className="text-xs sm:text-sm text-gray-500">Appointment time</div>
-            <div className="mt-1 text-lg font-semibold text-[#3D0007] sm:mt-2 sm:text-2xl">
-              {durationText || "Varies"}
-            </div>
-          </div>
-
-        </section>
+        
 
         {galleryImages.length > 0 && (
           <section className="mt-8 sm:mt-16">
@@ -291,8 +276,24 @@ export default function ServicePlaceholder({
             </div>
           </section>
         )}
+        <section className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-2">
+          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-2 sm:rounded-[24px] sm:p-6">
+            <div className="text-xs sm:text-sm text-gray-500">Starting price</div>
+            <div className="mt-1 text-md text-[#3D0007] sm:mt-2 sm:text-2xl">
+              {priceText || "Contact us"}
+            </div>
+          </div>
 
-        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
+            <div className="text-xs sm:text-sm text-gray-500">Appointment time</div>
+            <div className="mt-1 text-md text-[#3D0007] sm:mt-2 sm:text-2xl">
+              {durationText || "Varies"}
+            </div>
+          </div>
+
+        </section>
+
+        <section className="mt-6 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
               What to expect
