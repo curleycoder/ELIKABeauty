@@ -238,7 +238,7 @@ const hardResetAll = () => {
                   setAvailabilityTick((t) => t + 1);
                   setPickerKey((k) => k + 1);
 
-                  const bookingId = formData?._id || formData?.bookingId;
+                  const bookingId = savedBooking?._id;
 
                   if (!bookingId) {
                     alert("Booking saved, but confirmation tracking could not be completed.");

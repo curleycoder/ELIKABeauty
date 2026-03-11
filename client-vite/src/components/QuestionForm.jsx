@@ -116,23 +116,24 @@ const saved = body;
       };
 
       const res = await fetch(`${baseURL}/api/bookings`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(bookingPayload),
-});
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingPayload),
+      });
 
-await assertOk(res, "BOOKING");
-const saved = await res.json();
+      await assertOk(res, "BOOKING");
+      const saved = await res.json();
 
-onSubmit({
-  ...form,
-  _id: saved?._id,
-  bookingId: saved?._id,
-  services: selection.selected,
-  total: selection.total,
-  date: bookingTime.date,
-  time: bookingTime.time,
-});
+      onSubmit({
+        savedBooking: saved,
+        displayBooking: {
+          ...form,
+          services: selection.selected,
+          total: selection.total,
+          date: bookingTime.date,
+          time: bookingTime.time,
+        },
+      });
     } catch (error) {
       console.error("❌ Error submitting booking:", error);
 
