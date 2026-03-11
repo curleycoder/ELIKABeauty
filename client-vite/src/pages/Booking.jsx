@@ -231,24 +231,12 @@ const hardResetAll = () => {
             {step === 0 && <BookingForm onSelectionChange={setSelection} />}
 
             {step === 1 && (
-            <>
               <DateTimePicker
                 key={pickerKey}
                 duration={totalBlockedMinutes}
                 refreshKey={availabilityTick}
                 onSelect={(value) => setBookingTime(value)}
               />
-
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
-              <div className="bg-white/80 border border-[#55203d]/10 rounded-2xl py-4 px-6 text-center text-sm text-gray-600 shadow-sm">
-                Don’t see a time that works for you?{" "}
-                <a href="tel:+16044383727" className="font-semibold text-[#7a3b44] underline">
-                  Call us
-                </a>{" "}
-                — we may still be able to fit you in.
-              </div>
-            </div>
-            </>
           )}
 
             {step === 2 && (
