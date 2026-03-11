@@ -215,18 +215,15 @@ const hardResetAll = () => {
                 onSelect={(value) => setBookingTime(value)}
               />
 
-              <div className="mt-4 rounded-2xl bg-white/80 border border-[#55203d]/10 p-4 text-center shadow-sm">
-                <p className="text-sm text-gray-700">
-                  Don’t see a time that works for you?{" "}
-                  <a
-                    href="tel:+16044383727"
-                    className="font-semibold text-[#7a3b44] underline underline-offset-2"
-                  >
-                    Call us
-                  </a>{" "}
-                  — we may still be able to fit you in.
-                </p>
+              <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+              <div className="bg-white/80 border border-[#55203d]/10 rounded-2xl py-4 px-6 text-center text-sm text-gray-600 shadow-sm">
+                Don’t see a time that works for you?{" "}
+                <a href="tel:+16044383727" className="font-semibold text-[#7a3b44] underline">
+                  Call us
+                </a>{" "}
+                — we may still be able to fit you in.
               </div>
+            </div>
             </>
           )}
 
