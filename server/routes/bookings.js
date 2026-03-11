@@ -177,37 +177,37 @@ router.post("/", async (req, res) => {
 
     if (conflict) return res.status(409).json({ error: "This time slot is no longer available." });
 
-    const booking = new Booking({
-      name: String(name).trim(),
-      email: String(email).trim(),
-      phone: String(phone).trim(),
-      referredBy: String(referredBy || "").trim(),
-      services: serviceIds,
-      date: new Date(`${dateStr}T00:00:00.000Z`),
-      time: hhmm,
-      start,
-      end,
-      duration: serviceDuration,
-      bufferMinutes,
-      note: String(note || "").trim(),
-    });
+const booking = new Booking({
+  name: String(name).trim(),
+  email: String(email).trim(),
+  phone: String(phone).trim(),
+  referredBy: String(referredBy || "").trim(),
+  services: serviceIds,
+  date: new Date(`${dateStr}T00:00:00.000Z`),
+  time: hhmm,
+  start,
+  end,
+  duration: serviceDuration,
+  bufferMinutes,
+  note: String(note || "").trim(),
+});
 
-    await booking.save();
+const savedBooking = await booking.save();
 
     // Calendar (non-blocking)
     (async () => {
       try {
         const eventId = await createBookingEvent({
-          name: booking.name,
-          email: booking.email,
-          phone: booking.phone,
+          name: savedBooking.name,
+          email: savedBooking.email,
+          phone: savedBooking.phone,
           services: servicesData.map((s) => s.name),
-          note: booking.note,
+          note: savedBooking.note,
           start: start.toISOString(),
           end: end.toISOString(),
         });
-        booking.calendarEventId = eventId;
-        await booking.save();
+        savedBooking.calendarEventId = eventId;
+        await savedBooking.save();
       } catch (err) {
         console.error("🔥 Calendar insert failed:", err?.response?.data || err?.message || err);
       }
@@ -226,19 +226,19 @@ router.post("/", async (req, res) => {
         const servicesText = servicesData.map((s) => s.name).join(", ");
 
         console.log("📧 Sending booking emails", {
-          toClient: booking.email,
+          toClient: savedBooking.email,
           admin: process.env.ADMIN_EMAIL,
           smtpUser: process.env.SMTP_USER,
         });
 
-        await sendBookingEmails({ booking, servicesText, prettyDate, prettyTime });
+      await sendBookingEmails({ booking: savedBooking, servicesText, prettyDate, prettyTime });
         console.log("✅ Booking emails sent");
       } catch (err) {
         console.error("🔥 Booking email failed FULL:", err);
       }
     })();
 
-    return res.status(201).json(booking);
+    return res.status(201).json(savedBooking);
   } catch (err) {
     console.error("❌ Booking failed FULL ERROR:", err);
     return res.status(500).json({ error: err?.message, name: err?.name });
