@@ -5,11 +5,12 @@ const bookingSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  status: { type: String, enum: ["active", "cancelled"], default: "active" },
-cancelledAt: { type: Date },
-bufferMinutes: { type: Number, default: 0 },
-referredBy: { type: String },
 
+  status: { type: String, enum: ["active", "cancelled"], default: "active" },
+  cancelledAt: { type: Date },
+
+  bufferMinutes: { type: Number, default: 0 },
+  referredBy: { type: String },
 
   // Services
   services: [
@@ -20,19 +21,17 @@ referredBy: { type: String },
     },
   ],
 
-  // Date & time (for display)
-  date: { type: Date, required: true },      // e.g. 2025-07-09
-  time: { type: String, required: true },    // e.g. "15:00"
+  // Date & time (display)
+  date: { type: Date, required: true },
+  time: { type: String, required: true },
 
-  // 🔑 REAL booking time (for logic)
-  start: { type: Date, required: true },     // exact start datetime
-  end: { type: Date, required: true },       // exact end datetime (includes buffer)
+  // Actual booking time
+  start: { type: Date, required: true },
+  end: { type: Date, required: true },
 
-  // Duration (service only, NOT buffer)
-  duration: { type: Number, required: true }, // minutes
+  duration: { type: Number, required: true },
 
-  // Google Calendar integration
-  calendarEventId: { type: String },          // used for owner cancellation
+  calendarEventId: { type: String },
 
   note: { type: String },
 
@@ -42,7 +41,19 @@ referredBy: { type: String },
   },
 });
 
-// 🔥 CRITICAL INDEX: prevents race-condition double booking
+
+/* ============================= */
+/*           INDEXES             */
+/* ============================= */
+
+// used by conflict check
 bookingSchema.index({ start: 1, end: 1 });
+
+// used by availability API
+bookingSchema.index({ status: 1, start: 1 });
+
+// useful for admin panels / sorting
+bookingSchema.index({ createdAt: -1 });
+
 
 module.exports = mongoose.model("Booking", bookingSchema);

@@ -170,12 +170,18 @@ router.post("/", async (req, res) => {
     const closingUtc = vancouverLocalToUtcDate(dateStr, `${String(CLOSE_HOUR).padStart(2, "0")}:00`);
     if (end > closingUtc) return res.status(400).json({ error: "Selected service must finish by 7:00 PM." });
 
-    const conflict = await Booking.findOne({
-      status: { $ne: "cancelled" },
-      $expr: { $and: [{ $lt: ["$start", end] }, { $gt: ["$end", start] }] },
-    }).select("_id start end");
+    const conflict = await Booking.findOne(
+      {
+        status: "active",
+        start: { $lt: end },
+        end: { $gt: start },
+      },
+      { _id: 1, start: 1, end: 1 }
+    ).lean();
 
-    if (conflict) return res.status(409).json({ error: "This time slot is no longer available." });
+    if (conflict) {
+      return res.status(409).json({ error: "This time slot is no longer available." });
+    }
 
 const booking = new Booking({
   name: String(name).trim(),
@@ -249,15 +255,22 @@ const savedBooking = await booking.save();
 router.get("/booked", async (req, res) => {
   try {
     const dateStr = normalizeDateYYYYMMDD(req.query.date);
-    if (!dateStr) return res.status(400).json({ error: "date is required (YYYY-MM-DD)" });
+    if (!dateStr) {
+      return res.status(400).json({ error: "date is required (YYYY-MM-DD)" });
+    }
 
     const dayStartUtc = vancouverLocalToUtcDate(dateStr, "00:00");
     const nextDayUtc = new Date(dayStartUtc.getTime() + 24 * 60 * 60 * 1000);
 
-    const bookings = await Booking.find({
-      status: { $ne: "cancelled" },
-      start: { $gte: dayStartUtc, $lt: nextDayUtc },
-    }).select("start end");
+    const bookings = await Booking.find(
+      {
+        status: "active",
+        start: { $gte: dayStartUtc, $lt: nextDayUtc },
+      },
+      { _id: 0, start: 1, end: 1 }
+    )
+      .sort({ start: 1 })
+      .lean();
 
     return res.json(bookings);
   } catch (err) {
@@ -278,8 +291,9 @@ router.get("/booked", async (req, res) => {
 router.get("/", requireAdmin, async (req, res) => {
   try {
     const list = await Booking.find({})
-      .sort({ start: 1 })
-      .populate("services", "name duration");
+  .sort({ start: 1 })
+  .populate("services", "name duration")
+  .lean();
 
     return res.json(list);
   } catch (err) {
