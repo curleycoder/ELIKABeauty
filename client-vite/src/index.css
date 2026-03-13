@@ -1,0 +1,41 @@
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "react-datepicker/dist/react-datepicker.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 80px; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@font-face {
+  font-family: "TheSeason";
+  src: url("/fonts/TheSeasons.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Lato", sans-serif;
+}
+
+.font-theseason {
+  font-family: "TheSeason", Georgia, "Times New Roman", serif;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+.font-lato {
+  font-family: "Lato", sans-serif;
+}
