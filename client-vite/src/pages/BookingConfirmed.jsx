@@ -33,7 +33,7 @@ export default function BookingConfirmed() {
   }, [bookingId]);
 
   return (
-    <div className="w-full min-h-screen bg-[#F8F7F1] px-4 sm:px-6 py-12">
+    <div className="w-full min-h-screen bg-[#F8F7F1] px-4 sm:px-6 py-12 pt-20">
       <div className="max-w-2xl mx-auto bg-white rounded-[25px] shadow-xl p-6 sm:p-10 text-center">
         <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#7a3b44] mb-4">
           Booking Confirmed ✅
