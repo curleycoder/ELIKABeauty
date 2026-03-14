@@ -38,7 +38,7 @@ export default function Contact() {
             <div className="rounded-2xl border border-[#572a31]/10 bg-[#fcfaf8] p-6">
               <p className="text-xs uppercase tracking-widest text-[#8a6b73] mb-4">Location</p>
               <a
-                href="https://www.google.com/maps/place/ELIKA+BEAUTY+(Tangles+Hair+Design)/"
+                href="https://www.google.com/maps/search/?api=1&query=3790+Canada+Way+%23102+Burnaby+BC+V5G+1G4"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-start gap-3 text-[#572a31] hover:underline"
@@ -90,7 +90,7 @@ export default function Contact() {
           <div className="rounded-2xl overflow-hidden border border-[#572a31]/10 min-h-[400px]">
             <iframe
               title="Elika Beauty location map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2604.4!2d-122.9897!3d49.2488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5486759bdc647baf%3A0x4b88259ea908c136!2sELIKA%20BEAUTY!5e0!3m2!1sen!2sca!4v1"
+              src="https://maps.google.com/maps?q=3790+Canada+Way+%23102+Burnaby+BC+V5G+1G4&output=embed&z=16"
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: "400px" }}
