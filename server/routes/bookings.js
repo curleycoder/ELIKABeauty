@@ -4,6 +4,7 @@ const { addMinutes, format, parse, parseISO } = require("date-fns");
 const { fromZonedTime } = require("date-fns-tz");
 const Service = require("../models/service");
 const Booking = require("../models/booking");
+const Client = require("../models/client");
 const { sendBookingEmails } = require("../services/email");
 
 const SHOP_TZ = "America/Vancouver";
@@ -89,6 +90,33 @@ router.post("/", async (req, res) => {
     const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? parseISO(date) : new Date(date);
     const prettyDate = format(safeDate, "PPP");
     const servicesText = serviceNames.join(", ");
+
+    // Upsert client profile — birthday only written if not already on file
+    const normalizedPhone = String(phone).replace(/[^\d+]/g, "");
+    Client.findOne({ phone: normalizedPhone }).then(async (existing) => {
+      try {
+        if (!existing) {
+          await Client.create({
+            phone: normalizedPhone,
+            name, email,
+            referredBy: referredBy || "",
+            birthdayMonth: bMonth,
+            birthdayDay: bDay,
+          });
+        } else {
+          existing.name = name || existing.name;
+          existing.email = email || existing.email;
+          if (referredBy) existing.referredBy = referredBy;
+          if (!existing.birthdayMonth && !existing.birthdayDay) {
+            existing.birthdayMonth = bMonth;
+            existing.birthdayDay = bDay;
+          }
+          await existing.save();
+        }
+      } catch (e) {
+        console.error("❌ Client upsert failed:", e.message);
+      }
+    }).catch((e) => console.error("❌ Client lookup failed:", e.message));
 
     sendBookingEmails({ booking, servicesText, prettyDate, prettyTime: time }).catch((err) => {
       console.error("❌ Email send error:", err.message);

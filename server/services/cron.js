@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const { format, addDays, parseISO } = require("date-fns");
 const { toZonedTime } = require("date-fns-tz");
 const Booking = require("../models/booking");
+const Client = require("../models/client");
 const { sendBirthdayEmail, sendReminderEmail } = require("./email");
 
 const SHOP_TZ = "America/Vancouver";
@@ -11,15 +12,14 @@ const SHOP_TZ = "America/Vancouver";
 // Finds all clients whose birthday is today, sends $20 credit email once per year
 async function runBirthdayJob() {
   const nowVan = toZonedTime(new Date(), SHOP_TZ);
-  const month = nowVan.getMonth() + 1; // 1-12
+  const month = nowVan.getMonth() + 1;
   const day = nowVan.getDate();
   const year = nowVan.getFullYear();
 
-  console.log(`🎂 Birthday job running for ${month}/${day}/${year}`);
+  console.log(`Birthday job running for ${month}/${day}/${year}`);
 
-  // Find all bookings with this birthday that haven't been sent this year
-  // Group by email so we only send once per person
-  const bookings = await Booking.find({
+  // Read from Client model — one record per person, birthday set once
+  const clients = await Client.find({
     birthdayMonth: month,
     birthdayDay: day,
     $or: [
@@ -29,30 +29,16 @@ async function runBirthdayJob() {
     ],
   }).lean();
 
-  // Deduplicate by email — only send to each person once
-  const seen = new Set();
-  const unique = bookings.filter((b) => {
-    const key = b.email.toLowerCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  console.log(`Found ${clients.length} birthday(s) to send`);
 
-  console.log(`🎂 Found ${unique.length} birthday(s) to send`);
-
-  for (const b of unique) {
+  for (const c of clients) {
+    if (!c.email) continue;
     try {
-      await sendBirthdayEmail({ name: b.name, email: b.email });
-
-      // Mark ALL bookings for this email as sent this year
-      await Booking.updateMany(
-        { email: b.email, birthdayMonth: month, birthdayDay: day },
-        { $set: { birthdayCreditSentYear: year } }
-      );
-
-      console.log(`✅ Birthday email sent to ${b.email}`);
+      await sendBirthdayEmail({ name: c.name || "there", email: c.email });
+      await Client.updateOne({ _id: c._id }, { $set: { birthdayCreditSentYear: year } });
+      console.log(`Birthday email sent to ${c.email}`);
     } catch (err) {
-      console.error(`❌ Birthday email failed for ${b.email}:`, err.message);
+      console.error(`Birthday email failed for ${c.email}:`, err.message);
     }
   }
 }
