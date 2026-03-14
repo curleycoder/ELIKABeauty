@@ -8,6 +8,22 @@ import DateTimePicker from "../components/DatePicker";
 const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
 const DEFAULT_BUFFER_MINUTES = 10;
 
+// Services that use a separate room — don't block the hair chair
+const ROOM_SERVICE_NAMES = new Set([
+  "facial",
+  "massage",
+  "hot stone massage",
+  "deep tissue massage",
+]);
+
+function getServiceType(selected) {
+  if (!selected.length) return "chair";
+  const allRoom = selected.every((s) =>
+    ROOM_SERVICE_NAMES.has(String(s?.name || "").toLowerCase().trim())
+  );
+  return allRoom ? "room" : "chair";
+}
+
 function getDurationStats(selected) {
   const durations = selected.map((s) => s?.duration || 60);
   const total = durations.reduce((sum, d) => sum + d, 0);
@@ -62,6 +78,11 @@ export default function Booking() {
 
   const durationStats = useMemo(
     () => getDurationStats(selection.selected),
+    [selection.selected]
+  );
+
+  const serviceType = useMemo(
+    () => getServiceType(selection.selected),
     [selection.selected]
   );
 
@@ -235,6 +256,7 @@ const hardResetAll = () => {
                 key={pickerKey}
                 duration={totalBlockedMinutes}
                 refreshKey={availabilityTick}
+                serviceType={serviceType}
                 onSelect={(value) => setBookingTime(value)}
               />
           )}

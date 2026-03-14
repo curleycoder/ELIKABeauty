@@ -4,17 +4,21 @@ const { Resend } = require("resend");
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const EMAIL_FROM = process.env.EMAIL_FROM; // bookings@elikabeauty.ca
 const ADMIN_EMAIL_RAW = process.env.ADMIN_EMAIL || EMAIL_FROM;
-const ADMIN_EMAILS = String(ADMIN_EMAIL_RAW)
+const ADMIN_EMAILS = String(ADMIN_EMAIL_RAW || "")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 
 const EMAIL_REPLY_TO = process.env.EMAIL_REPLY_TO || EMAIL_FROM;
 
-if (!RESEND_API_KEY) throw new Error("Missing RESEND_API_KEY");
-if (!EMAIL_FROM) throw new Error("Missing EMAIL_FROM");
-
-const resend = new Resend(RESEND_API_KEY);
+// Lazy init — don't crash at startup if env vars are missing locally
+let resend = null;
+function getResend() {
+  if (!RESEND_API_KEY) throw new Error("Missing RESEND_API_KEY");
+  if (!EMAIL_FROM) throw new Error("Missing EMAIL_FROM");
+  if (!resend) resend = new Resend(RESEND_API_KEY);
+  return resend;
+}
 
 function safeEmail(v) {
   return String(v || "").trim();

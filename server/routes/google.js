@@ -42,6 +42,7 @@ router.get("/reviews", async (req, res) => {
         }))
       : [];
 
+    res.set("Cache-Control", "public, max-age=1800, stale-while-revalidate=3600");
     res.json({
       placeName: data.displayName?.text || "",
       rating: data.rating || 0,

@@ -26,6 +26,7 @@ export default function DateTimePicker({
   onSelect,
   duration = 30,
   refreshKey = 0,
+  serviceType = "chair",
 }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -137,7 +138,7 @@ export default function DateTimePicker({
       setLoadingSlots(true);
 
       try {
-        const url = `${baseURL}/api/bookings/booked?date=${ymd}`;
+        const url = `${baseURL}/api/bookings/booked?date=${ymd}&serviceType=${serviceType}`;
         const res = await fetch(url, {
           signal: controller.signal,
         });
@@ -173,7 +174,7 @@ export default function DateTimePicker({
     fetchBookedTimes();
 
     return () => controller.abort();
-  }, [selectedDate, dayUnavailable, refreshKey]);
+  }, [selectedDate, dayUnavailable, refreshKey, serviceType]);
 
   const scrollToTime = () => {
     if (!scrollRef.current || !timeRef.current) return;

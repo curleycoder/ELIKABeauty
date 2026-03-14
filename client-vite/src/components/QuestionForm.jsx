@@ -66,18 +66,6 @@ export default function QuestionsForm({
     if (res.ok) return;
 
     const body = await readResponseBody(res);
-
-if (!res.ok) {
-  const msg =
-    (body && typeof body === "object" && (body.error || body.message)) ||
-    (typeof body === "string" && body) ||
-    `BOOKING failed (${res.status})`;
-
-  throw new Error(msg);
-}
-
-const saved = body;
-
     const msg =
       (body && typeof body === "object" && (body.error || body.message)) ||
       (typeof body === "string" && body) ||

@@ -2,7 +2,9 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from "react"
 import { FaPlus, FaCheck } from "react-icons/fa";
 
 const TABS = ["Hair", "Face", "Men", "Spa", "Add ons"];
-const SERVICES_CACHE_KEY = "elika-services-cache-v1";
+const SERVICES_CACHE_KEY = "elika-services-cache-v2";
+const SERVICES_CACHE_LS_KEY = "elika-services-ls-v2";
+const SERVICES_CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
 function normalizeCategory(value) {
   return String(value || "")
@@ -105,8 +107,8 @@ export default function BookingForm({ onSelectionChange }) {
       setErrorMsg("");
 
       if (!forceFresh) {
+        // 1. Try sessionStorage (fastest — same tab)
         const cached = sessionStorage.getItem(SERVICES_CACHE_KEY);
-
         if (cached) {
           try {
             const parsed = JSON.parse(cached);
@@ -118,6 +120,22 @@ export default function BookingForm({ onSelectionChange }) {
           } catch {
             sessionStorage.removeItem(SERVICES_CACHE_KEY);
           }
+        }
+
+        // 2. Try localStorage (survives page refresh, TTL 1h)
+        try {
+          const lsRaw = localStorage.getItem(SERVICES_CACHE_LS_KEY);
+          if (lsRaw) {
+            const { data, ts } = JSON.parse(lsRaw);
+            if (Array.isArray(data) && Date.now() - ts < SERVICES_CACHE_TTL) {
+              setServices(data);
+              setStatus("success");
+              sessionStorage.setItem(SERVICES_CACHE_KEY, JSON.stringify(data));
+              return;
+            }
+          }
+        } catch {
+          localStorage.removeItem(SERVICES_CACHE_LS_KEY);
         }
       }
 
@@ -140,6 +158,12 @@ export default function BookingForm({ onSelectionChange }) {
         setServices(normalized);
         setStatus("success");
         sessionStorage.setItem(SERVICES_CACHE_KEY, JSON.stringify(normalized));
+        try {
+          localStorage.setItem(
+            SERVICES_CACHE_LS_KEY,
+            JSON.stringify({ data: normalized, ts: Date.now() })
+          );
+        } catch { /* storage full — ignore */ }
 
         console.log(
           `✅ services loaded in ${Math.round(performance.now() - startedAt)}ms`

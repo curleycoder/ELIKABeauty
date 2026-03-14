@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 
-const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
+const baseURL = (import.meta.env.VITE_API_URL || "https://api.elikabeauty.ca").replace(/\/$/, "");
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));

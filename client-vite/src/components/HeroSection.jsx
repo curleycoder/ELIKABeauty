@@ -10,32 +10,45 @@ const HERO_SLIDES = [
 export default function HeroSection() {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
+  // Only preload slide 2 & 3 after first paint
+  const [preloaded, setPreloaded] = useState(false);
+
+  useEffect(() => {
+    // Defer preloading non-hero slides until after first paint
+    const raf = requestAnimationFrame(() => setPreloaded(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 5000);
-
     return () => clearInterval(id);
   }, []);
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-[#ffe3d6] sm:min-h-[90vh]">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {HERO_SLIDES.map((slide, i) => (
-          <img
-            key={slide.src}
-            src={slide.src}
-            alt={slide.alt}
-            className={[
-              "absolute inset-0 h-full w-full object-cover object-top sm:object-center transition-opacity duration-700",
-              i === index ? "opacity-45" : "opacity-0",
-            ].join(" ")}
-            loading={i === 0 ? "eager" : "lazy"}
-            fetchPriority={i === 0 ? "high" : "auto"}
-            decoding="async"
-          />
-        ))}
+        {HERO_SLIDES.map((slide, i) => {
+          // Always render slide 0; only render others after preload
+          if (i > 0 && !preloaded) return null;
+          return (
+            <img
+              key={slide.src}
+              src={slide.src}
+              alt={slide.alt}
+              width={1600}
+              height={900}
+              className={[
+                "absolute inset-0 h-full w-full object-cover object-top sm:object-center transition-opacity duration-700",
+                i === index ? "opacity-45" : "opacity-0",
+              ].join(" ")}
+              loading={i === 0 ? "eager" : "lazy"}
+              fetchPriority={i === 0 ? "high" : "low"}
+              decoding={i === 0 ? "sync" : "async"}
+            />
+          );
+        })}
       </div>
 
       <div className="relative z-10 flex min-h-[70vh] items-center justify-center px-4 pt-20 text-center sm:min-h-[80vh]">

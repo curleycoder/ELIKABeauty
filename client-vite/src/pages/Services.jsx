@@ -265,8 +265,11 @@ export default function Services() {
                   <img
                     src={s.image}
                     alt={s.title}
+                    width={600}
+                    height={400}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/20 to-transparent" />
 
