@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { trackBookingConfirmed } from "../utils/analytics";
+import { FaCheckCircle } from "react-icons/fa";
 
 export default function BookingConfirmed() {
   const location = useLocation();
@@ -35,8 +36,8 @@ export default function BookingConfirmed() {
   return (
     <div className="w-full min-h-screen bg-[#F8F7F1] px-4 sm:px-6 py-12 pt-24">
       <div className="max-w-2xl mx-auto bg-white rounded-[25px] shadow-xl p-6 sm:p-10 text-center">
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#7a3b44] mb-4">
-          Booking Confirmed ✅
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#7a3b44] mb-4 flex items-center justify-center gap-2">
+          <FaCheckCircle className="text-green-500" /> Booking Confirmed
         </h1>
 
         <p className="text-gray-700 mb-6">

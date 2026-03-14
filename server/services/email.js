@@ -66,7 +66,7 @@ async function sendBookingEmails({ booking, servicesText, prettyDate, prettyTime
   const r2 = await r.emails.send({
     from: `ELIKA Beauty Bookings <${EMAIL_FROM}>`,
     to: ADMIN_EMAILS,
-    subject: `📅 New Booking — ${name} (${prettyDate} ${prettyTime})`,
+    subject: `New Booking — ${name} (${prettyDate} ${prettyTime})`,
     html: ownerHtml,
     replyTo: clientTo,
   });
@@ -113,7 +113,7 @@ async function sendCancellationEmails({ booking, servicesText, prettyDate, prett
   const r1 = await r.emails.send({ from, to: clientTo, subject: "Your ELIKA Beauty appointment has been cancelled", html: clientHtml, replyTo: EMAIL_REPLY_TO });
   console.log("✅ Cancellation client sent:", r1?.data?.id || JSON.stringify(r1));
 
-  const r2 = await r.emails.send({ from: `ELIKA Beauty Bookings <${EMAIL_FROM}>`, to: ADMIN_EMAILS, subject: `❌ Cancelled — ${name} (${prettyDate} ${prettyTime})`, html: ownerHtml, replyTo: clientTo });
+  const r2 = await r.emails.send({ from: `ELIKA Beauty Bookings <${EMAIL_FROM}>`, to: ADMIN_EMAILS, subject: `Cancelled — ${name} (${prettyDate} ${prettyTime})`, html: ownerHtml, replyTo: clientTo });
   console.log("✅ Cancellation admin sent:", r2?.data?.id || JSON.stringify(r2));
 }
 
@@ -122,7 +122,7 @@ async function sendBirthdayEmail({ name, email }) {
   const r = getResend();
   const html = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;max-width:520px;margin:0 auto">
-      <h2 style="color:#572a31">🎂 Happy Birthday, ${name}!</h2>
+      <h2 style="color:#572a31">Happy Birthday, ${name}!</h2>
       <p>Wishing you a wonderful birthday from everyone at <strong>ELIKA Beauty</strong>.</p>
       <p>As a birthday gift, enjoy a <strong>$20 credit</strong> on any service over $80 — on us!</p>
       <div style="margin:24px 0;padding:16px 24px;background:#f8f0f1;border-radius:12px;text-align:center">
@@ -135,7 +135,7 @@ async function sendBirthdayEmail({ name, email }) {
       <p>— ELIKA Beauty</p>
     </div>`;
 
-  const result = await r.emails.send({ from: `ELIKA Beauty <${EMAIL_FROM}>`, to: email, subject: `🎂 Happy Birthday ${name}! A gift from ELIKA Beauty`, html, replyTo: EMAIL_REPLY_TO });
+  const result = await r.emails.send({ from: `ELIKA Beauty <${EMAIL_FROM}>`, to: email, subject: `Happy Birthday ${name}! A gift from ELIKA Beauty`, html, replyTo: EMAIL_REPLY_TO });
   console.log("✅ Birthday email sent:", result?.data?.id || JSON.stringify(result));
 }
 
@@ -144,7 +144,7 @@ async function sendReminderEmail({ name, email, prettyDate, prettyTime, services
   const r = getResend();
   const html = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;max-width:520px;margin:0 auto">
-      <h2 style="color:#572a31">📅 Appointment Reminder</h2>
+      <h2 style="color:#572a31">Appointment Reminder</h2>
       <p>Hi <strong>${name}</strong>, just a friendly reminder about your appointment tomorrow:</p>
       <ul>
         <li><strong>Date:</strong> ${prettyDate}</li>

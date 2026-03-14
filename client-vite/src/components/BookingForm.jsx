@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { FaPlus, FaCheck } from "react-icons/fa";
+import { FaPlus, FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 const TABS = ["Hair", "Face", "Men", "Spa", "Add ons"];
 const SERVICES_CACHE_KEY = "elika-services-cache-v4";
@@ -239,7 +239,7 @@ export default function BookingForm({ onSelectionChange }) {
 
         {conflictWarning && (
           <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700">
-            <div className="font-bold">⚠️ Not recommended together</div>
+            <div className="font-bold flex items-center gap-2"><FaExclamationTriangle /> Not recommended together</div>
             <div className="text-sm mt-1">
               Keratin + (Highlight/Balayage/Hair Color) can damage hair. Book on separate days.
             </div>

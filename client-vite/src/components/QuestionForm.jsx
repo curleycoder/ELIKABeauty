@@ -134,7 +134,7 @@ export default function QuestionsForm({
         alert("That time just got booked. Please choose another time.");
         onTimeConflict?.();
       } else {
-        alert(`❌ ${msg || "Failed. Try again."}`);
+        alert(msg || "Failed. Try again.");
       }
     } finally {
       setLoading(false);

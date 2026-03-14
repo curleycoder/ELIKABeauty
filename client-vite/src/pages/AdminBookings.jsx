@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { FaCalendarAlt, FaClock, FaCut } from "react-icons/fa";
 
 const ADMIN_KEY_STORAGE = "elikabeauty_admin_key";
 const API_BASE = "https://elikabeauty.onrender.com/api/admin/bookings";
@@ -295,7 +296,7 @@ export default function AdminBookings() {
         <div className="space-y-6">
           {grouped.map((day) => (
             <div key={day.dateLabel} className="rounded border p-4">
-              <div className="font-bold text-[#55203d] mb-3">📆 {day.dateLabel}</div>
+              <div className="font-bold text-[#55203d] mb-3 flex items-center gap-2"><FaCalendarAlt /> {day.dateLabel}</div>
 
               <div className="space-y-3">
                 {day.list.map(({ b }) => {
@@ -323,9 +324,9 @@ export default function AdminBookings() {
 
                           <div className="text-sm text-gray-700">{contactText(b)}</div>
 
-                          <div className="text-sm text-gray-600 mt-1">⏰ {formatTime(b)}</div>
+                          <div className="text-sm text-gray-600 mt-1 flex items-center gap-1"><FaClock className="shrink-0" /> {formatTime(b)}</div>
 
-                          <div className="text-sm text-gray-600 mt-1">💇 {servicesText(b)}</div>
+                          <div className="text-sm text-gray-600 mt-1 flex items-center gap-1"><FaCut className="shrink-0" /> {servicesText(b)}</div>
                         </div>
 
                         <button
