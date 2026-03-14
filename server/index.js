@@ -17,15 +17,17 @@ mongoose
 
 const emailRouter = require("./routes/email");
 const servicesRouter = require("./routes/services");
+const googleRouter = require("./routes/google");
 
 app.use("/api/email", emailRouter);
 app.use("/api/services", servicesRouter);
+app.use("/api/google", googleRouter);
 
 app.get("/", (req, res) => {
   res.send("ELIKA Beauty server is running");
 });
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
