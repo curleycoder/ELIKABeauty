@@ -176,10 +176,12 @@ export default function Services() {
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/images/services/services-hero.webp`} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={`${SITE_ORIGIN}/images/services/services-hero.webp`} />
 
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbJsonLd)}

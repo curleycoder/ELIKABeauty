@@ -47,6 +47,7 @@ const routeMap = {
   Gallery: "/gallery",
   Articles: "/articles",
   About: "/about",
+  Contact: "/contact",
 };
 
 const navItems = [
@@ -56,6 +57,7 @@ const navItems = [
   { name: "Gallery" },
   { name: "Articles" },
   { name: "About" },
+  { name: "Contact" },
 ];
 const isActive = (item) => {
   const path = routeMap[item.name];

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { FaStar } from "react-icons/fa";
 
 const baseURL = (import.meta.env.VITE_API_URL || "https://api.elikabeauty.ca").replace(/\/$/, "");
 
@@ -256,8 +257,10 @@ export default function GoogleReview() {
                             <strong className="text-[#55203d] text-sm">
                               {review?.author_name || "Client"}
                             </strong>
-                            <span className="text-sm" aria-label={`${review?.rating || 0} stars`}>
-                              {"⭐️".repeat(clamp(Number(review?.rating) || 0, 0, 5))}
+                            <span className="flex gap-0.5 text-amber-400" aria-label={`${review?.rating || 0} stars`}>
+                              {Array.from({ length: clamp(Number(review?.rating) || 0, 0, 5) }).map((_, si) => (
+                                <FaStar key={si} className="text-xs" />
+                              ))}
                             </span>
                           </div>
                         </div>

@@ -4,6 +4,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import Footer from "./components/Footer.jsx";
 
 import Home from "./pages/Home.jsx";
 import Booking from "./pages/Booking.jsx";
@@ -31,6 +32,7 @@ import FacialBurnaby from "./pages/FacialBurnaby";
 
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
+import Contact from "./pages/Contact";
 
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -73,12 +75,15 @@ export default function App() {
           element={<RelaxationMassageBurnaby />}
         />
         <Route path="/facial-burnaby" element={<FacialBurnaby />}/>
+        <Route path="/facial-treatment-burnaby" element={<FacialBurnaby />}/>
 
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/contact" element={<Contact />} />
         
       </Routes>
 
+      <Footer />
       <SpeedInsights />
     </>
   );

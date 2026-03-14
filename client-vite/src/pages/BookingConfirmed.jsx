@@ -1,9 +1,33 @@
-// src/pages/BookingConfirmed.jsx
 import React, { useEffect } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { trackBookingConfirmed } from "../utils/analytics";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaCalendarPlus } from "react-icons/fa";
+
+function buildGoogleCalendarUrl({ name, date, time, services }) {
+  try {
+    // Parse date + time into a Date object (treat as Vancouver local time)
+    const [year, month, day] = date.split("-").map(Number);
+    const [timePart, period] = time.split(" ");
+    let [h, m] = timePart.split(":").map(Number);
+    if (period === "PM" && h !== 12) h += 12;
+    if (period === "AM" && h === 12) h = 0;
+    const start = new Date(year, month - 1, day, h, m);
+    const end = new Date(start.getTime() + 90 * 60 * 1000); // assume 90 min
+
+    const fmt = (d) => d.toISOString().replace(/[-:]/g, "").split(".")[0];
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: `Elika Beauty – ${services || "Appointment"}`,
+      dates: `${fmt(start)}/${fmt(end)}`,
+      details: `Your appointment at Elika Beauty. Call (604) 438-3727 to reschedule.`,
+      location: "3790 Canada Way #102, Burnaby, BC V5G 1G4",
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  } catch {
+    return null;
+  }
+}
 
 export default function BookingConfirmed() {
   const location = useLocation();
@@ -11,6 +35,14 @@ export default function BookingConfirmed() {
 
   const booking = location.state?.booking;
   const bookingId = searchParams.get("bookingId");
+
+  const servicesLabel = Array.isArray(booking?.services)
+    ? booking.services.map((s) => s?.name || s).filter(Boolean).join(", ")
+    : "";
+
+  const calendarUrl = booking?.date && booking?.time
+    ? buildGoogleCalendarUrl({ name: booking.name, date: booking.date, time: booking.time, services: servicesLabel })
+    : null;
 
   useEffect(() => {
     if (!bookingId) return;
@@ -52,9 +84,7 @@ export default function BookingConfirmed() {
 
             <p className="text-sm text-gray-700 mb-2">
               <strong>Services:</strong>{" "}
-              {Array.isArray(booking.services)
-                ? booking.services.map((s) => s?.name || s).filter(Boolean).join(", ")
-                : ""}
+              {servicesLabel}
             </p>
 
             <p className="text-sm text-gray-700 mb-2">
@@ -73,13 +103,22 @@ export default function BookingConfirmed() {
         )}
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {calendarUrl && (
+            <a
+              href={calendarUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="px-5 py-3 rounded-full bg-white border border-[#7a3b44]/20 text-[#7a3b44] font-semibold hover:bg-[#7a3b44]/5 flex items-center justify-center gap-2"
+            >
+              <FaCalendarPlus /> Add to Calendar
+            </a>
+          )}
           <Link
             to="/"
             className="px-5 py-3 rounded-full bg-[#7a3b44] text-white font-semibold hover:brightness-110"
           >
             Back to Home
           </Link>
-
           <Link
             to="/services"
             className="px-5 py-3 rounded-full border border-[#7a3b44]/20 text-[#7a3b44] font-semibold hover:bg-[#7a3b44]/5"
