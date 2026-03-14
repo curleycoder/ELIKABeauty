@@ -34,7 +34,7 @@ export default function Footer() {
   const status = getTodayStatus();
 
   return (
-    <footer className="bg-[#2e1118] text-white/80 mt-16">
+    <footer className="bg-[#2e1118] text-white/80">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
         {/* Brand */}
