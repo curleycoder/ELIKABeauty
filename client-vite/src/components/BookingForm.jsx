@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from "react"
 import { FaPlus, FaCheck } from "react-icons/fa";
 
 const TABS = ["Hair", "Face", "Men", "Spa", "Add ons"];
-const SERVICES_CACHE_KEY = "elika-services-cache-v2";
-const SERVICES_CACHE_LS_KEY = "elika-services-ls-v2";
+const SERVICES_CACHE_KEY = "elika-services-cache-v3";
+const SERVICES_CACHE_LS_KEY = "elika-services-ls-v3";
 const SERVICES_CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
 function normalizeCategory(value) {
