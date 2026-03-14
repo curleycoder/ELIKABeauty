@@ -24,6 +24,8 @@ export default function QuestionsForm({
     email: "",
     phone: "",
     referredBy: "",
+    birthdayMonth: "",
+    birthdayDay: "",
     note: "",
   });
 
@@ -101,6 +103,8 @@ export default function QuestionsForm({
         date: bookingTime.date,
         time: bookingTime.time,
         note: (form.note || "").trim(),
+        birthdayMonth: form.birthdayMonth ? Number(form.birthdayMonth) : null,
+        birthdayDay: form.birthdayDay ? Number(form.birthdayDay) : null,
       };
 
       const res = await fetch(`${baseURL}/api/bookings`, {
@@ -211,6 +215,36 @@ export default function QuestionsForm({
           onChange={handleChange}
           className="w-full border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31]"
         />
+      </div>
+
+      <div>
+        <label className="block text-md font-display font-medium mb-2">
+          Birthday <span className="text-sm font-normal text-gray-400">(optional — get a $20 gift on your birthday!)</span>
+        </label>
+        <div className="flex gap-3">
+          <select
+            name="birthdayMonth"
+            value={form.birthdayMonth}
+            onChange={handleChange}
+            className="w-1/2 border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31] bg-white"
+          >
+            <option value="">Month</option>
+            {["January","February","March","April","May","June","July","August","September","October","November","December"].map((m, i) => (
+              <option key={m} value={i + 1}>{m}</option>
+            ))}
+          </select>
+          <select
+            name="birthdayDay"
+            value={form.birthdayDay}
+            onChange={handleChange}
+            className="w-1/2 border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31] bg-white"
+          >
+            <option value="">Day</option>
+            {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div>

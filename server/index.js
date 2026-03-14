@@ -14,7 +14,11 @@ app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
+  .then(() => {
+    console.log("✅ MongoDB connected");
+    const { startCronJobs } = require("./services/cron");
+    startCronJobs();
+  })
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 const emailRouter = require("./routes/email");

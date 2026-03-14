@@ -261,4 +261,72 @@ ${adminUrl}
 }
 
 
-module.exports = { sendBookingEmails, sendCancellationEmails };
+module.exports = { sendBookingEmails, sendCancellationEmails, sendBirthdayEmail, sendReminderEmail };
+async function sendBirthdayEmail({ name, email }) {
+  const r = getResend();
+  const from = `ELIKA Beauty <${EMAIL_FROM}>`;
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;max-width:520px;margin:0 auto">
+      <h2 style="color:#572a31">🎂 Happy Birthday, ${name}!</h2>
+      <p>Wishing you a wonderful birthday from everyone at <strong>ELIKA Beauty</strong>.</p>
+      <p>As a birthday gift, enjoy a <strong>$20 credit</strong> on any service over $80 — on us!</p>
+      <div style="margin:24px 0;padding:16px 24px;background:#f8f0f1;border-radius:12px;text-align:center">
+        <p style="margin:0;font-size:13px;color:#888">Your birthday credit code</p>
+        <p style="margin:8px 0 0;font-size:28px;font-weight:bold;letter-spacing:4px;color:#572a31">BDAY20</p>
+        <p style="margin:8px 0 0;font-size:12px;color:#aaa">Valid for services over $80 • One-time use • Expires in 30 days</p>
+      </div>
+      <p>
+        <a href="https://elikabeauty.ca/booking"
+          style="display:inline-block;padding:12px 24px;background:#572a31;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">
+          Book Your Appointment
+        </a>
+      </p>
+      <p style="font-size:12px;color:#aaa">Just mention this code when you arrive. Cannot be combined with other offers.</p>
+      <p>— ELIKA Beauty</p>
+    </div>
+  `;
+
+  const result = await r.emails.send({
+    from,
+    to: email,
+    subject: `🎂 Happy Birthday ${name}! A gift from ELIKA Beauty`,
+    html,
+    replyTo: EMAIL_REPLY_TO,
+  });
+
+  console.log("✅ Birthday email sent:", result?.data?.id || result?.id);
+}
+
+async function sendReminderEmail({ name, email, prettyDate, prettyTime, servicesText }) {
+  const r = getResend();
+  const from = `ELIKA Beauty <${EMAIL_FROM}>`;
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;max-width:520px;margin:0 auto">
+      <h2 style="color:#572a31">📅 Appointment Reminder</h2>
+      <p>Hi <strong>${name}</strong>, just a friendly reminder about your appointment tomorrow:</p>
+      <ul>
+        <li><strong>Date:</strong> ${prettyDate}</li>
+        <li><strong>Time:</strong> ${prettyTime}</li>
+        <li><strong>Services:</strong> ${servicesText}</li>
+      </ul>
+      <p>We're located at <strong>3790 Canada Way #102, Burnaby</strong>.</p>
+      <p>If you need to reschedule, please reply to this email or call us at <strong>(604) 438-3727</strong>.</p>
+      <p>See you tomorrow!</p>
+      <p>— ELIKA Beauty</p>
+    </div>
+  `;
+
+  const result = await r.emails.send({
+    from,
+    to: email,
+    subject: `Reminder: Your ELIKA Beauty appointment tomorrow at ${prettyTime}`,
+    html,
+    replyTo: EMAIL_REPLY_TO,
+  });
+
+  console.log("✅ Reminder email sent:", result?.data?.id || result?.id);
+}
+
+module.exports = { sendBookingEmails, sendCancellationEmails, sendBirthdayEmail, sendReminderEmail };

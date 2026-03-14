@@ -1,96 +1,54 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const { addMinutes, format, parse, parseISO } = require("date-fns");
 const { fromZonedTime } = require("date-fns-tz");
 const Service = require("../models/service");
+const Booking = require("../models/booking");
 const { sendBookingEmails } = require("../services/email");
-
-const bookingSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true },
-    phone: { type: String, required: true, trim: true },
-    referredBy: { type: String, default: "", trim: true },
-    services: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service", required: true }],
-    date: { type: String, required: true },
-    time: { type: String, required: true },
-    duration: { type: Number, required: true },
-    // "chair" = blocks main stylist, "room" = separate room (facial/massage)
-    serviceType: { type: String, default: "chair" },
-    note: { type: String, default: "", trim: true },
-    status: { type: String, default: "confirmed" },
-    calendarEventId: { type: String, default: "" },
-  },
-  { timestamps: true }
-);
 
 const SHOP_TZ = "America/Vancouver";
 
 function bookingToUtcRange(dateStr, time12h, duration) {
-  const localParsed = parse(
-    `${dateStr} ${time12h}`,
-    "yyyy-MM-dd h:mm a",
-    new Date()
-  );
+  const localParsed = parse(`${dateStr} ${time12h}`, "yyyy-MM-dd h:mm a", new Date());
   if (isNaN(localParsed.getTime())) return null;
-
   const wallClock = format(localParsed, "yyyy-MM-dd HH:mm:ss");
   const startUtc = fromZonedTime(wallClock, SHOP_TZ);
   const endUtc = addMinutes(startUtc, Number(duration) || 60);
   return { startUtc, endUtc };
 }
 
-const Booking =
-  mongoose.models.Booking || mongoose.model("Booking", bookingSchema);
-
-// Determine if a set of services is "room-only" (facial, massage, etc.)
-// Room services don't block the hair chair and vice versa.
-const ROOM_SERVICE_NAMES = new Set([
-  "facial",
-  "massage",
-  "hot stone massage",
-  "deep tissue massage",
-]);
+const ROOM_SERVICE_NAMES = new Set(["facial", "massage", "hot stone massage", "deep tissue massage"]);
 
 function getServiceType(serviceNames) {
   const names = serviceNames.map((n) => String(n).toLowerCase().trim());
-  const allRoom = names.every((n) => ROOM_SERVICE_NAMES.has(n));
-  return allRoom ? "room" : "chair";
+  return names.every((n) => ROOM_SERVICE_NAMES.has(n)) ? "room" : "chair";
 }
 
+// POST /api/bookings
 router.post("/", async (req, res) => {
   try {
-    const { name, email, phone, referredBy, services, date, time, note } = req.body;
+    const { name, email, phone, referredBy, services, date, time, note, birthdayMonth, birthdayDay } = req.body;
 
-    if (!name || !email || !phone || !date || !time) {
+    if (!name || !email || !phone || !date || !time)
       return res.status(400).json({ error: "Missing required fields" });
-    }
-    if (!Array.isArray(services) || services.length === 0) {
+    if (!Array.isArray(services) || services.length === 0)
       return res.status(400).json({ error: "Please select at least one service" });
-    }
 
     const validServices = await Service.find({ _id: { $in: services } });
-    if (validServices.length !== services.length) {
+    if (validServices.length !== services.length)
       return res.status(400).json({ error: "One or more selected services are invalid" });
-    }
 
     const totalDuration = validServices.reduce((sum, s) => sum + (Number(s.duration) || 0), 0);
-    if (totalDuration <= 0) {
+    if (totalDuration <= 0)
       return res.status(400).json({ error: "Invalid total duration" });
-    }
 
     const requestedRange = bookingToUtcRange(date, time, totalDuration);
-    if (!requestedRange) {
+    if (!requestedRange)
       return res.status(400).json({ error: "Invalid booking date/time" });
-    }
 
-    // Determine if this booking uses the chair or a room
     const serviceNames = validServices.map((s) => s.name);
     const incomingType = getServiceType(serviceNames);
 
-    // Only check overlap against bookings of the same type
-    // Legacy bookings without serviceType are treated as "chair"
     const sameDayBookings = await Booking.find({
       date,
       status: { $ne: "cancelled" },
@@ -103,40 +61,35 @@ router.post("/", async (req, res) => {
     }).lean();
 
     const hasOverlap = sameDayBookings.some((b) => {
-      const existingRange = bookingToUtcRange(b.date, b.time, b.duration);
-      if (!existingRange) return false;
-      return (
-        requestedRange.startUtc < existingRange.endUtc &&
-        requestedRange.endUtc > existingRange.startUtc
-      );
+      const r = bookingToUtcRange(b.date, b.time, b.duration);
+      if (!r) return false;
+      return requestedRange.startUtc < r.endUtc && requestedRange.endUtc > r.startUtc;
     });
 
-    if (hasOverlap) {
+    if (hasOverlap)
       return res.status(409).json({ error: "This time is no longer available" });
-    }
+
+    // Validate birthday fields if provided
+    const bMonth = birthdayMonth ? Number(birthdayMonth) : null;
+    const bDay = birthdayDay ? Number(birthdayDay) : null;
+    if ((bMonth && (bMonth < 1 || bMonth > 12)) || (bDay && (bDay < 1 || bDay > 31)))
+      return res.status(400).json({ error: "Invalid birthday" });
 
     const booking = await Booking.create({
-      name,
-      email,
-      phone,
+      name, email, phone,
       referredBy: referredBy || "",
-      services,
-      date,
-      time,
+      services, date, time,
       duration: totalDuration,
       serviceType: incomingType,
       note: note || "",
+      birthdayMonth: bMonth,
+      birthdayDay: bDay,
     });
 
-    const safeDate =
-      typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date)
-        ? parseISO(date)
-        : new Date(date);
-
+    const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? parseISO(date) : new Date(date);
     const prettyDate = format(safeDate, "PPP");
     const servicesText = serviceNames.join(", ");
 
-    // Send emails via Resend (non-blocking — don't fail the booking if email fails)
     sendBookingEmails({ booking, servicesText, prettyDate, prettyTime: time }).catch((err) => {
       console.error("❌ Email send error:", err.message);
     });
@@ -149,34 +102,27 @@ router.post("/", async (req, res) => {
 });
 
 // GET /api/bookings/booked?date=YYYY-MM-DD&serviceType=chair|room
-// Returns booked UTC ranges for the given date and service type.
-// If serviceType is omitted, defaults to "chair".
 router.get("/booked", async (req, res) => {
   try {
     const { date, serviceType = "chair" } = req.query;
-
-    if (!date) {
-      return res.status(400).json({ error: "Missing date" });
-    }
+    if (!date) return res.status(400).json({ error: "Missing date" });
 
     const bookings = await Booking.find({
       date,
       status: { $ne: "cancelled" },
-      // Match explicit serviceType OR legacy bookings (no serviceType = chair)
       $or: [
         { serviceType },
-        ...(serviceType === "chair" ? [{ serviceType: { $exists: false } }, { serviceType: null }, { serviceType: "" }] : []),
+        ...(serviceType === "chair"
+          ? [{ serviceType: { $exists: false } }, { serviceType: null }, { serviceType: "" }]
+          : []),
       ],
     }).lean();
 
     const slots = bookings
       .map((b) => {
-        const range = bookingToUtcRange(b.date, b.time, b.duration);
-        if (!range) return null;
-        return {
-          start: range.startUtc.toISOString(),
-          end: range.endUtc.toISOString(),
-        };
+        const r = bookingToUtcRange(b.date, b.time, b.duration);
+        if (!r) return null;
+        return { start: r.startUtc.toISOString(), end: r.endUtc.toISOString() };
       })
       .filter(Boolean);
 
