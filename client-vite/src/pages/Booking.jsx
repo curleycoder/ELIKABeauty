@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
+import { useNextAvailable } from "../hooks/useNextAvailable";
+import { FaClock } from "react-icons/fa";
 
 
 const NO_BUFFER_SERVICE_NAMES = new Set(["Eyebrows Threading", "Full Threading"]);
@@ -121,6 +123,11 @@ useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  const { label: nextAvailLabel, loading: nextAvailLoading } = useNextAvailable({
+    duration: totalBlockedMinutes || 60,
+    serviceType,
+  });
+
   const progressPct = ((step + 1) / STEPS.length) * 100;
 
 const hardResetAll = () => {
@@ -194,6 +201,21 @@ const hardResetAll = () => {
             <span className="py-2 px-4 sm:px-6">Book Your Appointment</span>
           </h1>
           <p className="text-gray-600 text-sm mt-2">3790 Canada Way #102, Burnaby</p>
+
+          {/* Next available indicator */}
+          {step <= 1 && (
+            <div className="mt-3 flex justify-center">
+              {nextAvailLoading ? (
+                <span className="inline-flex items-center gap-1.5 text-xs text-gray-400 bg-white border border-gray-200 rounded-full px-3 py-1.5">
+                  <FaClock className="text-[10px]" /> Checking availability…
+                </span>
+              ) : nextAvailLabel ? (
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-800 bg-green-50 border border-green-200 rounded-full px-3 py-1.5">
+                  <FaClock className="text-[10px]" /> Next available: {nextAvailLabel}
+                </span>
+              ) : null}
+            </div>
+          )}
 
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
