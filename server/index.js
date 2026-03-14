@@ -18,10 +18,12 @@ mongoose
 const emailRouter = require("./routes/email");
 const servicesRouter = require("./routes/services");
 const googleRouter = require("./routes/google");
+const bookingsRouter = require("./routes/bookings");
 
 app.use("/api/email", emailRouter);
 app.use("/api/services", servicesRouter);
 app.use("/api/google", googleRouter);
+app.use("/api/bookings", bookingsRouter);
 
 app.get("/", (req, res) => {
   res.send("ELIKA Beauty server is running");
