@@ -10,7 +10,7 @@ if (!mongoose.connection.readyState) {
 
 router.get("/", async (req, res) => {
   try {
-    const services = await Service.find().sort({ category: 1, price: 1 });
+    const services = await Service.find().sort({ category: 1, sortOrder: 1, price: 1 });
     res.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
     res.json(services);
   } catch (error) {
