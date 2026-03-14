@@ -25,11 +25,13 @@ const emailRouter = require("./routes/email");
 const servicesRouter = require("./routes/services");
 const googleRouter = require("./routes/google");
 const bookingsRouter = require("./routes/bookings");
+const adminRouter = require("./routes/admin");
 
 app.use("/api/email", emailRouter);
 app.use("/api/services", servicesRouter);
 app.use("/api/google", googleRouter);
 app.use("/api/bookings", bookingsRouter);
+app.use("/api/admin", adminRouter);
 
 app.get("/", (req, res) => {
   res.send("ELIKA Beauty server is running");
