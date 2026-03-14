@@ -38,7 +38,7 @@ export default function Contact() {
             <div className="rounded-2xl border border-[#572a31]/10 bg-[#fcfaf8] p-6">
               <p className="text-xs uppercase tracking-widest text-[#8a6b73] mb-4">Location</p>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=3790+Canada+Way+%23102+Burnaby+BC+V5G+1G4"
+                href="https://www.google.com/maps/search/?api=1&query=ELIKA+BEAUTY+3790+Canada+Way+Burnaby+BC"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-start gap-3 text-[#572a31] hover:underline"
@@ -90,7 +90,7 @@ export default function Contact() {
           <div className="rounded-2xl overflow-hidden border border-[#572a31]/10 min-h-[400px]">
             <iframe
               title="Elika Beauty location map"
-              src="https://maps.google.com/maps?q=3790+Canada+Way+%23102+Burnaby+BC+V5G+1G4&output=embed&z=16"
+              src="https://maps.google.com/maps?q=ELIKA+BEAUTY+3790+Canada+Way+Burnaby+BC&output=embed&z=16"
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: "400px" }}
