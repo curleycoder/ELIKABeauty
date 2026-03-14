@@ -25,15 +25,14 @@ const localBusinessSchema = {
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: 49.2488,
-    longitude: -122.9897,
+    latitude: 49.2434,
+    longitude: -122.9725,
   },
   openingHoursSpecification: [
     { "@type": "OpeningHoursSpecification", dayOfWeek: ["Tuesday","Wednesday","Thursday","Friday", "Saturday"], opens: "10:00", closes: "19:00" },
     // { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday"], opens: "10:00", closes: "18:00" },
   ],
   priceRange: "$$",
-  servesCuisine: undefined,
   hasMap: "https://www.google.com/maps/place/ELIKA+BEAUTY+(Tangles+Hair+Design)/",
   sameAs: ["https://www.instagram.com/elikabeauty.ca/"],
 };

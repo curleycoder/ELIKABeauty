@@ -1,10 +1,6 @@
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 
-const SITE_NAME = "Elika Beauty";
 const EMAIL = "elkaeiamina@gmail.com";
-const PHONE_TEL = "+16044383727";
-const PHONE_DISPLAY = "(604) 438-3727";
 const ADDRESS_LINE = "3790 Canada Way #102, Burnaby, BC V5G 1G4";
 const LOCATION_NOTE = "Edward Jones Plaza";
 const PARKING_NOTE = "Plaza parking available • Pay parking on street";
@@ -213,7 +209,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="mt-8 border-t pt-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
+        {/* <section className="mt-8 border-t pt-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
           <h2 className="text-2xl font-theseason text-[#440008] sm:text-3xl">
             Ready to visit ELIKA BEAUTY?
           </h2>
@@ -237,7 +233,7 @@ export default function AboutPage() {
               Call {PHONE_DISPLAY}
             </a>
           </div>
-        </section>
+        </section> */}
       </main>
     </div>
   );
