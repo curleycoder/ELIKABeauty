@@ -519,7 +519,7 @@ export default function HairColorBurnaby() {
           </div>
         </section>
 
-        <section className="mt-14 rounded-[24px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
+        {/* <section className="mt-14 rounded-[24px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
           <h2 className="text-2xl font-theseason text-[#440008] sm:text-3xl">
             Ready to book?
           </h2>
@@ -543,7 +543,7 @@ export default function HairColorBurnaby() {
               Call {PHONE_DISPLAY}
             </a>
           </div>
-        </section>
+        </section> */}
       </main>
     </div>
   );

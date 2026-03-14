@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 import { FaInstagram, FaPhone, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 
 const HOURS = [
-  { day: "Monday",    hours: "10:00 AM – 7:00 PM" },
+  { day: "Monday",    hours: "Closed" },
   { day: "Tuesday",   hours: "10:00 AM – 7:00 PM" },
   { day: "Wednesday", hours: "10:00 AM – 7:00 PM" },
   { day: "Thursday",  hours: "10:00 AM – 7:00 PM" },
   { day: "Friday",    hours: "10:00 AM – 7:00 PM" },
-  { day: "Saturday",  hours: "10:00 AM – 6:00 PM" },
+  { day: "Saturday",  hours: "10:00 AM – 7:00 PM" },
   { day: "Sunday",    hours: "Closed" },
 ];
 

@@ -2,7 +2,7 @@ const articles = [
   {
     id: 1,
     slug: "fix-damaged-bleached-hair",
-    image: "/articles/bleach-damage.jpg",
+    image: "/articles/bleach-damage.webp",
     title: "How to Fix Damaged Hair After Bleaching",
     intro:
       "Bleached hair feeling dry, rough, or breaking? Here's how to repair it the professional way.",
@@ -22,7 +22,7 @@ const articles = [
   {
     id: 2,
     slug: "why-balayage-turns-brassy",
-    image: "/articles/brassy-balayage.jpg",
+    image: "/articles/brassy-balayage.webp",
     title: "Why Your Balayage Turns Brassy — And How to Fix It",
     intro:
       "If your balayage keeps turning yellow or orange, this guide explains why and how to fix it.",
@@ -42,7 +42,7 @@ const articles = [
   {
     id: 3,
     slug: "best-hair-care-routine-for-coloured-hair",
-    image: "/articles/colored-hair-routine.jpg",
+    image: "/articles/colored-hair-routine.webp",
     title: "Best Hair Care Routine for Coloured Hair",
     intro:
       "Coloured hair needs extra love. Here's the routine to keep it shiny and vibrant between appointments.",
