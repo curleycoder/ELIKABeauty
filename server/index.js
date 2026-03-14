@@ -35,18 +35,6 @@ app.get("/", (req, res) => {
   res.send("ELIKA Beauty server is running");
 });
 
-// Temporary env check — remove after confirming
-app.get("/debug-env", (req, res) => {
-  res.json({
-    hasResendKey: !!process.env.RESEND_API_KEY,
-    resendKeyPrefix: process.env.RESEND_API_KEY?.slice(0, 8) || "MISSING",
-    hasEmailFrom: !!process.env.EMAIL_FROM,
-    emailFrom: process.env.EMAIL_FROM || "MISSING",
-    hasAdminEmail: !!process.env.ADMIN_EMAIL,
-    adminEmail: process.env.ADMIN_EMAIL || "MISSING",
-  });
-});
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
