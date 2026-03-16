@@ -13,13 +13,13 @@ const services = [
     category: "Hair",
     description: "Natural hand-painted highlights. Extra charge for base colour if needed.",
   },
-  {
-    name: "Women’s Haircut",
+{
+    name: "Women's Haircut",
     price: 45,
     duration: 45,
     fromPrice: true,
     category: "Hair",
-    description: "Professional haircut tailored to you.",
+    description: "Professional haircut tailored to you. Wash and style available as an add-on.",
   },
   {
     name: "Keratin",
