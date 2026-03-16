@@ -1,6 +1,7 @@
 const services = [
   { id: "balayage", name: "Balayage", price: 200, fromPrice: true, duration: 240, category: "Hair", description: "Natural hand-painted highlights. Extra charge for base colour if needed" },
-  { id: "hair-cut", name: "Hair Cut", price: 50, fromPrice: true, duration: 45, category: "Hair", description: "Professional haircut tailored to you." },
+  { id: "hair-cut", name: "Hair Cut", price: 50, fromPrice: true, duration: 45, category: "Hair", description: "Professional haircut tailored to you. Wash and style available as an add-on.",
+ },
   { id: "keratin", name: "Keratin", price: 250, fromPrice: true, duration: 240, category: "Hair", description: "Smooth and straighten frizzy hair." },
   { id: "highlight", name: "Highlight", price: 200, fromPrice: true, duration: 210, category: "Hair", description: "Lighter strands to add dimension. Extra charge for base colour if needed" },
   { id: "root-colour", name: "Root Colour", price: 70, duration: 90, category: "Hair", description: "Touch up your hair roots." },
