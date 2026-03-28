@@ -72,6 +72,64 @@ router.delete("/bookings/:id", auth, async (req, res) => {
   }
 });
 
+// POST /api/admin/backfill-calendar — one-time backfill of calendar events for existing bookings
+router.post("/backfill-calendar", auth, async (req, res) => {
+  const { parse, format, addMinutes } = require("date-fns");
+  const { fromZonedTime } = require("date-fns-tz");
+  const { createBookingEvent } = require("../services/calendar");
+  const SHOP_TZ = "America/Vancouver";
+
+  function toUtcRange(dateStr, time12h, duration) {
+    const localParsed = parse(`${dateStr} ${time12h}`, "yyyy-MM-dd h:mm a", new Date());
+    if (isNaN(localParsed.getTime())) return null;
+    const wallClock = format(localParsed, "yyyy-MM-dd HH:mm:ss");
+    const startUtc = fromZonedTime(wallClock, SHOP_TZ);
+    const endUtc = addMinutes(startUtc, Number(duration) || 60);
+    return { startUtc, endUtc };
+  }
+
+  const bookings = await Booking.find({
+    status: { $ne: "cancelled" },
+    $or: [
+      { calendarEventId: { $exists: false } },
+      { calendarEventId: null },
+      { calendarEventId: "" },
+    ],
+  }).populate("services", "name").lean();
+
+  let success = 0, failed = 0, skipped = 0;
+  const errors = [];
+
+  for (const b of bookings) {
+    const range = toUtcRange(b.date, b.time, b.duration);
+    if (!range) { skipped++; continue; }
+
+    const serviceNames = b.serviceNames?.length
+      ? b.serviceNames
+      : b.services?.map((s) => s?.name).filter(Boolean) || [];
+
+    try {
+      const eventId = await createBookingEvent({
+        name: b.name, email: b.email, phone: b.phone,
+        services: serviceNames, note: b.note || "",
+        start: range.startUtc.toISOString(),
+        end: range.endUtc.toISOString(),
+      });
+      if (eventId) {
+        await Booking.findByIdAndUpdate(b._id, { calendarEventId: eventId });
+        success++;
+      } else {
+        skipped++;
+      }
+    } catch (err) {
+      errors.push(`${b.name} (${b.date}): ${err.message}`);
+      failed++;
+    }
+  }
+
+  res.json({ total: bookings.length, success, skipped, failed, errors });
+});
+
 // GET /api/admin/credits/lookup?code=BDAY-2025-XXXXXX
 router.get("/credits/lookup", auth, async (req, res) => {
   const { code } = req.query;
