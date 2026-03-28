@@ -285,6 +285,7 @@ const hardResetAll = () => {
 
             {step === 2 && (
               <QuestionsForm
+                hideSubmitButton
                 selection={selection}
                 bookingTime={bookingTime}
                 onSubmit={({ savedBooking, displayBooking }) => {

@@ -19,6 +19,7 @@ export default function QuestionsForm({
   setLoading,
   loading,
   submitSignal,
+  hideSubmitButton = false,
 }) {
   const formRef = useRef(null);
   const submittingRef = useRef(false);
@@ -313,22 +314,24 @@ export default function QuestionsForm({
         />
       </div>
 
-      <button
-        type="button"
-        onClick={triggerSubmit}
-        disabled={loading}
-        className={`mt-6 w-full py-3 font-display rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
-          loading
-            ? "bg-[#572a31]/60 cursor-wait text-white"
-            : "bg-[#572a31] text-white hover:brightness-110"
-        }`}
-      >
-        {loading ? (
-          <><ClipLoader color="#fff" size={22} /> Submitting...</>
-        ) : (
-          "Submit Booking"
-        )}
-      </button>
+      {!hideSubmitButton && (
+        <button
+          type="button"
+          onClick={triggerSubmit}
+          disabled={loading}
+          className={`mt-6 w-full py-3 font-display rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
+            loading
+              ? "bg-[#572a31]/60 cursor-wait text-white"
+              : "bg-[#572a31] text-white hover:brightness-110"
+          }`}
+        >
+          {loading ? (
+            <><ClipLoader color="#fff" size={22} /> Submitting...</>
+          ) : (
+            "Submit Booking"
+          )}
+        </button>
+      )}
     </form>
   );
 }
