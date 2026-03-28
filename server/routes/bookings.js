@@ -83,6 +83,7 @@ router.post("/", async (req, res) => {
       services, date, time,
       duration: totalDuration,
       serviceType: incomingType,
+      serviceNames,
       note: note || "",
       birthdayMonth: bMonth,
       birthdayDay: bDay,

@@ -7,6 +7,7 @@ const bookingSchema = new mongoose.Schema(
     phone: { type: String, required: true, trim: true },
     referredBy: { type: String, default: "", trim: true },
     services: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service", required: true }],
+    serviceNames: [{ type: String }],
     date: { type: String, required: true },
     time: { type: String, required: true },
     duration: { type: Number, required: true },
