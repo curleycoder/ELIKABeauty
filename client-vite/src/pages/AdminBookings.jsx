@@ -92,7 +92,10 @@ function servicesText(b) {
   const names = arr
     .map((s) => (typeof s === "string" ? s : s?.name))
     .filter(Boolean);
-  return names.length ? names.join(", ") : "No services";
+  if (names.length) return names.join(", ");
+  // fall back to snapshot stored at booking time
+  const snapshot = Array.isArray(b?.serviceNames) ? b.serviceNames.filter(Boolean) : [];
+  return snapshot.length ? snapshot.join(", ") : "No services";
 }
 
 function contactText(b) {
