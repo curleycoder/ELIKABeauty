@@ -10,3 +10,6 @@ dist/
 coverage/
 # Ignore test coverage reports
 mynote.md
+
+src/assets
+client-vite/public
