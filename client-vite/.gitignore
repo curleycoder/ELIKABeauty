@@ -3,7 +3,7 @@ node_modules/
 *.log
 
 .env
-
+*.env
 .DS_Store
 dist/
 # Ignore build output
