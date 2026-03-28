@@ -118,7 +118,7 @@ async function sendCancellationEmails({ booking, servicesText, prettyDate, prett
 }
 
 // ─── Birthday credit ───────────────────────────────────────────────
-async function sendBirthdayEmail({ name, email }) {
+async function sendBirthdayEmail({ name, email, code }) {
   const r = getResend();
   const html = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;max-width:520px;margin:0 auto">
@@ -126,16 +126,16 @@ async function sendBirthdayEmail({ name, email }) {
       <p>Wishing you a wonderful birthday from everyone at <strong>ELIKA Beauty</strong>.</p>
       <p>As a birthday gift, enjoy a <strong>$20 credit</strong> on any service over $80 — on us!</p>
       <div style="margin:24px 0;padding:16px 24px;background:#f8f0f1;border-radius:12px;text-align:center">
-        <p style="margin:0;font-size:13px;color:#888">Your birthday credit code</p>
-        <p style="margin:8px 0 0;font-size:28px;font-weight:bold;letter-spacing:4px;color:#572a31">BDAY20</p>
-        <p style="margin:8px 0 0;font-size:12px;color:#aaa">Valid for services over $80 • One-time use • Expires in 30 days</p>
+        <p style="margin:0;font-size:13px;color:#888">Your personal birthday credit code</p>
+        <p style="margin:8px 0 0;font-size:26px;font-weight:bold;letter-spacing:3px;color:#572a31">${code}</p>
+        <p style="margin:8px 0 0;font-size:12px;color:#aaa">Valid for services over $80 before tax &nbsp;•&nbsp; One-time use &nbsp;•&nbsp; Valid this month only</p>
       </div>
       <p><a href="https://elikabeauty.ca/booking" style="display:inline-block;padding:12px 24px;background:#572a31;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">Book Your Appointment</a></p>
-      <p style="font-size:12px;color:#aaa">Mention this code when you arrive. Cannot be combined with other offers.</p>
+      <p style="font-size:12px;color:#aaa">Show this code when you arrive. Cannot be combined with other offers. One use per person per year.</p>
       <p>— ELIKA Beauty</p>
     </div>`;
 
-  const result = await r.emails.send({ from: `ELIKA Beauty <${EMAIL_FROM}>`, to: email, subject: `Happy Birthday ${name}! A gift from ELIKA Beauty`, html, replyTo: EMAIL_REPLY_TO });
+  const result = await r.emails.send({ from: `ELIKA Beauty <${EMAIL_FROM}>`, to: email, subject: `Happy Birthday ${name}! 🎂 A gift from ELIKA Beauty`, html, replyTo: EMAIL_REPLY_TO });
   console.log("✅ Birthday email sent:", result?.data?.id || JSON.stringify(result));
 }
 

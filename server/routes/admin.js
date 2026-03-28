@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking");
+const Client = require("../models/client");
 const { sendCancellationEmails } = require("../services/email");
 const { deleteBookingEvent } = require("../services/calendar");
 const { format, parseISO } = require("date-fns");
@@ -69,6 +70,40 @@ router.delete("/bookings/:id", auth, async (req, res) => {
     console.error("❌ Admin cancel booking:", err);
     res.status(500).json({ error: "Failed to cancel booking" });
   }
+});
+
+// GET /api/admin/credits/lookup?code=BDAY-2025-XXXXXX
+router.get("/credits/lookup", auth, async (req, res) => {
+  const { code } = req.query;
+  if (!code) return res.status(400).json({ error: "Missing code" });
+
+  const client = await Client.findOne({ birthdayCode: code.trim().toUpperCase() }).lean();
+  if (!client) return res.status(404).json({ error: "Code not found" });
+
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  res.json({
+    name: client.name || "—",
+    phone: client.phone || "—",
+    birthdayMonth: client.birthdayMonth ? MONTHS[client.birthdayMonth - 1] : "—",
+    birthdayCreditUsed: !!client.birthdayCreditUsed,
+    birthdayCreditSentYear: client.birthdayCreditSentYear || null,
+  });
+});
+
+// POST /api/admin/credits/redeem  { code }
+router.post("/credits/redeem", auth, async (req, res) => {
+  const { code } = req.body;
+  if (!code) return res.status(400).json({ error: "Missing code" });
+
+  const client = await Client.findOne({ birthdayCode: code.trim().toUpperCase() });
+  if (!client) return res.status(404).json({ error: "Code not found" });
+  if (client.birthdayCreditUsed) return res.status(409).json({ error: "Code already redeemed" });
+
+  client.birthdayCreditUsed = true;
+  await client.save();
+
+  res.json({ success: true, name: client.name || "—" });
 });
 
 module.exports = router;

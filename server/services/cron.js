@@ -1,4 +1,5 @@
 const cron = require("node-cron");
+const crypto = require("crypto");
 const { format, addDays, parseISO } = require("date-fns");
 const { toZonedTime } = require("date-fns-tz");
 const Booking = require("../models/booking");
@@ -7,21 +8,29 @@ const { sendBirthdayEmail, sendReminderEmail } = require("./email");
 
 const SHOP_TZ = "America/Vancouver";
 
+function generateBirthdayCode(year) {
+  const suffix = crypto.randomBytes(3).toString("hex").toUpperCase(); // 6 chars
+  return `BDAY-${year}-${suffix}`;
+}
+
 // ─── Birthday emails ───────────────────────────────────────────────
 // Runs every day at 9:00 AM Vancouver time
-// Finds all clients whose birthday is today, sends $20 credit email once per year
+// On the 1st of each month, sends $20 credit to all clients with that birthday month
+// Sends once per year, with a unique code per client
 async function runBirthdayJob() {
   const nowVan = toZonedTime(new Date(), SHOP_TZ);
   const month = nowVan.getMonth() + 1;
   const day = nowVan.getDate();
   const year = nowVan.getFullYear();
 
-  console.log(`Birthday job running for ${month}/${day}/${year}`);
+  // Only run on the 1st of the month
+  if (day !== 1) return;
 
-  // Read from Client model — one record per person, birthday set once
+  console.log(`🎂 Birthday job running for month ${month}/${year}`);
+
   const clients = await Client.find({
     birthdayMonth: month,
-    birthdayDay: day,
+    email: { $exists: true, $ne: "" },
     $or: [
       { birthdayCreditSentYear: { $ne: year } },
       { birthdayCreditSentYear: null },
@@ -29,16 +38,25 @@ async function runBirthdayJob() {
     ],
   }).lean();
 
-  console.log(`Found ${clients.length} birthday(s) to send`);
+  console.log(`🎂 Found ${clients.length} birthday client(s) to notify`);
 
   for (const c of clients) {
-    if (!c.email) continue;
     try {
-      await sendBirthdayEmail({ name: c.name || "there", email: c.email });
-      await Client.updateOne({ _id: c._id }, { $set: { birthdayCreditSentYear: year } });
-      console.log(`Birthday email sent to ${c.email}`);
+      const code = generateBirthdayCode(year);
+      await sendBirthdayEmail({ name: c.name || "there", email: c.email, code });
+      await Client.updateOne(
+        { _id: c._id },
+        {
+          $set: {
+            birthdayCreditSentYear: year,
+            birthdayCode: code,
+            birthdayCreditUsed: false,
+          },
+        }
+      );
+      console.log(`✅ Birthday email sent to ${c.email} — code: ${code}`);
     } catch (err) {
-      console.error(`Birthday email failed for ${c.email}:`, err.message);
+      console.error(`❌ Birthday email failed for ${c.email}:`, err.message);
     }
   }
 }

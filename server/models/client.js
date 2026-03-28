@@ -13,6 +13,12 @@ const clientSchema = new mongoose.Schema(
 
     // Track which year we already sent the birthday credit
     birthdayCreditSentYear: { type: Number, default: null },
+
+    // Unique code generated each year when birthday email is sent
+    birthdayCode: { type: String, default: null },
+
+    // Whether this year's credit has been redeemed
+    birthdayCreditUsed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
