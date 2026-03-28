@@ -6,6 +6,7 @@ const Service = require("../models/service");
 const Booking = require("../models/booking");
 const Client = require("../models/client");
 const { sendBookingEmails } = require("../services/email");
+const { createBookingEvent } = require("../services/calendar");
 
 const SHOP_TZ = "America/Vancouver";
 
@@ -120,6 +121,20 @@ router.post("/", async (req, res) => {
 
     sendBookingEmails({ booking, servicesText, prettyDate, prettyTime: time }).catch((err) => {
       console.error("❌ Email send error:", err.message);
+    });
+
+    createBookingEvent({
+      name,
+      email,
+      phone,
+      services: serviceNames,
+      note: note || "",
+      start: requestedRange.startUtc.toISOString(),
+      end: requestedRange.endUtc.toISOString(),
+    }).then(async (eventId) => {
+      if (eventId) await Booking.findByIdAndUpdate(booking._id, { calendarEventId: eventId });
+    }).catch((err) => {
+      console.error("❌ Calendar sync error:", err.message);
     });
 
     res.status(201).json(booking);

@@ -1,11 +1,15 @@
 const { google } = require("googleapis");
 
-const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
-  scopes: ["https://www.googleapis.com/auth/calendar"],
-});
-
-const calendar = google.calendar({ version: "v3", auth });
+let calendar = null;
+try {
+  const auth = new google.auth.GoogleAuth({
+    credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
+    scopes: ["https://www.googleapis.com/auth/calendar"],
+  });
+  calendar = google.calendar({ version: "v3", auth });
+} catch (err) {
+  console.error("⚠️  Google Calendar not initialized:", err.message);
+}
 
 function clean(v) {
   return String(v ?? "").trim();
@@ -20,6 +24,7 @@ async function createBookingEvent({
   start,
   end,
 }) {
+  if (!calendar) return null;
   console.log("📅 CALENDAR_ID:", process.env.GOOGLE_CALENDAR_ID);
   console.log(
     "🤖 SERVICE ACCOUNT:",
@@ -58,7 +63,7 @@ async function createBookingEvent({
 }
 
 async function deleteBookingEvent(eventId) {
-  if (!eventId) return;
+  if (!calendar || !eventId) return;
 
   await calendar.events.delete({
     calendarId: process.env.GOOGLE_CALENDAR_ID,
@@ -67,7 +72,7 @@ async function deleteBookingEvent(eventId) {
 }
 
 async function updateBookingEvent({ eventId, start, end }) {
-  if (!eventId) return;
+  if (!calendar || !eventId) return;
 
   await calendar.events.patch({
     calendarId: process.env.GOOGLE_CALENDAR_ID,

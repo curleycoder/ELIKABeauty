@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking");
 const { sendCancellationEmails } = require("../services/email");
+const { deleteBookingEvent } = require("../services/calendar");
 const { format, parseISO } = require("date-fns");
 
 const ADMIN_KEY = process.env.ADMIN_KEY;
@@ -35,9 +36,16 @@ router.delete("/bookings/:id", auth, async (req, res) => {
     if (!booking) return res.status(404).json({ error: "Booking not found" });
     if (booking.status === "cancelled") return res.status(400).json({ error: "Already cancelled" });
 
+    const calendarEventId = booking.calendarEventId;
     booking.status = "cancelled";
     booking.cancelledAt = new Date();
     await booking.save();
+
+    if (calendarEventId) {
+      deleteBookingEvent(calendarEventId).catch((err) => {
+        console.error("❌ Calendar delete error:", err.message);
+      });
+    }
 
     // send cancellation emails (non-blocking)
     try {
