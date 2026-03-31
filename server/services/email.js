@@ -36,7 +36,8 @@ async function sendBookingEmails({ booking, servicesText, prettyDate, prettyTime
         <li><strong>Services:</strong> ${servicesText}</li>
       </ul>
       <p>We're at <strong>3790 Canada Way #102, Burnaby</strong>.</p>
-      <p>Need to reschedule? Reply to this email or call <strong>(604) 438-3727</strong>.</p>
+      <p>To cancel or reschedule, please call us at <strong>(604) 438-3727</strong> or email <a href="mailto:elikaeiamina@gmail.com">elikaeiamina@gmail.com</a> at least <strong>24 hours</strong> before your appointment.</p>
+      <p style="color:#888;font-size:13px;">Please do not reply to this email — it is not monitored.</p>
       <p>— ELIKA Beauty</p>
     </div>`;
 
@@ -124,14 +125,14 @@ async function sendBirthdayEmail({ name, email, code }) {
     <div style="font-family:Arial,sans-serif;line-height:1.6;max-width:520px;margin:0 auto">
       <h2 style="color:#572a31">Happy Birthday, ${name}!</h2>
       <p>Wishing you a wonderful birthday from everyone at <strong>ELIKA Beauty</strong>.</p>
-      <p>As a birthday gift, enjoy a <strong>$20 credit</strong> on any service over $80 — on us!</p>
+      <p>As a birthday gift, enjoy a <strong>$20 credit</strong> on any service over $100 — on us!</p>
       <div style="margin:24px 0;padding:16px 24px;background:#f8f0f1;border-radius:12px;text-align:center">
         <p style="margin:0;font-size:13px;color:#888">Your personal birthday credit code</p>
         <p style="margin:8px 0 0;font-size:26px;font-weight:bold;letter-spacing:3px;color:#572a31">${code}</p>
-        <p style="margin:8px 0 0;font-size:12px;color:#aaa">Valid for services over $80 before tax &nbsp;•&nbsp; One-time use &nbsp;•&nbsp; Valid this month only</p>
+        <p style="margin:8px 0 0;font-size:12px;color:#aaa">Valid for services over $100 before tax &nbsp;•&nbsp; One-time use &nbsp;•&nbsp; Valid this month only &nbsp;•&nbsp; Valid ID required</p>
       </div>
       <p><a href="https://elikabeauty.ca/booking" style="display:inline-block;padding:12px 24px;background:#572a31;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">Book Your Appointment</a></p>
-      <p style="font-size:12px;color:#aaa">Show this code when you arrive. Cannot be combined with other offers. One use per person per year.</p>
+      <p style="font-size:12px;color:#aaa">Show this code when you arrive. Valid photo ID required to redeem. Cannot be combined with other offers. One use per person per year.</p>
       <p>— ELIKA Beauty</p>
     </div>`;
 
@@ -152,7 +153,8 @@ async function sendReminderEmail({ name, email, prettyDate, prettyTime, services
         <li><strong>Services:</strong> ${servicesText}</li>
       </ul>
       <p>We're at <strong>3790 Canada Way #102, Burnaby</strong>.</p>
-      <p>Need to reschedule? Reply to this email or call <strong>(604) 438-3727</strong>.</p>
+      <p>To cancel or reschedule, please call us at <strong>(604) 438-3727</strong> or email <a href="mailto:elikaeiamina@gmail.com">elikaeiamina@gmail.com</a> at least <strong>24 hours</strong> before your appointment.</p>
+      <p style="color:#888;font-size:13px;">Please do not reply to this email — it is not monitored.</p>
       <p>See you tomorrow!</p>
       <p>— ELIKA Beauty</p>
     </div>`;
