@@ -22,6 +22,14 @@ const services = [
     description: "Professional haircut tailored to you. Wash and style available as an add-on.",
   },
   {
+    name: "Hair Treatment",
+    price: 60,
+    duration: 30,
+    fromPrice: true,
+    category: "Add ons",
+    description: "Bond repair treatment with K18 or Olaplex. Great for frizzy and damaged hair.",
+  },
+  {
     name: "Keratin",
     price: 250,
     duration: 240,
