@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
+import ChatWidget from "./components/ChatWidget.jsx";
 
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -97,6 +98,7 @@ export default function App() {
       </div>
 
       <Footer />
+      <ChatWidget />
       <SpeedInsights />
     </>
   );
