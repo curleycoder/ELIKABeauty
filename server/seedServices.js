@@ -156,6 +156,13 @@ const services = [
     category: "Men",
     description: "Includes wash and haircut.",
   },
+    {
+    name: "Men’s Hair Colour",
+    price: 45,
+    duration: 60,
+    category: "Men",
+    description: "All-over colour for a new look.",
+  },
 ];
 
 async function seed() {
