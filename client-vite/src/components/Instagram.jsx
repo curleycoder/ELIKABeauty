@@ -17,7 +17,7 @@ export default function InstagramMasonry() {
             href={IG_URL}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-md bg-[#440008] hover:opacity-90 px-7 py-3 text-sm sm:text-base font-semibold text-[#F9F7F4] transition"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#440008] hover:opacity-90 px-7 py-3 text-sm sm:text-base font-semibold text-[#F9F7F4] transition"
           >
             <FaInstagram className="text-base" />
             @elikabeauty.ca
