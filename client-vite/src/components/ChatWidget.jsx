@@ -100,7 +100,7 @@ export default function ChatWidget() {
         {/* Iframe (exists ONLY when open) */}
         <iframe
           title="ELIKA Beauty Chat"
-          src="https://client-sand-kappa.vercel.app/?biz=elikabeauty&embed=1"
+          src="https://ai-client-seven.vercel.app/?biz=elikabeauty&embed=1"
           className="w-full h-[calc(100%-3rem)] border-0"
         />
       </div>

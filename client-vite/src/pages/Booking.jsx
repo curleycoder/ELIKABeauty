@@ -232,7 +232,7 @@ const hardResetAll = () => {
                 </span>
               ) : null}
             </div>
-          )} 
+          )}
 
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
