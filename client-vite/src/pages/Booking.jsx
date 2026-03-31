@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import BookingForm from "../components/BookingForm";
 import QuestionsForm from "../components/QuestionForm";
 import DateTimePicker from "../components/DatePicker";
@@ -141,6 +142,22 @@ const hardResetAll = () => {
 };
 
   return (
+    <>
+    <Helmet>
+      <title>Book an Appointment | Elika Beauty – Hair Salon in Burnaby</title>
+      <meta name="description" content="Book your appointment online at Elika Beauty in Burnaby. Choose from hair colour, balayage, highlights, keratin, haircuts, microblading, threading, massage, and more." />
+      <link rel="canonical" href="https://elikabeauty.ca/booking" />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="Book an Appointment | Elika Beauty" />
+      <meta property="og:description" content="Book your appointment online at Elika Beauty in Burnaby. Hair colour, balayage, keratin, haircuts, microblading, threading, massage, and more." />
+      <meta property="og:url" content="https://elikabeauty.ca/booking" />
+      <meta property="og:image" content="https://elikabeauty.ca/assets/salon.webp" />
+      <meta property="og:site_name" content="Elika Beauty" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Book an Appointment | Elika Beauty" />
+      <meta name="twitter:description" content="Book your appointment online at Elika Beauty in Burnaby." />
+      <meta name="twitter:image" content="https://elikabeauty.ca/assets/salon.webp" />
+    </Helmet>
     <div className="w-full min-h-screen relative font-sans bg-[#F8F7F1]">
       {/* Background */}
       <div
@@ -435,5 +452,6 @@ const hardResetAll = () => {
         </div>
 
     </div>
+    </>
   );
 }

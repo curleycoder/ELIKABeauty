@@ -4,7 +4,7 @@ import ServicePlaceholder from "./ServicePlaceholder";
 export default function FacialCareBurnaby() {
   return (
     <ServicePlaceholder
-      slug="facial-care-burnaby"
+      slug="facial-treatment-burnaby"
       title="Facial Treatment in Burnaby"
       intro="Relaxing facial care at Elika Beauty in Burnaby designed to cleanse, refresh, and hydrate the skin. Our facial treatments include deep cleansing, steam, mask application, and skin-nourishing care to help your skin feel clean, smooth, and refreshed."
       priceText="$85"

@@ -1,5 +1,14 @@
+import { Helmet } from "react-helmet-async";
+
 export default function Terms() {
   return (
+    <>
+    <Helmet>
+      <title>Terms of Service | Elika Beauty</title>
+      <meta name="description" content="Read the Elika Beauty terms of service. Information about using our website, booking appointments, and our service policies." />
+      <link rel="canonical" href="https://elikabeauty.ca/terms" />
+      <meta name="robots" content="noindex, follow" />
+    </Helmet>
     <div className="max-w-3xl mx-auto px-4 py-16 pt-24">
       <h1 className="text-3xl font-theseason text-[#572a31] mb-6">
         Terms of Service
@@ -31,6 +40,6 @@ export default function Terms() {
         use of this website.
       </p>
     </div>
-    
+    </>
   );
 }

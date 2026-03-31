@@ -1,5 +1,14 @@
+import { Helmet } from "react-helmet-async";
+
 export default function PrivacyPolicy() {
   return (
+    <>
+    <Helmet>
+      <title>Privacy Policy | Elika Beauty</title>
+      <meta name="description" content="Read the Elika Beauty privacy policy. Learn how we collect, use, and protect your personal information when you use our website or book an appointment." />
+      <link rel="canonical" href="https://elikabeauty.ca/privacy-policy" />
+      <meta name="robots" content="noindex, follow" />
+    </Helmet>
     <div className="max-w-3xl mx-auto px-4 py-16 pt-24">
       <h1 className="text-3xl font-theseason text-[#572a31] mb-6">
         Privacy Policy
@@ -32,5 +41,6 @@ export default function PrivacyPolicy() {
         (604) 438-3727.
       </p>
     </div>
+    </>
   );
 }

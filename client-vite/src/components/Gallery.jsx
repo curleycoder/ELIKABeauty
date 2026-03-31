@@ -192,7 +192,17 @@ async function loadGallery() {
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={pageUrl} />
 
-        {/* <meta property="og:image" content={`${SITE_ORIGIN}${GALLERY_HERO}`} /> */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/images/gallery-hero.webp`} />
+        <meta property="og:site_name" content={SITE_NAME} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={`${SITE_ORIGIN}/images/gallery-hero.webp`} />
 
         <script type="application/ld+json">
           {JSON.stringify(itemListJsonLd)}

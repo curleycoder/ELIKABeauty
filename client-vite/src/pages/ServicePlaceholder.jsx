@@ -89,7 +89,7 @@ export default function ServicePlaceholder({
       "@type": "HairSalon",
       name: SITE_NAME,
       url: SITE_ORIGIN,
-      telephone: PHONE_DISPLAY,
+      telephone: PHONE_TEL,
       address: {
         "@type": "PostalAddress",
         streetAddress: "3790 Canada Way #102",

@@ -140,6 +140,7 @@ export default function HairColorBurnaby() {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={pageUrl} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/images/services/hair-color/hair-color-hero.webp`} />
         <meta property="og:site_name" content={SITE_NAME} />
 
         <meta name="twitter:card" content="summary_large_image" />
