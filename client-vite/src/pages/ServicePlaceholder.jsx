@@ -263,13 +263,13 @@ export default function ServicePlaceholder({
               {galleryImages.map((image, index) => (
                 <div
                   key={index}
-                  className="group overflow-hidden rounded-[24px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  className="overflow-hidden rounded-[24px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300"
                 >
-                  <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
+                  <div className="relative aspect-[3/4] overflow-hidden">
                     <img
                       src={image.src}
                       alt={image.alt || `${title} at Elika Beauty`}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover"
                       loading="lazy"
                     />
                   </div>
@@ -359,7 +359,7 @@ export default function ServicePlaceholder({
               <Link
                 key={service.to}
                 to={service.to}
-                className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
+                className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/35"
               >
                 {service.label}
               </Link>
