@@ -159,7 +159,7 @@ const services = [
     {
     name: "Men’s Hair Colour",
     price: 45,
-    duration: 60,
+    duration: 45,
     category: "Men",
     description: "All-over colour for a new look.",
   },
