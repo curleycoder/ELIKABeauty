@@ -31,6 +31,9 @@ export default function ChatWidget() {
           alt="ELIKA Beauty Assistant"
           className="h-16 w-16 rounded-full object-cover"
           draggable="false"
+          loading="lazy"
+          width={64}
+          height={64}
         />
       </button>
     );
