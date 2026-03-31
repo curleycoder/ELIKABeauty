@@ -43,7 +43,8 @@ router.post("/send-confirmation", async (req, res) => {
       <li><strong>Services:</strong> ${servicesText}</li>
     </ul>
     <p>You will receive a reminder before your appointment.</p>
-    <p>If you need to cancel or reschedule, contact Amina at <strong>778-513-9006</strong>.</p>
+    <p>To cancel or reschedule, please call us at <strong>(604) 438-3727</strong> or email <a href="mailto:elikaeiamina@gmail.com">elikaeiamina@gmail.com</a> at least <strong>24 hours</strong> before your appointment.</p>
+    <p style="color:#888;font-size:13px;">Please do not reply to this email — it is not monitored.</p>
     <p>— ELIKA Beauty</p>
   `;
 
