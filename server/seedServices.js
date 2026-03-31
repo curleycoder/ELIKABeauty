@@ -9,7 +9,7 @@ const services = [
     name: "Balayage",
     price: 220,
     fromPrice: true,
-    duration: 240,
+    duration: 210,
     category: "Hair",
     description: "Natural hand-painted highlights. Extra charge for base colour if needed.",
   },
