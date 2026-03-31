@@ -24,7 +24,7 @@ export default function ArticleCard({ article }) {
         decoding="async"
         width="800"
         height="448"
-        fetchpriority="low"
+        fetchPriority="low"
       />
 
       <div className="p-4 text-[#55203d]">

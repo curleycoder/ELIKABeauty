@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Logo from "./Logo"
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import { scrollToId } from "../lib/scrollTo";
 
@@ -21,6 +21,11 @@ export default function Navbar() {
       return () => clearTimeout(t);
     }
   }, [location.pathname, pendingTarget, navigate]);
+
+  // Close mobile menu on any route change (handles browser back/forward too)
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
 
 useEffect(() => {
@@ -85,17 +90,20 @@ const isActive = (item) => {
           : "bg-[#fcfaf8]  text-[#3D0007] shadow-sm",
       ].join(" ")}
     >
-<nav className="font-theseason h-14 px-4 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
-        <div
-          className="cursor-pointer"
-          onClick={() => navigate("/")}
-        >
+<nav aria-label="Main navigation" className="font-theseason h-14 px-4 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
+        <Link to="/" aria-label="Elika Beauty — go to home page">
           <Logo size="sm" />
-        </div>
+        </Link>
 
 
         <div className="sm:hidden">
-          <button onClick={() => setMenuOpen((v) => !v)} className="focus:outline-none">
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-menu"
+            className="rounded-md p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#572a31]"
+          >
             {menuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
           </button>
         </div>
@@ -105,9 +113,9 @@ const isActive = (item) => {
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className={`px-3 py-2 rounded-md transition ${
-  isActive(item) ? "underline underline-offset-4" : "hover:underline"
-}`}
+              className={`px-3 py-2 rounded-md transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#572a31] ${
+                isActive(item) ? "underline underline-offset-4" : "hover:underline"
+              }`}
             >
               {item.name}
             </button>
@@ -116,14 +124,19 @@ const isActive = (item) => {
       </nav>
 
       {menuOpen && (
-        <div className="sm:hidden bg-[#fcfaf8] px-4 pb-4 font-theseason text-[#440008]">
+        <div
+          id="mobile-nav-menu"
+          role="navigation"
+          aria-label="Mobile menu"
+          className="sm:hidden bg-[#fcfaf8] px-4 pb-4 font-theseason text-[#440008]"
+        >
           {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className={`block w-full text-left py-2 border-b border-[#572a31]/20 last:border-b-0 transition ${
-  isActive(item) ? "underline underline-offset-4 text-black" : "hover:text-black"
-}`}
+              className={`block w-full text-left py-2 border-b border-[#572a31]/20 last:border-b-0 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#572a31] ${
+                isActive(item) ? "underline underline-offset-4 text-black" : "hover:text-black"
+              }`}
             >
               {item.name}
             </button>

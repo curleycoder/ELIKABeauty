@@ -38,6 +38,8 @@ export default function FAQ() {
       <div className="space-y-3">
         {faqs.map((faq, idx) => {
           const isOpen = idx === openIndex;
+          const panelId = `faq-answer-${idx}`;
+          const btnId = `faq-btn-${idx}`;
           return (
             <div
               key={idx}
@@ -48,9 +50,12 @@ export default function FAQ() {
               }`}
             >
               <button
+                id={btnId}
                 type="button"
                 onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                className="w-full text-left px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between gap-4 focus:outline-none"
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                className="w-full text-left px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#572a31]"
               >
                 <span className="font-semibold text-[#3D0007] text-sm sm:text-base leading-snug">
                   {faq.question}
@@ -67,11 +72,16 @@ export default function FAQ() {
                 </span>
               </button>
 
-              {isOpen && (
+              <div
+                id={panelId}
+                role="region"
+                aria-labelledby={btnId}
+                hidden={!isOpen}
+              >
                 <p className="px-5 pb-5 sm:px-6 sm:pb-6 text-sm sm:text-base text-gray-600 leading-relaxed">
                   {faq.answer}
                 </p>
-              )}
+              </div>
             </div>
           );
         })}

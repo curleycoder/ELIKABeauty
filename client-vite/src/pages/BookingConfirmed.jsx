@@ -53,15 +53,6 @@ export default function BookingConfirmed() {
     if (alreadyTracked) return;
 
     trackBookingConfirmed();
-
-    if (window.gtag) {
-      window.gtag("event", "conversion", {
-        send_to: "AW-CONVERSION_ID/CONVERSION_LABEL",
-        value: 1.0,
-        currency: "CAD",
-      });
-    }
-
     sessionStorage.setItem(sessionKey, "true");
   }, [bookingId]);
 
@@ -69,7 +60,7 @@ export default function BookingConfirmed() {
     <div className="w-full min-h-screen bg-[#F8F7F1] px-4 sm:px-6 py-12 pt-24">
       <div className="max-w-2xl mx-auto bg-white rounded-[25px] shadow-xl p-6 sm:p-10 text-center">
         <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#7a3b44] mb-4 flex items-center justify-center gap-2">
-          <FaCheckCircle className="text-green-500" /> Booking Confirmed
+          <FaCheckCircle className="text-green-500" aria-hidden="true" /> Booking Confirmed
         </h1>
 
         <p className="text-gray-700 mb-6">
@@ -108,9 +99,10 @@ export default function BookingConfirmed() {
               href={calendarUrl}
               target="_blank"
               rel="noreferrer"
+              aria-label="Add appointment to Google Calendar (opens in new tab)"
               className="px-5 py-3 rounded-full bg-white border border-[#7a3b44]/20 text-[#7a3b44] font-semibold hover:bg-[#7a3b44]/5 flex items-center justify-center gap-2"
             >
-              <FaCalendarPlus /> Add to Calendar
+              <FaCalendarPlus aria-hidden="true" /> Add to Calendar
             </a>
           )}
           <Link

@@ -19,9 +19,17 @@ export default function Contact() {
         <title>Contact Elika Beauty | Hair Salon in Burnaby</title>
         <meta name="description" content="Contact Elika Beauty hair salon in Burnaby. Call (604) 438-3727, visit us at 3790 Canada Way #102, or book online. View our hours and location." />
         <link rel="canonical" href="https://elikabeauty.ca/contact" />
+        <meta property="og:type" content="website" />
         <meta property="og:title" content="Contact Elika Beauty | Hair Salon in Burnaby" />
         <meta property="og:description" content="Contact Elika Beauty hair salon in Burnaby. Call (604) 438-3727 or book online." />
         <meta property="og:url" content="https://elikabeauty.ca/contact" />
+        <meta property="og:image" content="https://elikabeauty.ca/assets/salon.webp" />
+        <meta property="og:site_name" content="Elika Beauty" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Elika Beauty | Hair Salon in Burnaby" />
+        <meta name="twitter:description" content="Contact Elika Beauty hair salon in Burnaby. Call (604) 438-3727 or book online." />
+        <meta name="twitter:image" content="https://elikabeauty.ca/assets/salon.webp" />
       </Helmet>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">

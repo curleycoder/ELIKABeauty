@@ -50,6 +50,13 @@ export default function HairSalonBurnaby() {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={pageUrl} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/assets/salon.webp`} />
+        <meta property="og:site_name" content={SITE_NAME} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={`${SITE_ORIGIN}/assets/salon.webp`} />
 
         <script type="application/ld+json">
           {JSON.stringify(localBusinessSchema)}

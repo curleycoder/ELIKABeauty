@@ -23,6 +23,12 @@ export default function ArticlesPage() {
         />
         <meta property="og:url" content={`${SITE_ORIGIN}/articles`} />
         <meta property="og:site_name" content="Elika Beauty" />
+        <meta property="og:image" content={`${SITE_ORIGIN}/assets/salon.webp`} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Hair Care Articles & Tips | Elika Beauty Burnaby" />
+        <meta name="twitter:description" content="Expert hair care tips from Elika Beauty in Burnaby. Learn about balayage, colour correction, keratin treatments, and how to maintain healthy coloured hair." />
+        <meta name="twitter:image" content={`${SITE_ORIGIN}/assets/salon.webp`} />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Blog",

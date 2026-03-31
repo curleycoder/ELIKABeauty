@@ -48,9 +48,10 @@ export default function Footer() {
             href="https://www.instagram.com/elikabeauty.ca/"
             target="_blank"
             rel="noreferrer"
+            aria-label="Elika Beauty on Instagram (opens in new tab)"
             className="mt-4 inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition"
           >
-            <FaInstagram /> @elikabeauty.ca
+            <FaInstagram aria-hidden="true" /> @elikabeauty.ca
           </a>
         </div>
 
@@ -79,7 +80,7 @@ export default function Footer() {
         <div>
           <p className="text-xs uppercase tracking-widest text-white/40 mb-4">Hours</p>
           <div className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-4 ${status.open ? "bg-green-700/40 text-green-300" : "bg-white/10 text-white/50"}`}>
-            <FaClock className="text-[10px]" /> {status.label}
+            <FaClock className="text-[10px]" aria-hidden="true" /> {status.label}
           </div>
           <ul className="space-y-1.5 text-sm">
             {HOURS.map((h) => (
@@ -97,7 +98,7 @@ export default function Footer() {
           <ul className="space-y-3 text-sm">
             <li>
               <a href="tel:+16044383727" className="flex items-start gap-2 hover:text-white transition">
-                <FaPhone className="mt-0.5 shrink-0 text-white/40" />
+                <FaPhone className="mt-0.5 shrink-0 text-white/40" aria-hidden="true" />
                 (604) 438-3727
               </a>
             </li>
@@ -106,9 +107,10 @@ export default function Footer() {
                 href="https://www.google.com/maps/place/ELIKA+BEAUTY+(Tangles+Hair+Design)/"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="3790 Canada Way #102, Burnaby, BC V5G 1G4 — open in Google Maps (opens in new tab)"
                 className="flex items-start gap-2 hover:text-white transition"
               >
-                <FaMapMarkerAlt className="mt-0.5 shrink-0 text-white/40" />
+                <FaMapMarkerAlt className="mt-0.5 shrink-0 text-white/40" aria-hidden="true" />
                 3790 Canada Way #102<br />Burnaby, BC V5G 1G4
               </a>
             </li>

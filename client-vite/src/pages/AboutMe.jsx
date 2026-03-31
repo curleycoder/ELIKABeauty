@@ -19,6 +19,18 @@ export default function AboutPage() {
           content="About Elika Beauty, a professional beauty salon in Burnaby BC offering hair services, a welcoming salon environment, and opportunities for beauty professionals to connect."
         />
         <link rel="canonical" href="https://elikabeauty.ca/about" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="About Elika Beauty | Hair Salon in Burnaby BC" />
+        <meta property="og:description" content="About Elika Beauty, a professional beauty salon in Burnaby BC offering hair services, a welcoming salon environment, and opportunities for beauty professionals to connect." />
+        <meta property="og:url" content="https://elikabeauty.ca/about" />
+        <meta property="og:image" content="https://elikabeauty.ca/images/pages/salon-ext.webp" />
+        <meta property="og:site_name" content="Elika Beauty" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Elika Beauty | Hair Salon in Burnaby BC" />
+        <meta name="twitter:description" content="About Elika Beauty, a professional beauty salon in Burnaby BC offering hair services in a welcoming salon environment." />
+        <meta name="twitter:image" content="https://elikabeauty.ca/images/pages/salon-ext.webp" />
       </Helmet>
 
       <section className="relative w-full overflow-hidden">
