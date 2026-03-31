@@ -271,7 +271,7 @@ export default function ServicePlaceholder({
                       alt={image.alt || `${title} at Elika Beauty`}
                       className="h-full w-full object-cover"
                       loading="lazy"
-                    />
+                    /> 
                   </div>
                 </div>
               ))}
