@@ -202,7 +202,7 @@ const hardResetAll = () => {
             </button>
           </div>
 
-          <div className="mt-3 h-1.5 bg-black/5 rounded-full overflow-hidden">
+          <div className="mt-3 h-1.5 bg-black/5 rounded-xl overflow-hidden">
             <div
               className="h-full bg-[#440008] transition-all duration-300"
               style={{ width: `${progressPct}%` }}
@@ -223,11 +223,11 @@ const hardResetAll = () => {
           {step <= 1 && (
             <div className="mt-3 flex justify-center">
               {nextAvailLoading ? (
-                <span className="inline-flex items-center gap-1.5 text-xs text-gray-400 bg-white border border-gray-200 rounded-full px-3 py-1.5">
+                <span className="inline-flex items-center gap-1.5 text-xs text-gray-400 bg-white border border-gray-200 rounded-xl px-3 py-1.5">
                   <FaClock className="text-[10px]" /> Checking availability…
                 </span>
               ) : nextAvailLabel ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-800 bg-green-50 border border-green-200 rounded-full px-3 py-1.5">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-800 bg-green-50 border border-green-200 rounded-xl px-3 py-1.5">
                   <FaClock className="text-[10px]" /> Next available: {nextAvailLabel}
                 </span>
               ) : null}
@@ -237,7 +237,7 @@ const hardResetAll = () => {
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
               onClick={() => setShowInfo((s) => !s)}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-[#440008]/30 text-[#440008] text-sm font-semibold font-display shadow hover:bg-[#440008]/5"
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-white border border-[#440008]/30 text-[#440008] text-sm font-semibold font-display shadow hover:bg-[#440008]/5"
               aria-expanded={showInfo}
               aria-controls="booking-info"
             >
@@ -384,7 +384,7 @@ const hardResetAll = () => {
                   if (step < 2) return goNext();
                   setSubmitTick((t) => t + 1);
                 }}
-                className={`w-full px-5 py-3 rounded-full font-bold text-white transition ${
+                className={`w-full px-5 py-3 rounded-xl font-bold text-white transition ${
                   !canContinue || loading || (selection.selected.length > 0 && !priceAccepted)
                     ? "bg-[#440008]/25 cursor-not-allowed"
                     : "bg-[#440008] hover:opacity-90"
@@ -397,7 +397,7 @@ const hardResetAll = () => {
                 <button
                   type="button"
                   onClick={goBack}
-                  className="w-full mt-3 px-5 py-3 rounded-full font-semibold border border-[#440008]/20 text-[#440008] hover:bg-[#440008]/5"
+                  className="w-full mt-3 px-5 py-3 rounded-xl font-semibold border border-[#440008]/20 text-[#440008] hover:bg-[#440008]/5"
                 >
                   Back
                 </button>
@@ -427,7 +427,7 @@ const hardResetAll = () => {
                   if (step < 2) return goNext();
                   setSubmitTick((t) => t + 1);
                 }}
-                className={`px-5 py-2.5 rounded-full font-bold text-white transition whitespace-nowrap ${
+                className={`px-5 py-2.5 rounded-xl font-bold text-white transition whitespace-nowrap ${
                   !canContinue || loading || (selection.selected.length > 0 && !priceAccepted)
                     ? "bg-[#440008]/25 cursor-not-allowed"
                     : "bg-[#440008] hover:opacity-90"
