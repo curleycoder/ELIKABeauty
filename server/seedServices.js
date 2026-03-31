@@ -122,7 +122,7 @@ const services = [
     name: "Facial Treatment",
     price: 80,
     duration: 60,
-    category: "Face",
+    category: "Spa",
     description: "Deep cleansing facial with steam, mask, and skin-refreshing care.",
   },
   {
