@@ -63,9 +63,9 @@ export default function BookingConfirmed() {
       <title>Booking Confirmed | Elika Beauty</title>
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>
-    <div className="w-full min-h-screen bg-[#F8F7F1] px-4 sm:px-6 py-12 pt-24">
+    <div className="w-full min-h-screen bg-[#E4E2DD] px-4 sm:px-6 py-12 pt-24">
       <div className="max-w-2xl mx-auto bg-white rounded-[25px] shadow-xl p-6 sm:p-10 text-center">
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#7a3b44] mb-4 flex items-center justify-center gap-2">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#440008] mb-4 flex items-center justify-center gap-2">
           <FaCheckCircle className="text-green-500" aria-hidden="true" /> Booking Confirmed
         </h1>
 
@@ -74,7 +74,7 @@ export default function BookingConfirmed() {
         </p>
 
         {booking ? (
-          <div className="bg-[#F8F7F1] rounded-2xl p-5 text-left max-w-md mx-auto mb-6">
+          <div className="bg-[#E4E2DD] rounded-2xl p-5 text-left max-w-md mx-auto mb-6">
             <p className="text-sm text-gray-700 mb-2">
               <strong>Name:</strong> {booking.name}
             </p>
@@ -106,20 +106,20 @@ export default function BookingConfirmed() {
               target="_blank"
               rel="noreferrer"
               aria-label="Add appointment to Google Calendar (opens in new tab)"
-              className="px-5 py-3 rounded-full bg-white border border-[#7a3b44]/20 text-[#7a3b44] font-semibold hover:bg-[#7a3b44]/5 flex items-center justify-center gap-2"
+              className="px-5 py-3 rounded-full bg-white border border-[#440008]/20 text-[#440008] font-semibold hover:border-[#440008]/45 hover:bg-[#440008]/5 flex items-center justify-center gap-2"
             >
               <FaCalendarPlus aria-hidden="true" /> Add to Calendar
             </a>
           )}
           <Link
             to="/"
-            className="px-5 py-3 rounded-full bg-[#7a3b44] text-white font-semibold hover:brightness-110"
+            className="px-5 py-3 rounded-full bg-[#440008] text-white font-semibold hover:opacity-90"
           >
             Back to Home
           </Link>
           <Link
             to="/services"
-            className="px-5 py-3 rounded-full border border-[#7a3b44]/20 text-[#7a3b44] font-semibold hover:bg-[#7a3b44]/5"
+            className="px-5 py-3 rounded-full border border-[#440008]/20 text-[#440008] font-semibold hover:border-[#440008]/45 hover:bg-[#440008]/5"
           >
             View Services
           </Link>

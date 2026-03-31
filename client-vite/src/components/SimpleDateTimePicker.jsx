@@ -125,7 +125,7 @@ export default function SimpleDateTimePicker({ onSelect, duration = 60 }) {
 
   return (
     <div className="bg-white rounded-2xl shadow p-5 border border-pink-100">
-      <h3 className="text-lg font-bold text-[#7a3b44] mb-3">Pick a date & time</h3>
+      <h3 className="text-lg font-bold text-[#440008] mb-3">Pick a date & time</h3>
 
       <label className="block text-sm text-gray-600 mb-1">Date</label>
       <input
@@ -139,7 +139,7 @@ export default function SimpleDateTimePicker({ onSelect, duration = 60 }) {
       />
 
       {dateStr && (isPastDate || isClosed) && (
-        <div className="mt-2 mb-3 text-sm rounded-lg border px-3 py-2 bg-[#7a3b44]/5 text-[#7a3b44]">
+        <div className="mt-2 mb-3 text-sm rounded-lg border px-3 py-2 bg-[#440008]/5 text-[#440008]">
           {isPastDate
             ? "Please choose a future date."
             : "Closed on Sundays & Mondays (unless a special Monday is open)."}
@@ -188,7 +188,7 @@ export default function SimpleDateTimePicker({ onSelect, duration = 60 }) {
           onSelect({ date: dateStr, time }); // backend accepts "h:mm a" too
         }}
         className={`mt-4 w-full px-4 py-2 rounded-full font-bold text-white ${
-          canSelect ? "bg-[#55203d]" : "bg-[#7a3b44]/25 cursor-not-allowed"
+          canSelect ? "bg-[#440008]" : "bg-[#440008]/25 cursor-not-allowed"
         }`}
       >
         Confirm time

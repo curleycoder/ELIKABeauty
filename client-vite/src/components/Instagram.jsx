@@ -8,7 +8,7 @@ export default function InstagramMasonry() {
     <section className="py-5">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center">
-          <h2 className="text-2xl sm:text-4xl font-theseason text-[#572a31]">
+          <h2 className="text-2xl sm:text-4xl font-theseason text-[#440008]">
             Follow Us on Instagram
           </h2>
         </div>
@@ -17,7 +17,7 @@ export default function InstagramMasonry() {
             href={IG_URL}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-md bg-[#440008] hover:bg-[#572a31] px-7 py-3 text-sm sm:text-base font-semibold text-[#faeddd] transition"
+            className="inline-flex items-center gap-2 rounded-md bg-[#440008] hover:opacity-90 px-7 py-3 text-sm sm:text-base font-semibold text-[#F9F7F4] transition"
           >
             <FaInstagram className="text-base" />
             @elikabeauty.ca
@@ -42,8 +42,8 @@ export default function InstagramMasonry() {
                 "group relative block",
                 "mb-3 sm:mb-4 lg:mb-5",
                 "break-inside-avoid overflow-hidden rounded-2xl",
-                "bg-[#f0e8e8]",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7a3b44]/50",
+                "bg-[#F9F7F4]",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#440008]/50",
               ].join(" ")}
               aria-label="Open Instagram"
             >
@@ -61,7 +61,7 @@ export default function InstagramMasonry() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
               </div>
               <div className="absolute inset-0 flex items-center justify-center opacity-0 transition duration-300 group-hover:opacity-100 group-active:opacity-100 group-focus-visible:opacity-100">
-                <div className="flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-[#572a31] shadow">
+                <div className="flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-[#440008] shadow">
                   <FaInstagram className="text-lg" />
                   <span className="text-xs font-bold tracking-widest">VIEW</span>
                 </div>

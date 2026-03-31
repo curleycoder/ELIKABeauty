@@ -29,8 +29,8 @@ export default function FAQ() {
   return (
     <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       <div className="text-center mb-10">
-        <p className="text-xs uppercase tracking-widest text-[#8a6b73] mb-2">Have questions?</p>
-        <h2 className="text-2xl sm:text-3xl font-theseason text-[#572a31]">
+        <p className="text-xs uppercase tracking-widest text-[#440008] mb-2">Have questions?</p>
+        <h2 className="text-2xl sm:text-3xl font-theseason text-[#440008]">
           Frequently Asked Questions
         </h2>
       </div>
@@ -45,8 +45,8 @@ export default function FAQ() {
               key={idx}
               className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
                 isOpen
-                  ? "border-[#572a31]/30 bg-[#fcfaf8]"
-                  : "border-[#572a31]/10 bg-white hover:border-[#572a31]/20"
+                  ? "border-[#440008]/30 bg-[#F9F7F4]"
+                  : "border-[#440008]/10 bg-white hover:border-[#440008]/20"
               }`}
             >
               <button
@@ -55,14 +55,14 @@ export default function FAQ() {
                 onClick={() => setOpenIndex(isOpen ? -1 : idx)}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                className="w-full text-left px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#572a31]"
+                className="w-full text-left px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#440008]"
               >
-                <span className="font-semibold text-[#3D0007] text-sm sm:text-base leading-snug">
+                <span className="font-semibold text-[#440008] text-sm sm:text-base leading-snug">
                   {faq.question}
                 </span>
                 <span
-                  className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[#572a31] border border-[#572a31]/20 transition-transform duration-200 ${
-                    isOpen ? "rotate-45 bg-[#572a31] text-white border-[#572a31]" : ""
+                  className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[#440008] border border-[#440008]/20 transition-transform duration-200 ${
+                    isOpen ? "rotate-45 bg-[#440008] text-white border-[#440008]" : ""
                   }`}
                   aria-hidden="true"
                 >

@@ -67,15 +67,15 @@ export default function HairSalonBurnaby() {
         <nav aria-label="Breadcrumb" className="mb-6">
           <Link
             to="/"
-            className="text-sm text-[#55203d] underline underline-offset-4"
+            className="text-sm text-[#440008] underline underline-offset-4"
           >
             ← Back to home
           </Link>
         </nav>
 
         {/* HERO */}
-        <section className="rounded-3xl border border-[#572a31]/10 bg-[#fcfaf8] p-6 sm:p-8 shadow-sm">
-          <p className="text-xs uppercase tracking-[0.18em] text-[#7b5b65]">
+        <section className="rounded-3xl border border-[#440008]/10 bg-[#F9F7F4] p-6 sm:p-8 shadow-sm">
+          <p className="text-xs uppercase tracking-[0.18em] text-[#440008]">
             Elika Beauty • Burnaby, BC
           </p>
 
@@ -93,14 +93,14 @@ export default function HairSalonBurnaby() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               to="/booking"
-              className="rounded-xl px-6 py-3 bg-[#572a31] text-white hover:opacity-90 transition"
+              className="rounded-xl px-6 py-3 bg-[#440008] text-white hover:opacity-90 transition"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="rounded-xl px-6 py-3 border border-[#572a31]/30 text-[#572a31] hover:bg-[#572a31]/5 transition"
+              className="rounded-xl px-6 py-3 border border-[#440008]/30 text-[#440008] hover:bg-[#440008]/5 transition"
             >
               Call {PHONE_DISPLAY}
             </a>
@@ -109,7 +109,7 @@ export default function HairSalonBurnaby() {
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl px-6 py-3 border border-[#572a31]/30 text-[#572a31] hover:bg-[#572a31]/5 transition"
+              className="rounded-xl px-6 py-3 border border-[#440008]/30 text-[#440008] hover:bg-[#440008]/5 transition"
             >
               Get Directions
             </a>
@@ -236,10 +236,10 @@ export default function HairSalonBurnaby() {
         </section>
 
         {/* CTA */}
-        <section className="mt-12 rounded-2xl border border-gray-200 bg-[#F8F7F1] p-6">
+        <section className="mt-12 rounded-2xl border border-gray-200 bg-[#E4E2DD] p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <div className="font-semibold text-[#572a31]">
+              <div className="font-semibold text-[#440008]">
                 Ready for your appointment?
               </div>
               <p className="text-sm text-gray-600 mt-1">
@@ -250,14 +250,14 @@ export default function HairSalonBurnaby() {
             <div className="flex gap-3">
               <Link
                 to="/booking"
-                className="px-6 py-3 rounded-xl bg-[#572a31] text-white"
+                className="px-6 py-3 rounded-xl bg-[#440008] text-white"
               >
                 Book Now
               </Link>
 
               <a
                 href={`tel:${PHONE_TEL}`}
-                className="px-6 py-3 rounded-xl border border-[#572a31]/40 text-[#572a31]"
+                className="px-6 py-3 rounded-xl border border-[#440008]/40 text-[#440008]"
               >
                 Call
               </a>

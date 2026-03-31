@@ -86,8 +86,8 @@ const isActive = (item) => {
       className={[
         "fixed top-0 left-0 right-0 z-50 transition ",
         scrolled
-          ? "bg-[#fcfaf8] text-[#3D0007]"
-          : "bg-[#fcfaf8]  text-[#3D0007] shadow-sm",
+          ? "bg-[#F9F7F4] text-[#440008]"
+          : "bg-[#F9F7F4]  text-[#440008] shadow-sm",
       ].join(" ")}
     >
 <nav aria-label="Main navigation" className="font-theseason h-14 px-4 sm:px-6 max-w-6xl mx-auto flex justify-between items-center">
@@ -102,7 +102,7 @@ const isActive = (item) => {
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav-menu"
-            className="rounded-md p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#572a31]"
+            className="rounded-md p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#440008]"
           >
             {menuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
           </button>
@@ -113,7 +113,7 @@ const isActive = (item) => {
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className={`px-3 py-2 rounded-md transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#572a31] ${
+              className={`px-3 py-2 rounded-md transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#440008] ${
                 isActive(item) ? "underline underline-offset-4" : "hover:underline"
               }`}
             >
@@ -128,13 +128,13 @@ const isActive = (item) => {
           id="mobile-nav-menu"
           role="navigation"
           aria-label="Mobile menu"
-          className="sm:hidden bg-[#fcfaf8] px-4 pb-4 font-theseason text-[#440008]"
+          className="sm:hidden bg-[#F9F7F4] px-4 pb-4 font-theseason text-[#440008]"
         >
           {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className={`block w-full text-left py-2 border-b border-[#572a31]/20 last:border-b-0 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#572a31] ${
+              className={`block w-full text-left py-2 border-b border-[#440008]/20 last:border-b-0 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#440008] ${
                 isActive(item) ? "underline underline-offset-4 text-black" : "hover:text-black"
               }`}
             >

@@ -208,7 +208,7 @@ export default function DateTimePicker({
   return (
     <div className="bg-white/60 font-display backdrop-blur-md rounded-[24px] sm:rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto flex flex-col h-[85dvh] sm:max-h-[80dvh] overflow-hidden">
       <div className="p-3 sm:p-4 pb-2">
-        <h2 className="text-xl font-theseason text-[#572a31] tracking-wide text-center">
+        <h2 className="text-xl font-theseason text-[#440008] tracking-wide text-center">
           Choose a Date
         </h2>
       </div>
@@ -220,7 +220,7 @@ export default function DateTimePicker({
         <div className="py-2">
           {groupedByMonth.map(([month, days]) => (
             <div key={month} className="mb-6">
-              <h4 className="text-left text-md sm:text-lg font-bold text-[#572a31] mb-2 mt-4">
+              <h4 className="text-left text-md sm:text-lg font-bold text-[#440008] mb-2 mt-4">
                 {month}
               </h4>
 
@@ -245,10 +245,10 @@ export default function DateTimePicker({
                       disabled={isDisabled}
                       className={`flex items-center justify-center w-full aspect-square max-w-[56px] mx-auto rounded-full border font-semibold text-sm transition ${
                         isSelected
-                          ? "bg-[#572a31] text-white shadow-md scale-105"
+                          ? "bg-[#440008] text-white shadow-md scale-105"
                           : isToday
-                          ? "border-[#572a31] text-[#572a31]"
-                          : "border-[#572a31]/20 text-[#572a31]/70 hover:border-[#572a31] hover:bg-[#572a31]/10"
+                          ? "border-[#440008] text-[#440008]"
+                          : "border-[#440008]/20 text-[#440008]/70 hover:border-[#440008] hover:bg-[#440008]/10"
                       } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     >
                       <div className="flex flex-col items-center leading-tight">
@@ -269,7 +269,7 @@ export default function DateTimePicker({
 
         {selectedDate && (
           <div ref={timeRef} className="pt-2">
-            <p className="text-xl text-center text-[#572a31] font-theseason mb-3 mt-2">
+            <p className="text-xl text-center text-[#440008] font-theseason mb-3 mt-2">
               Select a time
             </p>
 
@@ -278,14 +278,14 @@ export default function DateTimePicker({
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-10 rounded-full border border-[#572a31]/10 bg-[#572a31]/5 animate-pulse"
+                    className="h-10 rounded-full border border-[#440008]/10 bg-[#440008]/5 animate-pulse"
                   />
                 ))}
               </div>
             )}
 
             {dayUnavailable && (
-              <div className="text-center text-sm rounded-2xl border bg-[#572a31]/5 text-[#572a31] px-4 py-3">
+              <div className="text-center text-sm rounded-2xl border bg-[#440008]/5 text-[#440008] px-4 py-3">
                 This day is not available.
               </div>
             )}
@@ -301,8 +301,8 @@ export default function DateTimePicker({
                         onClick={() => onPickTime(time)}
                         className={`w-full py-2.5 sm:py-2 rounded-full border text-sm font-semibold transition duration-200 ${
                           selectedTime === time
-                            ? "bg-[#572a31]/80 text-white border-transparent scale-105 shadow-lg"
-                            : "bg-white text-[#572a31] border-[#572a31]/30 hover:bg-[#572a31] hover:text-white"
+                            ? "bg-[#440008]/80 text-white border-transparent scale-105 shadow-lg"
+                            : "bg-white text-[#440008] border-[#440008]/30 hover:bg-[#440008] hover:text-white"
                         }`}
                       >
                         {time}
@@ -310,17 +310,17 @@ export default function DateTimePicker({
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center text-sm rounded-2xl border bg-[#572a31]/5 text-[#572a31] px-4 py-3">
+                  <div className="text-center text-sm rounded-2xl border bg-[#440008]/5 text-[#440008] px-4 py-3">
                     No online times are currently available for this day.
                   </div>
                 )}
 
-                <div className="mt-5 rounded-2xl border border-[#572a31]/10 bg-[#572a31]/[0.04] px-4 py-3 text-center">
+                <div className="mt-5 rounded-2xl border border-[#440008]/10 bg-[#440008]/[0.04] px-4 py-3 text-center">
                   <p className="text-sm text-gray-700 leading-relaxed">
                     Don’t see a time that works for you?{" "}
                     <a
                       href="tel:+16044383727"
-                      className="font-semibold text-[#7a3b44] underline underline-offset-2"
+                      className="font-semibold text-[#440008] underline underline-offset-2"
                     >
                       Call us
                     </a>{" "}
@@ -334,19 +334,19 @@ export default function DateTimePicker({
       </div>
 
       {showConfirm && selectedDate && selectedTime && (
-        <div className="fixed inset-0 bg-[#572a31]/60 flex items-center justify-center px-4 sm:px-8 z-50">
+        <div className="fixed inset-0 bg-[#440008]/60 flex items-center justify-center px-4 sm:px-8 z-50">
           <div className="bg-white rounded-2xl p-5 sm:p-8 w-[90%] max-w-md shadow-xl text-center space-y-4">
-            <h3 className="text-lg font-display text-[#572a31] font-semibold">
+            <h3 className="text-lg font-display text-[#440008] font-semibold">
               Confirm Your Selection
             </h3>
 
             <p className="text-sm text-gray-700">
               You selected{" "}
-              <span className="font-medium text-[#572a31]">
+              <span className="font-medium text-[#440008]">
                 {format(selectedDate, "PPP")}
               </span>{" "}
               at{" "}
-              <span className="font-medium text-[#572a31]">
+              <span className="font-medium text-[#440008]">
                 {selectedTime}
               </span>
               .
@@ -362,7 +362,7 @@ export default function DateTimePicker({
                   });
                   setShowConfirm(false);
                 }}
-                className="px-4 py-2 bg-[#572a31] text-white rounded-2xl shadow"
+                className="px-4 py-2 bg-[#440008] text-white rounded-2xl shadow"
               >
                 Yes
               </button>
@@ -370,7 +370,7 @@ export default function DateTimePicker({
               <button
                 type="button"
                 onClick={() => setShowConfirm(false)}
-                className="px-4 py-2 border border-[#572a31] text-[#572a31] rounded-2xl"
+                className="px-4 py-2 border border-[#440008] text-[#440008] rounded-2xl"
               >
                 No
               </button>

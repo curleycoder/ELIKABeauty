@@ -182,14 +182,14 @@ export default function GoogleReview() {
   return (
     <section className="px-3 py-8  sm:p-6 rounded-xl max-w-6xl mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-theseason sm:text-3xl text-[#572a31] mb-1 sm:mb-3">
+        <h2 className="text-2xl font-theseason sm:text-3xl text-[#440008] mb-1 sm:mb-3">
           What Clients Say About Us
         </h2>
       </div>
 
       <div className="mt-3 sm:mt-6 relative">
         {loading ? (
-          <p className="text-center text-[#572a31]-500 mt-6">Loading reviews...</p>
+          <p className="text-center text-[#440008]-500 mt-6">Loading reviews...</p>
         ) : reviews.length === 0 ? (
           <p className="text-center text-gray-500 mt-6">No reviews found.</p>
         ) : (
@@ -234,7 +234,7 @@ export default function GoogleReview() {
                   >
                     <div
                       className={[
-                        "flex flex-col bg-white border border-[#200027] rounded-xl shadow-md p-5",
+                        "flex flex-col bg-white border border-[#1A0003] rounded-xl shadow-md p-5",
                         isExpanded ? "h-auto" : "h-[220px] overflow-hidden",
                       ].join(" ")}
                     >
@@ -254,7 +254,7 @@ export default function GoogleReview() {
                           )}
 
                           <div className="flex justify-between w-full items-center">
-                            <strong className="text-[#55203d] text-sm">
+                            <strong className="text-[#440008] text-sm">
                               {review?.author_name || "Client"}
                             </strong>
                             <span className="flex gap-0.5 text-amber-400" aria-label={`${review?.rating || 0} stars`}>
@@ -288,7 +288,7 @@ export default function GoogleReview() {
                           <button
                             type="button"
                             onClick={() => toggleExpanded(i)}
-                            className="text-[#200027] text-xs underline mt-1"
+                            className="text-[#1A0003] text-xs underline mt-1"
                           >
                             {isExpanded ? "Show less" : "Read more"}
                           </button>
@@ -327,7 +327,7 @@ export default function GoogleReview() {
               {Array.from({ length: Math.max(1, reviews.length - visible + 1) }).map((_, i) => (
                 <span
                   key={i}
-                  className={`h-2 w-2 rounded-full ${i === idx ? "bg-[#200027]" : "bg-gray-300"}`}
+                  className={`h-2 w-2 rounded-full ${i === idx ? "bg-[#1A0003]" : "bg-gray-300"}`}
                   aria-hidden="true"
                 />
               ))}
@@ -337,7 +337,7 @@ export default function GoogleReview() {
                 href="https://www.google.com/search?q=Elika+Beauty+Burnaby+reviews"
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm underline text-[#55203d] hover:opacity-80"
+                className="text-sm underline text-[#440008] hover:opacity-80"
               >
                 Leave a Google Review
               </a>

@@ -18,13 +18,13 @@ const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle })
     <div
       className={[
         "rounded-2xl border p-4 bg-white/80 backdrop-blur",
-        "border-[#7a3b44]/15 hover:border-[#7a3b44]/30 transition",
-        isSelected ? "border-2 border-[#7a3b44] shadow-sm" : "",
+        "border-[#440008]/15 hover:border-[#440008]/30 transition",
+        isSelected ? "border-2 border-[#440008] shadow-sm" : "",
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="font-display font-semibold text-[17px] sm:text-lg tracking-tight text-[#7a3b44]">
+          <h3 className="font-display font-semibold text-[17px] sm:text-lg tracking-tight text-[#440008]">
             {s.name}
           </h3>
 
@@ -52,8 +52,8 @@ const ServiceCard = React.memo(function ServiceCard({ s, isSelected, onToggle })
             "shrink-0 w-10 h-10 rounded-full border transition",
             "flex items-center justify-center",
             isSelected
-              ? "bg-[#7a3b44] text-white border-[#7a3b44] shadow"
-              : "bg-white text-[#7a3b44] border-[#7a3b44]/30 hover:bg-[#7a3b44]/5",
+              ? "bg-[#440008] text-white border-[#440008] shadow"
+              : "bg-white text-[#440008] border-[#440008]/30 hover:bg-[#440008]/5",
           ].join(" ")}
           aria-label={isSelected ? "Remove service" : "Add service"}
         >
@@ -209,9 +209,9 @@ export default function BookingForm({ onSelectionChange }) {
 
   return (
     <div className="bg-white backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto">
-      <div className="p-6 sm:p-8 pb-4 border-b border-[#7a3b44]/10">
+      <div className="p-6 sm:p-8 pb-4 border-b border-[#440008]/10">
         <div className="text-center">
-          <h2 className="text-xl sm:text-2xl font-theseason font-bold text-[#7a3b44]">
+          <h2 className="text-xl sm:text-2xl font-theseason font-bold text-[#440008]">
             Services
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -228,8 +228,8 @@ export default function BookingForm({ onSelectionChange }) {
               className={[
                 "px-4 py-2 rounded-full font-bold text-sm transition-all",
                 activeTab === tab
-                  ? "bg-[#7a3b44] text-white shadow-md scale-[1.02]"
-                  : "bg-white text-[#7a3b44] border border-[#7a3b44]/20 hover:bg-[#7a3b44]/5",
+                  ? "bg-[#440008] text-white shadow-md scale-[1.02]"
+                  : "bg-white text-[#440008] border border-[#440008]/20 hover:bg-[#440008]/5",
               ].join(" ")}
             >
               {tab}
@@ -247,14 +247,14 @@ export default function BookingForm({ onSelectionChange }) {
         )}
 
         {selected.length > 0 && (
-          <div className="mt-4 rounded-2xl border border-[#7a3b44]/10 bg-white/70 p-3">
+          <div className="mt-4 rounded-2xl border border-[#440008]/10 bg-white/70 p-3">
             <div className="flex items-center justify-between gap-3">
-              <div className="text-sm font-semibold text-[#7a3b44]">
+              <div className="text-sm font-semibold text-[#440008]">
                 {selected.length} selected • ${total}
               </div>
 
               <button
-                className="text-xs font-bold text-[#7a3b44] underline underline-offset-2"
+                className="text-xs font-bold text-[#440008] underline underline-offset-2"
                 onClick={() => setSelected([])}
                 type="button"
               >
@@ -268,7 +268,7 @@ export default function BookingForm({ onSelectionChange }) {
                   key={s._id}
                   type="button"
                   onClick={() => handleToggle(s)}
-                  className="px-3 py-1 rounded-full text-xs bg-[#7a3b44]/10 text-[#7a3b44] border border-[#7a3b44]/15 hover:bg-[#7a3b44]/15"
+                  className="px-3 py-1 rounded-full text-xs bg-[#440008]/10 text-[#440008] border border-[#440008]/15 hover:bg-[#440008]/15"
                   aria-label={`Remove ${s.name}`}
                 >
                   {s.name} ✕
@@ -297,7 +297,7 @@ export default function BookingForm({ onSelectionChange }) {
             <button
               type="button"
               onClick={() => fetchServices({ forceFresh: true })}
-              className="px-4 py-2 rounded-full bg-[#7a3b44] text-white font-bold"
+              className="px-4 py-2 rounded-full bg-[#440008] text-white font-bold"
             >
               Retry
             </button>

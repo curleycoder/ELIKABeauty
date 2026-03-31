@@ -27,7 +27,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-[70vh] overflow-hidden bg-[#ffe3d6] sm:min-h-[90vh]">
+    <section className="relative min-h-[70vh] overflow-hidden bg-[#E4E2DD] sm:min-h-[90vh]">
       <div className="absolute inset-0 z-0 pointer-events-none">
         {HERO_SLIDES.map((slide, i) => {
           // Always render slide 0; only render others after preload
@@ -58,7 +58,7 @@ export default function HeroSection() {
               font-theseason
               text-5xl
               tracking-wide
-              text-[#572a31]
+              text-[#440008]
               drop-shadow-[0_2px_18px_rgba(0,0,0,0.3)]
               sm:text-7xl
               md:text-8xl
@@ -76,7 +76,7 @@ export default function HeroSection() {
               text-xs
               uppercase
               tracking-[0.25em]
-              text-[#572a31]
+              text-[#440008]
               sm:text-sm
               sm:tracking-[0.6em]
               md:text-base
@@ -89,7 +89,7 @@ export default function HeroSection() {
 
           <button
             onClick={() => navigate("/booking")}
-            className="mt-8 rounded-md bg-[#440008] px-7 py-3 text-sm font-semibold text-[#fcfaf8] transition hover:bg-[#572a31]"
+            className="mt-8 rounded-xl bg-[#440008] px-8 py-4 text-sm font-semibold text-[#F9F7F4] transition hover:opacity-90"
           >
             BOOK AN APPOINTMENT
           </button>

@@ -219,7 +219,7 @@ async function loadGallery() {
     loading="eager"
   />
 
-  <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
+  <div className="absolute inset-0 bg-gradient-to-t from-[#1A0003]/80 via-[#1A0003]/35 to-transparent" />
 
   <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4 sm:bottom-0 sm:px-6 sm:pb-4 pt-14">
     <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
@@ -233,7 +233,7 @@ async function loadGallery() {
     <div className="mt-6 flex flex-row gap-1 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-3">
       <Link
         to="/booking"
-        className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#572a31] px-3 py-1 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:px-2"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#440008] px-3 py-1 text-sm font-medium text-white transition hover:bg-[#E4E2DD] sm:px-2"
       >
         Book Appointment
       </Link>
@@ -273,8 +273,8 @@ async function loadGallery() {
               onClick={() => pickCategory(cat)}
               className={`rounded-full border px-4 py-2 text-sm transition ${
                 cat === category
-                  ? "border-[#572a31] bg-[#572a31] text-white"
-                  : "border-[#572a31]/20 text-[#572a31]"
+                  ? "border-[#440008] bg-[#440008] text-white"
+                  : "border-[#440008]/20 text-[#440008]"
               }`}
             >
               {cat}

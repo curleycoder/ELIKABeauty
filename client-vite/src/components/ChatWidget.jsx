@@ -77,10 +77,10 @@ export default function ChatWidget() {
               />
             </div>
             <div className="leading-tight">
-              <div className="text-sm font-display font-semibold text-[#55203d]">
+              <div className="text-sm font-display font-semibold text-[#440008]">
                 ELIKA Beauty
               </div>
-              <div className="text-[11px] text-[#55203d]/70">
+              <div className="text-[11px] text-[#440008]/70">
                 Quick answers • Booking help
               </div>
             </div>

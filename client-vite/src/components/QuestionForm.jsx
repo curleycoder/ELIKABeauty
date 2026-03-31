@@ -178,14 +178,14 @@ export default function QuestionsForm({
     }
   };
 
-  const inputCls = "w-full border border-[#572a31]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#572a31]";
-  const lockedCls = "w-full border border-[#572a31]/10 p-3 rounded-lg bg-gray-50 text-gray-400 cursor-not-allowed";
+  const inputCls = "w-full border border-[#440008]/30 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#440008]";
+  const lockedCls = "w-full border border-[#440008]/10 p-3 rounded-lg bg-gray-50 text-gray-400 cursor-not-allowed";
 
   return (
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl text-[#572a31] w-full max-w-2xl mx-auto"
+      className="space-y-6 bg-white/90 p-6 sm:p-8 rounded-[25px] shadow-xl text-[#440008] w-full max-w-2xl mx-auto"
     >
       <h2 className="text-2xl font-display font-bold mb-2">Your Details</h2>
 
@@ -208,7 +208,7 @@ export default function QuestionsForm({
           />
           {lookupStatus === "loading" && (
             <span className="absolute right-3 top-1/2 -translate-y-1/2">
-              <ClipLoader size={16} color="#572a31" />
+              <ClipLoader size={16} color="#440008" />
             </span>
           )}
         </div>
@@ -264,7 +264,7 @@ export default function QuestionsForm({
 
       {/* Birthday — hidden if already locked on server */}
       {birthdayLocked ? (
-        <div className="rounded-xl border border-[#572a31]/10 bg-[#fdf8f8] p-4 flex items-center gap-3 text-sm text-[#572a31]/60">
+        <div className="rounded-xl border border-[#440008]/10 bg-[#F9F7F4] p-4 flex items-center gap-3 text-sm text-[#440008]/60">
           <FaLock />
           Birthday already saved — you'll get your gift automatically every year.
         </div>
@@ -321,8 +321,8 @@ export default function QuestionsForm({
           disabled={loading}
           className={`mt-6 w-full py-3 font-display rounded-full font-bold text-lg flex justify-center items-center gap-2 transition ${
             loading
-              ? "bg-[#572a31]/60 cursor-wait text-white"
-              : "bg-[#572a31] text-white hover:brightness-110"
+              ? "bg-[#440008]/60 cursor-wait text-white"
+              : "bg-[#440008] text-white hover:opacity-90"
           }`}
         >
           {loading ? (

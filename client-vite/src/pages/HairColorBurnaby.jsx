@@ -168,7 +168,7 @@ export default function HairColorBurnaby() {
           className="h-[260px] w-full object-cover object-[center_30%] sm:h-[360px] sm:object-center lg:h-[520px]"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A0003]/80 via-[#1A0003]/35 to-transparent" />
 
         <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4 pb-4 sm:bottom-0 sm:px-6 sm:pb-10">
           <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
@@ -188,7 +188,7 @@ export default function HairColorBurnaby() {
           <div className="mt-4 flex flex-row gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
             <Link
               to="/booking"
-              className="inline-flex min-h-[38px] items-center justify-center rounded-xl bg-white px-4 py-2 text-sm font-medium text-[#572a31] transition hover:bg-[#F8F7F1] sm:min-h-[46px] sm:px-6 sm:py-3"
+              className="inline-flex min-h-[38px] items-center justify-center rounded-xl bg-white px-4 py-2 text-sm font-medium text-[#440008] transition hover:bg-[#E4E2DD] hover:shadow-sm sm:min-h-[46px] sm:px-6 sm:py-3"
             >
               Book
             </Link>
@@ -216,39 +216,39 @@ export default function HairColorBurnaby() {
         <div className="mb-6 sm:mb-8">
           <Link
             to="/services"
-            className="inline-block text-sm text-[#572a31] underline underline-offset-4 transition hover:text-[#3D0007]"
+            className="inline-block text-sm text-[#440008] underline underline-offset-4 transition hover:text-[#440008]"
           >
             ← Back to services
           </Link>
         </div>
 
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6">
+          <div className="rounded-[24px] border border-[#440008]/10 bg-[#F9F7F4] p-5 sm:p-6">
             <div className="text-sm text-gray-500">Starting price</div>
-            <div className="mt-2 text-xl font-semibold text-[#3D0007] sm:text-2xl">
+            <div className="mt-2 text-xl font-semibold text-[#440008] sm:text-2xl">
               From $120
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6">
+          <div className="rounded-[24px] border border-[#440008]/10 bg-[#F9F7F4] p-5 sm:p-6">
             <div className="text-sm text-gray-500">Appointment time</div>
-            <div className="mt-2 text-xl font-semibold text-[#3D0007] sm:text-2xl">
+            <div className="mt-2 text-xl font-semibold text-[#440008] sm:text-2xl">
               Varies
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-[#fcfaf8] p-5 sm:p-6 sm:col-span-2 lg:col-span-1">
+          <div className="rounded-[24px] border border-[#440008]/10 bg-[#F9F7F4] p-5 sm:p-6 sm:col-span-2 lg:col-span-1">
             <div className="text-sm text-gray-500">Location</div>
-            <div className="mt-2 text-base font-semibold text-[#3D0007] sm:text-lg">
+            <div className="mt-2 text-base font-semibold text-[#440008] sm:text-lg">
               {LOCATION_NOTE}
             </div>
             <div className="mt-1 text-sm text-gray-600">Burnaby, BC</div>
           </div>
         </section>
 
-        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+        <section className="mt-14 rounded-[24px] bg-[#E4E2DD] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               Hair color services we offer
             </h2>
 
@@ -260,36 +260,36 @@ export default function HairColorBurnaby() {
           </div>
 
           <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2">
-            <article className="rounded-xl border border-[#572a31]/10 bg-white p-4">
-              <h3 className="font-semibold text-[#3D0007]">Balayage</h3>
+            <article className="rounded-xl border border-[#440008]/10 bg-white p-4">
+              <h3 className="font-semibold text-[#440008]">Balayage</h3>
               <p className="mt-2 text-sm leading-6 text-gray-700">
                 Soft, blended color with a more natural grow-out and lower
                 maintenance feel.
               </p>
               <Link
-                className="mt-3 inline-block text-sm text-[#572a31] underline underline-offset-4"
+                className="mt-3 inline-block text-sm text-[#440008] underline underline-offset-4"
                 to="/balayage-burnaby"
               >
                 Balayage in Burnaby →
               </Link>
             </article>
 
-            <article className="rounded-xl border border-[#572a31]/10 bg-white p-4">
-              <h3 className="font-semibold text-[#3D0007]">Highlights</h3>
+            <article className="rounded-xl border border-[#440008]/10 bg-white p-4">
+              <h3 className="font-semibold text-[#440008]">Highlights</h3>
               <p className="mt-2 text-sm leading-6 text-gray-700">
                 Structured brightness with dimension, contrast, and custom
                 toning.
               </p>
               <Link
-                className="mt-3 inline-block text-sm text-[#572a31] underline underline-offset-4"
+                className="mt-3 inline-block text-sm text-[#440008] underline underline-offset-4"
                 to="/highlights-burnaby"
               >
                 Highlights in Burnaby →
               </Link>
             </article>
 
-            <article className="rounded-xl border border-[#572a31]/10 bg-white p-4">
-              <h3 className="font-semibold text-[#3D0007]">
+            <article className="rounded-xl border border-[#440008]/10 bg-white p-4">
+              <h3 className="font-semibold text-[#440008]">
                 Root Color & Gray Coverage
               </h3>
               <p className="mt-2 text-sm leading-6 text-gray-700">
@@ -297,15 +297,15 @@ export default function HairColorBurnaby() {
                 cleaner regrowth.
               </p>
               <Link
-                className="mt-3 inline-block text-sm text-[#572a31] underline underline-offset-4"
+                className="mt-3 inline-block text-sm text-[#440008] underline underline-offset-4"
                 to="/services"
               >
                 View services →
               </Link>
             </article>
 
-            <article className="rounded-xl border border-[#572a31]/10 bg-white p-4">
-              <h3 className="font-semibold text-[#3D0007]">
+            <article className="rounded-xl border border-[#440008]/10 bg-white p-4">
+              <h3 className="font-semibold text-[#440008]">
                 Toners & Color Refresh
               </h3>
               <p className="mt-2 text-sm leading-6 text-gray-700">
@@ -313,7 +313,7 @@ export default function HairColorBurnaby() {
                 fresh and polished.
               </p>
               <Link
-                className="mt-3 inline-block text-sm text-[#572a31] underline underline-offset-4"
+                className="mt-3 inline-block text-sm text-[#440008] underline underline-offset-4"
                 to="/booking"
               >
                 Book consultation →
@@ -323,8 +323,8 @@ export default function HairColorBurnaby() {
         </section>
 
         <section className="mt-14 grid gap-6 lg:grid-cols-[1.4fr_0.9fr] sm:mt-16">
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+          <div className="rounded-[24px] border border-[#440008]/10 bg-white p-5 shadow-sm sm:p-6">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008]">
               Choosing the right hair color service
             </h2>
 
@@ -343,51 +343,51 @@ export default function HairColorBurnaby() {
             </p>
           </div>
 
-          <aside className="rounded-[24px] border border-[#572a31]/10 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-xl font-semibold text-[#3D0007]">
+          <aside className="rounded-[24px] border border-[#440008]/10 bg-white p-5 shadow-sm sm:p-6">
+            <h2 className="text-xl font-semibold text-[#440008]">
               What to expect
             </h2>
 
             <ul className="mt-4 space-y-3 text-gray-700">
               <li className="flex gap-3">
-                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#572a31]" />
+                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#440008]" />
                 <span>Consultation to confirm tone, goals, and upkeep level</span>
               </li>
               <li className="flex gap-3">
-                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#572a31]" />
+                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#440008]" />
                 <span>Customized placement and formula based on hair history</span>
               </li>
               <li className="flex gap-3">
-                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#572a31]" />
+                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#440008]" />
                 <span>Toning and refinement for a wearable final result</span>
               </li>
               <li className="flex gap-3">
-                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#572a31]" />
+                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#440008]" />
                 <span>Care guidance to help protect shine and longevity</span>
               </li>
             </ul>
 
-            <div className="mt-6 rounded-xl border border-[#572a31]/10 bg-[#F8F7F1] p-4 text-sm leading-6 text-gray-700">
+            <div className="mt-6 rounded-xl border border-[#440008]/10 bg-[#E4E2DD] p-4 text-sm leading-6 text-gray-700">
               Major color changes, previous dye, box color, and corrective work
               often need more time and planning. A consultation is the smart
               starting point.
             </div>
 
-            <div className="mt-6 rounded-xl border border-[#572a31]/10 bg-[#fcfaf8] p-4 text-sm leading-6 text-gray-700">
-              <div className="font-semibold text-[#3D0007]">Parking</div>
+            <div className="mt-6 rounded-xl border border-[#440008]/10 bg-[#F9F7F4] p-4 text-sm leading-6 text-gray-700">
+              <div className="font-semibold text-[#440008]">Parking</div>
               <div className="mt-1">{PARKING_NOTE}</div>
             </div>
 
             <div className="mt-6 flex flex-col gap-3">
               <Link
                 to="/booking"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#E4E2DD] transition hover:opacity-90"
               >
                 Book Now
               </Link>
               <a
                 href={`tel:${PHONE_TEL}`}
-                className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#572a31]/25 bg-white px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#440008]/25 bg-white px-6 py-3 text-sm font-medium text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
               >
                 Call Salon
               </a>
@@ -397,7 +397,7 @@ export default function HairColorBurnaby() {
 
         <section className="mt-14 sm:mt-16">
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               Gallery
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">
@@ -406,7 +406,7 @@ export default function HairColorBurnaby() {
           </div>
 
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div className="group overflow-hidden rounded-[24px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                 <img
                   src="/images/services/hair-color/hair-color-1.webp"
@@ -417,7 +417,7 @@ export default function HairColorBurnaby() {
               </div>
             </div>
 
-            <div className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div className="group overflow-hidden rounded-[24px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                 <img
                   src="/images/services/hair-color/hair-color-2.webp"
@@ -428,7 +428,7 @@ export default function HairColorBurnaby() {
               </div>
             </div>
 
-            <div className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div className="group overflow-hidden rounded-[24px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                 <img
                   src="/images/services/hair-color/hair-color-3.webp"
@@ -442,7 +442,7 @@ export default function HairColorBurnaby() {
         </section>
 
         <section className="mt-14 sm:mt-16">
-          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+          <h2 className="text-2xl font-theseason font-semibold text-[#440008]">
             FAQ
           </h2>
 
@@ -493,34 +493,34 @@ export default function HairColorBurnaby() {
           </div>
         </section>
 
-        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
-          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+        <section className="mt-14 rounded-[24px] bg-[#E4E2DD] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+          <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
             Related services
           </h2>
 
           <div className="mt-5 flex flex-wrap gap-2.5 sm:mt-6 sm:gap-3">
             <Link
               to="/balayage-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Balayage in Burnaby
             </Link>
             <Link
               to="/highlights-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Highlights in Burnaby
             </Link>
             <Link
               to="/services"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               View all services
             </Link>
           </div>
         </section>
 
-        {/* <section className="mt-14 rounded-[24px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
+        {/* <section className="mt-14 rounded-[24px] border border-[#440008]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
           <h2 className="text-2xl font-theseason text-[#440008] sm:text-3xl">
             Ready to book?
           </h2>
@@ -532,14 +532,14 @@ export default function HairColorBurnaby() {
           <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               to="/booking"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#E4E2DD] transition hover:opacity-90 sm:px-8"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#572a31]/25 bg-white px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#440008]/25 bg-white px-6 py-3 text-sm font-medium text-[#440008] transition hover:border-[#440008]/45 sm:px-8"
             >
               Call {PHONE_DISPLAY}
             </a>

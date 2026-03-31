@@ -158,7 +158,7 @@ const hardResetAll = () => {
       <meta name="twitter:description" content="Book your appointment online at Elika Beauty in Burnaby." />
       <meta name="twitter:image" content="https://elikabeauty.ca/assets/salon.webp" />
     </Helmet>
-    <div className="w-full min-h-screen relative font-sans bg-[#F8F7F1]">
+    <div className="w-full min-h-screen relative font-sans bg-[#E4E2DD]">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
@@ -172,14 +172,14 @@ const hardResetAll = () => {
       />
 
       {/* Sticky stepper header */}
-      <div className="sticky top-0 z-30 bg-[#F8F7F1]/90 backdrop-blur">
+      <div className="sticky top-0 z-30 bg-[#E4E2DD]/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={goBack}
               disabled={step === 0}
               className={`text-sm font-semibold font-display ${
-                step === 0 ? "opacity-30 cursor-not-allowed" : "text-[#7a3b44]"
+                step === 0 ? "opacity-30 cursor-not-allowed" : "text-[#440008]"
               }`}
             >
               Back
@@ -189,14 +189,14 @@ const hardResetAll = () => {
               <div className="text-xs text-gray-500">
                 Step {step + 1} of {STEPS.length}
               </div>
-              <h2 className="text-lg sm:text-xl font-display font-bold text-[#7a3b44]">
+              <h2 className="text-lg sm:text-xl font-display font-bold text-[#440008]">
                 {STEPS[step].title}
               </h2>
             </div>
 
             <button
               onClick={hardResetAll}
-              className="text-sm font-semibold font-display text-[#55203d]/70 hover:text-[#7a3b44]"
+              className="text-sm font-semibold font-display text-[#440008]/70 hover:text-[#440008]"
             >
               Reset
             </button>
@@ -204,7 +204,7 @@ const hardResetAll = () => {
 
           <div className="mt-3 h-1.5 bg-black/5 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#7a3b44] transition-all duration-300"
+              className="h-full bg-[#440008] transition-all duration-300"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -214,7 +214,7 @@ const hardResetAll = () => {
       {/* Foreground */}
       <div className="relative z-10 px-4 sm:px-6 py-8 max-w-6xl mx-auto">
         <header className="mb-6 text-center">
-          <h1 className="text-2xl sm:text-3xl text-[#7a3b44] font-theseason font-bold">
+          <h1 className="text-2xl sm:text-3xl text-[#440008] font-theseason font-bold">
             <span className="py-2 px-4 sm:px-6">Book Your Appointment</span>
           </h1>
           <p className="text-gray-600 text-sm mt-2">3790 Canada Way #102, Burnaby</p>
@@ -237,7 +237,7 @@ const hardResetAll = () => {
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
               onClick={() => setShowInfo((s) => !s)}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-[#55203d]/30 text-[#7a3b44] text-sm font-semibold font-display shadow hover:bg-[#55203d]/5"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white border border-[#440008]/30 text-[#440008] text-sm font-semibold font-display shadow hover:bg-[#440008]/5"
               aria-expanded={showInfo}
               aria-controls="booking-info"
             >
@@ -256,7 +256,7 @@ const hardResetAll = () => {
           aria-hidden={!showInfo}
         >
           <p className="mb-3">
-            Welcome to <strong className="text-[#7a3b44]">ELIKA BEAUTY</strong>, a professional
+            Welcome to <strong className="text-[#440008]">ELIKA BEAUTY</strong>, a professional
             hair salon located at <strong>3790 Canada Way #102, Burnaby</strong>.
             We specialize in modern hair services including balayage, highlights,
             hair coloring, keratin treatments, precision haircuts, and professional styling.
@@ -272,7 +272,7 @@ const hardResetAll = () => {
             If you don’t see a time that works for you, please{" "}
             <a
               href="tel:+16044383727"
-              className="text-[#7a3b44] font-semibold underline"
+              className="text-[#440008] font-semibold underline"
             >
               call us
             </a>.  
@@ -338,7 +338,7 @@ const hardResetAll = () => {
 
           {/* RIGHT summary */}
           <div className="hidden sm:block w-full lg:w-[300px] bg-white rounded-[25px] shadow-xl p-6 sm:p-8 h-fit self-start sticky top-28">
-            <h4 className="font-bold text-xl font-theseason text-[#7a3b44] mb-1">
+            <h4 className="font-bold text-xl font-theseason text-[#440008] mb-1">
               ELIKA BEAUTY
             </h4>
 
@@ -360,7 +360,7 @@ const hardResetAll = () => {
 
             <hr className="my-4 border-pink-100" />
 
-            <div className="text-lg font-semibold text-[#7a3b44]">
+            <div className="text-lg font-semibold text-[#440008]">
               <div className="flex font-display justify-between mb-1">
                 <span>Total</span>
                 <span>{selection.total > 0 ? `+$${selection.total}` : `$0`}</span>
@@ -386,8 +386,8 @@ const hardResetAll = () => {
                 }}
                 className={`w-full px-5 py-3 rounded-full font-bold text-white transition ${
                   !canContinue || loading || (selection.selected.length > 0 && !priceAccepted)
-                    ? "bg-[#7a3b44]/25 cursor-not-allowed"
-                    : "bg-[#7a3b44] hover:brightness-110"
+                    ? "bg-[#440008]/25 cursor-not-allowed"
+                    : "bg-[#440008] hover:opacity-90"
                 }`}
               >
                 {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}
@@ -397,7 +397,7 @@ const hardResetAll = () => {
                 <button
                   type="button"
                   onClick={goBack}
-                  className="w-full mt-3 px-5 py-3 rounded-full font-semibold border border-[#55203d]/20 text-[#55203d] hover:bg-[#55203d]/5"
+                  className="w-full mt-3 px-5 py-3 rounded-full font-semibold border border-[#440008]/20 text-[#440008] hover:bg-[#440008]/5"
                 >
                   Back
                 </button>
@@ -408,11 +408,11 @@ const hardResetAll = () => {
       </div>
 
         {/* Mobile bottom bar */}
-        <div className="sm:hidden sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#55203d]/10">
+        <div className="sm:hidden sticky bottom-0 z-30 bg-white/90 backdrop-blur border-t border-[#440008]/10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <div className="text-sm font-display font-bold text-[#7a3b44]">
+                <div className="text-sm font-display font-bold text-[#440008]">
                   {selection.selected.length} service(s) • ${selection.total}
                 </div>
                 <div className="text-xs text-gray-500">
@@ -429,8 +429,8 @@ const hardResetAll = () => {
                 }}
                 className={`px-5 py-2.5 rounded-full font-bold text-white transition whitespace-nowrap ${
                   !canContinue || loading || (selection.selected.length > 0 && !priceAccepted)
-                    ? "bg-[#7a3b44]/25 cursor-not-allowed"
-                    : "bg-[#55203d] hover:brightness-110"
+                    ? "bg-[#440008]/25 cursor-not-allowed"
+                    : "bg-[#440008] hover:opacity-90"
                 }`}
               >
                 {step === 2 ? (loading ? "Submitting..." : "Confirm") : "Continue"}

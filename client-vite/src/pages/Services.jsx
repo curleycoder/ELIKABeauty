@@ -201,7 +201,7 @@ export default function Services() {
           className="h-[260px] w-full object-cover sm:h-[360px] lg:h-[520px]"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A0003]/80 via-[#1A0003]/35 to-transparent" />
 
 <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4 sm:bottom-0 sm:px-6 sm:pb-4">
             <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
@@ -217,7 +217,7 @@ export default function Services() {
           <div className="mt-6 flex flex-row gap-1 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-3">
             <Link
               to="/booking"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#572a31] px-3 py-1 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:px-2"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-[#440008] px-3 py-1 text-sm font-medium text-white transition hover:opacity-90 sm:px-2"
             >
               Book Appointment
             </Link>
@@ -248,7 +248,7 @@ export default function Services() {
       <main className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12">
         <section>
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               Choose a service
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">
@@ -261,7 +261,7 @@ export default function Services() {
               <Link
                 key={s.path}
                 to={s.path}
-                className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group overflow-hidden rounded-[24px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                   <img
@@ -273,7 +273,7 @@ export default function Services() {
                     loading="lazy"
                     decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/80 via-[#2e1118]/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A0003]/80 via-[#1A0003]/20 to-transparent" />
 
                   <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
                     <h3 className="text-xl font-theseason leading-tight text-white sm:text-2xl">
@@ -283,16 +283,16 @@ export default function Services() {
                 </div>
 
                 <div className="flex min-h-[168px] flex-col p-4 sm:min-h-[180px] sm:p-5">
-                  <p className="text-sm leading-6 text-[#572a31]/80">
+                  <p className="text-sm leading-6 text-[#440008]/80">
                     {s.desc}
                   </p>
 
                   <div className="mt-4 flex items-start justify-between gap-3">
-                    <p className="text-sm font-semibold text-[#3D0007]">
+                    <p className="text-sm font-semibold text-[#440008]">
                       {s.price}
                     </p>
 
-                    <span className="shrink-0 text-sm font-medium text-[#572a31] underline underline-offset-4">
+                    <span className="shrink-0 text-sm font-medium text-[#440008] underline underline-offset-4">
                       View details
                     </span>
                   </div>
@@ -313,9 +313,9 @@ export default function Services() {
           </p>
         </section>
 
-        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+        <section className="mt-14 rounded-[24px] bg-[#E4E2DD] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               Not sure what to book?
             </h2>
 
@@ -328,37 +328,37 @@ export default function Services() {
           <div className="mt-5 flex flex-wrap gap-2.5 sm:mt-6 sm:gap-3">
             <Link
               to="/hair-color-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Hair Color
             </Link>
             <Link
               to="/balayage-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Balayage
             </Link>
             <Link
               to="/highlights-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Highlights
             </Link>
             <Link
               to="/keratin-treatment-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Keratin
             </Link>
             <Link
               to="/microblading-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Microblading
             </Link>
             <Link
               to="/threading-burnaby"
-              className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+              className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               Threading
             </Link>
@@ -366,7 +366,7 @@ export default function Services() {
         </section>
 
         <section className="mt-14 sm:mt-16">
-          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+          <h2 className="text-2xl font-theseason font-semibold text-[#440008]">
             FAQ
           </h2>
 
@@ -403,7 +403,7 @@ export default function Services() {
           </div>
         </section>
 
-        {/* <section className="mt-14 rounded-[24px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
+        {/* <section className="mt-14 rounded-[24px] border border-[#440008]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
           <h2 className="text-2xl font-theseason text-[#440008] sm:text-3xl">
             Ready to book?
           </h2>
@@ -415,14 +415,14 @@ export default function Services() {
           <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               to="/booking"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#E4E2DD] transition hover:opacity-90 sm:px-8"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#572a31]/25 bg-white px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#440008]/25 bg-white px-6 py-3 text-sm font-medium text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5 sm:px-8"
             >
               Call {PHONE_DISPLAY}
             </a>

@@ -8,10 +8,10 @@ export default function AboutMe() {
       className="mx-auto max-w-6xl px-8 text-gray-800 sm:px-16 pb-12"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-[11px] uppercase tracking-[0.18em] text-[#8a6b73] sm:text-xs">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-[#440008] sm:text-xs">
           Elika Beauty • Burnaby
         </p>
-        <h2 className="mt-2 text-2xl font-theseason text-[#572a31] sm:text-3xl">
+        <h2 className="mt-2 text-2xl font-theseason text-[#440008] sm:text-3xl">
           Meet Amina
         </h2>
       </div>
@@ -32,7 +32,7 @@ export default function AboutMe() {
         <div className="max-w-xl text-sm leading-7 text-gray-700 sm:text-base">
           <p>
             Hi, I'm <strong>Amina</strong>, the owner of{" "}
-            <strong className="font-theseason text-[#3D0007]">Elika Beauty</strong>{" "}
+            <strong className="font-theseason text-[#440008]">Elika Beauty</strong>{" "}
             in Burnaby.
           </p>
           <p className="mt-4">
@@ -53,13 +53,13 @@ export default function AboutMe() {
           <div className="mt-5 flex w-full max-w-[700px] flex-row gap-3">
             <Link
               to="/booking"
-              className="inline-flex items-center justify-center rounded-xl bg-[#572a31] px-3 py-2 text-sm font-medium text-white transition hover:opacity-90"
+              className="inline-flex items-center justify-center rounded-xl bg-[#440008] px-3 py-2 text-sm font-medium text-white transition hover:opacity-90"
             >
               Book Appointment
             </Link>
             <Link
               to="/services"
-              className="inline-flex items-center justify-center rounded-xl border border-[#572a31]/25 px-5 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]"
+              className="inline-flex items-center justify-center rounded-xl border border-[#440008]/25 px-5 py-3 text-sm font-medium text-[#440008] transition hover:border-[#440008]"
             >
               View Services
             </Link>

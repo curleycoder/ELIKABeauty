@@ -10,7 +10,7 @@ export default function Terms() {
       <meta name="robots" content="noindex, follow" />
     </Helmet>
     <div className="max-w-3xl mx-auto px-4 py-16 pt-24">
-      <h1 className="text-3xl font-theseason text-[#572a31] mb-6">
+      <h1 className="text-3xl font-theseason text-[#440008] mb-6">
         Terms of Service
       </h1>
 

@@ -34,13 +34,13 @@ export default function Footer() {
   const status = getTodayStatus();
 
   return (
-    <footer className="bg-[#2e1118] text-white/80">
+    <footer className="bg-[#1A0003] text-white/80">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
         {/* Brand */}
         <div>
-          <p className="font-theseason text-2xl text-white tracking-wide">ELIKA</p>
-          <p className="text-xs uppercase tracking-widest text-white/50 mt-0.5">Beauty Salon</p>
+          <p className="font-theseason text-2xl text-[#E7A45D] tracking-wide">ELIKA BEAUTY</p>
+          {/* <p className="text-xs uppercase tracking-widest text-white/50 mt-0.5">Salon</p> */}
           <p className="mt-4 text-sm leading-6">
             Professional hair salon in Burnaby specializing in balayage, highlights, hair colour, keratin treatments, and more.
           </p>
@@ -57,7 +57,7 @@ export default function Footer() {
 
         {/* Services */}
         <div>
-          <p className="text-xs uppercase tracking-widest text-white/40 mb-4">Services</p>
+          <p className="text-xs uppercase tracking-widest text-white/60 mb-4">Services</p>
           <ul className="space-y-2 text-sm">
             {[
               { to: "/balayage-burnaby", label: "Balayage" },
@@ -78,7 +78,7 @@ export default function Footer() {
 
         {/* Hours */}
         <div>
-          <p className="text-xs uppercase tracking-widest text-white/40 mb-4">Hours</p>
+          <p className="text-xs uppercase tracking-widest text-white/60 mb-4">Hours</p>
           <div className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-4 ${status.open ? "bg-green-700/40 text-green-300" : "bg-white/10 text-white/50"}`}>
             <FaClock className="text-[10px]" aria-hidden="true" /> {status.label}
           </div>
@@ -94,7 +94,7 @@ export default function Footer() {
 
         {/* Contact */}
         <div>
-          <p className="text-xs uppercase tracking-widest text-white/40 mb-4">Contact</p>
+          <p className="text-xs uppercase tracking-widest text-white/60 mb-4">Contact</p>
           <ul className="space-y-3 text-sm">
             <li>
               <a href="tel:+16044383727" className="flex items-start gap-2 hover:text-white transition">
@@ -119,16 +119,16 @@ export default function Footer() {
           <div className="mt-6">
             <Link
               to="/booking"
-              className="inline-flex items-center justify-center rounded-full bg-[#572a31] px-5 py-2.5 text-sm font-semibold text-white hover:brightness-110 transition"
+              className="inline-flex items-center justify-center rounded-xl bg-[#E7A45D] px-5 py-2.5 text-sm font-semibold text-[#440008] hover:opacity-90 transition"
             >
               Book Appointment
             </Link>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/40">
-            <Link to="/privacy-policy" className="hover:text-white/70 transition">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-white/70 transition">Terms</Link>
-            <Link to="/contact" className="hover:text-white/70 transition">Contact</Link>
+          <div className="mt-6 flex flex-wrap gap-3 text-xs text-[white]/60">
+            <Link to="/privacy-policy" className="hover:text-[#E7A45D]/70 transition">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-[#E7A45D]/70 transition">Terms</Link>
+            <Link to="/contact" className="hover:text-[#E7A45D]/70 transition">Contact</Link>
           </div>
         </div>
       </div>

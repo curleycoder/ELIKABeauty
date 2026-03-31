@@ -177,12 +177,12 @@ function CreditsTab({ adminKey }) {
           onChange={(e) => { setCode(e.target.value.toUpperCase()); setResult(null); setLookupError(""); setRedeemMsg(""); }}
           onKeyDown={(e) => e.key === "Enter" && lookup()}
           placeholder="BDAY-2025-XXXXXX"
-          className="flex-1 border border-[#55203d]/30 rounded px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#55203d]"
+          className="flex-1 border border-[#440008]/30 rounded px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]"
         />
         <button
           onClick={lookup}
           disabled={busy || !code.trim()}
-          className="px-4 py-2 rounded bg-[#55203d] text-white font-semibold disabled:opacity-40"
+          className="px-4 py-2 rounded bg-[#440008] text-white font-semibold disabled:opacity-40"
         >
           Look up
         </button>
@@ -195,10 +195,10 @@ function CreditsTab({ adminKey }) {
       )}
 
       {result && (
-        <div className="p-4 rounded-lg border border-[#55203d]/20 bg-[#fdf8f8] space-y-2">
+        <div className="p-4 rounded-lg border border-[#440008]/20 bg-[#F9F7F4] space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">Client</span>
-            <span className="font-semibold text-[#55203d]">{result.name}</span>
+            <span className="font-semibold text-[#440008]">{result.name}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">Phone</span>
@@ -225,7 +225,7 @@ function CreditsTab({ adminKey }) {
             <button
               onClick={redeem}
               disabled={busy}
-              className="mt-3 w-full py-2 rounded-full bg-[#55203d] text-white font-bold text-sm disabled:opacity-40"
+              className="mt-3 w-full py-2 rounded-full bg-[#440008] text-white font-bold text-sm disabled:opacity-40"
             >
               Mark as Redeemed ($20 off applied)
             </button>
@@ -234,7 +234,7 @@ function CreditsTab({ adminKey }) {
       )}
 
       {redeemMsg && (
-        <p className="mt-3 text-sm font-semibold text-[#55203d]">{redeemMsg}</p>
+        <p className="mt-3 text-sm font-semibold text-[#440008]">{redeemMsg}</p>
       )}
     </div>
   );
@@ -387,7 +387,7 @@ export default function AdminBookings() {
         onClick={() => setTab(id)}
         className={[
           "px-3 py-2 rounded font-semibold",
-          active ? "bg-[#55203d] text-white" : "border text-[#55203d]",
+          active ? "bg-[#440008] text-white" : "border text-[#440008]",
         ].join(" ")}
       >
         {label}{count != null ? ` (${count})` : ""}
@@ -398,12 +398,12 @@ export default function AdminBookings() {
   return (
     <div className="max-w-5xl mx-auto p-6 pt-20">
       <div className="flex items-center justify-between gap-3 mb-4">
-        <h2 className="text-2xl font-bold font-theseason text-[#55203d]">Admin – Bookings</h2>
+        <h2 className="text-2xl font-bold font-theseason text-[#440008]">Admin – Bookings</h2>
         <div className="flex gap-2">
-          <button onClick={fetchBookings} className="px-3 py-2 rounded bg-[#55203d] text-white">
+          <button onClick={fetchBookings} className="px-3 py-2 rounded bg-[#440008] text-white">
             Refresh
           </button>
-          <button onClick={clearKey} className="px-3 py-2 rounded border text-[#55203d]">
+          <button onClick={clearKey} className="px-3 py-2 rounded border text-[#440008]">
             Clear Key
           </button>
         </div>
@@ -431,7 +431,7 @@ export default function AdminBookings() {
           <div className="space-y-6">
             {grouped.map((day) => (
               <div key={day.dateLabel} className="rounded border p-4">
-                <div className="font-bold text-[#55203d] mb-3 flex items-center gap-2"><FaCalendarAlt /> {day.dateLabel}</div>
+                <div className="font-bold text-[#440008] mb-3 flex items-center gap-2"><FaCalendarAlt /> {day.dateLabel}</div>
 
                 <div className="space-y-3">
                   {day.list.map(({ b }) => {
@@ -445,12 +445,12 @@ export default function AdminBookings() {
                         className={[
                           "p-3 rounded border transition",
                           isCancelled ? "bg-red-50" : "bg-white",
-                          isHighlighted ? "ring-2 ring-[#55203d] shadow-lg" : "",
+                          isHighlighted ? "ring-2 ring-[#440008] shadow-lg" : "",
                         ].join(" ")}
                       >
                         <div className="flex justify-between items-start gap-3">
                           <div>
-                            <div className="font-semibold text-[#55203d]">
+                            <div className="font-semibold text-[#440008]">
                               {b?.name?.trim() ? b.name : "No name"}
                               {isCancelled && (
                                 <span className="ml-2 text-red-600 font-semibold">CANCELLED</span>

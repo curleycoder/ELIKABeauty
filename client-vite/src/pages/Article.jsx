@@ -21,7 +21,7 @@ export default function ArticlePage() {
             <link rel="canonical" href={`${SITE_ORIGIN}/articles`} />
           </Helmet>
 
-          <Link to="/articles" className="text-[#55203d] underline">
+          <Link to="/articles" className="text-[#440008] underline">
             ← Back to articles
           </Link>
           <p className="mt-4">Article not found.</p>
@@ -88,7 +88,7 @@ const articleJsonLd = {
       </Helmet>
 
       <div className="max-w-3xl mx-auto">
-        <Link to="/articles" className="text-[#55203d] underline">
+        <Link to="/articles" className="text-[#440008] underline">
           ← Back to articles
         </Link>
 

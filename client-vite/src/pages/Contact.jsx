@@ -33,8 +33,8 @@ export default function Contact() {
       </Helmet>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
-        <p className="text-xs uppercase tracking-widest text-[#8a6b73]">Elika Beauty · Burnaby</p>
-        <h1 className="mt-2 text-3xl sm:text-4xl font-theseason text-[#572a31]">Contact Us</h1>
+        <p className="text-xs uppercase tracking-widest text-[#440008]">Elika Beauty · Burnaby</p>
+        <h1 className="mt-2 text-3xl sm:text-4xl font-theseason text-[#440008]">Contact Us</h1>
         <p className="mt-3 text-gray-600 max-w-xl">
           Book online, call us, or stop by. We're located in Burnaby at Canada Way, easy to reach from Brentwood and Metrotown.
         </p>
@@ -43,20 +43,20 @@ export default function Contact() {
 
           {/* Left — info */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-[#572a31]/10 bg-[#fcfaf8] p-6">
-              <p className="text-xs uppercase tracking-widest text-[#8a6b73] mb-4">Location</p>
+            <div className="rounded-2xl border border-[#440008]/10 bg-[#F9F7F4] p-6">
+              <p className="text-xs uppercase tracking-widest text-[#440008] mb-4">Location</p>
               <a
                 href="https://www.google.com/maps/search/?api=1&query=ELIKA+BEAUTY+3790+Canada+Way+Burnaby+BC"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-start gap-3 text-[#572a31] hover:underline"
+                className="flex items-start gap-3 text-[#440008] hover:underline"
               >
                 <FaMapMarkerAlt className="mt-1 shrink-0" />
                 <span>3790 Canada Way #102<br />Burnaby, BC V5G 1G4</span>
               </a>
               <a
                 href="tel:+16044383727"
-                className="mt-4 flex items-center gap-3 text-[#572a31] hover:underline"
+                className="mt-4 flex items-center gap-3 text-[#440008] hover:underline"
               >
                 <FaPhone className="shrink-0" />
                 (604) 438-3727
@@ -65,22 +65,22 @@ export default function Contact() {
                 href="https://www.instagram.com/elikabeauty.ca/"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-4 flex items-center gap-3 text-[#572a31] hover:underline"
+                className="mt-4 flex items-center gap-3 text-[#440008] hover:underline"
               >
                 <FaInstagram className="shrink-0" />
                 @elikabeauty.ca
               </a>
             </div>
 
-            <div className="rounded-2xl border border-[#572a31]/10 bg-[#fcfaf8] p-6">
-              <p className="text-xs uppercase tracking-widest text-[#8a6b73] mb-4 flex items-center gap-2">
+            <div className="rounded-2xl border border-[#440008]/10 bg-[#F9F7F4] p-6">
+              <p className="text-xs uppercase tracking-widest text-[#440008] mb-4 flex items-center gap-2">
                 <FaClock /> Hours
               </p>
               <ul className="space-y-2 text-sm">
                 {HOURS.map((h) => (
                   <li key={h.day} className="flex justify-between">
                     <span className="text-gray-500">{h.day}</span>
-                    <span className={h.hours === "Closed" ? "text-gray-400" : "font-medium text-[#572a31]"}>{h.hours}</span>
+                    <span className={h.hours === "Closed" ? "text-gray-400" : "font-medium text-[#440008]"}>{h.hours}</span>
                   </li>
                 ))}
               </ul>
@@ -88,14 +88,14 @@ export default function Contact() {
 
             <Link
               to="/booking"
-              className="inline-flex w-full items-center justify-center rounded-full bg-[#572a31] px-6 py-3 text-sm font-semibold text-white hover:brightness-110 transition"
+              className="inline-flex w-full items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-semibold text-white hover:opacity-90 transition"
             >
               Book Appointment Online
             </Link>
           </div>
 
           {/* Right — map embed */}
-          <div className="rounded-2xl overflow-hidden border border-[#572a31]/10 min-h-[400px]">
+          <div className="rounded-2xl overflow-hidden border border-[#440008]/10 min-h-[400px]">
             <iframe
               title="Elika Beauty location map"
               src="https://maps.google.com/maps?q=ELIKA+BEAUTY+3790+Canada+Way+Burnaby+BC&output=embed&z=16"

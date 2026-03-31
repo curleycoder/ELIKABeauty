@@ -27,7 +27,7 @@ const TEXT_SIZES = {
 
 export default function Logo({
   size = "md",
-  color = "#572a31",
+  color = "#440008",
   showText = true,
   className = "",
 }) {

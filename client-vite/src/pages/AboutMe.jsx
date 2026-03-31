@@ -40,7 +40,7 @@ export default function AboutPage() {
           className="h-[220px] w-full object-cover object-center sm:h-[360px] lg:h-[520px]"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2e1118]/90 via-[#2e1118]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A0003]/90 via-[#1A0003]/40 to-transparent" />
 
         <div className="absolute inset-x-0 bottom-4 mx-auto max-w-6xl px-4 sm:bottom-0 sm:px-6 sm:pb-10">
           <p className="text-[10px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
@@ -61,7 +61,7 @@ export default function AboutPage() {
       <main className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12">
         <section>
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               A beauty space designed for comfort and quality
             </h2>
 
@@ -80,7 +80,7 @@ export default function AboutPage() {
 
         <section className="mt-10 sm:mt-16">
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               Inside the salon
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">
@@ -89,7 +89,7 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-4 grid gap-4 sm:mt-6 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5">
-            <div className="group overflow-hidden rounded-[20px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
+            <div className="group overflow-hidden rounded-[20px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
               <div className="relative h-44 overflow-hidden sm:h-64 lg:h-72">
                 <img
                   src="/images/pages/salon-4.webp"
@@ -100,7 +100,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="group overflow-hidden rounded-[20px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
+            <div className="group overflow-hidden rounded-[20px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
               <div className="relative h-44 overflow-hidden sm:h-64 lg:h-72">
                 <img
                   src="/images/pages/salon-1.webp"
@@ -111,7 +111,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="group overflow-hidden rounded-[20px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
+            <div className="group overflow-hidden rounded-[20px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[24px]">
               <div className="relative h-44 overflow-hidden sm:h-64 lg:h-72">
                 <img
                   src="/images/pages/salon-2.webp"
@@ -125,38 +125,38 @@ export default function AboutPage() {
         </section>
 
         <section className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3 sm:mt-16">
-          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
+          <div className="rounded-[20px] border border-[#440008]/10 bg-[#F9F7F4] p-4 sm:rounded-[24px] sm:p-6">
             <div className="text-xs text-gray-500 sm:text-sm">Location</div>
-            <div className="mt-1 text-sm font-semibold text-[#3D0007] sm:mt-2 sm:text-lg">
+            <div className="mt-1 text-sm font-semibold text-[#440008] sm:mt-2 sm:text-lg">
               {LOCATION_NOTE}
             </div>
             <div className="mt-1 text-sm text-gray-600">Burnaby, BC</div>
           </div>
 
-          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
+          <div className="rounded-[20px] border border-[#440008]/10 bg-[#F9F7F4] p-4 sm:rounded-[24px] sm:p-6">
             <div className="text-xs text-gray-500 sm:text-sm">Address</div>
             <a
               href={MAPS_URL}
               target="_blank"
               rel="noreferrer"
-              className="mt-1 block text-sm font-semibold text-[#3D0007] underline underline-offset-4 sm:mt-2 sm:text-lg"
+              className="mt-1 block text-sm font-semibold text-[#440008] underline underline-offset-4 sm:mt-2 sm:text-lg"
             >
               {ADDRESS_LINE}
             </a>
           </div>
 
-          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6 md:col-span-2 lg:col-span-1">
+          <div className="rounded-[20px] border border-[#440008]/10 bg-[#F9F7F4] p-4 sm:rounded-[24px] sm:p-6 md:col-span-2 lg:col-span-1">
             <div className="text-xs text-gray-500 sm:text-sm">Parking</div>
-            <div className="mt-1 text-sm font-semibold text-[#3D0007] sm:mt-2 sm:text-lg">
+            <div className="mt-1 text-sm font-semibold text-[#440008] sm:mt-2 sm:text-lg">
               Easy access
             </div>
             <div className="mt-1 text-sm text-gray-600">{PARKING_NOTE}</div>
           </div>
         </section>
 
-        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+        <section className="mt-14 rounded-[24px] bg-[#E4E2DD] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               What we offer
             </h2>
 
@@ -168,24 +168,24 @@ export default function AboutPage() {
           </div>
 
           <ul className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2">
-            <li className="rounded-xl border border-[#572a31]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
+            <li className="rounded-xl border border-[#440008]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
               Hair color, balayage, highlights, and root touch-ups
             </li>
-            <li className="rounded-xl border border-[#572a31]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
+            <li className="rounded-xl border border-[#440008]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
               Keratin and smoothing treatments
             </li>
-            <li className="rounded-xl border border-[#572a31]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
+            <li className="rounded-xl border border-[#440008]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
               Women’s and men’s haircuts, styling, and blowouts
             </li>
-            <li className="rounded-xl border border-[#572a31]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
+            <li className="rounded-xl border border-[#440008]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base">
               Facials, Relaxing Massage, threading, Makeup, updo, and microblading through our team
             </li>
           </ul>
         </section>
 
         <section className="mt-14 grid gap-4 lg:grid-cols-2 sm:mt-16">
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+          <div className="rounded-[24px] border border-[#440008]/10 bg-white p-5 shadow-sm sm:p-6">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008]">
               Feedback or general questions
             </h2>
 
@@ -195,14 +195,14 @@ export default function AboutPage() {
 
             <a
               href={`mailto:${EMAIL}`}
-              className="mt-5 inline-flex items-center justify-center rounded-full border border-[#572a31]/25 bg-[#F8F7F1] px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45"
+              className="mt-5 inline-flex items-center justify-center rounded-full border border-[#440008]/25 bg-[#E4E2DD] px-6 py-3 text-sm font-medium text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
             >
               {EMAIL}
             </a>
           </div>
 
-          <div className="rounded-[24px] border border-[#572a31]/10 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+          <div className="rounded-[24px] border border-[#440008]/10 bg-white p-5 shadow-sm sm:p-6">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008]">
               Want to work with us?
             </h2>
 
@@ -214,7 +214,7 @@ export default function AboutPage() {
 
             <a
               href={`mailto:${EMAIL}?subject=${encodeURIComponent("Elika Beauty Chair Rental / Commission Inquiry")}`}
-              className="mt-5 inline-flex items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90"
+              className="mt-5 inline-flex items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#E4E2DD] transition hover:opacity-90"
             >
               Email inquiry
             </a>
@@ -233,14 +233,14 @@ export default function AboutPage() {
           <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               to="/booking"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#E4E2DD] transition hover:opacity-90 sm:px-8"
             >
               Book Appointment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#572a31]/25 bg-white px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#440008]/25 bg-white px-6 py-3 text-sm font-medium text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5 sm:px-8"
             >
               Call {PHONE_DISPLAY}
             </a>

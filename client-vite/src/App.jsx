@@ -41,7 +41,7 @@ const FacialBurnaby          = lazy(() => import("./pages/FacialBurnaby"));
 
 // Minimal fallback shown during chunk download (first visit only)
 function PageLoader() {
-  return <div className="min-h-screen bg-[#F8F7F1]" aria-hidden="true" />;
+  return <div className="min-h-screen bg-[#E4E2DD]" aria-hidden="true" />;
 }
 
 export default function App() {

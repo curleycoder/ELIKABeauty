@@ -190,10 +190,10 @@ export default function ServicePlaceholder({
             loading="eager"
           />
         ) : (
-          <div className="h-[260px] w-full bg-[#d8c6b5] sm:h-[360px] lg:h-[520px]" />
+          <div className="h-[260px] w-full bg-[#E7A45D] sm:h-[360px] lg:h-[520px]" />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2e1118]/45 via-[#2e1118]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A0003]/45 via-[#1A0003]/50 to-transparent" />
 
         <div className="absolute inset-x-0 bottom-6 mx-auto max-w-6xl px-4   sm:bottom-0 sm:px-6 sm:pb-10">
           <p className="text-[11px] uppercase tracking-[0.18em] text-white/80 sm:text-xs">
@@ -212,7 +212,7 @@ export default function ServicePlaceholder({
           <div className="mt-4 flex flex-row gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
             <Link
               to="/booking"
-              className="inline-flex min-h-[38px] items-center justify-center rounded-xl bg-[#572a31] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#F8F7F1] sm:min-h-[46px] sm:px-6 sm:py-3"
+              className="inline-flex min-h-[38px] items-center justify-center rounded-xl bg-[#440008] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#E4E2DD] sm:min-h-[46px] sm:px-6 sm:py-3"
             >
               Book
             </Link>
@@ -240,7 +240,7 @@ export default function ServicePlaceholder({
         <div className="mb-6 sm:mb-8">
           <Link
             to="/services"
-            className="inline-block text-sm text-[#572a31] underline underline-offset-4 transition hover:text-[#3D0007]"
+            className="inline-block text-sm text-[#440008] underline underline-offset-4 transition hover:text-[#440008]"
           >
             ← Back to services
           </Link>
@@ -251,7 +251,7 @@ export default function ServicePlaceholder({
         {galleryImages.length > 0 && (
           <section className="mt-8 sm:mt-16">
             <div className="max-w-3xl">
-              <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+              <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
                 Gallery
               </h2>
               <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base sm:leading-7">
@@ -263,7 +263,7 @@ export default function ServicePlaceholder({
               {galleryImages.map((image, index) => (
                 <div
                   key={index}
-                  className="group overflow-hidden rounded-[24px] border border-[#572a31]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  className="group overflow-hidden rounded-[24px] border border-[#440008]/15 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                     <img
@@ -279,25 +279,25 @@ export default function ServicePlaceholder({
           </section>
         )}
         <section className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-2">
-          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-2 sm:rounded-[24px] sm:p-6">
+          <div className="rounded-[20px] border border-[#440008]/10 bg-[#F9F7F4] p-2 sm:rounded-[24px] sm:p-6">
             <div className="text-xs sm:text-sm text-gray-500">Starting price</div>
-            <div className="mt-1 text-md text-[#3D0007] sm:mt-2 sm:text-2xl">
+            <div className="mt-1 text-md text-[#440008] sm:mt-2 sm:text-2xl">
               {priceText || "Contact us"}
             </div>
           </div>
 
-          <div className="rounded-[20px] border border-[#572a31]/10 bg-[#fcfaf8] p-4 sm:rounded-[24px] sm:p-6">
+          <div className="rounded-[20px] border border-[#440008]/10 bg-[#F9F7F4] p-4 sm:rounded-[24px] sm:p-6">
             <div className="text-xs sm:text-sm text-gray-500">Appointment time</div>
-            <div className="mt-1 text-md text-[#3D0007] sm:mt-2 sm:text-2xl">
+            <div className="mt-1 text-md text-[#440008] sm:mt-2 sm:text-2xl">
               {durationText || "Varies"}
             </div>
           </div>
 
         </section>
 
-        <section className="mt-6 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+        <section className="mt-6 rounded-[24px] bg-[#E4E2DD] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
           <div className="max-w-3xl">
-            <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+            <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
               What to expect
             </h2>
 
@@ -313,7 +313,7 @@ export default function ServicePlaceholder({
             {finalBenefits.map((item, index) => (
               <li
                 key={index}
-                className="rounded-xl border border-[#572a31]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base"
+                className="rounded-xl border border-[#440008]/10 bg-white px-4 py-3 text-sm leading-6 text-gray-700 sm:text-base"
               >
                 {item}
               </li>
@@ -321,14 +321,14 @@ export default function ServicePlaceholder({
           </ul>
 
           {extraNote && (
-            <div className="mt-5 rounded-xl border border-[#572a31]/10 bg-white p-4 text-sm leading-6 text-gray-700 sm:mt-6">
+            <div className="mt-5 rounded-xl border border-[#440008]/10 bg-white p-4 text-sm leading-6 text-gray-700 sm:mt-6">
               {extraNote}
             </div>
           )}
         </section>
 
         <section className="mt-14 sm:mt-16">
-          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007]">
+          <h2 className="text-2xl font-theseason font-semibold text-[#440008]">
             FAQ
           </h2>
 
@@ -349,8 +349,8 @@ export default function ServicePlaceholder({
           </div>
         </section>
 
-        <section className="mt-14 rounded-[24px] bg-[#F8F7F1] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
-          <h2 className="text-2xl font-theseason font-semibold text-[#3D0007] sm:text-3xl">
+        <section className="mt-14 rounded-[24px] bg-[#E4E2DD] p-5 sm:mt-16 sm:rounded-[28px] sm:p-8">
+          <h2 className="text-2xl font-theseason font-semibold text-[#440008] sm:text-3xl">
             Related services
           </h2>
 
@@ -359,7 +359,7 @@ export default function ServicePlaceholder({
               <Link
                 key={service.to}
                 to={service.to}
-                className="rounded-full border border-[#572a31]/15 px-4 py-2 text-sm text-[#572a31] transition hover:border-[#572a31]/35"
+                className="rounded-full border border-[#440008]/15 px-4 py-2 text-sm text-[#440008] transition hover:border-[#440008]/45 hover:bg-[#440008]/5"
               >
                 {service.label}
               </Link>
@@ -367,7 +367,7 @@ export default function ServicePlaceholder({
           </div>
         </section>
 
-        {/* <section className="mt-14 rounded-[24px] border border-[#572a31]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
+        {/* <section className="mt-14 rounded-[24px] border border-[#440008]/15 bg-[#E7A45D]/20 p-5 text-center sm:mt-16 sm:rounded-[28px] sm:p-8">
           <h2 className="text-2xl font-theseason text-[#440008] sm:text-3xl">
             Ready to book?
           </h2>
@@ -379,14 +379,14 @@ export default function ServicePlaceholder({
           <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               to="/booking"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#F8F7F1] transition hover:opacity-90 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#440008] px-6 py-3 text-sm font-medium text-[#E4E2DD] transition hover:opacity-90 sm:px-8"
             >
               ntment
             </Link>
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#572a31]/25 bg-white px-6 py-3 text-sm font-medium text-[#572a31] transition hover:border-[#572a31]/45 sm:px-8"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#440008]/25 bg-white px-6 py-3 text-sm font-medium text-[#440008] transition hover:border-[#440008]/45 sm:px-8"
             >
               Call {PHONE_DISPLAY}
             </a>
