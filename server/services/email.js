@@ -163,4 +163,27 @@ async function sendReminderEmail({ name, email, prettyDate, prettyTime, services
   console.log("✅ Reminder email sent:", result?.data?.id || JSON.stringify(result));
 }
 
-module.exports = { sendBookingEmails, sendCancellationEmails, sendBirthdayEmail, sendReminderEmail };
+// ─── Reschedule ────────────────────────────────────────────────────
+async function sendRescheduleEmail({ name, email, servicesText, oldDate, oldTime, newDate, newTime }) {
+  const r = getResend();
+  const html = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;max-width:520px;margin:0 auto">
+      <p>Hi <strong>${name}</strong>,</p>
+      <p>Your appointment has been <strong>rescheduled</strong>. Here are your updated details:</p>
+      <ul>
+        <li><strong>New Date:</strong> ${newDate}</li>
+        <li><strong>New Time:</strong> ${newTime}</li>
+        <li><strong>Services:</strong> ${servicesText}</li>
+      </ul>
+      <p style="color:#888;font-size:13px;">Previous appointment was on ${oldDate} at ${oldTime}.</p>
+      <p>We're at <strong>3790 Canada Way #102, Burnaby</strong>.</p>
+      <p>To cancel or reschedule, please call us at <strong>(604) 438-3727</strong> or email <a href="mailto:elikaeiamina@gmail.com">elikaeiamina@gmail.com</a> at least <strong>24 hours</strong> before your appointment.</p>
+      <p style="color:#888;font-size:13px;">Please do not reply to this email — it is not monitored.</p>
+      <p>— ELIKA Beauty</p>
+    </div>`;
+
+  const result = await r.emails.send({ from: `ELIKA Beauty <${EMAIL_FROM}>`, to: email, subject: `Your ELIKA Beauty appointment has been rescheduled`, html, replyTo: EMAIL_REPLY_TO });
+  console.log("✅ Reschedule email sent:", result?.data?.id || JSON.stringify(result));
+}
+
+module.exports = { sendBookingEmails, sendCancellationEmails, sendBirthdayEmail, sendReminderEmail, sendRescheduleEmail };

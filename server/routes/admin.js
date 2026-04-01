@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking");
 const Client = require("../models/client");
-const { sendCancellationEmails } = require("../services/email");
-const { deleteBookingEvent } = require("../services/calendar");
+const { sendCancellationEmails, sendRescheduleEmail } = require("../services/email");
+const { deleteBookingEvent, updateBookingEvent } = require("../services/calendar");
 const { format, parseISO } = require("date-fns");
 
 const ADMIN_KEY = process.env.ADMIN_KEY;
@@ -69,6 +69,69 @@ router.delete("/bookings/:id", auth, async (req, res) => {
   } catch (err) {
     console.error("❌ Admin cancel booking:", err);
     res.status(500).json({ error: "Failed to cancel booking" });
+  }
+});
+
+// PATCH /api/admin/bookings/:id/reschedule  — update date/time, sync calendar, email client
+router.patch("/bookings/:id/reschedule", auth, async (req, res) => {
+  const { parse, format, addMinutes } = require("date-fns");
+  const { fromZonedTime } = require("date-fns-tz");
+  const SHOP_TZ = "America/Vancouver";
+
+  const { date, time } = req.body; // date: "YYYY-MM-DD", time: "10:30 AM"
+  if (!date || !time) return res.status(400).json({ error: "Missing date or time" });
+
+  try {
+    const booking = await Booking.findById(req.params.id).populate("services", "name");
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+    if (booking.status === "cancelled") return res.status(400).json({ error: "Cannot reschedule a cancelled booking" });
+
+    const oldDate = booking.date;
+    const oldTime = booking.time;
+
+    // Convert new local time → UTC for calendar
+    const localParsed = parse(`${date} ${time}`, "yyyy-MM-dd h:mm a", new Date());
+    if (isNaN(localParsed.getTime())) return res.status(400).json({ error: "Invalid date or time format" });
+    const wallClock = format(localParsed, "yyyy-MM-dd HH:mm:ss");
+    const startUtc = fromZonedTime(wallClock, SHOP_TZ);
+    const endUtc = addMinutes(startUtc, Number(booking.duration) || 60);
+
+    booking.date = date;
+    booking.time = time;
+    await booking.save();
+
+    // Update Google Calendar (non-blocking)
+    if (booking.calendarEventId) {
+      updateBookingEvent({
+        eventId: booking.calendarEventId,
+        start: startUtc.toISOString(),
+        end: endUtc.toISOString(),
+      }).catch(err => console.error("❌ Calendar update error:", err.message));
+    }
+
+    // Send reschedule email (non-blocking)
+    try {
+      const servicesText = booking.services.map(s => s.name).join(", ");
+      const prettyOld = format(parse(oldDate, "yyyy-MM-dd", new Date()), "PPP");
+      const prettyNew = format(parse(date, "yyyy-MM-dd", new Date()), "PPP");
+      await sendRescheduleEmail({
+        booking,
+        name: booking.name,
+        email: booking.email,
+        servicesText,
+        oldDate: prettyOld,
+        oldTime,
+        newDate: prettyNew,
+        newTime: time,
+      });
+    } catch (emailErr) {
+      console.error("❌ Reschedule email failed:", emailErr.message);
+    }
+
+    res.json({ success: true, date, time });
+  } catch (err) {
+    console.error("❌ Admin reschedule booking:", err);
+    res.status(500).json({ error: "Failed to reschedule booking" });
   }
 });
 
