@@ -51,6 +51,7 @@ async function sendBookingEmails({ booking, servicesText, prettyDate, prettyTime
         <li><strong>Phone:</strong> ${booking?.phone || "—"}</li>
         <li><strong>Email:</strong> ${clientTo}</li>
         <li><strong>Note:</strong> ${booking?.note ? String(booking.note).replace(/\n/g, "<br/>") : "—"}</li>
+        <li><strong>Referred by:</strong> ${booking?.referredBy ? `<span style="color:#572a31;font-weight:bold">${booking.referredBy}</span>` : "—"}</li>
       </ul>
       <p><a href="${adminUrl}" style="display:inline-block;padding:10px 18px;background:#55203d;color:#fff;text-decoration:none;border-radius:4px;font-weight:bold">View & Manage Booking</a></p>
     </div>`;
