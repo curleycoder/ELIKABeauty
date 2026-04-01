@@ -30,6 +30,7 @@ const bookingsRouter = require("./routes/bookings");
 const adminRouter = require("./routes/admin");
 const clientsRouter = require("./routes/clients");
 const galleryRouter = require("./routes/gallery");
+const scheduleRouter = require("./routes/schedule");
 
 // Serve gallery images from server/public
 app.use(express.static(path.join(__dirname, "public")));
@@ -41,6 +42,7 @@ app.use("/api/bookings", bookingsRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/clients", clientsRouter);
 app.use("/api/gallery", galleryRouter);
+app.use("/api/schedule", scheduleRouter);
 
 app.get("/", (req, res) => {
   res.send("ELIKA Beauty server is running");

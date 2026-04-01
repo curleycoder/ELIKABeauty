@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking");
 const Client = require("../models/client");
+const Schedule = require("../models/schedule");
 const { sendCancellationEmails, sendRescheduleEmail } = require("../services/email");
 const { deleteBookingEvent, updateBookingEvent } = require("../services/calendar");
 const { format, parseISO } = require("date-fns");
@@ -225,6 +226,60 @@ router.post("/credits/redeem", auth, async (req, res) => {
   await client.save();
 
   res.json({ success: true, name: client.name || "—" });
+});
+
+// GET /api/admin/clients
+router.get("/clients", auth, async (req, res) => {
+  try {
+    const clients = await Client.find().sort({ createdAt: -1 }).lean();
+    res.json(clients);
+  } catch (err) {
+    console.error("❌ Admin fetch clients:", err);
+    res.status(500).json({ error: "Failed to fetch clients" });
+  }
+});
+
+// PATCH /api/admin/clients/:id — update birthday
+router.patch("/clients/:id", auth, async (req, res) => {
+  try {
+    const { birthdayMonth, birthdayDay } = req.body;
+    const client = await Client.findByIdAndUpdate(
+      req.params.id,
+      { birthdayMonth: birthdayMonth || null, birthdayDay: birthdayDay || null },
+      { new: true }
+    ).lean();
+    if (!client) return res.status(404).json({ error: "Client not found" });
+    res.json(client);
+  } catch (err) {
+    console.error("❌ Admin update client:", err);
+    res.status(500).json({ error: "Failed to update client" });
+  }
+});
+
+// GET /api/admin/schedule
+router.get("/schedule", auth, async (req, res) => {
+  try {
+    const schedule = await Schedule.findOne().lean();
+    res.json(schedule || { closedWeekdays: [0, 1], overrides: [] });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch schedule" });
+  }
+});
+
+// PUT /api/admin/schedule
+router.put("/schedule", auth, async (req, res) => {
+  try {
+    const { closedWeekdays, overrides } = req.body;
+    const schedule = await Schedule.findOneAndUpdate(
+      {},
+      { closedWeekdays, overrides },
+      { upsert: true, new: true }
+    ).lean();
+    res.json({ success: true, schedule });
+  } catch (err) {
+    console.error("❌ Admin update schedule:", err);
+    res.status(500).json({ error: "Failed to update schedule" });
+  }
 });
 
 module.exports = router;
