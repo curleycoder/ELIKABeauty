@@ -203,9 +203,12 @@ export default function BookingForm({ onSelectionChange }) {
     setConflictWarning(hasKeratin && hasConflict);
   }, [selected]);
 
+  useEffect(() => {
+    listTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [activeTab]);
 
   return (
-    <div className="bg-white backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto">
+    <div ref={listTopRef} className="bg-white backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto">
       <div className="p-6 sm:p-8 pb-4 border-b border-[#440008]/10">
         <div className="text-center">
           <h2 className="text-xl sm:text-2xl font-theseason font-bold text-[#440008]">
@@ -283,7 +286,6 @@ export default function BookingForm({ onSelectionChange }) {
       </div>
 
       <div className="px-6 sm:px-8 py-5">
-        <div ref={listTopRef} />
 
         {status === "loading" ? (
           <div className="text-center text-gray-500 py-10">Loading services…</div>
