@@ -2,7 +2,11 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import {
   FaCalendarAlt, FaClock, FaCut, FaChevronLeft, FaChevronRight,
   FaTimes, FaPhone, FaEnvelope, FaBirthdayCake, FaUsers, FaCalendarCheck,
+  FaPlus, FaUserSlash,
 } from "react-icons/fa";
+
+const SERVICES_API = "https://elikabeauty.onrender.com/api/services";
+const BOOKINGS_API  = "https://elikabeauty.onrender.com/api/bookings";
 
 const ADMIN_KEY_STORAGE = "elikabeauty_admin_key";
 const API_BASE        = "https://elikabeauty.onrender.com/api/admin/bookings";
@@ -379,6 +383,128 @@ function ClientsTab({ adminKey }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Manual Booking Modal ───────────────────────────────────────────────────────
+
+function ManualBookingModal({ onClose, onCreated }) {
+  const [services, setServices] = useState([]);
+  const [form, setForm] = useState({ name: "", phone: "", email: "", date: "", time: "", note: "" });
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch(SERVICES_API)
+      .then(r => r.json())
+      .then(data => setServices(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
+
+  const toggle = (id) =>
+    setSelectedServices(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+
+  const field = (key) => ({
+    value: form[key],
+    onChange: e => setForm(p => ({ ...p, [key]: e.target.value })),
+    className: "w-full border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/30",
+  });
+
+  const submit = async () => {
+    if (!form.name || !form.phone || !form.email || !form.date || !form.time) {
+      setError("Please fill all required fields."); return;
+    }
+    if (selectedServices.length === 0) { setError("Please select at least one service."); return; }
+    setBusy(true); setError("");
+    try {
+      const res = await fetch(BOOKINGS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, time: to12h(form.time), services: selectedServices }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || "Failed to create booking");
+      onCreated();
+      onClose();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+      onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden max-h-[90dvh] flex flex-col"
+        onClick={e => e.stopPropagation()}>
+        <div className="bg-[#440008] px-5 py-4 flex items-center justify-between shrink-0">
+          <div className="text-white font-bold text-base">New Booking</div>
+          <button onClick={onClose} className="text-white/60 hover:text-white"><FaTimes /></button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+          {[["name","Name *","text"],["phone","Phone *","tel"],["email","Email *","email"]].map(([key, label, type]) => (
+            <div key={key}>
+              <label className="block text-xs font-semibold text-gray-500 mb-1">{label}</label>
+              <input type={type} {...field(key)} />
+            </div>
+          ))}
+
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-xs font-semibold text-gray-500 mb-1">Date *</label>
+              <input type="date" min={new Date().toLocaleDateString("en-CA")} {...field("date")} />
+            </div>
+            <div className="w-36">
+              <label className="block text-xs font-semibold text-gray-500 mb-1">Time *</label>
+              <input type="time" {...field("time")} />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 mb-2">Services *</label>
+            <div className="grid grid-cols-2 gap-1.5 max-h-44 overflow-y-auto pr-1">
+              {services.map(s => {
+                const on = selectedServices.includes(s._id);
+                return (
+                  <button key={s._id} type="button" onClick={() => toggle(s._id)}
+                    className={`text-left px-3 py-2 rounded-xl border text-xs font-medium transition ${
+                      on ? "bg-[#440008] text-white border-[#440008]"
+                         : "bg-white text-gray-600 border-gray-200 hover:border-[#440008]/40"
+                    }`}>
+                    <div>{s.name}</div>
+                    <div className={`text-[10px] mt-0.5 ${on ? "text-white/60" : "text-gray-400"}`}>
+                      {s.duration}min · ${s.price}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 mb-1">Note</label>
+            <textarea rows={2} {...field("note")}
+              className="w-full border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/30 resize-none" />
+          </div>
+
+          {error && <p className="text-xs text-red-500">{error}</p>}
+        </div>
+
+        <div className="px-5 pb-5 flex gap-2 border-t border-gray-100 pt-4 shrink-0">
+          <button onClick={onClose}
+            className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-sm font-semibold">
+            Cancel
+          </button>
+          <button onClick={submit} disabled={busy}
+            className="flex-1 py-2.5 rounded-xl bg-[#440008] text-white text-sm font-semibold disabled:opacity-40">
+            {busy ? "Booking…" : "Create Booking"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -788,8 +914,10 @@ function CalendarView({ bookings, onCancel, onReschedule, highlightId }) {
 
 // ── Booking Card (list view) ───────────────────────────────────────────────────
 
-function BookingCard({ b, onCancel, onReschedule, isHighlighted }) {
-  const isCancelled = normStatus(b?.status) === "cancelled";
+function BookingCard({ b, onCancel, onReschedule, onNoShow, isHighlighted }) {
+  const status = normStatus(b?.status);
+  const isCancelled = status === "cancelled";
+  const isNoShow    = status === "noshow";
   const total = getServiceTotal(b);
 
   return (
@@ -797,12 +925,12 @@ function BookingCard({ b, onCancel, onReschedule, isHighlighted }) {
       id={`booking-${b._id}`}
       className={[
         "bg-white rounded-2xl border transition-all overflow-hidden",
-        isCancelled ? "opacity-60 border-gray-200" : "border-[#440008]/15 hover:border-[#440008]/30 hover:shadow-sm",
+        (isCancelled || isNoShow) ? "opacity-60 border-gray-200" : "border-[#440008]/15 hover:border-[#440008]/30 hover:shadow-sm",
         isHighlighted ? "ring-2 ring-[#440008] shadow-md" : "",
       ].join(" ")}
     >
       <div className="flex items-stretch">
-        <div className={`w-1 shrink-0 ${isCancelled ? "bg-gray-200" : "bg-[#440008]"}`} />
+        <div className={`w-1 shrink-0 ${isCancelled ? "bg-gray-200" : isNoShow ? "bg-orange-400" : "bg-[#440008]"}`} />
         <div className="flex-1 p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
@@ -818,6 +946,11 @@ function BookingCard({ b, onCancel, onReschedule, isHighlighted }) {
                       Cancelled
                     </span>
                   )}
+                  {isNoShow && (
+                    <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-orange-100 text-orange-500">
+                      No-show
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                   <a href={`tel:${b.phone}`} className="text-xs text-gray-400 hover:text-[#440008] transition">{b.phone || "No phone"}</a>
@@ -826,12 +959,18 @@ function BookingCard({ b, onCancel, onReschedule, isHighlighted }) {
               </div>
             </div>
 
-            {!isCancelled && (
-              <div className="flex gap-2 shrink-0">
+            {!isCancelled && !isNoShow && (
+              <div className="flex gap-2 shrink-0 flex-wrap justify-end">
                 <button onClick={() => onReschedule(b)}
                   className="text-xs font-semibold text-[#440008] border border-[#440008]/25 hover:bg-[#440008]/5 px-3 py-1.5 rounded-lg transition">
                   Reschedule
                 </button>
+                {onNoShow && (
+                  <button onClick={() => onNoShow(b._id)}
+                    className="text-xs font-semibold text-orange-500 border border-orange-200 hover:bg-orange-50 px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1">
+                    <FaUserSlash size={10} /> No-show
+                  </button>
+                )}
                 <button onClick={() => onCancel(b._id)}
                   className="text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-lg transition">
                   Cancel
@@ -879,6 +1018,8 @@ export default function AdminBookings() {
   const [adminKey, setAdminKey] = useState(() => localStorage.getItem(ADMIN_KEY_STORAGE) || "");
   const [highlightId, setHighlightId] = useState(() => getQueryId());
   const [rescheduleTarget, setRescheduleTarget] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showManualBooking, setShowManualBooking] = useState(false);
 
   const fetchBookings = useCallback(async () => {
     setLoading(true);
@@ -948,6 +1089,19 @@ export default function AdminBookings() {
     setBookings(prev => prev.map(b => b._id === id ? { ...b, date, time } : b));
   }, []);
 
+  const markNoShow = useCallback(async (id) => {
+    const key = getAdminKey();
+    if (!key) return;
+    if (!window.confirm("Mark this booking as no-show?")) return;
+    try {
+      const res = await fetch(`${API_BASE}/${id}/noshow`, { method: "PATCH", headers: { "x-admin-key": key } });
+      if (!res.ok) throw new Error(await parseError(res));
+      setBookings(prev => prev.map(b => b._id === id ? { ...b, status: "noshow" } : b));
+    } catch (err) {
+      alert(err?.message || "Failed to mark no-show");
+    }
+  }, []);
+
   const clearKey = () => {
     localStorage.removeItem(ADMIN_KEY_STORAGE);
     setErrorMsg("Admin key cleared. Refresh to re-enter.");
@@ -965,7 +1119,14 @@ export default function AdminBookings() {
     const done      = normalized.filter(x => x.b?.status !== "cancelled" && x.ms < todayStart).sort((a, b) => b.ms - a.ms);
     const cancelled = normalized.filter(x => x.b?.status === "cancelled").sort((a, b) => b.ms - a.ms);
 
-    const selected = tab === "upcoming" ? upcoming : tab === "done" ? done : cancelled;
+    const base = tab === "upcoming" ? upcoming : tab === "done" ? done : cancelled;
+    const q = search.trim().toLowerCase();
+    const selected = q ? base.filter(({ b }) =>
+      b.name?.toLowerCase().includes(q) ||
+      b.phone?.includes(q) ||
+      b.email?.toLowerCase().includes(q) ||
+      servicesText(b).toLowerCase().includes(q)
+    ) : base;
 
     const todayBookings = upcoming.filter(x => x.b?.date === todayYmd);
     const todayRevenue  = todayBookings.reduce((sum, x) => sum + getServiceTotal(x.b), 0);
@@ -975,7 +1136,7 @@ export default function AdminBookings() {
       counts: { upcoming: upcoming.length, done: done.length, cancelled: cancelled.length },
       todayStats: { count: todayBookings.length, revenue: todayRevenue },
     };
-  }, [bookings, tab]);
+  }, [bookings, tab, search]);
 
   if (loading) {
     return (
@@ -1018,8 +1179,12 @@ export default function AdminBookings() {
                 </button>
               ))}
             </div>
+            <button onClick={() => setShowManualBooking(true)}
+              className="px-3 py-2 rounded-xl bg-[#440008] text-white text-xs font-semibold inline-flex items-center gap-1.5">
+              <FaPlus size={10} /> New
+            </button>
             <button onClick={fetchBookings}
-              className="px-3 py-2 rounded-xl bg-[#440008] text-white text-xs font-semibold">
+              className="px-3 py-2 rounded-xl bg-white border border-[#440008]/20 text-[#440008] text-xs font-semibold">
               Refresh
             </button>
             <button onClick={clearKey}
@@ -1049,8 +1214,20 @@ export default function AdminBookings() {
           ))}
         </div>
 
+        {/* Search — only on list booking tabs */}
+        {view === "list" && ["upcoming","done","cancelled"].includes(tab) && (
+          <div className="mb-4">
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search by name, phone, email, or service…"
+              className="w-full border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#440008]/20"
+            />
+          </div>
+        )}
+
         {/* Today summary */}
-        {tab === "upcoming" && view === "list" && todayStats.count > 0 && (
+        {tab === "upcoming" && view === "list" && !search && todayStats.count > 0 && (
           <div className="mb-5 rounded-2xl bg-[#440008] text-white px-5 py-4 flex items-center justify-between">
             <div>
               <div className="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Today</div>
@@ -1095,6 +1272,7 @@ export default function AdminBookings() {
                       b={b}
                       onCancel={cancelBooking}
                       onReschedule={setRescheduleTarget}
+                      onNoShow={tab === "upcoming" ? markNoShow : null}
                       isHighlighted={!!highlightId && b._id === highlightId}
                     />
                   ))}
@@ -1110,6 +1288,13 @@ export default function AdminBookings() {
           booking={rescheduleTarget}
           onClose={() => setRescheduleTarget(null)}
           onSave={rescheduleBooking}
+        />
+      )}
+
+      {showManualBooking && (
+        <ManualBookingModal
+          onClose={() => setShowManualBooking(false)}
+          onCreated={fetchBookings}
         />
       )}
     </div>
