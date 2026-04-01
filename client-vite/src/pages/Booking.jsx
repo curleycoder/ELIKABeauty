@@ -158,7 +158,7 @@ const hardResetAll = () => {
       <meta name="twitter:description" content="Book your appointment online at Elika Beauty in Burnaby." />
       <meta name="twitter:image" content="https://elikabeauty.ca/assets/salon.webp" />
     </Helmet>
-    <div className="w-full min-h-screen relative font-sans bg-[#E4E2DD]">
+    <div className="w-full min-h-screen relative font-sans bg-[#F9F7F4]">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 sm:hidden"
@@ -172,7 +172,7 @@ const hardResetAll = () => {
       />
 
       {/* Sticky stepper header */}
-      <div className="sticky top-0 z-30 bg-[#E4E2DD]/90 backdrop-blur">
+      <div className="sticky top-0 z-30 bg-[#F9F7F4]/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <button
