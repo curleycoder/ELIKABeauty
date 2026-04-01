@@ -5,7 +5,8 @@ import {
 } from "react-icons/fa";
 
 const ADMIN_KEY_STORAGE = "elikabeauty_admin_key";
-const API_BASE       = "https://elikabeauty.onrender.com/api/admin/bookings";
+const API_BASE        = "https://elikabeauty.onrender.com/api/admin/bookings";
+const ADMIN_BASE      = "https://elikabeauty.onrender.com/api/admin";
 const CREDITS_BASE   = "https://elikabeauty.onrender.com/api/admin/credits";
 const SHOP_TZ        = "America/Vancouver";
 
@@ -122,6 +123,264 @@ function parseTimeToMins(timeStr) {
   if (pm && h !== 12) h += 12;
   if (!pm && h === 12) h = 0;
   return h * 60 + min;
+}
+
+// ── Schedule Tab ──────────────────────────────────────────────────────────────
+
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTHS    = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function ScheduleTab({ adminKey }) {
+  const [closedWeekdays, setClosedWeekdays] = useState([]);
+  const [overrides, setOverrides] = useState([]);
+  const [newDate, setNewDate] = useState("");
+  const [newOpen, setNewOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    fetch(`${ADMIN_BASE}/schedule`, { headers: { "x-admin-key": adminKey } })
+      .then(r => r.json())
+      .then(d => {
+        setClosedWeekdays(d.closedWeekdays ?? [0, 1]);
+        setOverrides(d.overrides ?? []);
+      })
+      .catch(() => {});
+  }, [adminKey]);
+
+  const toggleDay = (dow) => {
+    setClosedWeekdays(prev =>
+      prev.includes(dow) ? prev.filter(d => d !== dow) : [...prev, dow]
+    );
+  };
+
+  const addOverride = () => {
+    if (!newDate) return;
+    if (overrides.some(o => o.date === newDate)) return;
+    setOverrides(prev => [...prev, { date: newDate, open: newOpen }]);
+    setNewDate("");
+  };
+
+  const removeOverride = (date) => setOverrides(prev => prev.filter(o => o.date !== date));
+
+  const save = async () => {
+    setSaving(true); setMsg("");
+    try {
+      const res = await fetch(`${ADMIN_BASE}/schedule`, {
+        method: "PUT",
+        headers: { "x-admin-key": adminKey, "Content-Type": "application/json" },
+        body: JSON.stringify({ closedWeekdays, overrides }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setMsg("✅ Saved");
+    } catch { setMsg("❌ Save failed"); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div className="max-w-lg space-y-8">
+
+      {/* Days of week */}
+      <div>
+        <h3 className="font-bold text-[#440008] mb-1">Regular closed days</h3>
+        <p className="text-xs text-gray-400 mb-4">Check the days you are normally closed.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {DAY_NAMES.map((name, dow) => (
+            <button key={dow} onClick={() => toggleDay(dow)}
+              className={[
+                "flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-semibold transition",
+                closedWeekdays.includes(dow)
+                  ? "bg-[#440008] text-white border-[#440008]"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-[#440008]/30",
+              ].join(" ")}>
+              <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${closedWeekdays.includes(dow) ? "bg-white/30 border-white/40" : "border-gray-300"}`}>
+                {closedWeekdays.includes(dow) && <span className="text-white text-[10px] font-bold">✕</span>}
+              </span>
+              {name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Date overrides */}
+      <div>
+        <h3 className="font-bold text-[#440008] mb-1">Date overrides</h3>
+        <p className="text-xs text-gray-400 mb-4">
+          Force a specific date open or closed — overrides the weekday rule above.
+        </p>
+
+        <div className="flex gap-2 mb-4 flex-wrap">
+          <input type="date" value={newDate} onChange={e => setNewDate(e.target.value)}
+            className="border border-[#440008]/20 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20" />
+          <select value={newOpen ? "open" : "closed"} onChange={e => setNewOpen(e.target.value === "open")}
+            className="border border-[#440008]/20 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20">
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+          </select>
+          <button onClick={addOverride} disabled={!newDate}
+            className="px-4 py-2 rounded-xl bg-[#440008] text-white text-sm font-semibold disabled:opacity-40">
+            Add
+          </button>
+        </div>
+
+        {overrides.length === 0 ? (
+          <p className="text-sm text-gray-400 italic">No overrides set.</p>
+        ) : (
+          <div className="space-y-2">
+            {[...overrides].sort((a, b) => a.date.localeCompare(b.date)).map(o => (
+              <div key={o.date} className="flex items-center justify-between bg-white border border-gray-100 rounded-xl px-4 py-2.5">
+                <div className="flex items-center gap-3">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${o.open ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
+                    {o.open ? "Open" : "Closed"}
+                  </span>
+                  <span className="text-sm text-gray-700">{o.date}</span>
+                </div>
+                <button onClick={() => removeOverride(o.date)} className="text-gray-300 hover:text-red-400 transition">
+                  <FaTimes size={12} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-center gap-3">
+        <button onClick={save} disabled={saving}
+          className="px-6 py-2.5 rounded-xl bg-[#440008] text-white font-semibold text-sm disabled:opacity-40">
+          {saving ? "Saving…" : "Save Changes"}
+        </button>
+        {msg && <span className="text-sm font-semibold text-[#440008]">{msg}</span>}
+      </div>
+    </div>
+  );
+}
+
+// ── Clients Tab ────────────────────────────────────────────────────────────────
+
+function ClientsTab({ adminKey }) {
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [editing, setEditing] = useState(null); // { id, month, day }
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetch(`${ADMIN_BASE}/clients`, { headers: { "x-admin-key": adminKey } })
+      .then(r => r.json())
+      .then(data => { setClients(Array.isArray(data) ? data : []); })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [adminKey]);
+
+  const filtered = clients.filter(c => {
+    const q = search.toLowerCase();
+    return !q || c.name?.toLowerCase().includes(q) || c.phone?.includes(q) || c.email?.toLowerCase().includes(q);
+  });
+
+  const saveBirthday = async () => {
+    if (!editing) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${ADMIN_BASE}/clients/${editing.id}`, {
+        method: "PATCH",
+        headers: { "x-admin-key": adminKey, "Content-Type": "application/json" },
+        body: JSON.stringify({ birthdayMonth: Number(editing.month) || null, birthdayDay: Number(editing.day) || null }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      const updated = await res.json();
+      setClients(prev => prev.map(c => c._id === updated._id ? updated : c));
+      setEditing(null);
+    } catch { alert("Failed to save birthday"); }
+    finally { setSaving(false); }
+  };
+
+  if (loading) return <p className="text-sm text-gray-400">Loading clients…</p>;
+
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-5">
+        <input value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Search by name, phone, or email…"
+          className="flex-1 border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20 bg-white" />
+        <span className="text-xs text-gray-400 shrink-0">{filtered.length} client{filtered.length !== 1 ? "s" : ""}</span>
+      </div>
+
+      <div className="space-y-2">
+        {filtered.map(c => {
+          const hasBirthday = c.birthdayMonth && c.birthdayDay;
+          const birthdayLabel = hasBirthday
+            ? `${MONTHS[c.birthdayMonth - 1]} ${c.birthdayDay}`
+            : "No birthday";
+
+          return (
+            <div key={c._id} className="bg-white rounded-2xl border border-[#440008]/10 px-4 py-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-full bg-[#440008]/10 flex items-center justify-center text-sm font-bold text-[#440008] shrink-0">
+                    {getInitials(c.name)}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-[#440008] text-sm">{c.name || "—"}</div>
+                    <div className="flex flex-wrap gap-x-3 mt-0.5">
+                      <a href={`tel:${c.phone}`} className="text-xs text-gray-400 hover:text-[#440008]">{c.phone}</a>
+                      <a href={`mailto:${c.email}`} className="text-xs text-gray-400 hover:text-[#440008] truncate max-w-[180px]">{c.email}</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className={`text-xs px-2 py-1 rounded-lg font-medium ${hasBirthday ? "bg-pink-50 text-pink-600" : "bg-gray-50 text-gray-400"}`}>
+                    🎂 {birthdayLabel}
+                  </span>
+                  <button
+                    onClick={() => setEditing({ id: c._id, month: c.birthdayMonth || "", day: c.birthdayDay || "" })}
+                    className="text-xs text-[#440008]/50 hover:text-[#440008] border border-[#440008]/15 px-2.5 py-1 rounded-lg transition">
+                    Edit
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Edit birthday modal */}
+      {editing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+          onClick={() => setEditing(null)}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6" onClick={e => e.stopPropagation()}>
+            <h3 className="font-bold text-[#440008] mb-4">Edit Birthday</h3>
+            <div className="flex gap-2 mb-5">
+              <div className="flex-1">
+                <label className="text-xs text-gray-400 mb-1 block">Month</label>
+                <select value={editing.month} onChange={e => setEditing(p => ({ ...p, month: e.target.value }))}
+                  className="w-full border border-[#440008]/20 rounded-xl px-3 py-2 text-sm focus:outline-none">
+                  <option value="">—</option>
+                  {MONTHS.map((m, i) => <option key={i} value={i + 1}>{m}</option>)}
+                </select>
+              </div>
+              <div className="w-24">
+                <label className="text-xs text-gray-400 mb-1 block">Day</label>
+                <input type="number" min="1" max="31" value={editing.day}
+                  onChange={e => setEditing(p => ({ ...p, day: e.target.value }))}
+                  className="w-full border border-[#440008]/20 rounded-xl px-3 py-2 text-sm focus:outline-none" />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setEditing(null)}
+                className="flex-1 py-2 rounded-xl border border-gray-200 text-gray-500 text-sm font-semibold">
+                Cancel
+              </button>
+              <button onClick={saveBirthday} disabled={saving}
+                className="flex-1 py-2 rounded-xl bg-[#440008] text-white text-sm font-semibold disabled:opacity-40">
+                {saving ? "Saving…" : "Save"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ── Reschedule Modal ───────────────────────────────────────────────────────────
@@ -735,7 +994,9 @@ export default function AdminBookings() {
       { id: "done",      label: "Done",      count: counts.done },
       { id: "cancelled", label: "Cancelled", count: counts.cancelled },
     ] : []),
-    { id: "credits", label: "🎂 Credits", count: null },
+    { id: "credits",  label: "🎂 Credits",  count: null },
+    { id: "clients",  label: "👤 Clients",  count: null },
+    { id: "schedule", label: "📅 Schedule", count: null },
   ];
 
   return (
@@ -806,6 +1067,10 @@ export default function AdminBookings() {
         {/* Content */}
         {tab === "credits" ? (
           <CreditsTab adminKey={adminKey} />
+        ) : tab === "clients" ? (
+          <ClientsTab adminKey={adminKey} />
+        ) : tab === "schedule" ? (
+          <ScheduleTab adminKey={adminKey} />
         ) : view === "calendar" ? (
           <CalendarView bookings={bookings} onCancel={cancelBooking} onReschedule={setRescheduleTarget} highlightId={highlightId} />
         ) : grouped.length === 0 ? (

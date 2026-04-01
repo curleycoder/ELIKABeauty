@@ -33,18 +33,27 @@ function vancouverSlotToUtcDate(dateObj, time12h) {
   return fromZonedTime(wallClock, SHOP_TZ);
 }
 
-export function isShopClosed(dateObj) {
+// schedule: { closedWeekdays: number[], overrides: { date: string, open: boolean }[] } | null
+// Falls back to hardcoded constants if no schedule provided
+export function isShopClosed(dateObj, schedule = null) {
   const dateStr = ymd(dateObj);
 
-  // Determine weekday in Vancouver (use noon to avoid DST edge)
   const noonUtc = fromZonedTime(`${dateStr} 12:00:00`, SHOP_TZ);
   const vanNoon = toZonedTime(noonUtc, SHOP_TZ);
   const dow = vanNoon.getDay();
 
-  // Allow specific Mondays
-  if (dow === 1 && OPEN_MONDAYS.has(dateStr)) return false;
+  // Check specific date override first
+  const overrides = schedule?.overrides ?? [];
+  const override = overrides.find(o => o.date === dateStr);
+  if (override) return !override.open;
 
-  return CLOSED_WEEKDAYS.has(dow);
+  // Fall back to closed weekdays list
+  const closedWeekdays = schedule?.closedWeekdays ?? Array.from(CLOSED_WEEKDAYS);
+
+  // Legacy: allow specific Mondays if using hardcoded fallback
+  if (!schedule && dow === 1 && OPEN_MONDAYS.has(dateStr)) return false;
+
+  return closedWeekdays.includes(dow);
 }
 
 /**

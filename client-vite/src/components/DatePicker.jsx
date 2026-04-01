@@ -33,6 +33,7 @@ export default function DateTimePicker({
   const [showConfirm, setShowConfirm] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+  const [schedule, setSchedule] = useState(null);
 
   const scrollRef = useRef(null);
   const timeRef = useRef(null);
@@ -40,6 +41,14 @@ export default function DateTimePicker({
 
   const todayYMD = useMemo(() => format(new Date(), "yyyy-MM-dd"), []);
   const monthDates = useMemo(() => generateNext30Days(new Date()), []);
+
+  // Fetch schedule on mount
+  useEffect(() => {
+    fetch(`${baseURL}/api/schedule`)
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data) setSchedule(data); })
+      .catch(() => {});
+  }, []);
 
   const totalBlockedMinutes = Number(duration) || 0;
 
@@ -63,7 +72,7 @@ export default function DateTimePicker({
 
     return {
       past: isPastDay(selectedDate),
-      closed: isShopClosed(selectedDate),
+      closed: isShopClosed(selectedDate, schedule),
       ymd: format(selectedDate, "yyyy-MM-dd"),
     };
   }, [selectedDate]);
@@ -107,7 +116,7 @@ export default function DateTimePicker({
     if (selectedDate) return;
 
     const firstAvailable = monthDates.find(
-      (d) => !isPastDay(d.date) && !isShopClosed(d.date)
+      (d) => !isPastDay(d.date) && !isShopClosed(d.date, schedule)
     );
 
     if (firstAvailable) {
@@ -230,7 +239,7 @@ export default function DateTimePicker({
                   const isSelected =
                     selectedDate?.toDateString() === d.date.toDateString();
 
-                  const closedDay = isShopClosed(d.date);
+                  const closedDay = isShopClosed(d.date, schedule);
                   const pastDay = isPastDay(d.date);
                   const isDisabled = pastDay || closedDay;
 
