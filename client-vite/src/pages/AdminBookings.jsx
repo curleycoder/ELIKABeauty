@@ -626,37 +626,33 @@ export default function AdminBookings() {
 
   return (
     <div className="min-h-screen bg-[#F9F7F4]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-10">
 
-      {/* Header */}
-      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-[#440008]/10 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
-          <div className="flex-1">
-            <div className="text-lg font-theseason font-bold text-[#440008] leading-tight">ELIKA BEAUTY</div>
-            <div className="text-[10px] text-gray-400 uppercase tracking-widest">Admin Panel</div>
+        {/* Top bar */}
+        <div className="flex items-center justify-between gap-3 mb-5">
+          <div>
+            <div className="text-xl font-theseason font-bold text-[#440008]">Admin Bookings</div>
           </div>
-
-          <div className="flex items-center bg-[#F9F7F4] rounded-xl p-1 gap-0.5">
-            {[["list", "List"], ["calendar", "Calendar"]].map(([v, label]) => (
-              <button key={v} onClick={() => setView(v)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition
-                  ${view === v ? "bg-white shadow text-[#440008]" : "text-gray-400 hover:text-gray-600"}`}>
-                {label}
-              </button>
-            ))}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center bg-white border border-[#440008]/15 rounded-xl p-1 gap-0.5">
+              {[["list", "List"], ["calendar", "Calendar"]].map(([v, label]) => (
+                <button key={v} onClick={() => setView(v)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition
+                    ${view === v ? "bg-[#440008] text-white shadow-sm" : "text-gray-400 hover:text-[#440008]"}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button onClick={fetchBookings}
+              className="px-3 py-2 rounded-xl bg-[#440008] text-white text-xs font-semibold">
+              Refresh
+            </button>
+            <button onClick={clearKey}
+              className="hidden sm:block px-3 py-2 rounded-xl border border-[#440008]/20 text-[#440008] text-xs font-semibold">
+              Clear Key
+            </button>
           </div>
-
-          <button onClick={fetchBookings}
-            className="px-3 py-2 rounded-xl bg-[#440008] text-white text-xs font-semibold">
-            Refresh
-          </button>
-          <button onClick={clearKey}
-            className="hidden sm:block px-3 py-2 rounded-xl border border-[#440008]/20 text-[#440008] text-xs font-semibold">
-            Clear Key
-          </button>
         </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
 
         {errorMsg && (
           <div className="mb-4 p-3 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm">{errorMsg}</div>
