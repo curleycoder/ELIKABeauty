@@ -104,6 +104,14 @@ function getWeekStart(date) {
   return d;
 }
 
+function to12h(time24) {
+  // "14:30" → "2:30 PM"
+  const [h, m] = time24.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
 function parseTimeToMins(timeStr) {
   if (!timeStr) return null;
   const m = String(timeStr).match(/(\d+):(\d+)\s*(AM|PM)/i);
@@ -114,6 +122,85 @@ function parseTimeToMins(timeStr) {
   if (pm && h !== 12) h += 12;
   if (!pm && h === 12) h = 0;
   return h * 60 + min;
+}
+
+// ── Reschedule Modal ───────────────────────────────────────────────────────────
+
+function RescheduleModal({ booking, onClose, onSave }) {
+  const [date, setDate] = useState(booking.date || "");
+  const [time, setTime] = useState(""); // 24h input value
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSave = async () => {
+    if (!date || !time) { setError("Please pick a date and time."); return; }
+    setBusy(true);
+    setError("");
+    try {
+      await onSave(booking._id, date, to12h(time));
+      onClose();
+    } catch (err) {
+      setError(err.message || "Failed to reschedule.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+      onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+        onClick={e => e.stopPropagation()}>
+        <div className="bg-[#440008] px-5 py-4 flex items-center justify-between">
+          <div>
+            <div className="text-white font-bold text-base">Reschedule</div>
+            <div className="text-white/60 text-xs mt-0.5">{booking.name}</div>
+          </div>
+          <button onClick={onClose} className="text-white/60 hover:text-white"><FaTimes /></button>
+        </div>
+
+        <div className="px-5 py-5 space-y-4">
+          <div className="text-xs text-gray-400 bg-[#F9F7F4] rounded-xl px-3 py-2">
+            Current: <span className="font-semibold text-gray-600">{booking.date} at {booking.time}</span>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 mb-1.5">New date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+              min={new Date().toLocaleDateString("en-CA")}
+              className="w-full border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/30"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 mb-1.5">New time</label>
+            <input
+              type="time"
+              value={time}
+              onChange={e => setTime(e.target.value)}
+              className="w-full border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/30"
+            />
+          </div>
+
+          {error && <p className="text-xs text-red-500">{error}</p>}
+        </div>
+
+        <div className="px-5 pb-5 flex gap-2">
+          <button onClick={onClose}
+            className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-sm font-semibold hover:bg-gray-50 transition">
+            Cancel
+          </button>
+          <button onClick={handleSave} disabled={busy}
+            className="flex-1 py-2.5 rounded-xl bg-[#440008] text-white text-sm font-semibold disabled:opacity-40 hover:opacity-90 transition">
+            {busy ? "Saving…" : "Confirm"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // ── Credits Tab ────────────────────────────────────────────────────────────────
@@ -218,7 +305,7 @@ function CreditsTab({ adminKey }) {
 
 // ── Calendar View ──────────────────────────────────────────────────────────────
 
-function CalendarView({ bookings, onCancel, highlightId }) {
+function CalendarView({ bookings, onCancel, onReschedule, highlightId }) {
   const [weekStart, setWeekStart] = useState(() => getWeekStart(new Date()));
   const [selected, setSelected] = useState(null);
 
@@ -421,11 +508,16 @@ function CalendarView({ bookings, onCancel, highlightId }) {
               )}
             </div>
 
-            <div className="px-5 pb-5">
+            <div className="px-5 pb-5 flex gap-2">
+              <button
+                onClick={() => { onReschedule(selected); setSelected(null); }}
+                className="flex-1 py-2.5 rounded-xl bg-[#440008]/5 text-[#440008] font-semibold text-sm border border-[#440008]/20 hover:bg-[#440008]/10 transition">
+                Reschedule
+              </button>
               <button
                 onClick={() => { onCancel(selected._id); setSelected(null); }}
-                className="w-full py-2.5 rounded-xl bg-red-50 text-red-600 font-semibold text-sm border border-red-200 hover:bg-red-100 transition">
-                Cancel Booking
+                className="flex-1 py-2.5 rounded-xl bg-red-50 text-red-600 font-semibold text-sm border border-red-200 hover:bg-red-100 transition">
+                Cancel
               </button>
             </div>
           </div>
@@ -437,7 +529,7 @@ function CalendarView({ bookings, onCancel, highlightId }) {
 
 // ── Booking Card (list view) ───────────────────────────────────────────────────
 
-function BookingCard({ b, onCancel, isHighlighted }) {
+function BookingCard({ b, onCancel, onReschedule, isHighlighted }) {
   const isCancelled = normStatus(b?.status) === "cancelled";
   const total = getServiceTotal(b);
 
@@ -476,10 +568,16 @@ function BookingCard({ b, onCancel, isHighlighted }) {
             </div>
 
             {!isCancelled && (
-              <button onClick={() => onCancel(b._id)}
-                className="shrink-0 text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-lg transition">
-                Cancel
-              </button>
+              <div className="flex gap-2 shrink-0">
+                <button onClick={() => onReschedule(b)}
+                  className="text-xs font-semibold text-[#440008] border border-[#440008]/25 hover:bg-[#440008]/5 px-3 py-1.5 rounded-lg transition">
+                  Reschedule
+                </button>
+                <button onClick={() => onCancel(b._id)}
+                  className="text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-lg transition">
+                  Cancel
+                </button>
+              </div>
             )}
           </div>
 
@@ -521,6 +619,7 @@ export default function AdminBookings() {
   const [errorMsg, setErrorMsg] = useState("");
   const [adminKey, setAdminKey] = useState(() => localStorage.getItem(ADMIN_KEY_STORAGE) || "");
   const [highlightId, setHighlightId] = useState(() => getQueryId());
+  const [rescheduleTarget, setRescheduleTarget] = useState(null);
 
   const fetchBookings = useCallback(async () => {
     setLoading(true);
@@ -574,6 +673,21 @@ export default function AdminBookings() {
       alert(err?.message || "Cancellation failed");
     }
   }, [bookings]);
+
+  const rescheduleBooking = useCallback(async (id, date, time) => {
+    const key = getAdminKey();
+    if (!key) throw new Error("Admin key required");
+    const res = await fetch(`${API_BASE}/${id}/reschedule`, {
+      method: "PATCH",
+      headers: { "x-admin-key": key, "Content-Type": "application/json" },
+      body: JSON.stringify({ date, time }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data?.error || "Reschedule failed");
+    }
+    setBookings(prev => prev.map(b => b._id === id ? { ...b, date, time } : b));
+  }, []);
 
   const clearKey = () => {
     localStorage.removeItem(ADMIN_KEY_STORAGE);
@@ -693,7 +807,7 @@ export default function AdminBookings() {
         {tab === "credits" ? (
           <CreditsTab adminKey={adminKey} />
         ) : view === "calendar" ? (
-          <CalendarView bookings={bookings} onCancel={cancelBooking} highlightId={highlightId} />
+          <CalendarView bookings={bookings} onCancel={cancelBooking} onReschedule={setRescheduleTarget} highlightId={highlightId} />
         ) : grouped.length === 0 ? (
           <div className="text-center py-20">
             <FaCalendarAlt size={28} className="mx-auto mb-3 text-gray-200" />
@@ -714,6 +828,7 @@ export default function AdminBookings() {
                       key={b._id}
                       b={b}
                       onCancel={cancelBooking}
+                      onReschedule={setRescheduleTarget}
                       isHighlighted={!!highlightId && b._id === highlightId}
                     />
                   ))}
@@ -723,6 +838,14 @@ export default function AdminBookings() {
           </div>
         )}
       </div>
+
+      {rescheduleTarget && (
+        <RescheduleModal
+          booking={rescheduleTarget}
+          onClose={() => setRescheduleTarget(null)}
+          onSave={rescheduleBooking}
+        />
+      )}
     </div>
   );
 }
