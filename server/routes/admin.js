@@ -73,6 +73,21 @@ router.delete("/bookings/:id", auth, async (req, res) => {
   }
 });
 
+// PATCH /api/admin/bookings/:id/noshow  — mark a booking as no-show
+router.patch("/bookings/:id/noshow", auth, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+    if (booking.status === "cancelled") return res.status(400).json({ error: "Cannot mark a cancelled booking as no-show" });
+    booking.status = "noshow";
+    await booking.save();
+    res.json({ success: true });
+  } catch (err) {
+    console.error("❌ Admin mark no-show:", err);
+    res.status(500).json({ error: "Failed to mark no-show" });
+  }
+});
+
 // PATCH /api/admin/bookings/:id/reschedule  — update date/time, sync calendar, email client
 router.patch("/bookings/:id/reschedule", auth, async (req, res) => {
   const { parse, format, addMinutes } = require("date-fns");
