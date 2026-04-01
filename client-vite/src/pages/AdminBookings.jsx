@@ -998,6 +998,11 @@ function BookingCard({ b, onCancel, onReschedule, onNoShow, isHighlighted }) {
             <span className="line-clamp-1">{servicesText(b)}</span>
           </div>
 
+          {b.referredBy && (
+            <div className="mt-2 inline-flex items-center gap-1.5 text-xs text-[#440008] bg-[#440008]/5 border border-[#440008]/10 rounded-lg px-2.5 py-1">
+              <FaUsers size={9} /> Referred by <span className="font-semibold">{b.referredBy}</span>
+            </div>
+          )}
           {b.note && (
             <div className="mt-2 text-xs text-gray-400 italic line-clamp-1">"{b.note}"</div>
           )}
