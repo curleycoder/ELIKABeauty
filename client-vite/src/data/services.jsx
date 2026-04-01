@@ -24,7 +24,18 @@ const services = [
   { id: "facial", name: "Facial", price: 100, duration: 45, category: "Face", description: "Cleanse, exfoliate, and glow." },
 
   { id: "men-cut", name: "Men Hair Cut", price: 30, duration: 30, category: "Men", description: "Wash available with additional charge." },
-  { id: "men-cut-wash", name: "Men Hair Cut + Wash", price: 40, duration: 45, category: "Men", description: "Includes wash and haircut." }
+  { id: "men-cut-wash", name: "Men Hair Cut + Wash", price: 40, duration: 45, category: "Men", description: "Includes wash and haircut." },
+
+  { id: "facial-treatment", name: "Facial Treatment", price: 80, duration: 60, category: "Spa", description: "Deep cleansing facial with steam, mask, and skin-refreshing care." },
+  { id: "body-massage", name: "Relaxation / Body Massage", price: 80, duration: 60, category: "Spa", description: "Spa-style body massage focused on relaxation and stress relief." },
+
+  { id: "wax-full-body", name: "Full Body", price: 260, fromPrice: true, duration: 90, category: "Wax", description: "Full body waxing for smooth, hair-free skin. Brazilian included." },
+  { id: "wax-brazilian", name: "Brazilian", price: 45, duration: 20, category: "Wax", description: "Complete hair removal for the bikini area." },
+  { id: "wax-underarm", name: "Underarm", price: 20, duration: 10, category: "Wax", description: "Smooth and clean underarm waxing." },
+  { id: "wax-full-leg", name: "Full Leg", price: 55, fromPrice: true, duration: 40, category: "Wax", description: "Full leg waxing for silky smooth skin." },
+  { id: "wax-arms", name: "Arms", price: 40, duration: 40, category: "Wax", description: "Full arm waxing for smooth, hair-free skin." },
+  { id: "wax-neck", name: "Neck only", price: 15, duration: 10, category: "Wax", description: "Clean neck waxing for a neat finish." },
+  { id: "wax-full-back", name: "Full Back", price: 50, duration: 30, category: "Wax", description: "Full back waxing for smooth, hair-free skin." },
 ];
 
 export default services;
