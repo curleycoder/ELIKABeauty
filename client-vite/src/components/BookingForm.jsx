@@ -203,9 +203,6 @@ export default function BookingForm({ onSelectionChange }) {
     setConflictWarning(hasKeratin && hasConflict);
   }, [selected]);
 
-  useEffect(() => {
-    listTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [activeTab]);
 
   return (
     <div className="bg-white backdrop-blur-md rounded-[30px] shadow-2xl max-w-2xl w-full mx-auto">
