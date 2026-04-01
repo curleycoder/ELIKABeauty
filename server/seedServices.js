@@ -171,6 +171,57 @@ const services = [
     category: "Men",
     description: "All-over colour for a new look.",
   },
+  {
+    name: "Full Body",
+    price: 260,
+    fromPrice: true,
+    duration: 90,
+    category: "Wax",
+    description: "Full body waxing for smooth, hair-free skin. Brizilian included.",
+  },
+  {
+    name: "Brazilian",
+    price: 45,
+    duration: 20,
+    category: "Wax",
+    description: "Complete hair removal for the bikini area.",
+  },
+  {
+    name: "Underarm",
+    price: 20,
+    duration: 10,
+    category: "Wax",
+    description: "Smooth and clean underarm waxing.",
+  },
+  {
+    name: "Full Leg",
+    price: 55,
+    fromPrice: true,
+    duration: 40,
+    category: "Wax",
+    description: "Full leg waxing for silky smooth skin.",
+  },
+  {
+    name: "Arms",
+    price: 40,
+    duration: 40,
+    category: "Wax",
+    description: "Full arm waxing for smooth, hair-free skin.",
+  },
+  {
+    name: "Neck only",
+    price: 15,
+    duration: 10,
+    category: "Wax",
+    description: "Clean neck waxing for a neat finish.",
+  },
+  {
+    name: "Full Back",
+    price: 50,
+    duration: 30,
+    category: "Wax",
+    description: "Full back waxing for smooth, hair-free skin.",
+  },
 ];
 
 async function seed() {
