@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import {
   FaCalendarAlt, FaClock, FaCut, FaChevronLeft, FaChevronRight,
-  FaTimes, FaPhone, FaEnvelope,
+  FaTimes, FaPhone, FaEnvelope, FaBirthdayCake, FaUsers, FaCalendarCheck,
 } from "react-icons/fa";
 
 const ADMIN_KEY_STORAGE = "elikabeauty_admin_key";
@@ -329,8 +329,8 @@ function ClientsTab({ adminKey }) {
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className={`text-xs px-2 py-1 rounded-lg font-medium ${hasBirthday ? "bg-pink-50 text-pink-600" : "bg-gray-50 text-gray-400"}`}>
-                    🎂 {birthdayLabel}
+                  <span className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg font-medium ${hasBirthday ? "bg-pink-50 text-pink-600" : "bg-gray-50 text-gray-400"}`}>
+                    <FaBirthdayCake size={10} /> {birthdayLabel}
                   </span>
                   <button
                     onClick={() => setEditing({ id: c._id, month: c.birthdayMonth || "", day: c.birthdayDay || "" })}
@@ -994,9 +994,9 @@ export default function AdminBookings() {
       { id: "done",      label: "Done",      count: counts.done },
       { id: "cancelled", label: "Cancelled", count: counts.cancelled },
     ] : []),
-    { id: "credits",  label: "🎂 Credits",  count: null },
-    { id: "clients",  label: "👤 Clients",  count: null },
-    { id: "schedule", label: "📅 Schedule", count: null },
+    { id: "credits",  label: "Credits",  icon: FaBirthdayCake, count: null },
+    { id: "clients",  label: "Clients",  icon: FaUsers,        count: null },
+    { id: "schedule", label: "Schedule", icon: FaCalendarCheck, count: null },
   ];
 
   return (
@@ -1035,14 +1035,15 @@ export default function AdminBookings() {
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-2 mb-5">
-          {tabs.map(({ id, label, count }) => (
+          {tabs.map(({ id, label, icon: Icon, count }) => (
             <button key={id} onClick={() => setTab(id)}
               className={[
-                "px-4 py-2 rounded-xl text-sm font-semibold transition",
+                "inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition",
                 tab === id
                   ? "bg-[#440008] text-white shadow-sm"
                   : "bg-white text-[#440008] border border-[#440008]/20 hover:bg-[#440008]/5",
               ].join(" ")}>
+              {Icon && <Icon size={11} />}
               {label}{count != null ? ` (${count})` : ""}
             </button>
           ))}
