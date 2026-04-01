@@ -19,11 +19,8 @@ function bookingToUtcRange(dateStr, time12h, duration) {
   return { startUtc, endUtc };
 }
 
-const ROOM_SERVICE_NAMES = new Set(["facial", "massage", "hot stone massage", "deep tissue massage"]);
-
-function getServiceType(serviceNames) {
-  const names = serviceNames.map((n) => String(n).toLowerCase().trim());
-  return names.every((n) => ROOM_SERVICE_NAMES.has(n)) ? "room" : "chair";
+function getServiceType(validServices) {
+  return validServices.every((s) => s.serviceType === "room") ? "room" : "chair";
 }
 
 // POST /api/bookings
@@ -49,7 +46,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Invalid booking date/time" });
 
     const serviceNames = validServices.map((s) => s.name);
-    const incomingType = getServiceType(serviceNames);
+    const incomingType = getServiceType(validServices);
 
     const sameDayBookings = await Booking.find({
       date,

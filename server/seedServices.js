@@ -103,6 +103,7 @@ const services = [
     price: 80,
     duration: 60,
     category: "Face",
+    serviceType: "room",
     description: "Professional makeup application.",
   },
   {
@@ -110,6 +111,7 @@ const services = [
     price: 17,
     duration: 20,
     category: "Face",
+    serviceType: "room",
     description: "Define your brows naturally.",
   },
   {
@@ -117,6 +119,7 @@ const services = [
     price: 10,
     duration: 10,
     category: "Face",
+    serviceType: "room",
     description: "Tint for bolder brows.",
   },
   {
@@ -124,6 +127,7 @@ const services = [
     price: 40,
     duration: 30,
     category: "Face",
+    serviceType: "room",
     description: "Remove facial hair by threading, including eyebrow threading.",
   },
   {
@@ -131,6 +135,7 @@ const services = [
     price: 80,
     duration: 60,
     category: "Spa",
+    serviceType: "room",
     description: "Deep cleansing facial with steam, mask, and skin-refreshing care.",
   },
   {
@@ -139,6 +144,7 @@ const services = [
     duration: 120,
     fromPrice: true,
     category: "Face",
+    serviceType: "room",
     description:
       "PhiBrows microblading with single-use tools for natural-looking brows.",
   },
@@ -147,6 +153,7 @@ const services = [
     price: 80,
     duration: 60,
     category: "Spa",
+    serviceType: "room",
     description: "Spa-style body massage focused on relaxation and stress relief.",
   },
   {
@@ -177,6 +184,7 @@ const services = [
     fromPrice: true,
     duration: 90,
     category: "Wax",
+    serviceType: "room",
     description: "Full body waxing for smooth, hair-free skin. Brizilian included.",
   },
   {
@@ -184,6 +192,7 @@ const services = [
     price: 45,
     duration: 20,
     category: "Wax",
+    serviceType: "room",
     description: "Complete hair removal for the bikini area.",
   },
   {
@@ -191,6 +200,7 @@ const services = [
     price: 20,
     duration: 10,
     category: "Wax",
+    serviceType: "room",
     description: "Smooth and clean underarm waxing.",
   },
   {
@@ -199,6 +209,7 @@ const services = [
     fromPrice: true,
     duration: 40,
     category: "Wax",
+    serviceType: "room",
     description: "Full leg waxing for silky smooth skin.",
   },
   {
@@ -206,6 +217,7 @@ const services = [
     price: 40,
     duration: 40,
     category: "Wax",
+    serviceType: "room",
     description: "Full arm waxing for smooth, hair-free skin.",
   },
   {
@@ -213,6 +225,7 @@ const services = [
     price: 15,
     duration: 10,
     category: "Wax",
+    serviceType: "room",
     description: "Clean neck waxing for a neat finish.",
   },
   {
@@ -220,6 +233,7 @@ const services = [
     price: 50,
     duration: 30,
     category: "Wax",
+    serviceType: "room",
     description: "Full back waxing for smooth, hair-free skin.",
   },
 ];
