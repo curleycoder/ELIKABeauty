@@ -24,7 +24,18 @@ router.get("/bookings", auth, async (req, res) => {
       .populate("services", "name duration price")
       .sort({ date: 1, time: 1 })
       .lean();
-    res.json(bookings);
+
+    // Filter out null refs (deleted services) and backfill serviceNames from
+    // populated data so the frontend always has names to display
+    const result = bookings.map(b => {
+      const populated = (b.services || []).filter(Boolean);
+      const names = b.serviceNames?.length
+        ? b.serviceNames
+        : populated.map(s => s.name).filter(Boolean);
+      return { ...b, services: populated, serviceNames: names };
+    });
+
+    res.json(result);
   } catch (err) {
     console.error("❌ Admin fetch bookings:", err);
     res.status(500).json({ error: "Failed to fetch bookings" });
@@ -70,6 +81,31 @@ router.delete("/bookings/:id", auth, async (req, res) => {
   } catch (err) {
     console.error("❌ Admin cancel booking:", err);
     res.status(500).json({ error: "Failed to cancel booking" });
+  }
+});
+
+// PATCH /api/admin/bookings/:id/checkout  — save visit record & mark as paid
+router.patch("/bookings/:id/checkout", auth, async (req, res) => {
+  try {
+    const { extraServices, amount, tip, paymentMethod, stylist, notes } = req.body;
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    booking.checkout = {
+      done: true,
+      extraServices: Array.isArray(extraServices) ? extraServices : [],
+      amount: amount != null ? Number(amount) : null,
+      tip: tip != null ? Number(tip) : null,
+      paymentMethod: paymentMethod || "",
+      stylist: stylist || "",
+      notes: notes || "",
+      completedAt: new Date(),
+    };
+    await booking.save();
+    res.json({ success: true, checkout: booking.checkout });
+  } catch (err) {
+    console.error("❌ Admin checkout:", err);
+    res.status(500).json({ error: "Failed to save checkout" });
   }
 });
 

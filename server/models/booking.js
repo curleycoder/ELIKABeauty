@@ -25,6 +25,18 @@ const bookingSchema = new mongoose.Schema(
 
     // Track if appointment reminder was sent
     reminderSent: { type: Boolean, default: false },
+
+    // Checkout / payment record
+    checkout: {
+      done:          { type: Boolean, default: false },
+      extraServices: [{ name: String, price: Number }],
+      amount:        { type: Number, default: null },
+      tip:           { type: Number, default: null },
+      paymentMethod: { type: String, default: "" },   // "cash" | "card"
+      stylist:       { type: String, default: "" },   // "Amina" | "Narges"
+      notes:         { type: String, default: "" },
+      completedAt:   { type: Date,   default: null },
+    },
   },
   { timestamps: true }
 );
