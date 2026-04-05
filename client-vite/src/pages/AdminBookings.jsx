@@ -3,6 +3,7 @@ import {
   FaCalendarAlt, FaClock, FaCut, FaChevronLeft, FaChevronRight,
   FaTimes, FaPhone, FaEnvelope, FaBirthdayCake, FaUsers, FaCalendarCheck,
   FaPlus, FaUserSlash, FaCheckCircle, FaChevronDown, FaChevronUp, FaHistory, FaCog,
+  FaSync, FaKey,
 } from "react-icons/fa";
 
 const SERVICES_API = "https://elikabeauty.onrender.com/api/services";
@@ -1508,8 +1509,8 @@ export default function AdminBookings() {
           </h1>
           <div className="flex items-center gap-2">
             <button onClick={fetchBookings} title="Refresh"
-              className="p-2.5 rounded-xl bg-white border border-gray-200 text-gray-400 hover:text-[#440008] transition text-lg leading-none">
-              ↺
+              className="p-2.5 rounded-xl bg-white border border-gray-200 text-gray-400 hover:text-[#440008] transition">
+              <FaSync size={14} />
             </button>
             <button onClick={() => setShowManualBooking(true)}
               className="px-4 py-2.5 rounded-xl bg-[#440008] text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-sm">
@@ -1658,22 +1659,22 @@ export default function AdminBookings() {
           <div>
             <div className="flex flex-wrap gap-2 mb-5">
               {[
-                { id: "credits",  label: "🎂  Birthday Credits" },
-                { id: "schedule", label: "📅  Working Hours" },
-              ].map(({ id, label }) => (
+                { id: "credits",  label: "Birthday Credits", icon: FaBirthdayCake },
+                { id: "schedule", label: "Working Hours",    icon: FaCalendarAlt },
+              ].map(({ id, label, icon: Icon }) => (
                 <button key={id} onClick={() => setSettingsTab(id)}
                   className={[
-                    "px-4 py-2 rounded-full text-sm font-semibold transition",
+                    "px-4 py-2 rounded-full text-sm font-semibold transition inline-flex items-center gap-2",
                     settingsTab === id
                       ? "bg-[#440008] text-white shadow-sm"
                       : "bg-white text-gray-600 border border-gray-200 hover:border-[#440008]/30",
                   ].join(" ")}>
-                  {label}
+                  <Icon size={13} />{label}
                 </button>
               ))}
               <button onClick={clearKey}
                 className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-gray-400 border border-gray-200 hover:border-red-300 hover:text-red-400 transition ml-auto">
-                🔑 Reset Key
+                <FaKey size={12} className="mr-1.5" /> Reset Key
               </button>
             </div>
             {settingsTab === "credits" ? <CreditsTab adminKey={adminKey} /> : <ScheduleTab adminKey={adminKey} />}
