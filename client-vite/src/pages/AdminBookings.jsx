@@ -318,29 +318,28 @@ function ClientsTab({ adminKey }) {
 
           return (
             <div key={c._id} className="bg-white rounded-2xl border border-[#440008]/10 px-4 py-3">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-full bg-[#440008]/10 flex items-center justify-center text-sm font-bold text-[#440008] shrink-0">
-                    {getInitials(c.name)}
-                  </div>
-                  <div className="min-w-0">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#440008]/10 flex items-center justify-center text-sm font-bold text-[#440008] shrink-0">
+                  {getInitials(c.name)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="font-semibold text-[#440008] text-sm">{c.name || "—"}</div>
-                    <div className="flex flex-wrap gap-x-3 mt-0.5">
-                      <a href={`tel:${c.phone}`} className="text-xs text-gray-400 hover:text-[#440008]">{c.phone}</a>
-                      <a href={`mailto:${c.email}`} className="text-xs text-gray-400 hover:text-[#440008] truncate max-w-[180px]">{c.email}</a>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg font-medium ${hasBirthday ? "bg-pink-50 text-pink-600" : "bg-gray-50 text-gray-400"}`}>
+                        <FaBirthdayCake size={10} /> {birthdayLabel}
+                      </span>
+                      <button
+                        onClick={() => setEditing({ id: c._id, month: c.birthdayMonth || "", day: c.birthdayDay || "" })}
+                        className="text-xs text-[#440008]/50 hover:text-[#440008] border border-[#440008]/15 px-2.5 py-1 rounded-lg transition">
+                        Edit
+                      </button>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg font-medium ${hasBirthday ? "bg-pink-50 text-pink-600" : "bg-gray-50 text-gray-400"}`}>
-                    <FaBirthdayCake size={10} /> {birthdayLabel}
-                  </span>
-                  <button
-                    onClick={() => setEditing({ id: c._id, month: c.birthdayMonth || "", day: c.birthdayDay || "" })}
-                    className="text-xs text-[#440008]/50 hover:text-[#440008] border border-[#440008]/15 px-2.5 py-1 rounded-lg transition">
-                    Edit
-                  </button>
+                  <div className="flex flex-wrap gap-x-3 mt-0.5">
+                    <a href={`tel:${c.phone}`} className="text-xs text-gray-400 hover:text-[#440008]">{c.phone}</a>
+                    <a href={`mailto:${c.email}`} className="text-xs text-gray-400 hover:text-[#440008] truncate max-w-[180px]">{c.email}</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -932,51 +931,49 @@ function BookingCard({ b, onCancel, onReschedule, onNoShow, isHighlighted }) {
       <div className="flex items-stretch">
         <div className={`w-1 shrink-0 ${isCancelled ? "bg-gray-200" : isNoShow ? "bg-orange-400" : "bg-[#440008]"}`} />
         <div className="flex-1 p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold
-                ${isCancelled ? "bg-gray-100 text-gray-400" : "bg-[#440008]/10 text-[#440008]"}`}>
-                {getInitials(b.name)}
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-[#440008]">{b?.name?.trim() || "No name"}</span>
-                  {isCancelled && (
-                    <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-red-100 text-red-400">
-                      Cancelled
-                    </span>
-                  )}
-                  {isNoShow && (
-                    <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-orange-100 text-orange-500">
-                      No-show
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-                  <a href={`tel:${b.phone}`} className="text-xs text-gray-400 hover:text-[#440008] transition">{b.phone || "No phone"}</a>
-                  <a href={`mailto:${b.email}`} className="text-xs text-gray-400 hover:text-[#440008] transition truncate max-w-[180px]">{b.email || "No email"}</a>
-                </div>
-              </div>
+          <div className="flex items-start gap-3">
+            <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold
+              ${isCancelled ? "bg-gray-100 text-gray-400" : "bg-[#440008]/10 text-[#440008]"}`}>
+              {getInitials(b.name)}
             </div>
-
-            {!isCancelled && !isNoShow && (
-              <div className="flex gap-2 shrink-0 flex-wrap justify-end">
-                <button onClick={() => onReschedule(b)}
-                  className="text-xs font-semibold text-[#440008] border border-[#440008]/25 hover:bg-[#440008]/5 px-3 py-1.5 rounded-lg transition">
-                  Reschedule
-                </button>
-                {onNoShow && (
-                  <button onClick={() => onNoShow(b._id)}
-                    className="text-xs font-semibold text-orange-500 border border-orange-200 hover:bg-orange-50 px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1">
-                    <FaUserSlash size={10} /> No-show
-                  </button>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-bold text-[#440008]">{b?.name?.trim() || "No name"}</span>
+                {isCancelled && (
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-red-100 text-red-400">
+                    Cancelled
+                  </span>
                 )}
-                <button onClick={() => onCancel(b._id)}
-                  className="text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-lg transition">
-                  Cancel
-                </button>
+                {isNoShow && (
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-orange-100 text-orange-500">
+                    No-show
+                  </span>
+                )}
               </div>
-            )}
+              <div className="flex items-center gap-3 mt-0.5 flex-wrap">
+                <a href={`tel:${b.phone}`} className="text-xs text-gray-400 hover:text-[#440008] transition">{b.phone || "No phone"}</a>
+                <a href={`mailto:${b.email}`} className="text-xs text-gray-400 hover:text-[#440008] transition truncate max-w-[180px]">{b.email || "No email"}</a>
+              </div>
+
+              {!isCancelled && !isNoShow && (
+                <div className="flex gap-2 flex-wrap mt-2.5">
+                  <button onClick={() => onReschedule(b)}
+                    className="text-xs font-semibold text-[#440008] border border-[#440008]/25 hover:bg-[#440008]/5 px-3 py-1.5 rounded-lg transition">
+                    Reschedule
+                  </button>
+                  {onNoShow && (
+                    <button onClick={() => onNoShow(b._id)}
+                      className="text-xs font-semibold text-orange-500 border border-orange-200 hover:bg-orange-50 px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1">
+                      <FaUserSlash size={10} /> No-show
+                    </button>
+                  )}
+                  <button onClick={() => onCancel(b._id)}
+                    className="text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-lg transition">
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
@@ -1170,11 +1167,9 @@ export default function AdminBookings() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-10">
 
         {/* Top bar */}
-        <div className="flex items-center justify-between gap-3 mb-5">
-          <div>
-            <div className="text-xl font-theseason font-bold text-[#440008]">Admin Bookings</div>
-          </div>
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
+          <div className="text-xl font-theseason font-bold text-[#440008]">Admin Bookings</div>
+          <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center bg-white border border-[#440008]/15 rounded-xl p-1 gap-0.5">
               {[["list", "List"], ["calendar", "Calendar"]].map(([v, label]) => (
                 <button key={v} onClick={() => setView(v)}
