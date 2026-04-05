@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import {
   FaCalendarAlt, FaClock, FaCut, FaChevronLeft, FaChevronRight,
   FaTimes, FaPhone, FaEnvelope, FaBirthdayCake, FaUsers, FaCalendarCheck,
-  FaPlus, FaUserSlash,
+  FaPlus, FaUserSlash, FaCheckCircle, FaChevronDown, FaChevronUp, FaHistory, FaCog,
 } from "react-icons/fa";
 
 const SERVICES_API = "https://elikabeauty.onrender.com/api/services";
@@ -261,12 +261,13 @@ function ScheduleTab({ adminKey }) {
 
 // ── Clients Tab ────────────────────────────────────────────────────────────────
 
-function ClientsTab({ adminKey }) {
+function ClientsTab({ adminKey, bookings }) {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState(null); // { id, month, day }
   const [saving, setSaving] = useState(false);
+  const [expanded, setExpanded] = useState(null); // client._id
 
   useEffect(() => {
     fetch(`${ADMIN_BASE}/clients`, { headers: { "x-admin-key": adminKey } })
@@ -316,32 +317,126 @@ function ClientsTab({ adminKey }) {
             ? `${MONTHS[c.birthdayMonth - 1]} ${c.birthdayDay}`
             : "No birthday";
 
+          // Visit history from bookings prop — match by phone (unique key)
+          const cPhone = (c.phone || "").replace(/\s/g, "");
+          const todayStr = ymdVancouver();
+          const visits = (bookings || [])
+            .filter(b => {
+              const bPhone = (b.phone || "").replace(/\s/g, "");
+              return bPhone === cPhone && b.date <= todayStr; // past + today only
+            })
+            .sort((a, b) => new Date(b.date) - new Date(a.date));
+          const checkedOut = visits.filter(v => v.checkout?.done);
+          const totalSpent = checkedOut.reduce((s, v) => s + (v.checkout.amount || 0), 0);
+          const totalTips  = checkedOut.reduce((s, v) => s + (v.checkout.tip    || 0), 0);
+          const lastVisit  = visits.find(v => normStatus(v.status) !== "cancelled")?.date;
+          const isOpen       = expanded === c._id;
+
           return (
-            <div key={c._id} className="bg-white rounded-2xl border border-[#440008]/10 px-4 py-3">
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#440008]/10 flex items-center justify-center text-sm font-bold text-[#440008] shrink-0">
-                  {getInitials(c.name)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="font-semibold text-[#440008] text-sm">{c.name || "—"}</div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg font-medium ${hasBirthday ? "bg-pink-50 text-pink-600" : "bg-gray-50 text-gray-400"}`}>
-                        <FaBirthdayCake size={10} /> {birthdayLabel}
-                      </span>
-                      <button
-                        onClick={() => setEditing({ id: c._id, month: c.birthdayMonth || "", day: c.birthdayDay || "" })}
-                        className="text-xs text-[#440008]/50 hover:text-[#440008] border border-[#440008]/15 px-2.5 py-1 rounded-lg transition">
-                        Edit
-                      </button>
-                    </div>
+            <div key={c._id} className="bg-white rounded-2xl border border-[#440008]/10 overflow-hidden">
+              {/* Summary row */}
+              <div className="px-4 py-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-full bg-[#440008]/10 flex items-center justify-center text-sm font-bold text-[#440008] shrink-0">
+                    {getInitials(c.name)}
                   </div>
-                  <div className="flex flex-wrap gap-x-3 mt-0.5">
-                    <a href={`tel:${c.phone}`} className="text-xs text-gray-400 hover:text-[#440008]">{c.phone}</a>
-                    <a href={`mailto:${c.email}`} className="text-xs text-gray-400 hover:text-[#440008] truncate max-w-[180px]">{c.email}</a>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="font-semibold text-[#440008] text-sm">{c.name || "—"}</div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg font-medium ${hasBirthday ? "bg-pink-50 text-pink-600" : "bg-gray-50 text-gray-400"}`}>
+                          <FaBirthdayCake size={10} /> {birthdayLabel}
+                        </span>
+                        <button
+                          onClick={() => setEditing({ id: c._id, month: c.birthdayMonth || "", day: c.birthdayDay || "" })}
+                          className="text-xs text-[#440008]/50 hover:text-[#440008] border border-[#440008]/15 px-2.5 py-1 rounded-lg transition">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-x-3 mt-0.5">
+                      <a href={`tel:${c.phone}`} className="text-xs text-gray-400 hover:text-[#440008]">{c.phone}</a>
+                      <a href={`mailto:${c.email}`} className="text-xs text-gray-400 hover:text-[#440008] truncate max-w-[180px]">{c.email}</a>
+                    </div>
+
+                    {/* Stats bar */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
+                      <span className="text-xs text-gray-500">
+                        <span className="font-semibold text-[#440008]">{visits.length}</span> visit{visits.length !== 1 ? "s" : ""}
+                      </span>
+                      {totalSpent > 0 && (
+                        <span className="text-xs text-gray-500">
+                          <span className="font-semibold text-[#440008]">${totalSpent}</span> spent
+                        </span>
+                      )}
+                      {totalTips > 0 && (
+                        <span className="text-xs text-gray-500">
+                          <span className="font-semibold text-[#440008]">${totalTips}</span> tips
+                        </span>
+                      )}
+                      {lastVisit && (
+                        <span className="text-xs text-gray-400">Last: {lastVisit}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Expand toggle */}
+              {visits.length > 0 && (
+                <button
+                  onClick={() => setExpanded(isOpen ? null : c._id)}
+                  className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-gray-100 text-xs text-gray-400 hover:text-[#440008] hover:bg-gray-50 transition">
+                  <FaHistory size={9} />
+                  {isOpen ? "Hide history" : `View ${visits.length} visit${visits.length !== 1 ? "s" : ""}`}
+                  {isOpen ? <FaChevronUp size={8} /> : <FaChevronDown size={8} />}
+                </button>
+              )}
+
+              {/* Visit history */}
+              {isOpen && (
+                <div className="border-t border-gray-100 divide-y divide-gray-50">
+                  {visits.map(v => {
+                    const co          = v.checkout?.done ? v.checkout : null;
+                    const vStatus     = normStatus(v.status);
+                    const isCancelled = vStatus === "cancelled";
+                    const isNoShow    = vStatus === "noshow";
+                    const svcText     = servicesText(v);
+                    const extras      = co?.extraServices?.map(e => `${e.name} (+$${e.price})`) || [];
+                    const allServices = [...(svcText !== "No services" ? [svcText] : []), ...extras].join(", ") || "—";
+                    return (
+                      <div key={v._id} className={`px-4 py-3 ${isCancelled || isNoShow ? "opacity-60" : ""} ${isCancelled ? "bg-red-50/40" : isNoShow ? "bg-orange-50/40" : "bg-gray-50/60"}`}>
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <div className="text-xs font-semibold text-gray-700">{v.date} · {v.time}</div>
+                            <div className="text-xs text-gray-500 mt-0.5">{allServices}</div>
+                            {isCancelled ? (
+                              <span className="mt-1 inline-block text-[10px] font-semibold text-red-400 bg-red-50 border border-red-200 px-1.5 py-0.5 rounded-md">Cancelled</span>
+                            ) : isNoShow ? (
+                              <span className="mt-1 inline-block text-[10px] font-semibold text-orange-500 bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded-md">No-show</span>
+                            ) : co ? (
+                              <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5 text-xs">
+                                {co.amount != null && <span className="font-semibold text-[#440008]">${co.amount}</span>}
+                                {co.tip > 0 && <span className="text-gray-400">+${co.tip} tip</span>}
+                                {co.paymentMethod && <span className="text-gray-400">{co.paymentMethod === "cash" ? "💵 Cash" : "💳 Card"}</span>}
+                                {co.stylist && <span className="text-gray-400">· {co.stylist}</span>}
+                              </div>
+                            ) : (
+                              <div className="mt-1 text-[10px] text-gray-300 italic">Not checked out yet</div>
+                            )}
+                            {co?.notes && <div className="mt-1.5 text-xs text-gray-400 italic">"{co.notes}"</div>}
+                          </div>
+                          {co && (
+                            <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-semibold text-green-700 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-md">
+                              <FaCheckCircle size={8} /> Paid
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
@@ -501,6 +596,190 @@ function ManualBookingModal({ onClose, onCreated }) {
           <button onClick={submit} disabled={busy}
             className="flex-1 py-2.5 rounded-xl bg-[#440008] text-white text-sm font-semibold disabled:opacity-40">
             {busy ? "Booking…" : "Create Booking"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Checkout Modal ─────────────────────────────────────────────────────────────
+
+function CheckoutModal({ booking, onClose, onSave }) {
+  const existing = booking.checkout?.done ? booking.checkout : null;
+  const defaultAmount = existing?.amount != null
+    ? String(existing.amount)
+    : getServiceTotal(booking) > 0 ? String(getServiceTotal(booking)) : "";
+
+  const [extraServices, setExtraServices] = useState(
+    existing?.extraServices?.length ? existing.extraServices.map(e => ({ name: e.name, price: String(e.price ?? "") })) : []
+  );
+  const [amount, setAmount]               = useState(defaultAmount);
+  const [tip, setTip]                     = useState(existing?.tip != null ? String(existing.tip) : "");
+  const [paymentMethod, setPaymentMethod] = useState(existing?.paymentMethod || "");
+  const [stylist, setStylist]             = useState(existing?.stylist || "");
+  const [notes, setNotes]                 = useState(existing?.notes || "");
+  const [busy, setBusy]                   = useState(false);
+  const [error, setError]                 = useState("");
+
+  const addExtra  = () => setExtraServices(p => [...p, { name: "", price: "" }]);
+  const removeExtra = i => setExtraServices(p => p.filter((_, idx) => idx !== i));
+  const updateExtra = (i, field, val) =>
+    setExtraServices(p => p.map((e, idx) => idx === i ? { ...e, [field]: val } : e));
+
+  const submit = async () => {
+    if (!paymentMethod) { setError("Please select a payment method."); return; }
+    if (!stylist)        { setError("Please select a stylist.");         return; }
+    setBusy(true); setError("");
+    try {
+      await onSave(booking._id, {
+        extraServices: extraServices
+          .filter(e => e.name.trim())
+          .map(e => ({ name: e.name.trim(), price: Number(e.price) || 0 })),
+        amount:        amount !== "" ? Number(amount) : null,
+        tip:           tip    !== "" ? Number(tip)    : null,
+        paymentMethod,
+        stylist,
+        notes,
+      });
+      onClose();
+    } catch (err) {
+      setError(err.message || "Failed to save.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const bookedServices = Array.isArray(booking.services)
+    ? booking.services.map(s => (typeof s === "string" ? s : s?.name)).filter(Boolean)
+    : [];
+
+  const toggle = (setter, val, current) => setter(current === val ? "" : val);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+      onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden max-h-[92dvh] flex flex-col"
+        onClick={e => e.stopPropagation()}>
+
+        {/* Header */}
+        <div className="bg-[#440008] px-5 py-4 flex items-start justify-between shrink-0">
+          <div>
+            <div className="text-white font-bold text-base">Checkout</div>
+            <div className="text-white/60 text-xs mt-0.5">{booking.name} · {booking.date} at {booking.time}</div>
+          </div>
+          <button onClick={onClose} className="text-white/60 hover:text-white mt-0.5"><FaTimes /></button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-5">
+
+          {/* Booked services (read-only) */}
+          {bookedServices.length > 0 && (
+            <div>
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Booked services</div>
+              <div className="flex flex-wrap gap-1.5">
+                {bookedServices.map((s, i) => (
+                  <span key={i} className="text-xs bg-[#440008]/8 text-[#440008] px-2.5 py-1 rounded-lg border border-[#440008]/15">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Extra services */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Extra services</div>
+              <button onClick={addExtra}
+                className="text-xs text-[#440008] font-semibold inline-flex items-center gap-1 hover:opacity-75">
+                <FaPlus size={9} /> Add
+              </button>
+            </div>
+            {extraServices.length === 0 && (
+              <p className="text-xs text-gray-300 italic">None added</p>
+            )}
+            {extraServices.map((e, i) => (
+              <div key={i} className="flex gap-2 mb-2">
+                <input
+                  value={e.name} onChange={ev => updateExtra(i, "name", ev.target.value)}
+                  placeholder="Service name"
+                  className="flex-1 border border-[#440008]/20 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20" />
+                <input
+                  type="number" min="0" value={e.price} onChange={ev => updateExtra(i, "price", ev.target.value)}
+                  placeholder="$"
+                  className="w-20 border border-[#440008]/20 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20" />
+                <button onClick={() => removeExtra(i)} className="text-gray-300 hover:text-red-400 transition px-1">
+                  <FaTimes size={11} />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Amount + Tip */}
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="block text-xs font-semibold text-gray-400 mb-1.5">Amount charged ($)</label>
+              <input type="number" min="0" value={amount} onChange={e => setAmount(e.target.value)}
+                placeholder="0"
+                className="w-full border border-[#440008]/20 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20" />
+            </div>
+            <div className="w-28">
+              <label className="block text-xs font-semibold text-gray-400 mb-1.5">Tip ($)</label>
+              <input type="number" min="0" value={tip} onChange={e => setTip(e.target.value)}
+                placeholder="0"
+                className="w-full border border-[#440008]/20 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20" />
+            </div>
+          </div>
+
+          {/* Payment method */}
+          <div>
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Payment method</div>
+            <div className="flex gap-2">
+              {["cash", "card"].map(m => (
+                <button key={m} onClick={() => toggle(setPaymentMethod, m, paymentMethod)}
+                  className={`flex-1 py-2.5 rounded-xl border text-sm font-semibold capitalize transition
+                    ${paymentMethod === m ? "bg-[#440008] text-white border-[#440008]" : "bg-white text-gray-500 border-gray-200 hover:border-[#440008]/30"}`}>
+                  {m === "cash" ? "💵 Cash" : "💳 Card"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Stylist */}
+          <div>
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Stylist</div>
+            <div className="flex gap-2">
+              {["Amina", "Narges"].map(s => (
+                <button key={s} onClick={() => toggle(setStylist, s, stylist)}
+                  className={`flex-1 py-2.5 rounded-xl border text-sm font-semibold transition
+                    ${stylist === s ? "bg-[#440008] text-white border-[#440008]" : "bg-white text-gray-500 border-gray-200 hover:border-[#440008]/30"}`}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Notes</label>
+            <textarea rows={2} value={notes} onChange={e => setNotes(e.target.value)}
+              placeholder="e.g. sensitive scalp, loved the balayage…"
+              className="w-full border border-[#440008]/20 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#440008]/20 resize-none" />
+          </div>
+
+          {error && <p className="text-xs text-red-500">{error}</p>}
+        </div>
+
+        {/* Footer */}
+        <div className="px-5 pb-5 pt-4 border-t border-gray-100 flex gap-2 shrink-0">
+          <button onClick={onClose}
+            className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-sm font-semibold">
+            Cancel
+          </button>
+          <button onClick={submit} disabled={busy}
+            className="flex-1 py-2.5 rounded-xl bg-[#440008] text-white text-sm font-semibold disabled:opacity-40">
+            {busy ? "Saving…" : existing ? "Update" : "Save & Complete"}
           </button>
         </div>
       </div>
@@ -913,11 +1192,12 @@ function CalendarView({ bookings, onCancel, onReschedule, highlightId }) {
 
 // ── Booking Card (list view) ───────────────────────────────────────────────────
 
-function BookingCard({ b, onCancel, onReschedule, onNoShow, isHighlighted }) {
+function BookingCard({ b, onCancel, onReschedule, onNoShow, onCheckout, isHighlighted }) {
   const status = normStatus(b?.status);
   const isCancelled = status === "cancelled";
   const isNoShow    = status === "noshow";
-  const total = getServiceTotal(b);
+  const total       = getServiceTotal(b);
+  const co          = b.checkout?.done ? b.checkout : null;
 
   return (
     <div
@@ -1003,6 +1283,38 @@ function BookingCard({ b, onCancel, onReschedule, onNoShow, isHighlighted }) {
           {b.note && (
             <div className="mt-2 text-xs text-gray-400 italic line-clamp-1">"{b.note}"</div>
           )}
+
+          {/* Checkout row */}
+          {!isCancelled && (
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              {co ? (
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                    <span className="inline-flex items-center gap-1 font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-1 rounded-lg">
+                      <FaCheckCircle size={9} /> Paid
+                    </span>
+                    {co.amount != null && <span className="text-gray-600 font-medium">${co.amount}</span>}
+                    {co.tip > 0 && <span className="text-gray-400">+ ${co.tip} tip</span>}
+                    {co.paymentMethod && (
+                      <span className="text-gray-400 capitalize">{co.paymentMethod === "cash" ? "💵" : "💳"} {co.paymentMethod}</span>
+                    )}
+                    {co.stylist && <span className="text-gray-400">· {co.stylist}</span>}
+                  </div>
+                  <button onClick={() => onCheckout(b)}
+                    className="text-xs text-[#440008]/50 hover:text-[#440008] border border-[#440008]/15 px-2.5 py-1 rounded-lg transition shrink-0">
+                    Edit
+                  </button>
+                </div>
+              ) : (
+                !isNoShow && (
+                  <button onClick={() => onCheckout(b)}
+                    className="w-full py-2 rounded-xl bg-[#440008]/6 border border-[#440008]/20 text-[#440008] text-xs font-semibold hover:bg-[#440008]/10 transition inline-flex items-center justify-center gap-1.5">
+                    <FaCheckCircle size={10} /> Checkout
+                  </button>
+                )
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -1020,8 +1332,11 @@ export default function AdminBookings() {
   const [adminKey, setAdminKey] = useState(() => localStorage.getItem(ADMIN_KEY_STORAGE) || "");
   const [highlightId, setHighlightId] = useState(() => getQueryId());
   const [rescheduleTarget, setRescheduleTarget] = useState(null);
+  const [checkoutTarget, setCheckoutTarget]     = useState(null);
   const [search, setSearch] = useState("");
   const [showManualBooking, setShowManualBooking] = useState(false);
+  const [section, setSection]         = useState("today");
+  const [settingsTab, setSettingsTab] = useState("credits");
 
   const fetchBookings = useCallback(async () => {
     setLoading(true);
@@ -1044,6 +1359,7 @@ export default function AdminBookings() {
           const st = normStatus(found?.status);
           if (st === "cancelled") setTab("cancelled");
           else setTab(getStartMs(found) < startOfTodayMs() ? "done" : "upcoming");
+          setSection("bookings");
           setHighlightId(deepId);
           setTimeout(() => {
             document.getElementById(`booking-${deepId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1091,6 +1407,22 @@ export default function AdminBookings() {
     setBookings(prev => prev.map(b => b._id === id ? { ...b, date, time } : b));
   }, []);
 
+  const saveCheckout = useCallback(async (id, data) => {
+    const key = getAdminKey();
+    if (!key) throw new Error("Admin key required");
+    const res = await fetch(`${API_BASE}/${id}/checkout`, {
+      method: "PATCH",
+      headers: { "x-admin-key": key, "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d?.error || "Checkout failed");
+    }
+    const result = await res.json();
+    setBookings(prev => prev.map(b => b._id === id ? { ...b, checkout: result.checkout } : b));
+  }, []);
+
   const markNoShow = useCallback(async (id) => {
     const key = getAdminKey();
     if (!key) return;
@@ -1109,19 +1441,19 @@ export default function AdminBookings() {
     setErrorMsg("Admin key cleared. Refresh to re-enter.");
   };
 
-  const { grouped, counts, todayStats } = useMemo(() => {
+  const { grouped, counts } = useMemo(() => {
     const todayStart = startOfTodayMs();
-    const todayYmd   = ymdVancouver();
 
     const normalized = bookings
       .map(b => ({ b, ms: getStartMs(b) }))
       .filter(x => x.ms !== Infinity);
 
-    const upcoming  = normalized.filter(x => x.b?.status !== "cancelled" && x.ms >= todayStart).sort((a, b) => a.ms - b.ms);
-    const done      = normalized.filter(x => x.b?.status !== "cancelled" && x.ms < todayStart).sort((a, b) => b.ms - a.ms);
-    const cancelled = normalized.filter(x => x.b?.status === "cancelled").sort((a, b) => b.ms - a.ms);
+    const upcoming  = normalized.filter(x => !["cancelled","noshow"].includes(normStatus(x.b?.status)) && x.ms >= todayStart).sort((a, b) => a.ms - b.ms);
+    const done      = normalized.filter(x => !["cancelled","noshow"].includes(normStatus(x.b?.status)) && x.ms < todayStart).sort((a, b) => b.ms - a.ms);
+    const noshow    = normalized.filter(x => normStatus(x.b?.status) === "noshow").sort((a, b) => b.ms - a.ms);
+    const cancelled = normalized.filter(x => normStatus(x.b?.status) === "cancelled").sort((a, b) => b.ms - a.ms);
 
-    const base = tab === "upcoming" ? upcoming : tab === "done" ? done : cancelled;
+    const base = tab === "upcoming" ? upcoming : tab === "done" ? done : tab === "noshow" ? noshow : cancelled;
     const q = search.trim().toLowerCase();
     const selected = q ? base.filter(({ b }) =>
       b.name?.toLowerCase().includes(q) ||
@@ -1130,13 +1462,9 @@ export default function AdminBookings() {
       servicesText(b).toLowerCase().includes(q)
     ) : base;
 
-    const todayBookings = upcoming.filter(x => x.b?.date === todayYmd);
-    const todayRevenue  = todayBookings.reduce((sum, x) => sum + getServiceTotal(x.b), 0);
-
     return {
-      grouped: groupByDate(selected),
-      counts: { upcoming: upcoming.length, done: done.length, cancelled: cancelled.length },
-      todayStats: { count: todayBookings.length, revenue: todayRevenue },
+      grouped: tab === "upcoming" ? groupByDate(selected) : groupByDate(selected).reverse(),
+      counts: { upcoming: upcoming.length, done: done.length, noshow: noshow.length, cancelled: cancelled.length },
     };
   }, [bookings, tab, search]);
 
@@ -1151,137 +1479,221 @@ export default function AdminBookings() {
     );
   }
 
-  const tabs = [
-    { id: "upcoming", label: "Upcoming", count: counts.upcoming },
-    ...(view === "list" ? [
-      { id: "done",      label: "Done",      count: counts.done },
-      { id: "cancelled", label: "Cancelled", count: counts.cancelled },
-    ] : []),
-    { id: "credits",  label: "Credits",  icon: FaBirthdayCake, count: null },
-    { id: "clients",  label: "Clients",  icon: FaUsers,        count: null },
-    { id: "schedule", label: "Schedule", icon: FaCalendarCheck, count: null },
+  const navItems = [
+    { id: "today",    label: "Today",    icon: FaCalendarAlt },
+    { id: "bookings", label: "Bookings", icon: FaCalendarCheck },
+    { id: "clients",  label: "Clients",  icon: FaUsers },
+    { id: "settings", label: "Settings", icon: FaCog },
   ];
 
-  return (
-    <div className="min-h-screen bg-[#F9F7F4]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-10">
+  const todayYmd        = ymdVancouver();
+  const todayList       = bookings
+    .filter(b => b.date === todayYmd && normStatus(b.status) !== "cancelled")
+    .sort((a, b) => (parseTimeToMins(a.time) || 0) - (parseTimeToMins(b.time) || 0));
+  const todayCheckedOut = todayList.filter(b => b.checkout?.done).length;
+  const todayRevenue    = todayList.reduce((s, b) => s + getServiceTotal(b), 0);
 
-        {/* Top bar */}
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
-          <div className="text-xl font-theseason font-bold text-[#440008]">Admin Bookings</div>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center bg-white border border-[#440008]/15 rounded-xl p-1 gap-0.5">
-              {[["list", "List"], ["calendar", "Calendar"]].map(([v, label]) => (
-                <button key={v} onClick={() => setView(v)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition
-                    ${view === v ? "bg-[#440008] text-white shadow-sm" : "text-gray-400 hover:text-[#440008]"}`}>
-                  {label}
-                </button>
-              ))}
-            </div>
+  return (
+    <div className="min-h-screen bg-[#F9F7F4] pb-24 sm:pb-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20">
+
+        {/* Header */}
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <h1 className="text-2xl font-theseason font-bold text-[#440008]">
+            {section === "today"
+              ? new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: SHOP_TZ })
+              : section === "bookings" ? "All Bookings"
+              : section === "clients"  ? "Clients"
+              : "Settings"}
+          </h1>
+          <div className="flex items-center gap-2">
+            <button onClick={fetchBookings} title="Refresh"
+              className="p-2.5 rounded-xl bg-white border border-gray-200 text-gray-400 hover:text-[#440008] transition text-lg leading-none">
+              ↺
+            </button>
             <button onClick={() => setShowManualBooking(true)}
-              className="px-3 py-2 rounded-xl bg-[#440008] text-white text-xs font-semibold inline-flex items-center gap-1.5">
-              <FaPlus size={10} /> New
-            </button>
-            <button onClick={fetchBookings}
-              className="px-3 py-2 rounded-xl bg-white border border-[#440008]/20 text-[#440008] text-xs font-semibold">
-              Refresh
-            </button>
-            <button onClick={clearKey}
-              className="hidden sm:block px-3 py-2 rounded-xl border border-[#440008]/20 text-[#440008] text-xs font-semibold">
-              Clear Key
+              className="px-4 py-2.5 rounded-xl bg-[#440008] text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-sm">
+              <FaPlus size={11} /> New
             </button>
           </div>
         </div>
 
         {errorMsg && (
-          <div className="mb-4 p-3 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm">{errorMsg}</div>
+          <div className="mb-5 p-3 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm">{errorMsg}</div>
         )}
 
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-5">
-          {tabs.map(({ id, label, icon: Icon, count }) => (
-            <button key={id} onClick={() => setTab(id)}
+        {/* Desktop section nav */}
+        <div className="hidden sm:flex gap-1 mb-6 bg-white rounded-2xl p-1.5 border border-gray-100 shadow-sm">
+          {navItems.map(({ id, label, icon: Icon }) => (
+            <button key={id} onClick={() => setSection(id)}
               className={[
-                "inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition",
-                tab === id
+                "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition",
+                section === id
                   ? "bg-[#440008] text-white shadow-sm"
-                  : "bg-white text-[#440008] border border-[#440008]/20 hover:bg-[#440008]/5",
+                  : "text-gray-500 hover:text-[#440008] hover:bg-[#440008]/5",
               ].join(" ")}>
-              {Icon && <Icon size={11} />}
-              {label}{count != null ? ` (${count})` : ""}
+              <Icon size={13} /> {label}
             </button>
           ))}
         </div>
 
-        {/* Search — only on list booking tabs */}
-        {view === "list" && ["upcoming","done","cancelled"].includes(tab) && (
-          <div className="mb-4">
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search by name, phone, email, or service…"
-              className="w-full border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#440008]/20"
-            />
-          </div>
-        )}
-
-        {/* Today summary */}
-        {tab === "upcoming" && view === "list" && !search && todayStats.count > 0 && (
-          <div className="mb-5 rounded-2xl bg-[#440008] text-white px-5 py-4 flex items-center justify-between">
-            <div>
-              <div className="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Today</div>
-              <div className="font-bold text-xl">{todayStats.count} booking{todayStats.count !== 1 ? "s" : ""}</div>
+        {/* ── TODAY ── */}
+        {section === "today" && (
+          <div>
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[
+                { value: todayList.length,    label: "Appointments" },
+                { value: todayCheckedOut,      label: "Checked out" },
+                { value: `$${todayRevenue}+`,  label: "Est. revenue" },
+              ].map(({ value, label }) => (
+                <div key={label} className="bg-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm">
+                  <div className="text-2xl font-bold text-[#440008]">{value}</div>
+                  <div className="text-xs text-gray-400 mt-1">{label}</div>
+                </div>
+              ))}
             </div>
-            {todayStats.revenue > 0 && (
-              <div className="text-right">
-                <div className="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Est. Revenue</div>
-                <div className="font-bold text-xl">${todayStats.revenue}+</div>
+
+            {todayList.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+                <FaCalendarAlt size={28} className="mx-auto mb-3 text-gray-200" />
+                <p className="text-gray-400 font-medium mb-4">No appointments today</p>
+                <button onClick={() => setShowManualBooking(true)}
+                  className="px-5 py-2.5 rounded-xl bg-[#440008] text-white text-sm font-semibold inline-flex items-center gap-1.5">
+                  <FaPlus size={10} /> Add Booking
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {todayList.map(b => (
+                  <BookingCard key={b._id} b={b}
+                    onCancel={cancelBooking} onReschedule={setRescheduleTarget}
+                    onNoShow={markNoShow} onCheckout={setCheckoutTarget} />
+                ))}
               </div>
             )}
           </div>
         )}
 
-        {/* Content */}
-        {tab === "credits" ? (
-          <CreditsTab adminKey={adminKey} />
-        ) : tab === "clients" ? (
-          <ClientsTab adminKey={adminKey} />
-        ) : tab === "schedule" ? (
-          <ScheduleTab adminKey={adminKey} />
-        ) : view === "calendar" ? (
-          <CalendarView bookings={bookings} onCancel={cancelBooking} onReschedule={setRescheduleTarget} highlightId={highlightId} />
-        ) : grouped.length === 0 ? (
-          <div className="text-center py-20">
-            <FaCalendarAlt size={28} className="mx-auto mb-3 text-gray-200" />
-            <p className="text-sm text-gray-400">No bookings here.</p>
-          </div>
-        ) : (
-          <div className="space-y-7">
-            {grouped.map(day => (
-              <div key={day.dateLabel}>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xs font-bold uppercase tracking-widest text-[#440008]/60">{day.dateLabel}</span>
-                  <div className="flex-1 h-px bg-[#440008]/10" />
-                  <span className="text-xs text-gray-400">{day.list.length} booking{day.list.length !== 1 ? "s" : ""}</span>
-                </div>
-                <div className="space-y-3">
-                  {day.list.map(({ b }) => (
-                    <BookingCard
-                      key={b._id}
-                      b={b}
-                      onCancel={cancelBooking}
-                      onReschedule={setRescheduleTarget}
-                      onNoShow={tab === "upcoming" ? markNoShow : null}
-                      isHighlighted={!!highlightId && b._id === highlightId}
-                    />
-                  ))}
-                </div>
+        {/* ── BOOKINGS ── */}
+        {section === "bookings" && (
+          <div>
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div className="flex gap-2 flex-wrap">
+                {[
+                  ["upcoming", "Upcoming",  counts.upcoming],
+                  ["done",     "Done",      counts.done],
+                  ["noshow",   "No-show",   counts.noshow],
+                  ["cancelled","Cancelled", counts.cancelled],
+                ].map(([id, label, count]) => (
+                  <button key={id} onClick={() => setTab(id)}
+                    className={[
+                      "px-3 py-1.5 rounded-full text-xs font-semibold transition",
+                      tab === id
+                        ? "bg-[#440008] text-white shadow-sm"
+                        : "bg-white text-gray-500 border border-gray-200 hover:border-[#440008]/30",
+                    ].join(" ")}>
+                    {label}{count > 0 ? ` (${count})` : ""}
+                  </button>
+                ))}
               </div>
-            ))}
+              <div className="flex items-center bg-white border border-gray-200 rounded-xl p-1 gap-0.5 shrink-0">
+                {[["list","List"],["calendar","Calendar"]].map(([v, label]) => (
+                  <button key={v} onClick={() => setView(v)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                      view === v ? "bg-[#440008] text-white shadow-sm" : "text-gray-400 hover:text-[#440008]"
+                    }`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {view === "list" && (
+              <div className="mb-4">
+                <input value={search} onChange={e => setSearch(e.target.value)}
+                  placeholder="Search by name, phone, email, or service…"
+                  className="w-full border border-[#440008]/20 rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#440008]/20" />
+              </div>
+            )}
+
+            {view === "calendar" ? (
+              <CalendarView bookings={bookings} onCancel={cancelBooking} onReschedule={setRescheduleTarget} highlightId={highlightId} />
+            ) : grouped.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+                <FaCalendarAlt size={28} className="mx-auto mb-3 text-gray-200" />
+                <p className="text-sm text-gray-400">No bookings here.</p>
+              </div>
+            ) : (
+              <div className="space-y-7">
+                {grouped.map(day => (
+                  <div key={day.dateLabel}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-xs font-bold uppercase tracking-widest text-[#440008]/60">{day.dateLabel}</span>
+                      <div className="flex-1 h-px bg-[#440008]/10" />
+                      <span className="text-xs text-gray-400">{day.list.length} booking{day.list.length !== 1 ? "s" : ""}</span>
+                    </div>
+                    <div className="space-y-3">
+                      {day.list.map(({ b }) => (
+                        <BookingCard key={b._id} b={b}
+                          onCancel={cancelBooking} onReschedule={setRescheduleTarget}
+                          onNoShow={["upcoming","done"].includes(tab) ? markNoShow : null}
+                          onCheckout={setCheckoutTarget}
+                          isHighlighted={!!highlightId && b._id === highlightId} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
+
+        {/* ── CLIENTS ── */}
+        {section === "clients" && (
+          <ClientsTab adminKey={adminKey} bookings={bookings} />
+        )}
+
+        {/* ── SETTINGS ── */}
+        {section === "settings" && (
+          <div>
+            <div className="flex flex-wrap gap-2 mb-5">
+              {[
+                { id: "credits",  label: "🎂  Birthday Credits" },
+                { id: "schedule", label: "📅  Working Hours" },
+              ].map(({ id, label }) => (
+                <button key={id} onClick={() => setSettingsTab(id)}
+                  className={[
+                    "px-4 py-2 rounded-full text-sm font-semibold transition",
+                    settingsTab === id
+                      ? "bg-[#440008] text-white shadow-sm"
+                      : "bg-white text-gray-600 border border-gray-200 hover:border-[#440008]/30",
+                  ].join(" ")}>
+                  {label}
+                </button>
+              ))}
+              <button onClick={clearKey}
+                className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-gray-400 border border-gray-200 hover:border-red-300 hover:text-red-400 transition ml-auto">
+                🔑 Reset Key
+              </button>
+            </div>
+            {settingsTab === "credits" ? <CreditsTab adminKey={adminKey} /> : <ScheduleTab adminKey={adminKey} />}
+          </div>
+        )}
+
       </div>
+
+      {/* Mobile bottom nav */}
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 flex">
+        {navItems.map(({ id, label, icon: Icon }) => (
+          <button key={id} onClick={() => setSection(id)}
+            className={`flex-1 flex flex-col items-center pt-3 pb-5 gap-0.5 transition ${
+              section === id ? "text-[#440008]" : "text-gray-400"
+            }`}>
+            <Icon size={20} />
+            <span className="text-[10px] font-semibold tracking-wide">{label}</span>
+          </button>
+        ))}
+      </nav>
 
       {rescheduleTarget && (
         <RescheduleModal
@@ -1295,6 +1707,14 @@ export default function AdminBookings() {
         <ManualBookingModal
           onClose={() => setShowManualBooking(false)}
           onCreated={fetchBookings}
+        />
+      )}
+
+      {checkoutTarget && (
+        <CheckoutModal
+          booking={checkoutTarget}
+          onClose={() => setCheckoutTarget(null)}
+          onSave={saveCheckout}
         />
       )}
     </div>
